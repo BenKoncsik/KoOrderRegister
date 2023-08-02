@@ -56,9 +56,8 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Módósítás" Click="ContextMenu_Change"/>
-                    <MenuItem Header="Cipő rendelés törlése" Click="ContextMenu_Delete" />
-                    <MenuItem Header="Ember Törlése" Click="ContextMenu_Delete_Custumer" />
-
+                    <MenuItem Header="Rendelés törlése" Click="ContextMenu_Delete" />
+                    <MenuItem Header="Ember Törlése (a rendelései megmaradnak)" Click="ContextMenu_Delete_Custumer" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>

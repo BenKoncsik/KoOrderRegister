@@ -255,7 +255,23 @@ namespace ShoeDatabase
                     if (messageBoxResult == MessageBoxResult.Yes)
                     {
                         var selectedShoe = selectedItem;
-
+                        if (!selectedShoe.PhotoPath.Equals("null"))
+                        {
+                            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                            string directory = System.IO.Path.Combine(baseDirectory, "images/order");
+                            string filePath = System.IO.Path.Combine(directory, selectedItem.PhotoPath);
+                            if (File.Exists(filePath))
+                            {
+                                try
+                                {
+                                    File.Delete(filePath);
+                                }
+                                catch (IOException ex)
+                                {
+                                    MessageBox.Show($"Nem sikerült törölni a képet: {filePath}");
+                                }
+                            }
+                        }
                         string sql = $"DELETE FROM shoes WHERE id = @id";
 
                         using (var command = new SQLiteCommand(sql, connection))
