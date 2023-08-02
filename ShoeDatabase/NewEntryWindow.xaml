@@ -1,0 +1,63 @@
+﻿<Window x:Class="ShoeDatabase.NewEntryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Új Rendelés hozzáadása" Height="450" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Elmentett emberek:"/>
+        <ComboBox x:Name="customerComboBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" 
+                  DisplayMemberPath="Name" SelectedValuePath="Id" TextSearch.TextPath="Name"
+                   SelectionChanged="CustomerComboBox_SelectionChanged" SelectedIndex="0" IsTextSearchEnabled="True" />
+        
+        <Label Grid.Row="1" Grid.Column="0" Content="Név:"/>
+        <TextBox x:Name="nameBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Cím:"/>
+        <TextBox x:Name="addressBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="TAJ szám:"/>
+        <TextBox x:Name="tajNumberBox" Grid.Row="3" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" TextChanged="TajNumberBox_TextChanged" HorizontalAlignment="Stretch"/>
+        
+        <Label Grid.Row="4" Grid.Column="0" Content="Rendelési szám:"/>
+        <TextBox x:Name="orderNumberBox" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+       
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Rendelési dátum:"/>
+        <DatePicker x:Name="orderDateBox" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" SelectedDate="{x:Static sys:DateTime.Now}"/>
+
+        <Label Grid.Row="6" Grid.Column="0" Content="Rendelési kiadásának dátuma:"/>
+        <DatePicker x:Name="orderReleaseDateBox" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+
+        <Label Grid.Row="7" Grid.Column="0" Content="Fénykép kiválasztása:"/>
+        <Button x:Name="photoButton" Grid.Row="7" Grid.Column="1" Click="PhotoButton_Click" HorizontalAlignment="Stretch">Fénykép kiválasztása</Button>
+
+        
+        
+        <Button x:Name="CancelButton" Width="Auto" Height="50" Grid.Row="10" Grid.Column="0" Click="CancelButton_Click">Mégse</Button>
+        <Button x:Name="SaveButton" Width="Auto" Height="50" Grid.Row="10"  Grid.Column="1" Click="SaveButton_Click">Mentés</Button>
+    </Grid>
+
+
+</Window>
