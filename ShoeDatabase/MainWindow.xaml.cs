@@ -162,7 +162,42 @@ namespace ShoeDatabase
 
         private void DeveloperSourceCode_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Email: kocsik.benedek.andras@gmail.com");
+            string url = "https://github.com/Koncsik-cyber/ShoeOrderCustumerRegister";
+
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
+            }
+        }
+        private void DeveloperWebSite_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://koncsik.hopto.org/";
+
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
+            }
+        }
+        private void DeveloperX_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://twitter.com/BenedekKoncsik?t=JmLhG8S77hWOWqdrpitPJw&s=09";
+
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
+            }
         }
 
 
@@ -242,8 +277,11 @@ namespace ShoeDatabase
         private void ContextMenu_Change(object sender, RoutedEventArgs e)
         {
             CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
-            NewEntryWindow newEntryWindow = new NewEntryWindow(selectedItem, connection, this);
-            newEntryWindow.Show();
+            if (selectedItem != null)
+            {
+                NewEntryWindow newEntryWindow = new NewEntryWindow(selectedItem, connection, this);
+                newEntryWindow.Show();
+            }
         }
 
         private void ContextMenu_Delete_Custumer(object sender, RoutedEventArgs e)
