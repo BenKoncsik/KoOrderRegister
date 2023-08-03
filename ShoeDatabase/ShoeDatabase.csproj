@@ -105,7 +105,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Model\BuckupModel.cs" />
+    <Compile Include="Model\Setting.cs" />
+    <Compile Include="Services\CustumerService.cs" />
+    <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="View\NewCustumer.xaml.cs">
+      <DependentUpon>NewCustumer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -113,22 +124,30 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustumerShoeInfo.cs" />
-    <Compile Include="Custumer.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Model\CustumerShoeInfo.cs" />
+    <Compile Include="Model\Custumer.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NewEntryWindow.xaml">
+    <Page Include="View\NewCustumer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewEntryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NewEntryWindow.xaml.cs">
+    <Compile Include="View\NewEntryWindow.xaml.cs">
       <DependentUpon>NewEntryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NullToVisibilityConverter .cs" />
+    <Compile Include="CustumeView\NullToVisibilityConverter .cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -169,8 +188,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\cipo_1.ico" />
-    <Resource Include="img\cipo_2.ico">
+    <Resource Include="Img\cipo_1.ico" />
+    <Resource Include="Img\cipo_2.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

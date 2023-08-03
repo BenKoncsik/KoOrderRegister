@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoeDatabase
+namespace ShoeDatabase.Model
 {
     public class Custumer
     {
@@ -13,6 +13,13 @@ namespace ShoeDatabase
         {
             this.Name = name;
             this.Id = -1;
+        }
+        public Custumer(int id, string name, string address, string tajNumber)
+        {
+            this.Name = name;
+            this.Id = id;
+            this.Address = address;
+            this.TAJNumber = tajNumber;
         }
         public int Id { get; set; }
         public string Name { get; set; }

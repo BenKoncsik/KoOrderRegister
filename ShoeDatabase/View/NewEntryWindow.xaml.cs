@@ -1,23 +1,15 @@
 ﻿using Microsoft.Win32;
+using ShoeDatabase.Model;
+using ShoeDatabase.Services;
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using System.Globalization;
 
 namespace ShoeDatabase
 {
@@ -25,34 +17,34 @@ namespace ShoeDatabase
     /// Interaction logic for NewEntryWindow.xaml
     /// </summary>
     public partial class NewEntryWindow : Window
-    {
-        private SQLiteConnection connection;
-        private MainWindow window;
+    { 
         private string photoFilePath = "NULL";
-        private List<Custumer> customers = new List<Custumer>();
+        private List<Custumer> custumers = new List<Custumer>();
         private bool newOrder = true;
         private DateTime OrderDateTime { get; set; } = DateTime.Now;
-        private CustomerShoeInfo customer;
+        private CustomerShoeInfo customerShoeInfo = new CustomerShoeInfo();
+        private OrderService orderService = new OrderService();
+        private CustumerService custumerService = new CustumerService();
 
         public NewEntryWindow()
         {
             InitializeComponent();
-            customers.Add(new Custumer("Új ember"));
+            custumers = custumerService.getAllCustumers();
+            custumerComboBox.ItemsSource = custumers;
         }
 
-        public NewEntryWindow(CustomerShoeInfo customer, SQLiteConnection connection, MainWindow main)
+        public NewEntryWindow(CustomerShoeInfo customer)
         {
             InitializeComponent();
-            this.connection = connection;
-            window = main;
-            customers.Add(new Custumer("Új ember"));
-            SettDataBse(connection, main);
             newOrder = false;
-            this.customer = customer;
+            this.customerShoeInfo = customer;
             nameBox.Text = customer.Name;
             addressBox.Text = customer.Address;
             tajNumberBox.Text = customer.TajNumber;
             orderNumberBox.Text = customer.OrderNumber;
+            custumers = custumerService.getAllCustumers();
+            custumerComboBox.ItemsSource = custumers;
+
             DateTime dateTime = DateTime.Now;
             if (!customer.OrderDate.Equals("NULL"))
             {
@@ -76,24 +68,18 @@ namespace ShoeDatabase
                 photoButton.Content = photoFilePath;
             }
             
-            foreach (Custumer c in customers) 
+            foreach (Custumer c in custumers) 
             {
-                if (c.Name.Equals(customer.Name))
+                if (c.TAJNumber.Equals(customer.TajNumber))
                 {
-                    customerComboBox.SelectedItem = c;
+                    custumerComboBox.SelectedItem = c;
                     return;
                 }
             }
            
 
         }
-        public void SettDataBse(SQLiteConnection connection, MainWindow main)
-        {
-            this.connection = connection;
-            window = main;
-            GetCustomers();
-            customerComboBox.ItemsSource = customers;
-        }
+     
 
         private void PhotoButton_Click(object sender, RoutedEventArgs e)
         {
@@ -155,51 +141,22 @@ namespace ShoeDatabase
             string orderDate = orderDateBox.SelectedDate.Value.ToString("yyyy-MM-dd");
             string orderReleaseDate = orderReleaseDateBox.SelectedDate.HasValue ? orderReleaseDateBox.SelectedDate.Value.ToString("yyyy-MM-dd") : "NULL";
             string photoNewName = HandlePhotoFile(photoFilePath, orderNumber, name, orderDate);
-
-            try
-            {
-                SQLiteCommand cmd = new SQLiteCommand();
-                if (newOrder || customer == null)
+            string note = "";
+            try {
+                customerShoeInfo.Name = name;
+                customerShoeInfo.Address = address;
+                customerShoeInfo.TajNumber = tajNumber;
+                customerShoeInfo.Note = note;
+                customerShoeInfo.OrderReleaseDate = orderReleaseDate;
+                customerShoeInfo.OrderDate = orderDate;
+                customerShoeInfo.PhotoPath = photoNewName;
+                customerShoeInfo.OrderNumber = orderNumber;
+                
+                if(OrderService.saveNewOrder(customerShoeInfo, newOrder))
                 {
-                    string insertCustomerQuery = $"INSERT OR IGNORE INTO customers (name, address, tajNumber) VALUES ('{name}', '{address}', '{tajNumber}')";
-                    cmd = new SQLiteCommand(insertCustomerQuery, connection);
-                    cmd.ExecuteNonQuery();
+                    this.Close();
                 }
-                else
-                {
-                    string updateCustomerQuery = $"UPDATE customers SET name = '{name}', address = '{address}', tajNumber = '{tajNumber}' WHERE id = {customer.CustomerId}";
-                    cmd = new SQLiteCommand(updateCustomerQuery, connection);
-                    cmd.ExecuteNonQuery();
-                }
-
-
-                string insertShoesQuery = "";
-
-                if (newOrder || customer == null)
-                {
-                    int customerId = GetCustomerId(name, address, tajNumber);
-                    insertShoesQuery = $"INSERT INTO shoes " +
-                    $"(orderNumber, orderDate, orderReleaseDate, photoPath, customerId) VALUES " +
-                    $"('{orderNumber}', '{orderDate}', '{orderReleaseDate}', '{photoNewName}', " +
-                    $"'{customerId}')";
-                }
-                else
-                {
-                    insertShoesQuery = $"UPDATE shoes SET " +
-                        $"orderNumber = '{orderNumber}', " +
-                        $"orderDate = '{orderDate}', " +
-                        $"orderReleaseDate = '{orderReleaseDate}', " +
-                        $"photoPath = '{photoNewName}', " +
-                        $"customerId = '{customer.CustomerId}' " +
-                        $"WHERE id = {customer.ShoeId}";
-                }
-                cmd = new SQLiteCommand(insertShoesQuery, connection); ;
-                cmd.ExecuteNonQuery();
-
-                if(newOrder) MessageBox.Show("Adatok sikeresen elmentve!");
-                else MessageBox.Show("Adatok sikeresen frissitve!");
-                window.RefreshData();
-                this.Close();
+                
             }
             catch (Exception ex)
             {
@@ -231,34 +188,22 @@ namespace ShoeDatabase
         }
 
 
-        private void GetCustomers()
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT id, name, address, tajNumber  FROM customers";
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    var customer = new Custumer
-                    {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Address = reader.GetString(2),
-                        TAJNumber = reader.GetString(3)
-                    };
-                    customers.Add(customer);
-                }
-            }
-        }
-
+     
         private void CustomerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCustomer = (Custumer)customerComboBox.SelectedItem;
+            var selectedCustomer = (Custumer)custumerComboBox.SelectedItem;
             if(selectedCustomer != null && selectedCustomer.Id != -1) 
             {
+                customerShoeInfo.Name = selectedCustomer.Name;
                 nameBox.Text = selectedCustomer.Name;
+
+                customerShoeInfo.Address = selectedCustomer.Address;
                 addressBox.Text = selectedCustomer.Address;
+
+                customerShoeInfo.TajNumber = selectedCustomer.TAJNumber;
                 tajNumberBox.Text = selectedCustomer.TAJNumber;
+
+                customerShoeInfo.CustomerId = selectedCustomer.Id;
             }
             else 
             {
@@ -280,7 +225,7 @@ namespace ShoeDatabase
 
         private string HandlePhotoFile(string photoFilePath, string orderNumber, string name, string date)
         {
-            if (string.IsNullOrEmpty(photoFilePath) || !photoFilePath.Equals("NULL"))
+            if ((string.IsNullOrEmpty(photoFilePath) || !photoFilePath.Equals("NULL")) && Directory.Exists(photoFilePath))
             {
                 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -290,44 +235,26 @@ namespace ShoeDatabase
                 {
                     Directory.CreateDirectory(newDirectory);
                 }
+                
                 string newFileName = "";
-                if (newOrder || (customer != null && !customer.PhotoPath.Equals("NULL")))
+                if (newOrder || (customerShoeInfo != null && !customerShoeInfo.PhotoPath.Equals("NULL")))
                 {
                     newFileName = $"{orderNumber}_{name}_{date}_{GenerateRandomSuffix(5)}{System.IO.Path.GetExtension(photoFilePath)}";
                 }
                 else
                 {
-                    newFileName = customer.PhotoPath;
+                    newFileName = customerShoeInfo.PhotoPath;
                 }
                 string newFilePath = System.IO.Path.Combine(newDirectory, newFileName);
+
+                
 
                 File.Copy(photoFilePath, newFilePath, true);
                 return newFileName;
             }
             else return "NULL";
         }
-        public int GetCustomerId(string name, string address, string tajNumber)
-        {
-            string sql = $"SELECT id FROM customers WHERE name = @name AND address = @address AND tajNumber = @tajNumber LIMIT 1";
-            using (var command = new SQLiteCommand(sql, connection))
-            {
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@address", address);
-                command.Parameters.AddWithValue("@tajNumber", tajNumber);
-
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return reader.GetInt32(0);
-                    }
-                    else
-                    {
-                        throw new Exception("Customer not found");
-                    }
-                }
-            }
-        }
+      
 
      
 

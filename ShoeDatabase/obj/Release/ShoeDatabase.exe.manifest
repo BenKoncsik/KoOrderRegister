@@ -67,14 +67,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ShoeDatabase.exe" size="1117664">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ShoeDatabase.exe" size="1130976">
       <assemblyIdentity name="ShoeDatabase" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>PVFy/gIs6K0oS0tiAeLdl4bzjiNt2oP7YQn2PuJLkCU=</dsig:DigestValue>
+        <dsig:DigestValue>oX5iI4TqWP4EaIPcJkoTRFqZHCfB8Kon1NbW3vgUGe4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -1,42 +1,39 @@
 ﻿using Microsoft.Win32;
+using ShoeDatabase.Model;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Xml.Linq;
 
-namespace ShoeDatabase
+namespace ShoeDatabase.Services
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public class OrderService
     {
-        private SQLiteConnection connection;
-        private SQLiteDataAdapter adapter;
-        private DataTable dataTable;
-        private static bool databesInitzialized = false;
-        public MainWindow()
-        {
-            InitializeComponent();
-            ConectDateBase();
+        public static SQLiteConnection connection;
+        private static SettingsService settingsService = new SettingsService();
+        private static CustumerService custumerService = new CustumerService();
+        public static bool databesInitzialized = false;
 
+        public OrderService()
+        {
+            if(!databesInitzialized) ConectDateBase();
         }
 
-        private void ConectDateBase()
+        public static void ConectDateBase()
         {
+            Setting dataBaseLocation = settingsService.GetSetting(SettingsService.DataBaseLocation);
+            if(dataBaseLocation != null && File.Exists(dataBaseLocation.Value))
+            {
+                connection = new SQLiteConnection($@"Data Source={dataBaseLocation.Value};");
+                connection.Open();
+                databesInitzialized = true;
+                return;
+            }
             if (!File.Exists("shoe.db"))
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -46,7 +43,7 @@ namespace ShoeDatabase
                     connection = new SQLiteConnection($@"Data Source={openFileDialog.FileName};");
                     connection.Open();
                     databesInitzialized = true;
-                    RefreshData();
+                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, openFileDialog.FileName));
                 }
                 else
                 {
@@ -59,19 +56,16 @@ namespace ShoeDatabase
                 connection = new SQLiteConnection(@"Data Source=shoe.db;");
                 connection.Open();
                 databesInitzialized = true;
-                RefreshData();
             }
-
         }
 
-        public void RefreshData()
+        public static List<CustomerShoeInfo> GetCustumerShoInfo(string searchText = "")
         {
             if (databesInitzialized)
             {
                 try
                 {
                     string query;
-                    string searchText = searchBox.Text;
                     Console.WriteLine($"Search Text: {searchText}");
                     if (string.IsNullOrEmpty(searchText))
                     {
@@ -118,8 +112,7 @@ namespace ShoeDatabase
                                     CustomerId = reader.IsDBNull(8) ? -1 : reader.GetInt32(8)
                                 });
                             }
-
-                            dataGrid.ItemsSource = customerShoeInfos;
+                            return customerShoeInfos;
                         }
                     }
                 }
@@ -128,80 +121,11 @@ namespace ShoeDatabase
                     MessageBox.Show("Nem megfelelő adatbázis!\n" + ex.Message);
                 }
             }
+            return new List<CustomerShoeInfo>();
         }
 
 
-
-
-        private void New_Click(object sender, RoutedEventArgs e)
-        {
-            NewEntryWindow newEntryWindow = new NewEntryWindow();
-            newEntryWindow.SettDataBse(connection, this);
-            newEntryWindow.Show();
-        }
-
-        private void SearchBox_CLick(object sender, RoutedEventArgs e)
-        {
-            RefreshData();
-        }
-
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            RefreshData();
-        }
-        private void UpdateBox_CLick(object sender, RoutedEventArgs e)
-        {
-            searchBox.Text = "";
-            RefreshData();
-        }
-
-        private void DeveloperContact_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Email: kocsik.benedek.andras@gmail.com");
-        }
-
-        private void DeveloperSourceCode_Click(object sender, RoutedEventArgs e)
-        {
-            string url = "https://github.com/Koncsik-cyber/ShoeOrderCustumerRegister";
-
-            try
-            {
-                System.Diagnostics.Process.Start(url);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
-            }
-        }
-        private void DeveloperWebSite_Click(object sender, RoutedEventArgs e)
-        {
-            string url = "https://koncsik.hopto.org/";
-
-            try
-            {
-                System.Diagnostics.Process.Start(url);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
-            }
-        }
-        private void DeveloperX_Click(object sender, RoutedEventArgs e)
-        {
-            string url = "https://twitter.com/BenedekKoncsik?t=JmLhG8S77hWOWqdrpitPJw&s=09";
-
-            try
-            {
-                System.Diagnostics.Process.Start(url);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
-            }
-        }
-
-
-        private void CreateDatabase_Click(object sender, RoutedEventArgs e)
+        public static SQLiteConnection createDateBase()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "SQLite Database|*.db";
@@ -220,7 +144,7 @@ namespace ShoeDatabase
                             name TEXT, 
                             address TEXT,
                             tajNumber TEXT UNIQUE
-                );";
+                            );";
                         command.ExecuteNonQuery();
 
                         command.CommandText = @"
@@ -232,34 +156,30 @@ namespace ShoeDatabase
                             photoPath TEXT,
                             customerId INTEGER,
                             FOREIGN KEY(customerId) REFERENCES customers(id)
-                );";
+                            );";
                         command.ExecuteNonQuery();
                     }
                 }
-
-                this.connection = new SQLiteConnection($"Data Source={dbPath};");
-                this.connection.Open();
-                RefreshData();
+                return connection;
             }
+            return null;
         }
 
-        private void ContextMenu_Delete(object sender, RoutedEventArgs e)
+        public static bool deletOrder(CustomerShoeInfo delteOreder)
         {
             try
             {
-                CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
-
-                if (selectedItem != null)
+                if (delteOreder != null)
                 {
-                    var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {selectedItem.Name} ügyfél {selectedItem.OrderNumber}?", "Törlés megerősítése", MessageBoxButton.YesNo);
+                    var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {delteOreder.Name} ügyfél " +
+                        $"{delteOreder.OrderNumber} számú rendelését?", "Törlés megerősítése", MessageBoxButton.YesNo);
                     if (messageBoxResult == MessageBoxResult.Yes)
                     {
-                        var selectedShoe = selectedItem;
-                        if (!selectedShoe.PhotoPath.Equals("null"))
+                        if (!delteOreder.PhotoPath.Equals("null"))
                         {
                             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                             string directory = System.IO.Path.Combine(baseDirectory, "images/order");
-                            string filePath = System.IO.Path.Combine(directory, selectedItem.PhotoPath);
+                            string filePath = System.IO.Path.Combine(directory, delteOreder.PhotoPath);
                             if (File.Exists(filePath))
                             {
                                 try
@@ -276,11 +196,11 @@ namespace ShoeDatabase
 
                         using (var command = new SQLiteCommand(sql, connection))
                         {
-                            command.Parameters.AddWithValue("@id", selectedShoe.ShoeId);
+                            command.Parameters.AddWithValue("@id", delteOreder.ShoeId);
                             command.ExecuteNonQuery();
                         }
 
-                        RefreshData();
+                        return true;
                     }
                 }
             }
@@ -288,65 +208,107 @@ namespace ShoeDatabase
             {
                 MessageBox.Show("Nem sikerült törölni a sor adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
             }
+            return false;
         }
 
-        private void ContextMenu_Change(object sender, RoutedEventArgs e)
+   
+
+
+        public static string openImage(CustomerShoeInfo customerShoeInfo)
         {
-            CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
-            if (selectedItem != null)
-            {
-                NewEntryWindow newEntryWindow = new NewEntryWindow(selectedItem, connection, this);
-                newEntryWindow.Show();
-            }
+            string photoPath = customerShoeInfo.PhotoPath;
+            return AppDomain.CurrentDomain.BaseDirectory + "images/order/" + photoPath;
         }
 
-        private void ContextMenu_Delete_Custumer(object sender, RoutedEventArgs e)
+        public static bool saveNewOrder(CustomerShoeInfo customerShoeInfo, bool newOrder = true)
         {
             try
             {
-                CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
+              string sql = "";
 
-                if (selectedItem != null)
-                {
-                    var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {selectedItem.Name} ügyfél adatait?", "Törlés megerősítése", MessageBoxButton.YesNo);
-                    if (messageBoxResult == MessageBoxResult.Yes)
+                    if (newOrder)
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(connection))
+                //    sql = @"SELECT * FROM customers WHERE id = @Id;";
+
+
+                    using (var command = new SQLiteCommand(sql, connection))
                         {
-                            cmd.CommandText = $"UPDATE shoes SET customerId = -1 WHERE customerId = {selectedItem.CustomerId};";
-                            cmd.ExecuteNonQuery();
+                            // Add parameters
+                            command.Parameters.AddWithValue("@Name", customerShoeInfo.Custumer.Name);
+                            command.Parameters.AddWithValue("@Address", customerShoeInfo.Custumer.Address);
+                            command.Parameters.AddWithValue("@TajNumber", customerShoeInfo.Custumer.TAJNumber);
 
-                            cmd.CommandText = $"DELETE FROM customers WHERE id = {selectedItem.CustomerId};";
-                            cmd.ExecuteNonQuery();
+                            // Execute command and get the ID of the inserted customer
+                            var customerId = (long)command.ExecuteScalar();
+
+                            sql = @"INSERT INTO shoes (orderNumber, orderDate, orderReleaseDate, photoPath, customerId) 
+                            VALUES (@OrderNumber, @OrderDate, @OrderReleaseDate, @PhotoPath, @CustomerId)";
+
+                            using (var command2 = new SQLiteCommand(sql, connection))
+                            {
+                                // Add parameters
+                                command2.Parameters.AddWithValue("@OrderNumber", customerShoeInfo.OrderNumber);
+                                command2.Parameters.AddWithValue("@OrderDate", customerShoeInfo.OrderDate);
+                                command2.Parameters.AddWithValue("@OrderReleaseDate", customerShoeInfo.OrderReleaseDate);
+                                command2.Parameters.AddWithValue("@PhotoPath", customerShoeInfo.PhotoPath);
+                                command2.Parameters.AddWithValue("@CustomerId", customerShoeInfo.Custumer.Id);
+
+                                // Execute command
+                                command2.ExecuteNonQuery();
+                            }
                         }
-
-                        RefreshData();
                     }
-                }
+                    else
+                    {
+                        sql = @"UPDATE shoes SET orderNumber = @OrderNumber, orderDate = @OrderDate, 
+                        orderReleaseDate = @OrderReleaseDate, photoPath = @PhotoPath
+                        WHERE id = @ShoeId";
+
+                        using (var command = new SQLiteCommand(sql, connection))
+                        {
+                            // Add parameters
+                            command.Parameters.AddWithValue("@OrderNumber", customerShoeInfo.OrderNumber);
+                            command.Parameters.AddWithValue("@OrderDate", customerShoeInfo.OrderDate);
+                            command.Parameters.AddWithValue("@OrderReleaseDate", customerShoeInfo.OrderReleaseDate);
+                            command.Parameters.AddWithValue("@PhotoPath", customerShoeInfo.PhotoPath);
+                            command.Parameters.AddWithValue("@ShoeId", customerShoeInfo.ShoeId);
+
+                            // Execute command
+                            command.ExecuteNonQuery();
+                        }
+                  }
+                if (newOrder) MessageBox.Show("Adatok sikeresen elmentve!");
+                else MessageBox.Show("Adatok sikeresen frissitve!");
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Nem sikerült törölni az ügyél adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
+                MessageBox.Show($"Hiba történt az adatok mentése során! Hibaüzenet: {ex.Message}");
             }
+            return false;
         }
 
-        private void OpenPhotoButton_Click(object sender, RoutedEventArgs e)
+
+        public static List<Custumer> GetCustomers()
         {
-            Button button = (Button)sender;
-            string photoPath = ((CustomerShoeInfo)button.DataContext).PhotoPath;
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + "images/order/" + photoPath;
-            if (File.Exists(filePath))
-            {
-                System.Diagnostics.Process.Start(filePath);
-            }
-            else
-            {
-                MessageBox.Show("A képfájl nem található: " + photoPath);
-            }
+            List<Custumer> customers = new List<Custumer>();
+            customers.Add(new Custumer("Új ember"));
+            return custumerService.getAllCustumers(customers);   
         }
+
+
+       
+
+
+
+
+
+
+
+
+
 
 
 
     }
 }
-    

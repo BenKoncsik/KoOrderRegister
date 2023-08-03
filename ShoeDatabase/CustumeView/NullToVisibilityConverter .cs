@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows;
 
-namespace ShoeDatabase
+namespace ShoeDatabase.CustumeView
 {
     public class NullToVisibilityConverter : IValueConverter
     {

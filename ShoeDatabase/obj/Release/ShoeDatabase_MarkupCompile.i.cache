@@ -10,11 +10,11 @@ none
 false
 TRACE
 I:\xampp\htdocs\gitHub\Shoose\ShoeDatabase\ShoeDatabase\App.xaml
-2-1376777499
+4-1171107268
 
-10558422935
+17892010382
 19125961583
-MainWindow.xaml;NewEntryWindow.xaml;
+View\MainWindow.xaml;View\NewCustumer.xaml;View\NewEntryWindow.xaml;View\Settings.xaml;
 
-False
+True
 
