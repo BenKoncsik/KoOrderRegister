@@ -33,7 +33,7 @@ namespace ShoeDatabase.View
         private void SelectDataBaseButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "SQLite adatbázis (*.db)|*.db";
+            openFileDialog.Filter = "SQLite database (*.db)|*.db";
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;

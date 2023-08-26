@@ -62,9 +62,9 @@ namespace ShoeDatabase
             {
                 orderReleaseDateBox.SelectedDate = dateTime;
             }
-            if(!customer.PhotoPath.Equals("null") && !customer.PhotoPath.Equals("NULL"))
+            if(!customer.FileName.Equals("null") && !customer.FileName.Equals("NULL"))
             {
-                photoFilePath = customer.PhotoPath;
+                photoFilePath = customer.FileName;
                 photoButton.Content = photoFilePath;
             }
             
@@ -149,7 +149,7 @@ namespace ShoeDatabase
                 customerShoeInfo.Note = note;
                 customerShoeInfo.OrderReleaseDate = orderReleaseDate;
                 customerShoeInfo.OrderDate = orderDate;
-                customerShoeInfo.PhotoPath = photoNewName;
+                customerShoeInfo.FileName = photoNewName;
                 customerShoeInfo.OrderNumber = orderNumber;
                 
                 if(OrderService.saveNewOrder(customerShoeInfo, newOrder))
@@ -237,13 +237,13 @@ namespace ShoeDatabase
                 }
                 
                 string newFileName = "";
-                if (newOrder || (customerShoeInfo != null && !customerShoeInfo.PhotoPath.Equals("NULL")))
+                if (newOrder || (customerShoeInfo != null && !customerShoeInfo.FileName.Equals("NULL")))
                 {
                     newFileName = $"{orderNumber}_{name}_{date}_{GenerateRandomSuffix(5)}{System.IO.Path.GetExtension(photoFilePath)}";
                 }
                 else
                 {
-                    newFileName = customerShoeInfo.PhotoPath;
+                    newFileName = customerShoeInfo.FileName;
                 }
                 string newFilePath = System.IO.Path.Combine(newDirectory, newFileName);
 

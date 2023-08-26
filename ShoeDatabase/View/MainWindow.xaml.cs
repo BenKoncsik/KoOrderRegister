@@ -41,7 +41,7 @@ namespace ShoeDatabase
 
         public void RefreshData()
         {  
-            dataGrid.ItemsSource = OrderService.GetCustumerShoInfo(searchBox.Text);            
+            dataGrid.ItemsSource = OrderService.GetCustumerPriducts(searchBox.Text);            
         }
 
 
@@ -134,7 +134,7 @@ namespace ShoeDatabase
         private void OpenPhotoButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            string filePath = OrderService.openImage((CustomerShoeInfo)button.DataContext);
+            string filePath = OrderService.openFile((CustomerShoeInfo)button.DataContext);
             if (File.Exists(filePath))
             {
                 System.Diagnostics.Process.Start(filePath);
