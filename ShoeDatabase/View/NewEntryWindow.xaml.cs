@@ -3,6 +3,7 @@ using ShoeDatabase.Model;
 using ShoeDatabase.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ShoeDatabase
 {
@@ -25,12 +28,18 @@ namespace ShoeDatabase
         private CustomerProduct customerShoeInfo = new CustomerProduct();
         private OrderService orderService = new OrderService();
         private CustumerService custumerService = new CustumerService();
-
+        private ObservableCollection<FileBLOB> images = new ObservableCollection<FileBLOB>();
         public NewEntryWindow()
         {
             InitializeComponent();
-            custumers = custumerService.getAllCustumers();
+            custumers = custumerService.getAllCustumers(custumers);
+            if(custumers.Count <= 0)
+            {
+                custumers.Add(new Custumer("Nincs ember felvéve!"));
+            }
             custumerComboBox.ItemsSource = custumers;
+
+            ImagesListView.ItemsSource = images;
         }
 
         public NewEntryWindow(CustomerProduct customer)
@@ -62,12 +71,8 @@ namespace ShoeDatabase
             {
                 orderReleaseDateBox.SelectedDate = dateTime;
             }
-            /*
-            {
-                photoFilePath = customer.FileName;
-                photoButton.Content = photoFilePath;
-            }*/
-            
+            images = FileService.getFilesObservable(customerShoeInfo.ProductId);
+            ImagesListView.ItemsSource = images;
             foreach (Custumer c in custumers) 
             {
                 if (c.TAJNumber.Equals(customer.TajNumber))
@@ -81,20 +86,7 @@ namespace ShoeDatabase
         }
      
 
-        private void PhotoButton_Click(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
-                Title = "Válassz ki egy fényképet"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                photoButton.Content = System.IO.Path.GetFileName(openFileDialog.FileName);
-                photoFilePath = openFileDialog.FileName;
-            }
-        }
+     
 
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -151,8 +143,8 @@ namespace ShoeDatabase
                 customerShoeInfo.OrderDate = orderDate;
                 customerShoeInfo.FileName = photoNewName;
                 customerShoeInfo.OrderNumber = orderNumber;
-                
-                if(OrderService.saveNewOrder(customerShoeInfo, newOrder))
+                customerShoeInfo.Files = images.ToList<FileBLOB>();
+                if (OrderService.saveNewOrder(customerShoeInfo, newOrder))
                 {
                     this.Close();
                 }
@@ -204,6 +196,8 @@ namespace ShoeDatabase
                 tajNumberBox.Text = selectedCustomer.TAJNumber;
 
                 customerShoeInfo.CustomerId = selectedCustomer.Id;
+
+                
             }
             else 
             {
@@ -254,9 +248,50 @@ namespace ShoeDatabase
             }
             else return "NULL";
         }
-      
 
-     
+
+        private void PhotoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
+                Title = "Válassz ki egy fényképet"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                photoButton.Content = System.IO.Path.GetFileName(openFileDialog.FileName);
+                photoFilePath = openFileDialog.FileName;
+                
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    images.Add(FileService.getFileBLOB(System.IO.Path.GetFileName(openFileDialog.FileName), photoFilePath));
+                }
+            }
+        }
+        
+                private void OpenImage_Click(object sender, RoutedEventArgs e)
+                {
+                    if (ImagesListView.SelectedItem is ImageSource selectedImage)
+                    {
+                        // Handle opening image logic here.
+                    }
+                }
+
+                private void DeleteImage_Click(object sender, RoutedEventArgs e)
+                {
+                    if (ImagesListView.SelectedItem is ImageSource selectedImage)
+                    {
+                        //images.Remove();
+                    }
+                }
+        private void RenameImage_Click(object sender, RoutedEventArgs e) { }
+        private void SaveImage_Click(object sender, RoutedEventArgs e) { }
+        private void OnImageSelected(object sender, RoutedEventArgs e) { }
+        
+
+
+
 
     }
 }

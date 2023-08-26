@@ -49,29 +49,39 @@ namespace ShoeDatabase.Services
             }
             else
             {
-                connection = new SQLiteConnection(@"Data Source=products.db;");
-                connection.Open();
-                databesInitzialized = true;
+                if (settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
+                {
+                    connection = new SQLiteConnection(@"Data Source=products.db;");
+                    connection.Open();
+                    databesInitzialized = true;
+                } else
+                {
+                    connection = new SQLiteConnection(@"Data Source=" + settingsService.GetSetting(SettingsService.DataBaseLocation) + ";");
+                    connection.Open();
+                    databesInitzialized = true;
+                }
             }
         }
         public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
         {
-            List<CustomerProduct> customerProducts = new List<CustomerProduct>();
-
-            if (!databesInitzialized)
-                ConectDateBase();  // Feltételezem, hogy ez a metódus létezik és inicializálja az adatbázis kapcsolatot
-
-            string query;
-            if (string.IsNullOrEmpty(searchText))
+            try
             {
-                query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                List<CustomerProduct> customerProducts = new List<CustomerProduct>();
+
+                if (!databesInitzialized)
+                    ConectDateBase();  // Feltételezem, hogy ez a metódus létezik és inicializálja az adatbázis kapcsolatot
+
+                string query;
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
                           c.name, c.address, c.tajNumber, c.id as customerId
                   FROM products p
                   LEFT JOIN customers c ON p.customerId = c.id";
-            }
-            else
-            {
-                query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                }
+                else
+                {
+                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
                           c.name, c.address, c.tajNumber, c.id as customerId
                   FROM products p
                   LEFT JOIN customers c ON p.customerId = c.id
@@ -81,36 +91,41 @@ namespace ShoeDatabase.Services
                         p.orderNumber LIKE @SearchText OR
                         p.orderDate LIKE @SearchText OR
                         p.orderReleaseDate LIKE @SearchText";
-            }
-
-            using (SQLiteCommand command = new SQLiteCommand(query, connection))
-            {
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    string searchPattern = "%" + searchText + "%";
-                    command.Parameters.AddWithValue("@SearchText", searchPattern);
                 }
 
-                using (SQLiteDataReader reader = command.ExecuteReader())
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
-                    while (reader.Read())
+                    if (!string.IsNullOrEmpty(searchText))
                     {
-                        customerProducts.Add(new CustomerProduct
+                        string searchPattern = "%" + searchText + "%";
+                        command.Parameters.AddWithValue("@SearchText", searchPattern);
+                    }
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
                         {
-                            ProductId = reader.IsDBNull(0) ? -1 : reader.GetInt64(0),
-                            OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
-                            OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                            OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
-                            Name = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                            Address = reader.IsDBNull(5) ? "" : reader.GetString(5),
-                            TajNumber = reader.IsDBNull(6) ? "" : reader.GetString(6),
-                            CustomerId = reader.IsDBNull(7) ? -1 : reader.GetInt64(7)
-                        });
+                            customerProducts.Add(new CustomerProduct
+                            {
+                                ProductId = reader.IsDBNull(0) ? -1 : reader.GetInt64(0),
+                                OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                                OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                                OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
+                                Name = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                                Address = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                                TajNumber = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                CustomerId = reader.IsDBNull(7) ? -1 : reader.GetInt64(7)
+                            });
+                        }
                     }
                 }
-            }
 
-            return customerProducts;
+                return customerProducts;
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
+                return null;
+            }
         }
 
        
@@ -271,7 +286,7 @@ namespace ShoeDatabase.Services
                 }
                 else
                 {
-                    string sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, 
+                    string sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, customerId = @CustomerId, 
                           orderReleaseDate = @OrderReleaseDate WHERE id = @ProductId";
 
                     using (var command = new SQLiteCommand(sql, connection))
@@ -279,6 +294,7 @@ namespace ShoeDatabase.Services
                         command.Parameters.AddWithValue("@OrderNumber", customerProduct.OrderNumber);
                         command.Parameters.AddWithValue("@OrderDate", customerProduct.OrderDate);
                         command.Parameters.AddWithValue("@OrderReleaseDate", customerProduct.OrderReleaseDate);
+                        command.Parameters.AddWithValue("@CustomerId", customerProduct.Custumer.Id);
                         command.Parameters.AddWithValue("@ProductId", customerProduct.ProductId);
                         command.ExecuteNonQuery();
                     }

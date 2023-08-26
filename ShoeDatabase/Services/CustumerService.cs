@@ -39,7 +39,7 @@ namespace ShoeDatabase.Services
             {
                 if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
                 {
-                    connection = new SQLiteConnection(@"Data Source=shoe.db;");
+                    connection = new SQLiteConnection(@"Data Source=pruducts.db;");
                     connection.Open();
                     databesInitzialized = true;
                 }

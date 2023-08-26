@@ -6,11 +6,13 @@ namespace ShoeDatabase.Model
     {
         public CustomerProduct() 
         { 
-            Custumer = new Custumer(); 
+            Custumer = new Custumer();
+            this.Files = new List<FileBLOB>();
         }
         public CustomerProduct(Custumer c)
         {
             Custumer = c;
+            this.Files = new List<FileBLOB>();
         }
         public CustomerProduct(long productID, string orderNumber, string orderDate, string orderEelaseDate, string note, Custumer custumer) 
         {
@@ -20,6 +22,7 @@ namespace ShoeDatabase.Model
             this.OrderReleaseDate = orderEelaseDate;
             this.Note = note;
             this.Custumer = custumer;
+            this.Files = new List<FileBLOB>();
 
         }
         public Custumer Custumer { get; set; }
