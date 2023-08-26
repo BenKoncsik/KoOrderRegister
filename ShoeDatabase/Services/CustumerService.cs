@@ -37,7 +37,7 @@ namespace ShoeDatabase.Services
             }
             else
             {
-                if (File.Exists("shoe.db"))
+                if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
                 {
                     connection = new SQLiteConnection(@"Data Source=shoe.db;");
                     connection.Open();
@@ -101,21 +101,21 @@ namespace ShoeDatabase.Services
             }
         }
 
-            public static bool deleteCustumer(CustomerShoeInfo shoeInfo)
+            public static bool deleteCustumer(CustomerProduct pruduct)
             {
                 try
                 {
-                    if (shoeInfo != null)
+                    if (pruduct != null)
                     {
-                        var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {shoeInfo.Name} ügyfél adatait?", "Törlés megerősítése", MessageBoxButton.YesNo);
+                        var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {pruduct.Name} ügyfél adatait?", "Törlés megerősítése", MessageBoxButton.YesNo);
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                             using (SQLiteCommand cmd = new SQLiteCommand(connection))
                             {
-                                cmd.CommandText = $"UPDATE shoes SET customerId = -1 WHERE customerId = {shoeInfo.CustomerId};";
+                                cmd.CommandText = $"UPDATE products SET customerId = -1 WHERE customerId = {pruduct.CustomerId};";
                                 cmd.ExecuteNonQuery();
 
-                                cmd.CommandText = $"DELETE FROM customers WHERE id = {shoeInfo.CustomerId};";
+                                cmd.CommandText = $"DELETE FROM customers WHERE id = {pruduct.CustomerId};";
                                 cmd.ExecuteNonQuery();
                             }
                             return true;

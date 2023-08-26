@@ -42,7 +42,10 @@
         <Label Grid.Row="3" Grid.Column="0" Content="TAJ szám:"/>
         <TextBox x:Name="tajNumberBox" Grid.Row="3" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" TextChanged="TajNumberBox_TextChanged" HorizontalAlignment="Stretch"/>
 
-       
+        <Button x:Name="DeleteButton" Width="Auto" Height="50" Grid.Row="8" Grid.Column="1" Click="DeleteButton_Click">
+            Törlés
+        </Button>
+
 
 
         <Button x:Name="CancelButton" Width="Auto" Height="50" Grid.Row="10" Grid.Column="0" Click="CancelButton_Click">Mégse</Button>

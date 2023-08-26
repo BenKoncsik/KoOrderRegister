@@ -53,16 +53,31 @@ namespace ShoeDatabase.Services
         }
         public static bool save(FileBLOB file)
         {
-            try { 
-            using (SQLiteCommand command = new SQLiteCommand(OrderService.connection))
+            try
             {
-                command.CommandText = @"INSERT INTO files (fileName, fileBlob) VALUES (@FileName, @FileBlob)";
-                command.Parameters.AddWithValue("@FileName", file.Name);
-                command.Parameters.AddWithValue("@FileBlob", file.Data);
+                long fileId;
+                using (SQLiteCommand command = new SQLiteCommand(OrderService.connection))
+                {
+                    command.CommandText = @"INSERT INTO files (fileName, fileBlob) VALUES (@FileName, @FileBlob)";
+                    command.Parameters.AddWithValue("@FileName", file.Name);
+                    command.Parameters.AddWithValue("@FileBlob", file.Data);
 
-                command.ExecuteNonQuery();
-            }
-            return true;
+                    command.ExecuteNonQuery();
+
+                    // Get the ID of the inserted file
+                    fileId = (long)new SQLiteCommand("SELECT last_insert_rowid()", OrderService.connection).ExecuteScalar();
+                }
+
+                // Now, we will insert the relation into the product_files table
+                using (SQLiteCommand command = new SQLiteCommand(OrderService.connection))
+                {
+                    command.CommandText = @"INSERT INTO product_files (orderId, fileId) VALUES (@OrderId, @FileId)";
+                    command.Parameters.AddWithValue("@OrderId", file.ProductID);
+                    command.Parameters.AddWithValue("@FileId", fileId);
+
+                    command.ExecuteNonQuery();
+                }
+                return true;
             }
             catch
             {
@@ -104,7 +119,7 @@ namespace ShoeDatabase.Services
                         {
                             FileBLOB fileBlob = new FileBLOB
                             {
-                                ID = reader.GetInt64(0),
+                                ID = (int)reader.GetInt64(0),
                                 Name = reader.GetString(1),
                                 Data = (byte[])reader[2]
                             };

@@ -23,7 +23,7 @@ namespace ShoeDatabase.View
         private List<Custumer> custumers = new List<Custumer>();
         private OrderService orderService = new OrderService();
         private CustumerService custumerService = new CustumerService();
-        private int custumerId = -1;
+        private long custumerId = -1;
         public NewCustumer()
         {
             InitializeComponent();
@@ -40,6 +40,8 @@ namespace ShoeDatabase.View
                 addressBox.Text = selectedCustomer.Address;
                 tajNumberBox.Text = selectedCustomer.TAJNumber;
                 custumerId = selectedCustomer.Id;
+                DeleteButton.Visibility = Visibility.Visible;
+
             }
             else
             {
@@ -47,6 +49,7 @@ namespace ShoeDatabase.View
                 addressBox.Text = "";
                 tajNumberBox.Text = "";
                 custumerId = -1;
+                DeleteButton.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -109,6 +112,26 @@ namespace ShoeDatabase.View
                         }
                     }
                 }
+            }
+        }
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (custumerId != -1) {
+                MessageBoxResult result = MessageBox.Show("Biztosan törölni szeretné ezt az ügyfelet?", "Megerősítés", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    foreach (Custumer c in custumers)
+                    {
+                        if (c.Id.Equals(custumerId))
+                        {
+                            CustumerService.deleteCustumer(new CustomerProduct(c));
+                            break;
+                        }
+                    }
+                }
+                    
             }
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)

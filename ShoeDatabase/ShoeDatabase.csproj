@@ -106,8 +106,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\BuckupModel.cs" />
+    <Compile Include="Model\FileBLOB.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Services\CustumerService.cs" />
+    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="View\NewCustumer.xaml.cs">
@@ -124,7 +126,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\CustumerShoeInfo.cs" />
+    <Compile Include="Model\CustomerProduct.cs" />
     <Compile Include="Model\Custumer.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

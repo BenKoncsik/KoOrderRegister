@@ -47,6 +47,7 @@
             <MenuItem Header="Beállítások" Click="SettingsBox_CLick"/>
             <MenuItem Header="Developer" HorizontalAlignment="Right">
                 <MenuItem Header="Új adatbázis" Click="CreateDatabase_Click" />
+                <MenuItem Header="Adatbázis Ellenőrzése" Click="CheckDB_Click" />
                 <MenuItem Header="Kapcsolat" Click="DeveloperContact_Click"/>
                 <MenuItem Header="Fejlesztő weboldala" Click="DeveloperWebSite_Click"/>
                 <MenuItem Header="Contact me in X" Click="DeveloperX_Click" />

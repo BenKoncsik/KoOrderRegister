@@ -30,7 +30,7 @@ namespace ShoeDatabase.Services
                 databesInitzialized = true;
                 return;
             }
-            if (!File.Exists("products.db"))
+            if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "SQLite adatbázis (*.db)|*.db";
@@ -49,107 +49,104 @@ namespace ShoeDatabase.Services
             }
             else
             {
-                connection = new SQLiteConnection(@"Data Source=shoe.db;");
+                connection = new SQLiteConnection(@"Data Source=products.db;");
                 connection.Open();
                 databesInitzialized = true;
             }
         }
-
-        public static List<CustomerShoeInfo> GetCustumerPriducts(string searchText = "")
+        public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
         {
-            if (databesInitzialized)
+            List<CustomerProduct> customerProducts = new List<CustomerProduct>();
+
+            if (!databesInitzialized)
+                ConectDateBase();  // Feltételezem, hogy ez a metódus létezik és inicializálja az adatbázis kapcsolatot
+
+            string query;
+            if (string.IsNullOrEmpty(searchText))
             {
-                try
+                query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                          c.name, c.address, c.tajNumber, c.id as customerId
+                  FROM products p
+                  LEFT JOIN customers c ON p.customerId = c.id";
+            }
+            else
+            {
+                query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                          c.name, c.address, c.tajNumber, c.id as customerId
+                  FROM products p
+                  LEFT JOIN customers c ON p.customerId = c.id
+                  WHERE c.name LIKE @SearchText OR
+                        c.address LIKE @SearchText OR
+                        c.tajNumber LIKE @SearchText OR
+                        p.orderNumber LIKE @SearchText OR
+                        p.orderDate LIKE @SearchText OR
+                        p.orderReleaseDate LIKE @SearchText";
+            }
+
+            using (SQLiteCommand command = new SQLiteCommand(query, connection))
+            {
+                if (!string.IsNullOrEmpty(searchText))
                 {
-                    string query;
-                    Console.WriteLine($"Search Text: {searchText}");
-                    if (string.IsNullOrEmpty(searchText))
-                    {
-                        query = @"SELECT s.id, s.orderNumber, s.orderDate, s.orderReleaseDate, s.photoPath,
-                                  c.name, c.address, c.tajNumber, c.id as coustumer_id
-                                    FROM productss s 
-                                    LEFT JOIN customers c 
-                                    ON s.customerId = c.id";
-                    }
-                    else
-                    {
-                        query = $@"
-                                SELECT s.id as shoue_id, s.orderNumber, s.orderDate, s.orderReleaseDate, s.photoPath,
-                                        c.name, c.address, c.tajNumber, c.id as coustumer_id
-                                FROM products s 
-                                LEFT JOIN customers c 
-                                ON s.customerId = c.id 
-                                WHERE c.name LIKE '%{searchText}%' OR
-                                      c.address LIKE '%{searchText}%' OR
-                                      c.tajNumber LIKE '%{searchText}%' OR
-                                      s.orderNumber LIKE '%{searchText}%' OR
-                                      s.orderDate LIKE '%{searchText}%' OR
-                                      s.orderReleaseDate LIKE '%{searchText}%'";
-                    }
-
-                    List<CustomerShoeInfo> customerShoeInfos = new List<CustomerShoeInfo>();
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
-                    {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                customerShoeInfos.Add(new CustomerShoeInfo
-                                {
-                                    ProductId = reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
-                                    OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
-                                    OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                                    OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
-                                    FileName = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                                    Name = reader.IsDBNull(5) ? "" : reader.GetString(5),
-                                    Address = reader.IsDBNull(6) ? "" : reader.GetString(6),
-                                    TajNumber = reader.IsDBNull(7) ? "" : reader.GetString(7),
-                                    CustomerId = reader.IsDBNull(8) ? -1 : reader.GetInt32(8)
-                                });
-                            }
-                            return customerShoeInfos;
-                        }
-                    }
+                    string searchPattern = "%" + searchText + "%";
+                    command.Parameters.AddWithValue("@SearchText", searchPattern);
                 }
-                catch (Exception ex)
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    MessageBox.Show("Nem megfelelő adatbázis!\n" + ex.Message);
+                    while (reader.Read())
+                    {
+                        customerProducts.Add(new CustomerProduct
+                        {
+                            ProductId = reader.IsDBNull(0) ? -1 : reader.GetInt64(0),
+                            OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                            OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                            OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
+                            Name = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                            Address = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                            TajNumber = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                            CustomerId = reader.IsDBNull(7) ? -1 : reader.GetInt64(7)
+                        });
+                    }
                 }
             }
-            return new List<CustomerShoeInfo>();
+
+            return customerProducts;
         }
+
+       
 
 
         public static SQLiteConnection createDateBase()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "SQLite Database|*.db";
-            if (saveFileDialog.ShowDialog() == true)
+            try
             {
-                string dbPath = saveFileDialog.FileName;
-                SQLiteConnection.CreateFile(dbPath);
-                using (SQLiteConnection connection = new SQLiteConnection($"Data Source={dbPath};"))
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "SQLite Database|*.db";
+                if (saveFileDialog.ShowDialog() == true)
                 {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    string dbPath = saveFileDialog.FileName;
+                    SQLiteConnection.CreateFile(dbPath);
+                    using (SQLiteConnection connection = new SQLiteConnection($"Data Source={dbPath};"))
                     {
-                        command.CommandText = @"CREATE TABLE customers (
+                        connection.Open();
+                        using (SQLiteCommand command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = @"CREATE TABLE customers (
                                                 id INTEGER PRIMARY KEY, 
                                                 name TEXT, 
                                                 address TEXT,
                                                 tajNumber TEXT UNIQUE
                                                 );";
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
-                        command.CommandText = @"CREATE TABLE files (
+                            command.CommandText = @"CREATE TABLE files (
                                                 fileId INTEGER PRIMARY KEY,
                                                 fileName TEXT,
                                                 fileBlob BLOB
                                             );";
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
-                        command.CommandText = @"CREATE TABLE products (
+                            command.CommandText = @"CREATE TABLE products (
                                                 id INTEGER PRIMARY KEY, 
                                                 orderNumber TEXT,
                                                 orderDate TEXT,
@@ -157,124 +154,160 @@ namespace ShoeDatabase.Services
                                                 customerId INTEGER,
                                                 FOREIGN KEY(customerId) REFERENCES customers(id)
                                                 );";
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
-                        command.CommandText = @"CREATE TABLE product_files (
+                            command.CommandText = @"CREATE TABLE product_files (
                                                 productId INTEGER,
                                                 fileId INTEGER,
                                                 FOREIGN KEY(productId) REFERENCES products(id),
                                                 FOREIGN KEY(fileId) REFERENCES files(fileId)
                                             );";
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
 
+                        }
                     }
+                    return connection;
                 }
-                return connection;
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Nem sikerült adatbázis létrehozni: " + ex.Message);
             }
             return null;
         }
 
-        public static bool deletOrder(CustomerShoeInfo delteOreder)
+        public static bool deletOrder(CustomerProduct delteOreder)
+        {
+            using (SQLiteTransaction transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    // Töröljük az összes hozzá kapcsolódó fájlt a product_files táblából
+                    string deleteFilesQuery = @"DELETE FROM product_files WHERE productId = @ProductId";
+                    using (SQLiteCommand deleteFilesCommand = new SQLiteCommand(deleteFilesQuery, connection))
+                    {
+                        deleteFilesCommand.Parameters.AddWithValue("@ProductId", delteOreder.ProductId);
+                        deleteFilesCommand.ExecuteNonQuery();
+                    }
+
+                    // Töröljük a terméket a products táblából
+                    string deleteProductQuery = @"DELETE FROM products WHERE id = @ProductId";
+                    using (SQLiteCommand deleteProductCommand = new SQLiteCommand(deleteProductQuery, connection))
+                    {
+                        deleteProductCommand.Parameters.AddWithValue("@ProductId", delteOreder.ProductId);
+                        deleteProductCommand.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Hiba történt a rendelés törlése során! Hibaüzenet: {ex.Message}");
+                    return false;
+                }
+            }
+        }
+
+        public static bool saveNewOrder(CustomerProduct customerProduct, bool newOrder = true)
         {
             try
             {
-                if (delteOreder != null)
+                if (!databesInitzialized) ConectDateBase();
+
+                long customerId;
+                long productId;
+
+                // Check if the customer already exists
+                using (var checkCommand = new SQLiteCommand("SELECT id FROM customers WHERE tajNumber = @TajNumber", connection))
                 {
-                    var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {delteOreder.Name} ügyfél " +
-                        $"{delteOreder.OrderNumber} számú rendelését?", "Törlés megerősítése", MessageBoxButton.YesNo);
-                    if (messageBoxResult == MessageBoxResult.Yes)
+                    checkCommand.Parameters.AddWithValue("@TajNumber", customerProduct.Custumer.TAJNumber);
+                    object result = checkCommand.ExecuteScalar();
+
+                    if (result != null) // customer exists
                     {
-                        if (FileService.deleteFilesWithOrder(delteOreder.ProductId))
+                        customerId = Convert.ToInt32(result);
+
+                        // Update the customer's details
+                        string updateSql = "UPDATE customers SET name = @Name, address = @Address WHERE id = @CustomerId";
+                        using (var updateCommand = new SQLiteCommand(updateSql, connection))
                         {
-                            string sql = $"DELETE FROM products WHERE id = @id";
+                            updateCommand.Parameters.AddWithValue("@Name", customerProduct.Custumer.Name);
+                            updateCommand.Parameters.AddWithValue("@Address", customerProduct.Custumer.Address);
+                            updateCommand.Parameters.AddWithValue("@CustomerId", customerId);
+                            updateCommand.ExecuteNonQuery();
+                        }
+                    }
+                    else // customer doesn't exist
+                    {
+                        string insertSql = @"INSERT INTO customers (name, address, tajNumber) 
+                                     VALUES (@Name, @Address, @TajNumber);
+                                     SELECT last_insert_rowid();";
 
-                            using (var command = new SQLiteCommand(sql, connection))
-                            {
-                                command.Parameters.AddWithValue("@id", delteOreder.ProductId);
-                                command.ExecuteNonQuery();
-                            }
-
-                            return true;
+                        using (var insertCommand = new SQLiteCommand(insertSql, connection))
+                        {
+                            insertCommand.Parameters.AddWithValue("@Name", customerProduct.Custumer.Name);
+                            insertCommand.Parameters.AddWithValue("@Address", customerProduct.Custumer.Address);
+                            insertCommand.Parameters.AddWithValue("@TajNumber", customerProduct.Custumer.TAJNumber);
+                            customerId = Convert.ToInt32(insertCommand.ExecuteScalar());
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nem sikerült törölni a sor adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
-            }
-            return false;
-        }
-
-
-
-
-       
-
-
-        public static bool saveNewOrder(CustomerShoeInfo customerShoeInfo, bool newOrder = true)
-        {
-            try
-            {
-                string sql = "";
 
                 if (newOrder)
                 {
+                    string sql = @"INSERT INTO products (orderNumber, orderDate, orderReleaseDate, customerId) 
+                   VALUES (@OrderNumber, @OrderDate, @OrderReleaseDate, @CustomerId);
+                   SELECT last_insert_rowid();";
+
                     using (var command = new SQLiteCommand(sql, connection))
                     {
-                        // Add parameters
-                        command.Parameters.AddWithValue("@Name", customerShoeInfo.Custumer.Name);
-                        command.Parameters.AddWithValue("@Address", customerShoeInfo.Custumer.Address);
-                        command.Parameters.AddWithValue("@TajNumber", customerShoeInfo.Custumer.TAJNumber);
-
-                        // Execute command and get the ID of the inserted customer
-                        var customerId = (long)command.ExecuteScalar();
-
-                        sql = @"INSERT INTO products (orderNumber, orderDate, orderReleaseDate, customerId) 
-                            VALUES (@OrderNumber, @OrderDate, @OrderReleaseDate, @CustomerId)";
-
-                        using (var command2 = new SQLiteCommand(sql, connection))
-                        {
-                            // Add parameters
-                            command2.Parameters.AddWithValue("@OrderNumber", customerShoeInfo.OrderNumber);
-                            command2.Parameters.AddWithValue("@OrderDate", customerShoeInfo.OrderDate);
-                            command2.Parameters.AddWithValue("@OrderReleaseDate", customerShoeInfo.OrderReleaseDate);
-                            command2.Parameters.AddWithValue("@CustomerId", customerShoeInfo.Custumer.Id);
-
-                            // Execute command
-                            command2.ExecuteNonQuery();
-                        }
-                       
+                        command.Parameters.AddWithValue("@OrderNumber", customerProduct.OrderNumber);
+                        command.Parameters.AddWithValue("@OrderDate", customerProduct.OrderDate);
+                        command.Parameters.AddWithValue("@OrderReleaseDate", customerProduct.OrderReleaseDate);
+                        command.Parameters.AddWithValue("@CustomerId", customerId);
+                        productId = Convert.ToInt32(command.ExecuteScalar());
                     }
                 }
                 else
                 {
-                    sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, 
-                        orderReleaseDate = @OrderReleaseDate, photoPath = @PhotoPath
-                        WHERE id = @ShoeId";
+                    string sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, 
+                          orderReleaseDate = @OrderReleaseDate WHERE id = @ProductId";
 
                     using (var command = new SQLiteCommand(sql, connection))
                     {
-                        // Add parameters
-                        command.Parameters.AddWithValue("@OrderNumber", customerShoeInfo.OrderNumber);
-                        command.Parameters.AddWithValue("@OrderDate", customerShoeInfo.OrderDate);
-                        command.Parameters.AddWithValue("@OrderReleaseDate", customerShoeInfo.OrderReleaseDate);
-                        command.Parameters.AddWithValue("@ShoeId", customerShoeInfo.ProductId);
-
-                        // Execute command
+                        command.Parameters.AddWithValue("@OrderNumber", customerProduct.OrderNumber);
+                        command.Parameters.AddWithValue("@OrderDate", customerProduct.OrderDate);
+                        command.Parameters.AddWithValue("@OrderReleaseDate", customerProduct.OrderReleaseDate);
+                        command.Parameters.AddWithValue("@ProductId", customerProduct.ProductId);
                         command.ExecuteNonQuery();
                     }
+                    productId = customerProduct.ProductId;
                 }
-                if (newOrder) MessageBox.Show("Adatok sikeresen elmentve!");
-                else MessageBox.Show("Adatok sikeresen frissitve!");
+
+                if (customerProduct.Files != null)
+                {
+                    foreach (FileBLOB file in customerProduct.Files)
+                    {
+                        file.ProductID = productId;
+                        FileService.save(file);
+                    }
+                }
+
+                if (newOrder)
+                    MessageBox.Show("Adatok sikeresen elmentve!");
+                else
+                    MessageBox.Show("Adatok sikeresen frissitve!");
+
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Hiba történt az adatok mentése során! Hibaüzenet: {ex.Message}");
+                return false;
             }
-            return false;
         }
+
 
 
         public static List<Custumer> GetCustomers()

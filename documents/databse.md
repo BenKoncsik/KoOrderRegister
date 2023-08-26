@@ -16,11 +16,6 @@
 	fileId INTEGER,
 	FOREIGN KEY(orderId) REFERENCES products(id),
 	FOREIGN KEY(photoId) REFERENCES files(photoId)
-#product photos
-	orderId INTEGER,
-    photoId INTEGER,
-    FOREIGN KEY(orderId) REFERENCES your_table_name(id),
-    FOREIGN KEY(photoId) REFERENCES photos(photoId)
 # Custumers
 	id INTEGER PRIMARY KEY, 
 	name TEXT, 

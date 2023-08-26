@@ -22,7 +22,7 @@ namespace ShoeDatabase
         private List<Custumer> custumers = new List<Custumer>();
         private bool newOrder = true;
         private DateTime OrderDateTime { get; set; } = DateTime.Now;
-        private CustomerShoeInfo customerShoeInfo = new CustomerShoeInfo();
+        private CustomerProduct customerShoeInfo = new CustomerProduct();
         private OrderService orderService = new OrderService();
         private CustumerService custumerService = new CustumerService();
 
@@ -33,7 +33,7 @@ namespace ShoeDatabase
             custumerComboBox.ItemsSource = custumers;
         }
 
-        public NewEntryWindow(CustomerShoeInfo customer)
+        public NewEntryWindow(CustomerProduct customer)
         {
             InitializeComponent();
             newOrder = false;
@@ -62,11 +62,11 @@ namespace ShoeDatabase
             {
                 orderReleaseDateBox.SelectedDate = dateTime;
             }
-            if(!customer.FileName.Equals("null") && !customer.FileName.Equals("NULL"))
+            /*
             {
                 photoFilePath = customer.FileName;
                 photoButton.Content = photoFilePath;
-            }
+            }*/
             
             foreach (Custumer c in custumers) 
             {
