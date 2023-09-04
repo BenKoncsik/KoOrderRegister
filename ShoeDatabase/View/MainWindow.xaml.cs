@@ -90,7 +90,7 @@ namespace ShoeDatabase
         {
             try
             {
-                CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
+                CustomerProduct selectedItem = (CustomerProduct)dataGrid.SelectedItem;
 
                 if (OrderService.deletOrder(selectedItem))
                 {
@@ -105,7 +105,7 @@ namespace ShoeDatabase
 
         private void ContextMenu_Change(object sender, RoutedEventArgs e)
         {
-            CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
+            CustomerProduct selectedItem = (CustomerProduct)dataGrid.SelectedItem;
             if (selectedItem != null)
             {
                 NewEntryWindow newEntryWindow = new NewEntryWindow(selectedItem);
@@ -118,7 +118,7 @@ namespace ShoeDatabase
         {
             try
             {
-                CustomerShoeInfo selectedItem = (CustomerShoeInfo)dataGrid.SelectedItem;
+                CustomerProduct selectedItem = (CustomerProduct)dataGrid.SelectedItem;
 
                 if (CustumerService.deleteCustumer(selectedItem))
                 {
@@ -133,16 +133,9 @@ namespace ShoeDatabase
 
         private void OpenPhotoButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            string filePath = OrderService.openFile((CustomerShoeInfo)button.DataContext);
-            if (File.Exists(filePath))
-            {
-                System.Diagnostics.Process.Start(filePath);
-            }
-            else
-            {
-                MessageBox.Show("A képfájl nem található: " + filePath);
-            }
+          /*  Button button = (Button)sender;
+            CustomerProduct customerProduct = (CustomerProduct)button.DataContext;
+            FileService.OpenFileFromDatabase(customerProduct.Files.First());*/
         }
 
 
@@ -203,7 +196,19 @@ namespace ShoeDatabase
             OrderService.createDateBase();    
             RefreshData();
         }
-
+        private void CheckDB_Click(object sender, RoutedEventArgs e)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table';", OrderService.connection))
+            {
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MessageBox.Show(reader.GetString(0));
+                    }
+                }
+            }
+        }
        
 
 

@@ -133,9 +133,6 @@ namespace ShoeDatabase.Services
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=settings.db"))
                 {
                     connection.Open();
-
-                    //string sql = $"INSERT INTO settings (setting_name, setting_value) VALUES (@name, @value) " +
-                    //           $"ON CONFLICT(setting_name) DO UPDATE SET setting_value = @value";
                     string sql = "INSERT OR REPLACE INTO settings (setting_name, setting_value) VALUES (@name, @value)";
 
 

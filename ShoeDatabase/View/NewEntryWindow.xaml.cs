@@ -3,6 +3,8 @@ using ShoeDatabase.Model;
 using ShoeDatabase.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ShoeDatabase
 {
@@ -22,18 +26,25 @@ namespace ShoeDatabase
         private List<Custumer> custumers = new List<Custumer>();
         private bool newOrder = true;
         private DateTime OrderDateTime { get; set; } = DateTime.Now;
-        private CustomerShoeInfo customerShoeInfo = new CustomerShoeInfo();
+        private CustomerProduct customerShoeInfo = new CustomerProduct();
         private OrderService orderService = new OrderService();
         private CustumerService custumerService = new CustumerService();
-
+        private ObservableCollection<FileBLOB> images = new ObservableCollection<FileBLOB>();
         public NewEntryWindow()
         {
             InitializeComponent();
-            custumers = custumerService.getAllCustumers();
+            noteBox.Text = "";
+            custumers = custumerService.getAllCustumers(custumers);
+            if(custumers.Count <= 0)
+            {
+                custumers.Add(new Custumer("Nincs ember felvéve!"));
+            }
             custumerComboBox.ItemsSource = custumers;
+
+            ImagesListView.ItemsSource = images;
         }
 
-        public NewEntryWindow(CustomerShoeInfo customer)
+        public NewEntryWindow(CustomerProduct customer)
         {
             InitializeComponent();
             newOrder = false;
@@ -43,8 +54,8 @@ namespace ShoeDatabase
             tajNumberBox.Text = customer.TajNumber;
             orderNumberBox.Text = customer.OrderNumber;
             custumers = custumerService.getAllCustumers();
+            noteBox.Text = customer.Note;
             custumerComboBox.ItemsSource = custumers;
-
             DateTime dateTime = DateTime.Now;
             if (!customer.OrderDate.Equals("NULL"))
             {
@@ -62,12 +73,8 @@ namespace ShoeDatabase
             {
                 orderReleaseDateBox.SelectedDate = dateTime;
             }
-            if(!customer.FileName.Equals("null") && !customer.FileName.Equals("NULL"))
-            {
-                photoFilePath = customer.FileName;
-                photoButton.Content = photoFilePath;
-            }
-            
+            images = FileService.getFilesObservable(customerShoeInfo.ProductId);
+            ImagesListView.ItemsSource = images;
             foreach (Custumer c in custumers) 
             {
                 if (c.TAJNumber.Equals(customer.TajNumber))
@@ -81,20 +88,7 @@ namespace ShoeDatabase
         }
      
 
-        private void PhotoButton_Click(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
-                Title = "Válassz ki egy fényképet"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                photoButton.Content = System.IO.Path.GetFileName(openFileDialog.FileName);
-                photoFilePath = openFileDialog.FileName;
-            }
-        }
+     
 
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -142,6 +136,10 @@ namespace ShoeDatabase
             string orderReleaseDate = orderReleaseDateBox.SelectedDate.HasValue ? orderReleaseDateBox.SelectedDate.Value.ToString("yyyy-MM-dd") : "NULL";
             string photoNewName = HandlePhotoFile(photoFilePath, orderNumber, name, orderDate);
             string note = "";
+            if(!string.IsNullOrWhiteSpace(noteBox.Text))
+            {
+                note = noteBox.Text;
+            }
             try {
                 customerShoeInfo.Name = name;
                 customerShoeInfo.Address = address;
@@ -151,8 +149,8 @@ namespace ShoeDatabase
                 customerShoeInfo.OrderDate = orderDate;
                 customerShoeInfo.FileName = photoNewName;
                 customerShoeInfo.OrderNumber = orderNumber;
-                
-                if(OrderService.saveNewOrder(customerShoeInfo, newOrder))
+                customerShoeInfo.Files = images.ToList<FileBLOB>();
+                if (OrderService.saveNewOrder(customerShoeInfo, newOrder))
                 {
                     this.Close();
                 }
@@ -204,6 +202,8 @@ namespace ShoeDatabase
                 tajNumberBox.Text = selectedCustomer.TAJNumber;
 
                 customerShoeInfo.CustomerId = selectedCustomer.Id;
+
+                
             }
             else 
             {
@@ -254,9 +254,110 @@ namespace ShoeDatabase
             }
             else return "NULL";
         }
-      
 
-     
+
+        private void PhotoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
+                Title = "Válassz ki egy fényképet"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                photoButton.Content = System.IO.Path.GetFileName(openFileDialog.FileName);
+                photoFilePath = openFileDialog.FileName;
+                
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    images.Add(FileService.getFileBLOB(System.IO.Path.GetFileName(openFileDialog.FileName), photoFilePath));
+                }
+            }
+        }
+
+        private void OpenImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedFileBlob)
+            {
+                BitmapImage bitmapImage = selectedFileBlob.BitmapImage;
+
+                // Fájl elmentése
+                string tempPath = Path.Combine(Path.GetTempPath(), selectedFileBlob.Name + ".jpg");
+                using (FileStream fileStream = new FileStream(tempPath, FileMode.Create))
+                {
+                    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                    encoder.Save(fileStream);
+                }
+
+                // Megnyitás az alapértelmezett képnézegetőben
+                Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+            }
+        }
+
+        private void DeleteImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedImage)
+            {
+                if (FileService.deleteFile(selectedImage))
+                {
+                    images.Remove(selectedImage);
+                }
+            }
+        }
+        private void RenameImage_Click(object sender, RoutedEventArgs e) 
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedImage)
+            {
+                if (FileService.renameFile(selectedImage))
+                {
+                    int index = images.IndexOf(selectedImage);
+                    if (index != -1)
+                    {
+                        images[index] = selectedImage;
+                    }
+                }
+            }
+        }
+
+
+        private void SaveImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedFileBlob)
+            {
+                BitmapImage bitmapImage = selectedFileBlob.BitmapImage;
+
+                // Megnyitás a SaveFileDialog segítségével
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = selectedFileBlob.Name; // Alapértelmezett fájlnév
+                saveFileDialog.DefaultExt = ".jpg"; // Alapértelmezett fájlkiterjesztés
+                saveFileDialog.Filter = "JPEG képek (.jpg)|*.jpg"; // Szűrők
+
+                // Dialógus megnyitása és fájl mentése, ha a felhasználó megnyomja a 'Mentés' gombot
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                        encoder.Save(fileStream);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        //private void SaveImage_Click(object sender, RoutedEventArgs e) { }
+        private void OnImageSelected(object sender, RoutedEventArgs e) { }
+        
+
+
+
 
     }
 }

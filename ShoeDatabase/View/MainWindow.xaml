@@ -47,6 +47,7 @@
             <MenuItem Header="Beállítások" Click="SettingsBox_CLick"/>
             <MenuItem Header="Developer" HorizontalAlignment="Right">
                 <MenuItem Header="Új adatbázis" Click="CreateDatabase_Click" />
+                <MenuItem Header="Adatbázis Ellenőrzése" Click="CheckDB_Click" />
                 <MenuItem Header="Kapcsolat" Click="DeveloperContact_Click"/>
                 <MenuItem Header="Fejlesztő weboldala" Click="DeveloperWebSite_Click"/>
                 <MenuItem Header="Contact me in X" Click="DeveloperX_Click" />
@@ -69,7 +70,7 @@
                 <DataGridTextColumn Header="Rendelési szám" Binding="{Binding OrderNumber}"/>
                 <DataGridTextColumn Header="Rendelési dátum" Binding="{Binding OrderDate}"/>
                 <DataGridTextColumn Header="Rendelés kiadásának dátuma" Binding="{Binding OrderReleaseDate}"/>
-                <DataGridTemplateColumn Header="Fénykép megnyitása">
+          <!--      <DataGridTemplateColumn Header="Fénykép megnyitása">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Megnyitás" 
@@ -77,14 +78,14 @@
                     Click="OpenPhotoButton_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightGray" VerticalAlignment="Center">
             <Label Content="© 2023 - Koncsik" />
-            <Label Content="version: 1.0" />
+            <Label Content="version: 1.0 Pre Alpha build" />
         </StackPanel>
     </Grid>
 
