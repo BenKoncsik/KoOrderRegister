@@ -43,17 +43,26 @@
 
        
 
-        <Label Grid.Row="5" Grid.Column="0" Content="Rendelési dátum:"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="Rendelés dátuma:"/>
         <DatePicker x:Name="orderDateBox" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" SelectedDate="{x:Static sys:DateTime.Now}"/>
 
         <Label Grid.Row="6" Grid.Column="0" Content="Rendelési kiadásának dátuma:"/>
         <DatePicker x:Name="orderReleaseDateBox" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch"/>
 
 
-        <Label Grid.Row="7" Grid.Column="0" Content="Fénykép kiválasztása:"/>
-        <Button x:Name="photoButton" Grid.Row="7" Grid.Column="1" Click="PhotoButton_Click" HorizontalAlignment="Stretch">Fénykép kiválasztása</Button>
+        <Label Grid.Row="7" Grid.Column="0" Content="Mejegyzés:"/>
+        <TextBox x:Name="noteBox" Grid.Row="7" Grid.Column="1"
+                Height="Auto" 
+                MinLines="3"
+                MaxLines="20"
+                TextWrapping="Wrap"
+                 HorizontalAlignment="Stretch"/>
 
-        <ListView x:Name="ImagesListView" Grid.Row="8" Grid.ColumnSpan="2" Height="100" SelectionChanged="OnImageSelected">
+
+        <Label Grid.Row="8" Grid.Column="0" Content="Fénykép kiválasztása:"/>
+        <Button x:Name="photoButton" Grid.Row="8" Grid.Column="1" Click="PhotoButton_Click" HorizontalAlignment="Stretch">Fénykép kiválasztása</Button>
+
+        <ListView x:Name="ImagesListView" Grid.Row="9" Grid.ColumnSpan="2" Height="100" SelectionChanged="OnImageSelected">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Megnyitás" Click="OpenImage_Click"/>
@@ -63,18 +72,26 @@
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Width="80" Height="80" Source="{Binding}" Stretch="UniformToFill"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
+                    <GridView>
+                        <!-- Az oszlop a neveknek -->
+                        <GridViewColumn Width="auto" Header="Név">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!-- Az oszlop a képeknek -->
+                        <GridViewColumn Width="auto" Header="Kép">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="80" Height="80" Source="{Binding BitmapImage}" Stretch="UniformToFill"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
         <Button x:Name="CancelButton" Width="Auto" Height="50" Grid.Row="10" Grid.Column="0" Click="CancelButton_Click">Mégse</Button>
         <Button x:Name="SaveButton" Width="Auto" Height="50" Grid.Row="10"  Grid.Column="1" Click="SaveButton_Click">Mentés</Button>

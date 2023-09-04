@@ -17,7 +17,7 @@ namespace ShoeDatabase.Services
 
         public OrderService()
         {
-            if (!databesInitzialized) ConectDateBase();
+            if (!databesInitzialized) createDateBase();
         }
 
         public static void ConectDateBase()
@@ -44,7 +44,8 @@ namespace ShoeDatabase.Services
                 else
                 {
                     MessageBox.Show("Nem választott ki adatbázist.");
-                    Application.Current.Shutdown();
+                    OrderService.connection = OrderService.createDateBase();
+                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, openFileDialog.FileName));
                 }
             }
             else
@@ -69,19 +70,19 @@ namespace ShoeDatabase.Services
                 List<CustomerProduct> customerProducts = new List<CustomerProduct>();
 
                 if (!databesInitzialized)
-                    ConectDateBase();  // Feltételezem, hogy ez a metódus létezik és inicializálja az adatbázis kapcsolatot
+                    ConectDateBase();  
 
                 string query;
                 if (string.IsNullOrEmpty(searchText))
                 {
-                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate, p.note,
                           c.name, c.address, c.tajNumber, c.id as customerId
                   FROM products p
                   LEFT JOIN customers c ON p.customerId = c.id";
                 }
                 else
                 {
-                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate,
+                    query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate, p.note,
                           c.name, c.address, c.tajNumber, c.id as customerId
                   FROM products p
                   LEFT JOIN customers c ON p.customerId = c.id
@@ -111,10 +112,11 @@ namespace ShoeDatabase.Services
                                 OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
                                 OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
                                 OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
-                                Name = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                                Address = reader.IsDBNull(5) ? "" : reader.GetString(5),
-                                TajNumber = reader.IsDBNull(6) ? "" : reader.GetString(6),
-                                CustomerId = reader.IsDBNull(7) ? -1 : reader.GetInt64(7)
+                                Note = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                                Name = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                                Address = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                TajNumber = reader.IsDBNull(7) ? "" : reader.GetString(7),
+                                CustomerId = reader.IsDBNull(8) ? -1 : reader.GetInt64(8)
                             });
                         }
                     }
@@ -130,7 +132,8 @@ namespace ShoeDatabase.Services
 
        
 
-
+        //A custumers táblába legyen egy pusz oszlop ami a note neü és hosszú szöveget lehesen benne tárolni
+        //A product táblába legyen egy pusz oszlop ami a note neü és hosszú szöveget lehesen benne tárolni
         public static SQLiteConnection createDateBase()
         {
             try
@@ -150,6 +153,7 @@ namespace ShoeDatabase.Services
                                                 id INTEGER PRIMARY KEY, 
                                                 name TEXT, 
                                                 address TEXT,
+                                                note TEXT,
                                                 tajNumber TEXT UNIQUE
                                                 );";
                             command.ExecuteNonQuery();
@@ -166,6 +170,7 @@ namespace ShoeDatabase.Services
                                                 orderNumber TEXT,
                                                 orderDate TEXT,
                                                 orderReleaseDate TEXT,
+                                                note TEXT,  
                                                 customerId INTEGER,
                                                 FOREIGN KEY(customerId) REFERENCES customers(id)
                                                 );";
@@ -271,8 +276,8 @@ namespace ShoeDatabase.Services
 
                 if (newOrder)
                 {
-                    string sql = @"INSERT INTO products (orderNumber, orderDate, orderReleaseDate, customerId) 
-                   VALUES (@OrderNumber, @OrderDate, @OrderReleaseDate, @CustomerId);
+                    string sql = @"INSERT INTO products (orderNumber, orderDate, orderReleaseDate, note, customerId) 
+                   VALUES (@OrderNumber, @OrderDate, @OrderReleaseDate, @Note, @CustomerId);
                    SELECT last_insert_rowid();";
 
                     using (var command = new SQLiteCommand(sql, connection))
@@ -280,13 +285,14 @@ namespace ShoeDatabase.Services
                         command.Parameters.AddWithValue("@OrderNumber", customerProduct.OrderNumber);
                         command.Parameters.AddWithValue("@OrderDate", customerProduct.OrderDate);
                         command.Parameters.AddWithValue("@OrderReleaseDate", customerProduct.OrderReleaseDate);
+                        command.Parameters.AddWithValue("@Note", customerProduct.Note);
                         command.Parameters.AddWithValue("@CustomerId", customerId);
                         productId = Convert.ToInt32(command.ExecuteScalar());
                     }
                 }
                 else
                 {
-                    string sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, customerId = @CustomerId, 
+                    string sql = @"UPDATE products SET orderNumber = @OrderNumber, orderDate = @OrderDate, note = @Note, customerId = @CustomerId, 
                           orderReleaseDate = @OrderReleaseDate WHERE id = @ProductId";
 
                     using (var command = new SQLiteCommand(sql, connection))
@@ -295,6 +301,7 @@ namespace ShoeDatabase.Services
                         command.Parameters.AddWithValue("@OrderDate", customerProduct.OrderDate);
                         command.Parameters.AddWithValue("@OrderReleaseDate", customerProduct.OrderReleaseDate);
                         command.Parameters.AddWithValue("@CustomerId", customerProduct.Custumer.Id);
+                        command.Parameters.AddWithValue("@Note", customerProduct.Note);
                         command.Parameters.AddWithValue("@ProductId", customerProduct.ProductId);
                         command.ExecuteNonQuery();
                     }

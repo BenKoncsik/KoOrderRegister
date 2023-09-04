@@ -4,6 +4,7 @@ using ShoeDatabase.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace ShoeDatabase
         public NewEntryWindow()
         {
             InitializeComponent();
+            noteBox.Text = "";
             custumers = custumerService.getAllCustumers(custumers);
             if(custumers.Count <= 0)
             {
@@ -52,8 +54,8 @@ namespace ShoeDatabase
             tajNumberBox.Text = customer.TajNumber;
             orderNumberBox.Text = customer.OrderNumber;
             custumers = custumerService.getAllCustumers();
+            noteBox.Text = customer.Note;
             custumerComboBox.ItemsSource = custumers;
-
             DateTime dateTime = DateTime.Now;
             if (!customer.OrderDate.Equals("NULL"))
             {
@@ -134,6 +136,10 @@ namespace ShoeDatabase
             string orderReleaseDate = orderReleaseDateBox.SelectedDate.HasValue ? orderReleaseDateBox.SelectedDate.Value.ToString("yyyy-MM-dd") : "NULL";
             string photoNewName = HandlePhotoFile(photoFilePath, orderNumber, name, orderDate);
             string note = "";
+            if(!string.IsNullOrWhiteSpace(noteBox.Text))
+            {
+                note = noteBox.Text;
+            }
             try {
                 customerShoeInfo.Name = name;
                 customerShoeInfo.Address = address;
@@ -269,24 +275,71 @@ namespace ShoeDatabase
                 }
             }
         }
-        
-                private void OpenImage_Click(object sender, RoutedEventArgs e)
+
+        private void OpenImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedFileBlob)
+            {
+                BitmapImage bitmapImage = selectedFileBlob.BitmapImage;
+
+                // Fájl elmentése
+                string tempPath = Path.Combine(Path.GetTempPath(), selectedFileBlob.Name + ".jpg");
+                using (FileStream fileStream = new FileStream(tempPath, FileMode.Create))
                 {
-                    if (ImagesListView.SelectedItem is ImageSource selectedImage)
-                    {
-                        // Handle opening image logic here.
-                    }
+                    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                    encoder.Save(fileStream);
                 }
 
-                private void DeleteImage_Click(object sender, RoutedEventArgs e)
+                // Megnyitás az alapértelmezett képnézegetőben
+                Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+            }
+        }
+
+        private void DeleteImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedImage)
+            {
+                if (FileService.deleteFile(selectedImage))
                 {
-                    if (ImagesListView.SelectedItem is ImageSource selectedImage)
+                    images.Remove(selectedImage);
+                }
+            }
+        }
+        private void RenameImage_Click(object sender, RoutedEventArgs e) { }
+
+
+        private void SaveImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedFileBlob)
+            {
+                BitmapImage bitmapImage = selectedFileBlob.BitmapImage;
+
+                // Megnyitás a SaveFileDialog segítségével
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = selectedFileBlob.Name; // Alapértelmezett fájlnév
+                saveFileDialog.DefaultExt = ".jpg"; // Alapértelmezett fájlkiterjesztés
+                saveFileDialog.Filter = "JPEG képek (.jpg)|*.jpg"; // Szűrők
+
+                // Dialógus megnyitása és fájl mentése, ha a felhasználó megnyomja a 'Mentés' gombot
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        //images.Remove();
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                        encoder.Save(fileStream);
                     }
                 }
-        private void RenameImage_Click(object sender, RoutedEventArgs e) { }
-        private void SaveImage_Click(object sender, RoutedEventArgs e) { }
+            }
+        }
+
+
+
+
+
+        //private void SaveImage_Click(object sender, RoutedEventArgs e) { }
         private void OnImageSelected(object sender, RoutedEventArgs e) { }
         
 

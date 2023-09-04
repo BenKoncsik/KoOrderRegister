@@ -59,7 +59,7 @@ namespace ShoeDatabase.Services
             }
             
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT id, name, address, tajNumber  FROM customers";
+            command.CommandText = "SELECT id, name, address, tajNumber, note  FROM customers";
             using (var reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -69,7 +69,8 @@ namespace ShoeDatabase.Services
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Address = reader.GetString(2),
-                        TAJNumber = reader.GetString(3)
+                        TAJNumber = reader.GetString(3),
+                        Note = reader.GetString(4)
                     };
                     custumers.Add(customer);
                 }
@@ -78,7 +79,7 @@ namespace ShoeDatabase.Services
         }
 
 
-        public static Custumer GetCustomer(string name, string address, string tajNumber)
+        public static Custumer GetCustomer(string name, string address, string tajNumber, string note = "")
         {
             string sql = $"SELECT id FROM customers WHERE name = @name AND address = @address AND tajNumber = @tajNumber LIMIT 1";
             using (var command = new SQLiteCommand(sql, connection))
@@ -91,7 +92,7 @@ namespace ShoeDatabase.Services
                 {
                     if (reader.Read())
                     {
-                        return new Custumer(reader.GetInt32(0), name, address, tajNumber);
+                        return new Custumer(reader.GetInt32(0), name, address, tajNumber, note);
                     }
                     else
                     {
@@ -133,10 +134,10 @@ namespace ShoeDatabase.Services
         {
             try
             {
-                string sql = "INSERT INTO customers (name, address, tajNumber) VALUES (@name, @address, @tajNumber)";
+                string sql = "INSERT INTO customers (name, address, note, tajNumber) VALUES (@name, @address, @note, @tajNumber)";
                 if (custumer.Id != -1)
                 {
-                    sql = "UPDATE customers SET name = @name, address = @address, tajNumber = @tajNumber WHERE id = @id"; 
+                    sql = "UPDATE customers SET name = @name, address = @address, note = @note, tajNumber = @tajNumber WHERE id = @id"; 
                     
                 }
                 
@@ -145,6 +146,7 @@ namespace ShoeDatabase.Services
                        if(custumer.Id != -1) command.Parameters.AddWithValue("@id", custumer.Id);
                         command.Parameters.AddWithValue("@name", custumer.Name);
                         command.Parameters.AddWithValue("@address", custumer.Address);
+                        command.Parameters.AddWithValue("@note", custumer.Note);
                         command.Parameters.AddWithValue("@tajNumber", custumer.TAJNumber);
 
                         command.ExecuteNonQuery();
@@ -157,8 +159,6 @@ namespace ShoeDatabase.Services
                 MessageBox.Show("Hiba a vásárló mentése során: " + ex.Message);
                 return false;
             }
-        
-
         }
 
         

@@ -70,7 +70,7 @@
                 <DataGridTextColumn Header="Rendelési szám" Binding="{Binding OrderNumber}"/>
                 <DataGridTextColumn Header="Rendelési dátum" Binding="{Binding OrderDate}"/>
                 <DataGridTextColumn Header="Rendelés kiadásának dátuma" Binding="{Binding OrderReleaseDate}"/>
-                <DataGridTemplateColumn Header="Fénykép megnyitása">
+          <!--      <DataGridTemplateColumn Header="Fénykép megnyitása">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Megnyitás" 
@@ -78,7 +78,7 @@
                     Click="OpenPhotoButton_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
             </DataGrid.Columns>
         </DataGrid>

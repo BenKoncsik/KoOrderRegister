@@ -40,6 +40,7 @@ namespace ShoeDatabase.View
                 addressBox.Text = selectedCustomer.Address;
                 tajNumberBox.Text = selectedCustomer.TAJNumber;
                 custumerId = selectedCustomer.Id;
+                noteBox.Text = selectedCustomer.Note;
                 DeleteButton.Visibility = Visibility.Visible;
 
             }
@@ -48,6 +49,7 @@ namespace ShoeDatabase.View
                 nameBox.Text = "";
                 addressBox.Text = "";
                 tajNumberBox.Text = "";
+                noteBox.Text = "";
                 custumerId = -1;
                 DeleteButton.Visibility = Visibility.Collapsed;
             }
@@ -95,8 +97,12 @@ namespace ShoeDatabase.View
                 MessageBox.Show("A TAJ szám mező kitöltése kötelező!");
                 return;
             }
-            
-            if (custumerService.saveCustumer(new Custumer(custumerId, nameBox.Text, addressBox.Text, tajNumberBox.Text)))
+            string note = "";
+            if (!string.IsNullOrWhiteSpace(noteBox.Text))
+            {
+                note = noteBox.Text;
+            }
+            if (custumerService.saveCustumer(new Custumer(custumerId, nameBox.Text, addressBox.Text, tajNumberBox.Text, note)))
             {
                 MessageBox.Show("Sikeres Mentés");
                 custumers = OrderService.GetCustomers();

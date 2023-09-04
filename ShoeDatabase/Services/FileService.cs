@@ -21,10 +21,34 @@ namespace ShoeDatabase.Services
     {
         private static OrderService _orderService = new OrderService();
 
-        public static bool deleteFile(FileBLOB fiel)
+        public static bool deleteFile(FileBLOB file)
         {
-            return false;
+            try
+            {
+                // Töröljük a kapcsolatot a 'product_files' táblában
+                using (var deleteLinkCommand = new SQLiteCommand("DELETE FROM product_files WHERE fileId = @FileId", OrderService.connection))
+                {
+                    deleteLinkCommand.Parameters.AddWithValue("@FileId", file.ID);
+                    deleteLinkCommand.ExecuteNonQuery();
+                }
+
+                // Töröljük a fájlt a 'files' táblából
+                using (var deleteFileCommand = new SQLiteCommand("DELETE FROM files WHERE fileId = @FileId", OrderService.connection))
+                {
+                    deleteFileCommand.Parameters.AddWithValue("@FileId", file.ID);
+                    deleteFileCommand.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Kezelje le a kivételt, például naplózás vagy hibaüzenet megjelenítése
+                Console.WriteLine($"Hiba történt a fájl törlése során: {ex.Message}");
+                return false;
+            }
         }
+
         public static bool deleteFilesWithOrder(long productID)
         {
             if (deleteProduct_files(productID))
@@ -32,7 +56,6 @@ namespace ShoeDatabase.Services
                 return deleteFiles(productID);
             }
             return false;
-
         }
         private static bool deleteProduct_files(long productID)
         {
