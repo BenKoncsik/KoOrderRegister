@@ -4,8 +4,10 @@
 # Ignore all build folders
 [Bb]in/
 [Oo]bj/
+[Pp]ublish/
 ShoeDatabase/[Bb]in/
 ShoeDatabase/[Oo]bj/
+ShoeDatabase/[Pp]ublish/
 
 # Ignore user-specific files
 *.suo
@@ -19,6 +21,7 @@ ShoeDatabase/[Oo]bj/
 # Ignore the ShoeDatabase specific bin and obj folders
 ShoeDatabase/bin/
 ShoeDatabase/obj/
+ShoeDatabase/obj/publish
 
 # Ignore other common files
 *.log

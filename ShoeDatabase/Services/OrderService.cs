@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ShoeDatabase.Services
 {
@@ -17,7 +19,7 @@ namespace ShoeDatabase.Services
 
         public OrderService()
         {
-            if (!databesInitzialized) createDateBase();
+            if (!databesInitzialized) OrderService.ConectDateBase();
         }
 
         public static void ConectDateBase()
@@ -32,9 +34,9 @@ namespace ShoeDatabase.Services
             }
             if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
+                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
                 openFileDialog.Filter = "SQLite adatbázis (*.db)|*.db";
-                if (openFileDialog.ShowDialog() == true)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     connection = new SQLiteConnection($@"Data Source={openFileDialog.FileName};");
                     connection.Open();
@@ -45,7 +47,6 @@ namespace ShoeDatabase.Services
                 {
                     MessageBox.Show("Nem választott ki adatbázist.");
                     OrderService.connection = OrderService.createDateBase();
-                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, openFileDialog.FileName));
                 }
             }
             else
@@ -125,25 +126,22 @@ namespace ShoeDatabase.Services
                 return customerProducts;
             }catch (Exception ex)
             {
-                MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
+                System.Windows.MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
                 return null;
             }
         }
 
-       
-
-        //A custumers táblába legyen egy pusz oszlop ami a note neü és hosszú szöveget lehesen benne tárolni
-        //A product táblába legyen egy pusz oszlop ami a note neü és hosszú szöveget lehesen benne tárolni
         public static SQLiteConnection createDateBase()
         {
             try
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "SQLite Database|*.db";
-                if (saveFileDialog.ShowDialog() == true)
+                FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string dbPath = saveFileDialog.FileName;
+                    string folderPath = folderBrowserDialog.SelectedPath;
+                    string dbPath = System.IO.Path.Combine(folderPath, "products.sql");
                     SQLiteConnection.CreateFile(dbPath);
+                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, dbPath));
                     using (SQLiteConnection connection = new SQLiteConnection($"Data Source={dbPath};"))
                     {
                         connection.Open();

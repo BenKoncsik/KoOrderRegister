@@ -79,6 +79,41 @@ namespace ShoeDatabase.Services
                 return true;
             }
         }
+
+        //kellene egz olzam metodus ami a FIleBLOB ot vár és frissíti a name értékét true ha seikerült false ha nem
+        public static bool renameFile(FileBLOB file)
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection($"Data Source=your_database_path_here;"))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = "UPDATE files SET fileName = @newName WHERE fileId = @id";
+                        command.Parameters.AddWithValue("@newName", file.Name);
+                        command.Parameters.AddWithValue("@id", file.ID);
+
+                        int rowsUpdated = command.ExecuteNonQuery();
+
+                        if (rowsUpdated > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public static bool save(FileBLOB file)
         {
             try

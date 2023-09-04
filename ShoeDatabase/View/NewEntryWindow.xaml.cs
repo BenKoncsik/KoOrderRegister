@@ -306,7 +306,20 @@ namespace ShoeDatabase
                 }
             }
         }
-        private void RenameImage_Click(object sender, RoutedEventArgs e) { }
+        private void RenameImage_Click(object sender, RoutedEventArgs e) 
+        {
+            if (ImagesListView.SelectedItem is FileBLOB selectedImage)
+            {
+                if (FileService.renameFile(selectedImage))
+                {
+                    int index = images.IndexOf(selectedImage);
+                    if (index != -1)
+                    {
+                        images[index] = selectedImage;
+                    }
+                }
+            }
+        }
 
 
         private void SaveImage_Click(object sender, RoutedEventArgs e)
