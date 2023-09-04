@@ -1,0 +1,34 @@
+# Ignore .vs folder for Visual Studio
+.vs/
+
+# Ignore all build folders
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+ShoeDatabase/[Bb]in/
+ShoeDatabase/[Oo]bj/
+ShoeDatabase/[Pp]ublish/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore .NET SDK options files
+*.rsp
+
+# Ignore the ShoeDatabase specific bin and obj folders
+ShoeDatabase/bin/
+ShoeDatabase/obj/
+ShoeDatabase/obj/publish
+
+# Ignore other common files
+*.log
+*.bak
+*.cache
+*.swp
+*.lock
+
+# Include this file to force versioning empty directories
+!.gitignore
