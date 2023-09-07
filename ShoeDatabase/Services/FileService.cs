@@ -80,12 +80,12 @@ namespace ShoeDatabase.Services
             }
         }
 
-        //kellene egz olzam metodus ami a FIleBLOB ot vár és frissíti a name értékét true ha seikerült false ha nem
+        //kellene egz olzam metodus ami a FIleBLOB ot vár és frissíti a name értékét true ha sikerü akkor false
         public static bool renameFile(FileBLOB file)
         {
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection($"Data Source=your_database_path_here;"))
+                using (SQLiteConnection connection = OrderService.connection)
                 {
                     connection.Open();
 
