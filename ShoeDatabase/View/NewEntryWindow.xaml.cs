@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using ShoeDatabase.Model;
 using ShoeDatabase.Services;
+using ShoeDatabase.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -306,16 +307,23 @@ namespace ShoeDatabase
                 }
             }
         }
+        
         private void RenameImage_Click(object sender, RoutedEventArgs e) 
         {
             if (ImagesListView.SelectedItem is FileBLOB selectedImage)
             {
-                if (FileService.renameFile(selectedImage))
+                FileBLOB selectedImageOld = selectedImage;
+                RenameDialog renameDialog = new RenameDialog(selectedImage.Name);
+                if (renameDialog.ShowDialog() == true && renameDialog.NewName != null)
                 {
-                    int index = images.IndexOf(selectedImage);
-                    if (index != -1)
+                    selectedImage.Name = renameDialog.NewName;
+                    if (FileService.renameFile(selectedImage))
                     {
-                        images[index] = selectedImage;
+                        int index = images.IndexOf(selectedImageOld);
+                        if (index != -1)
+                        {
+                            images[index] = selectedImage;
+                        }
                     }
                 }
             }

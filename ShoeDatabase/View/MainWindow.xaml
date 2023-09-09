@@ -41,7 +41,6 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-          <!--  <MenuItem Header="Keresés" Click="SearchBox_CLick"/>-->
             <MenuItem Header="Keresés törlése" Click="UpdateBox_CLick"/>
             <MenuItem Header="Vásárló hozzáadása/változtatása" Click="newCustumerBox_CLick"/>
             <MenuItem Header="Beállítások" Click="SettingsBox_CLick"/>
@@ -70,15 +69,6 @@
                 <DataGridTextColumn Header="Rendelési szám" Binding="{Binding OrderNumber}"/>
                 <DataGridTextColumn Header="Rendelési dátum" Binding="{Binding OrderDate}"/>
                 <DataGridTextColumn Header="Rendelés kiadásának dátuma" Binding="{Binding OrderReleaseDate}"/>
-          <!--      <DataGridTemplateColumn Header="Fénykép megnyitása">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Megnyitás" 
-                    Visibility="{Binding PhotoPath, Converter={StaticResource NullToVisibilityConverter}}"
-                    Click="OpenPhotoButton_Click"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
 
             </DataGrid.Columns>
         </DataGrid>

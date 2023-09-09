@@ -45,7 +45,7 @@ namespace ShoeDatabase.Services
                 }
                 else 
                 {
-                    OrderService.ConectDateBase();
+                    OrderService.ConnectDatabase();
                 }
             }
         }

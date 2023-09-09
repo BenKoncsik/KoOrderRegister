@@ -28,25 +28,32 @@ namespace ShoeDatabase.Services
 
         private void ConectDateBase()
         {
-            
-            if (!File.Exists("settings.db"))
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string targetDirectory = Path.Combine(documentsPath, "koorderregister", "settings");
+            string databasePath = Path.Combine(targetDirectory, "settings.db");
+            if (!File.Exists(databasePath))
             {
-                using (connection = new SQLiteConnection("Data Source=settings.db"))
+                if (!Directory.Exists(targetDirectory))
+                {
+                    Directory.CreateDirectory(targetDirectory);
+                }
+
+                using (connection = new SQLiteConnection($"Data Source={databasePath}"))
                 {
                     connection.Open();
 
                     string createBackupTableQuery = @"CREATE TABLE backup (
-                id INTEGER PRIMARY KEY,
-                location TEXT NOT NULL,
-                name TEXT NOT NULL,
-                date TEXT NOT NULL
-            )";
+                                                    id INTEGER PRIMARY KEY,
+                                                    location TEXT NOT NULL,
+                                                    name TEXT NOT NULL,
+                                                    date TEXT NOT NULL
+                                                )";
 
                     string createSettingsTableQuery = @"CREATE TABLE settings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                setting_name TEXT NOT NULL,
-                setting_value TEXT NOT NULL
-            )";
+                                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                        setting_name TEXT NOT NULL,
+                                                        setting_value TEXT NOT NULL
+                                                    )";
 
                     using (SQLiteCommand command = new SQLiteCommand(createBackupTableQuery, connection))
                     {
@@ -62,7 +69,7 @@ namespace ShoeDatabase.Services
             }
             else
             {
-                connection = new SQLiteConnection(@"Data Source=settings.db;");
+                connection = new SQLiteConnection($"Data Source={databasePath}");
                 connection.Open();
                 CheckDatabaseIntegrity();
                 databesInitzialized = true;

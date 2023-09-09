@@ -38,7 +38,7 @@ namespace ShoeDatabase.View
             {
                 string selectedFilePath = openFileDialog.FileName;
                 settingService.SaveSetting(new Setting(SettingsService.DataBaseLocation, selectedFilePath));
-                OrderService.ConectDateBase();
+                OrderService.   ConnectDatabase();
                 dataBaseLocation.Content = selectedFilePath;
             }
         }

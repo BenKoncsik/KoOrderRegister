@@ -131,20 +131,7 @@ namespace ShoeDatabase
             }
         }
 
-        private void OpenPhotoButton_Click(object sender, RoutedEventArgs e)
-        {
-          /*  Button button = (Button)sender;
-            CustomerProduct customerProduct = (CustomerProduct)button.DataContext;
-            FileService.OpenFileFromDatabase(customerProduct.Files.First());*/
-        }
-
-
-
-
-
-
-
-
+        
         private void DeveloperContact_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Email: kocsik.benedek.andras@gmail.com");

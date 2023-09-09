@@ -6,7 +6,9 @@ using System.Data.SQLite;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Shapes;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Path = System.IO.Path;
 
 namespace ShoeDatabase.Services
 {
@@ -19,12 +21,15 @@ namespace ShoeDatabase.Services
 
         public OrderService()
         {
-            if (!databesInitzialized) OrderService.ConectDateBase();
+            if (!databesInitzialized) OrderService.ConnectDatabase();
         }
 
-        public static void ConectDateBase()
+        public static void ConnectDatabase()
         {
             Setting dataBaseLocation = settingsService.GetSetting(SettingsService.DataBaseLocation);
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string defaultDbPath = Path.Combine(documentsPath, "koorderregister", "products.db");
+
             if (dataBaseLocation != null && File.Exists(dataBaseLocation.Value))
             {
                 connection = new SQLiteConnection($@"Data Source={dataBaseLocation.Value};");
@@ -32,37 +37,88 @@ namespace ShoeDatabase.Services
                 databesInitzialized = true;
                 return;
             }
-            if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
+
+            if (!File.Exists(defaultDbPath) || dataBaseLocation == null)
             {
-                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-                openFileDialog.Filter = "SQLite adatbázis (*.db)|*.db";
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (!Directory.Exists(Path.GetDirectoryName(defaultDbPath)))
                 {
-                    connection = new SQLiteConnection($@"Data Source={openFileDialog.FileName};");
-                    connection.Open();
+                    Directory.CreateDirectory(Path.GetDirectoryName(defaultDbPath));
+                }
+                connection = createDateBase();
+                if (connection != null)
+                {
                     databesInitzialized = true;
-                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, openFileDialog.FileName));
                 }
                 else
                 {
-                    MessageBox.Show("Nem választott ki adatbázist.");
-                    OrderService.connection = OrderService.createDateBase();
+                    MessageBox.Show("Nem sikerült adatbázist létrehozni.");
                 }
+                return;
             }
-            else
+
+            connection = new SQLiteConnection($@"Data Source={defaultDbPath};");
+            connection.Open();
+            databesInitzialized = true;
+        }
+
+        public static SQLiteConnection createDateBase()
+        {
+            try
             {
-                if (settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
+                Setting dataBaseLocation = settingsService.GetSetting(SettingsService.DataBaseLocation);
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string defaultDbPath = Path.Combine(documentsPath, "koorderregister", "products.db");
+                SQLiteConnection.CreateFile(defaultDbPath);
+                settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, defaultDbPath));
+                using (SQLiteConnection connection = new SQLiteConnection($"Data Source={defaultDbPath};"))
                 {
-                    connection = new SQLiteConnection(@"Data Source=products.db;");
                     connection.Open();
-                    databesInitzialized = true;
-                } else
-                {
-                    connection = new SQLiteConnection(@"Data Source=" + settingsService.GetSetting(SettingsService.DataBaseLocation) + ";");
-                    connection.Open();
-                    databesInitzialized = true;
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = @"CREATE TABLE customers (
+                                    id INTEGER PRIMARY KEY, 
+                                    name TEXT, 
+                                    address TEXT,
+                                    note TEXT,
+                                    tajNumber TEXT UNIQUE
+                                    );";
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = @"CREATE TABLE files (
+                                    fileId INTEGER PRIMARY KEY,
+                                    fileName TEXT,
+                                    fileBlob BLOB
+                                );";
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = @"CREATE TABLE products (
+                                    id INTEGER PRIMARY KEY, 
+                                    orderNumber TEXT,
+                                    orderDate TEXT,
+                                    orderReleaseDate TEXT,
+                                    note TEXT,  
+                                    customerId INTEGER,
+                                    FOREIGN KEY(customerId) REFERENCES customers(id)
+                                    );";
+                        command.ExecuteNonQuery();
+
+                        command.CommandText = @"CREATE TABLE product_files (
+                                    productId INTEGER,
+                                    fileId INTEGER,
+                                    FOREIGN KEY(productId) REFERENCES products(id),
+                                    FOREIGN KEY(fileId) REFERENCES files(fileId)
+                                );";
+                        command.ExecuteNonQuery();
+
+                    }
+                    return connection;
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nem sikerült adatbázis létrehozni: " + ex.Message);
+            }
+            return null;
         }
         public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
         {
@@ -71,7 +127,7 @@ namespace ShoeDatabase.Services
                 List<CustomerProduct> customerProducts = new List<CustomerProduct>();
 
                 if (!databesInitzialized)
-                    ConectDateBase();  
+                    ConnectDatabase();  
 
                 string query;
                 if (string.IsNullOrEmpty(searchText))
@@ -131,67 +187,7 @@ namespace ShoeDatabase.Services
             }
         }
 
-        public static SQLiteConnection createDateBase()
-        {
-            try
-            {
-                FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string folderPath = folderBrowserDialog.SelectedPath;
-                    string dbPath = System.IO.Path.Combine(folderPath, "products.sql");
-                    SQLiteConnection.CreateFile(dbPath);
-                    settingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, dbPath));
-                    using (SQLiteConnection connection = new SQLiteConnection($"Data Source={dbPath};"))
-                    {
-                        connection.Open();
-                        using (SQLiteCommand command = new SQLiteCommand(connection))
-                        {
-                            command.CommandText = @"CREATE TABLE customers (
-                                                id INTEGER PRIMARY KEY, 
-                                                name TEXT, 
-                                                address TEXT,
-                                                note TEXT,
-                                                tajNumber TEXT UNIQUE
-                                                );";
-                            command.ExecuteNonQuery();
-
-                            command.CommandText = @"CREATE TABLE files (
-                                                fileId INTEGER PRIMARY KEY,
-                                                fileName TEXT,
-                                                fileBlob BLOB
-                                            );";
-                            command.ExecuteNonQuery();
-
-                            command.CommandText = @"CREATE TABLE products (
-                                                id INTEGER PRIMARY KEY, 
-                                                orderNumber TEXT,
-                                                orderDate TEXT,
-                                                orderReleaseDate TEXT,
-                                                note TEXT,  
-                                                customerId INTEGER,
-                                                FOREIGN KEY(customerId) REFERENCES customers(id)
-                                                );";
-                            command.ExecuteNonQuery();
-
-                            command.CommandText = @"CREATE TABLE product_files (
-                                                productId INTEGER,
-                                                fileId INTEGER,
-                                                FOREIGN KEY(productId) REFERENCES products(id),
-                                                FOREIGN KEY(fileId) REFERENCES files(fileId)
-                                            );";
-                            command.ExecuteNonQuery();
-
-                        }
-                    }
-                    return connection;
-                }
-            }catch (Exception ex)
-            {
-                MessageBox.Show("Nem sikerült adatbázis létrehozni: " + ex.Message);
-            }
-            return null;
-        }
+        
 
         public static bool deletOrder(CustomerProduct delteOreder)
         {
@@ -231,7 +227,7 @@ namespace ShoeDatabase.Services
         {
             try
             {
-                if (!databesInitzialized) ConectDateBase();
+                if (!databesInitzialized) ConnectDatabase();
 
                 long customerId;
                 long productId;

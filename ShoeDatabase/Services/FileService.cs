@@ -80,15 +80,13 @@ namespace ShoeDatabase.Services
             }
         }
 
-        //kellene egz olzam metodus ami a FIleBLOB ot vár és frissíti a name értékét true ha sikerü akkor false
+        //kellene egz olyam metodus ami a FIleBLOB ot vár és frissíti a name értékét true ha sikerü akkor false
         public static bool renameFile(FileBLOB file)
         {
             try
             {
                 using (SQLiteConnection connection = OrderService.connection)
                 {
-                    connection.Open();
-
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
                         command.CommandText = "UPDATE files SET fileName = @newName WHERE fileId = @id";
@@ -97,19 +95,13 @@ namespace ShoeDatabase.Services
 
                         int rowsUpdated = command.ExecuteNonQuery();
 
-                        if (rowsUpdated > 0)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return rowsUpdated > 0;
                     }
                 }
             }
             catch (Exception ex)
             {
+                MessageBox.Show($"Hiba történt a fájl átnevezése során: {ex.Message}");
                 return false;
             }
         }
