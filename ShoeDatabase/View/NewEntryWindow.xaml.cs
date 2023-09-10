@@ -28,14 +28,13 @@ namespace ShoeDatabase
         private bool newOrder = true;
         private DateTime OrderDateTime { get; set; } = DateTime.Now;
         private CustomerProduct customerShoeInfo = new CustomerProduct();
-        private OrderService orderService = new OrderService();
-        private CustumerService custumerService = new CustumerService();
+
         private ObservableCollection<FileBLOB> images = new ObservableCollection<FileBLOB>();
         public NewEntryWindow()
         {
             InitializeComponent();
             noteBox.Text = "";
-            custumers = custumerService.getAllCustumers(custumers);
+            custumers = CustumerService.getAllCustumers(custumers);
             if(custumers.Count <= 0)
             {
                 custumers.Add(new Custumer("Nincs ember felvéve!"));
@@ -54,7 +53,7 @@ namespace ShoeDatabase
             addressBox.Text = customer.Address;
             tajNumberBox.Text = customer.TajNumber;
             orderNumberBox.Text = customer.OrderNumber;
-            custumers = custumerService.getAllCustumers();
+            custumers = CustumerService.getAllCustumers();
             noteBox.Text = customer.Note;
             custumerComboBox.ItemsSource = custumers;
             DateTime dateTime = DateTime.Now;

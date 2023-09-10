@@ -26,14 +26,14 @@ namespace ShoeDatabase.Services
             try
             {
                 // Töröljük a kapcsolatot a 'product_files' táblában
-                using (var deleteLinkCommand = new SQLiteCommand("DELETE FROM product_files WHERE fileId = @FileId", OrderService.connection))
+                using (var deleteLinkCommand = new SQLiteCommand("DELETE FROM product_files WHERE fileId = @FileId", OrderService.OpenConnection()))
                 {
                     deleteLinkCommand.Parameters.AddWithValue("@FileId", file.ID);
                     deleteLinkCommand.ExecuteNonQuery();
                 }
 
                 // Töröljük a fájlt a 'files' táblából
-                using (var deleteFileCommand = new SQLiteCommand("DELETE FROM files WHERE fileId = @FileId", OrderService.connection))
+                using (var deleteFileCommand = new SQLiteCommand("DELETE FROM files WHERE fileId = @FileId", OrderService.OpenConnection()))
                 {
                     deleteFileCommand.Parameters.AddWithValue("@FileId", file.ID);
                     deleteFileCommand.ExecuteNonQuery();
@@ -61,7 +61,7 @@ namespace ShoeDatabase.Services
         {
             string sql = $"DELETE FROM product_files WHERE orderId = @ProductId";
 
-            using (var command = new SQLiteCommand(sql, OrderService.connection))
+            using (var command = new SQLiteCommand(sql, OrderService.OpenConnection()))
             {
                 command.Parameters.AddWithValue("@id", productID);
                 command.ExecuteNonQuery();
@@ -72,7 +72,7 @@ namespace ShoeDatabase.Services
         {
             string sql = $"DELETE FROM product_files WHERE orderId = @ProductId";
 
-            using (var command = new SQLiteCommand(sql, OrderService.connection))
+            using (var command = new SQLiteCommand(sql, OrderService.OpenConnection()))
             {
                 command.Parameters.AddWithValue("@id", productID);
                 command.ExecuteNonQuery();
@@ -85,7 +85,7 @@ namespace ShoeDatabase.Services
         {
             try
             {
-                using (SQLiteConnection connection = OrderService.connection)
+                using (SQLiteConnection connection = OrderService.OpenConnection())
                 {
                     using (SQLiteCommand command = new SQLiteCommand(connection))
                     {
@@ -110,10 +110,10 @@ namespace ShoeDatabase.Services
         {
             try
             {
-                using (var transaction = OrderService.connection.BeginTransaction())
+                long fileId;
+                using (var connection = OrderService.OpenConnection())
                 {
-                    long fileId;
-                    using (SQLiteCommand command = new SQLiteCommand(OrderService.connection))
+                    using (var command = new SQLiteCommand(connection))
                     {
                         command.CommandText = @"INSERT INTO files (fileName, fileBlob) VALUES (@FileName, @FileBlob)";
                         command.Parameters.AddWithValue("@FileName", file.Name);
@@ -122,21 +122,24 @@ namespace ShoeDatabase.Services
                         command.ExecuteNonQuery();
 
                         // Get the ID of the inserted file
-                        fileId = (long)new SQLiteCommand("SELECT last_insert_rowid()", OrderService.connection).ExecuteScalar();
+                        fileId = (long)new SQLiteCommand("SELECT last_insert_rowid()", connection).ExecuteScalar();
                     }
 
-                    // Now, we will insert the relation into the product_files table
-                    using (SQLiteCommand command = new SQLiteCommand(OrderService.connection))
+                    using (var transaction = connection.BeginTransaction())
                     {
-                        command.CommandText = @"INSERT INTO product_files (productId, fileId) VALUES (@OrderId, @FileId)";
-                        command.Parameters.AddWithValue("@OrderId", file.ProductID);
-                        command.Parameters.AddWithValue("@FileId", fileId);
+                        // Now, we will insert the relation into the product_files table
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = @"INSERT INTO product_files (productId, fileId) VALUES (@OrderId, @FileId)";
+                            command.Parameters.AddWithValue("@OrderId", file.ProductID);
+                            command.Parameters.AddWithValue("@FileId", fileId);
 
-                        command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
                     }
-                    transaction.Commit();
-                    return true;
                 }
+                return true;
             }
             catch (Exception ex)
             {
@@ -164,7 +167,7 @@ namespace ShoeDatabase.Services
                             INNER JOIN product_files pf ON f.fileId = pf.fileId 
                             WHERE pf.productId = @ProductID";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, OrderService.connection))
+                using (SQLiteCommand command = new SQLiteCommand(query, OrderService.OpenConnection()))
                 {
                     command.Parameters.AddWithValue("@ProductID", productID);
 

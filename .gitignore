@@ -5,9 +5,11 @@
 [Bb]in/
 [Oo]bj/
 [Pp]ublish/
+[Dd]ebug/
 ShoeDatabase/[Bb]in/
 ShoeDatabase/[Oo]bj/
 ShoeDatabase/[Pp]ublish/
+ShoeDatabase/[Dd]ebug/
 
 # Ignore user-specific files
 *.suo

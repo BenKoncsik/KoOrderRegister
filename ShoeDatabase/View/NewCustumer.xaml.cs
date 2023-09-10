@@ -102,7 +102,7 @@ namespace ShoeDatabase.View
             {
                 note = noteBox.Text;
             }
-            if (custumerService.saveCustumer(new Custumer(custumerId, nameBox.Text, addressBox.Text, tajNumberBox.Text, note)))
+            if (custumerService.saveCustumer(new Custumer(custumerId, nameBox.Text, addressBox.Text, note, tajNumberBox.Text)))
             {
                 MessageBox.Show("Sikeres Mentés");
                 custumers = OrderService.GetCustomers();

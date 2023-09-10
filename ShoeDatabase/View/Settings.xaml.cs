@@ -37,15 +37,14 @@ namespace ShoeDatabase.View
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
-                settingService.SaveSetting(new Setting(SettingsService.DataBaseLocation, selectedFilePath));
-                OrderService.   ConnectDatabase();
+                SettingsService.SaveSetting(new Setting(SettingsService.DataBaseLocation, selectedFilePath));
                 dataBaseLocation.Content = selectedFilePath;
             }
         }
 
         private void GetSettings()
         {
-            Setting dataBaseLocationSetting = settingService.GetSetting(SettingsService.DataBaseLocation);
+            Setting dataBaseLocationSetting = SettingsService.GetSetting(SettingsService.DataBaseLocation);
             if (dataBaseLocationSetting != null)
             {
                 dataBaseLocation.Content = dataBaseLocationSetting.Value;

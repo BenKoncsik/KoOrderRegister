@@ -14,13 +14,13 @@ namespace ShoeDatabase.Model
             this.Name = name;
             this.Id = -1;
         }
-        public Custumer(long id, string name, string address, string tajNumber, string note)
+        public Custumer(long id, string name, string address, string note, string tajNumber)
         {
             this.Name = name;
             this.Id = id;
             this.Address = address;
             this.TAJNumber = tajNumber;
-            Note = note;
+            this.Note = note;
         }
         public long Id { get; set; }
         public string Name { get; set; }

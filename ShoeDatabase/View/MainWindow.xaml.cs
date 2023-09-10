@@ -180,12 +180,12 @@ namespace ShoeDatabase
 
         private void CreateDatabase_Click(object sender, RoutedEventArgs e)
         {
-            OrderService.createDateBase();    
+            OrderService.CreateDatabase();
             RefreshData();
         }
         private void CheckDB_Click(object sender, RoutedEventArgs e)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table';", OrderService.connection))
+            using (SQLiteCommand cmd = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table';", OrderService.OpenConnection()))
             {
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {

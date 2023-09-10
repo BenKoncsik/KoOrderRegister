@@ -14,6 +14,7 @@ namespace ShoeDatabase.Services
 
     public class SettingsService
     {
+        private static string _databasePath;
         public static SQLiteConnection connection;
         public static bool databesInitzialized = false;
 
@@ -26,11 +27,12 @@ namespace ShoeDatabase.Services
             }
         }
 
-        private void ConectDateBase()
+        private static void ConectDateBase()
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string targetDirectory = Path.Combine(documentsPath, "koorderregister", "settings");
             string databasePath = Path.Combine(targetDirectory, "settings.db");
+            _databasePath = databasePath;
             if (!File.Exists(databasePath))
             {
                 if (!Directory.Exists(targetDirectory))
@@ -69,19 +71,21 @@ namespace ShoeDatabase.Services
             }
             else
             {
-                connection = new SQLiteConnection($"Data Source={databasePath}");
+                connection = new SQLiteConnection($"Data Source={_databasePath}");
                 connection.Open();
-                CheckDatabaseIntegrity();
+               // CheckDatabaseIntegrity();
                 databesInitzialized = true;
             }
         }
 
-        public Setting GetSetting(string name)
+        public static Setting GetSetting(string name)
         {
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=settings.db"))
+            if(connection == null)
             {
-                connection.Open();
-
+                ConectDateBase();
+            }
+            try
+            {
                 string sql = $"SELECT * FROM settings WHERE setting_name = @name LIMIT 1";
                 using (var command = new SQLiteCommand(sql, connection))
                 {
@@ -106,6 +110,9 @@ namespace ShoeDatabase.Services
                         }
                     }
                 }
+            }catch (Exception ex)
+            { 
+                return null;
             }
         }
         public Dictionary<string, string> GetAllSettings()
@@ -133,11 +140,11 @@ namespace ShoeDatabase.Services
         }
 
 
-        public bool SaveSetting(Setting setting)
+        public static bool SaveSetting(Setting setting)
         {
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=settings.db"))
+                using (SQLiteConnection connection = new SQLiteConnection($"Data Source={_databasePath}"))
                 {
                     connection.Open();
                     string sql = "INSERT OR REPLACE INTO settings (setting_name, setting_value) VALUES (@name, @value)";

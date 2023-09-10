@@ -14,89 +14,68 @@ namespace ShoeDatabase.Services
 {
     public class CustumerService
     {
-        public static SQLiteConnection connection;
-        private static SettingsService settingsService = new SettingsService();
-        private static OrderService orderService = new OrderService();
-        public static bool databesInitzialized = false;
         public CustumerService() 
         {
-            if (!databesInitzialized)
+            if (!OrderService.databesInitzialized)
             {
-                ConectDateBase();
-            }
-        }
-
-        public static void ConectDateBase()
-        {
-            Setting dataBaseLocation = settingsService.GetSetting(SettingsService.DataBaseLocation);
-            if (dataBaseLocation != null && File.Exists(dataBaseLocation.Value))
-            {
-                connection = new SQLiteConnection($@"Data Source={dataBaseLocation.Value};");
-                connection.Open();
-                databesInitzialized = true;
-            }
-            else
-            {
-                if (!File.Exists("products.db") || settingsService.GetSetting(SettingsService.DataBaseLocation) == null)
-                {
-                    connection = new SQLiteConnection(@"Data Source=pruducts.db;");
-                    connection.Open();
-                    databesInitzialized = true;
-                }
-                else 
-                {
-                    OrderService.ConnectDatabase();
-                }
+                OrderService.OpenConnection();
             }
         }
 
 
-        public List<Custumer> getAllCustumers(List<Custumer> custumers = null)
+
+        public static List<Custumer> getAllCustumers(List<Custumer> custumers = null)
         {
-            if(custumers == null)
+            using (var connection = OrderService.OpenConnection())
             {
-                custumers = new List<Custumer>();
-            }
-            
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT id, name, address, tajNumber, note  FROM customers";
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
+                if (custumers == null)
                 {
-                    var customer = new Custumer
+                    custumers = new List<Custumer>();
+                }
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT id, name, address, note, tajNumber  FROM customers";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Address = reader.GetString(2),
-                        TAJNumber = reader.GetString(3),
-                        Note = reader.GetString(4)
-                    };
-                    custumers.Add(customer);
+                        var customer = new Custumer
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Address = reader.GetString(2),
+                            Note = reader.GetString(3),
+                            TAJNumber = reader.GetString(4)
+
+                        };
+                        custumers.Add(customer);
+                    }
                 }
+                return custumers ?? new List<Custumer>();
             }
-            return custumers;
         }
 
 
         public static Custumer GetCustomer(string name, string address, string tajNumber, string note = "")
         {
-            string sql = $"SELECT id FROM customers WHERE name = @name AND address = @address AND tajNumber = @tajNumber LIMIT 1";
-            using (var command = new SQLiteCommand(sql, connection))
+            using (var connection = OrderService.OpenConnection())
             {
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@address", address);
-                command.Parameters.AddWithValue("@tajNumber", tajNumber);
-
-                using (SQLiteDataReader reader = command.ExecuteReader())
+                string sql = $"SELECT id FROM customers WHERE name = @name AND address = @address AND tajNumber = @tajNumber LIMIT 1";
+                using (var command = new SQLiteCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@address", address);
+                    command.Parameters.AddWithValue("@tajNumber", tajNumber);
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        return new Custumer(reader.GetInt32(0), name, address, tajNumber, note);
-                    }
-                    else
-                    {
-                        throw new Exception("Customer not found");
+                        if (reader.Read())
+                        {
+                            return new Custumer(reader.GetInt32(0), name, address, tajNumber, note);
+                        }
+                        else
+                        {
+                            throw new Exception("Customer not found");
+                        }
                     }
                 }
             }
@@ -111,7 +90,8 @@ namespace ShoeDatabase.Services
                         var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {pruduct.Name} ügyfél adatait?", "Törlés megerősítése", MessageBoxButton.YesNo);
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(connection))
+                        using (var connection = OrderService.OpenConnection())
+                        using (SQLiteCommand cmd = new SQLiteCommand(connection))
                             {
                                 cmd.CommandText = $"UPDATE products SET customerId = -1 WHERE customerId = {pruduct.CustomerId};";
                                 cmd.ExecuteNonQuery();
@@ -134,16 +114,18 @@ namespace ShoeDatabase.Services
         {
             try
             {
-                string sql = "INSERT INTO customers (name, address, note, tajNumber) VALUES (@name, @address, @note, @tajNumber)";
-                if (custumer.Id != -1)
+                using (var connection = OrderService.OpenConnection())
                 {
-                    sql = "UPDATE customers SET name = @name, address = @address, note = @note, tajNumber = @tajNumber WHERE id = @id"; 
-                    
-                }
-                
-                using (var command = new SQLiteCommand(sql, connection))
+                    string sql = "INSERT INTO customers (name, address, note, tajNumber) VALUES (@name, @address, @note, @tajNumber)";
+                    if (custumer.Id != -1)
                     {
-                       if(custumer.Id != -1) command.Parameters.AddWithValue("@id", custumer.Id);
+                        sql = "UPDATE customers SET name = @name, address = @address, note = @note, tajNumber = @tajNumber WHERE id = @id";
+
+                    }
+
+                    using (var command = new SQLiteCommand(sql, connection))
+                    {
+                        if (custumer.Id != -1) command.Parameters.AddWithValue("@id", custumer.Id);
                         command.Parameters.AddWithValue("@name", custumer.Name);
                         command.Parameters.AddWithValue("@address", custumer.Address);
                         command.Parameters.AddWithValue("@note", custumer.Note);
@@ -153,7 +135,8 @@ namespace ShoeDatabase.Services
                         return true;
                     }
                 }
-                
+            }
+
             catch (Exception ex)
             {
                 MessageBox.Show("Hiba a vásárló mentése során: " + ex.Message);

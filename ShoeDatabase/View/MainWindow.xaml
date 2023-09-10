@@ -75,7 +75,7 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightGray" VerticalAlignment="Center">
             <Label Content="© 2023 - Koncsik" />
-            <Label Content="version: 1.0 Pre Alpha build" />
+            <Label Content="version: 0.9 Beta build" />
         </StackPanel>
     </Grid>
 
