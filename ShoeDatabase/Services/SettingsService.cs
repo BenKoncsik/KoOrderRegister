@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ShoeDatabase.Logs;
 using ShoeDatabase.Model;
 using System;
 using System.Collections.Generic;
@@ -111,7 +112,8 @@ namespace ShoeDatabase.Services
                     }
                 }
             }catch (Exception ex)
-            { 
+            {
+                Logger.LogException(ex);
                 return null;
             }
         }
@@ -162,6 +164,7 @@ namespace ShoeDatabase.Services
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show("Hiba a beállítás mentésébe: " + ex.Message);
                 return false;
             }
@@ -176,6 +179,7 @@ namespace ShoeDatabase.Services
                 if (result != "ok")
                 {
                     throw new Exception("Adatbázis integritás hiba: " + result);
+                  
                 }
             }
         }

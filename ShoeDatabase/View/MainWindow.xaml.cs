@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ShoeDatabase.Logs;
 using ShoeDatabase.Model;
 using ShoeDatabase.Services;
 using ShoeDatabase.View;
@@ -99,6 +100,7 @@ namespace ShoeDatabase
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show("Nem sikerült törölni a sor adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
             }
         }
@@ -127,6 +129,7 @@ namespace ShoeDatabase
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show("Nem sikerült törölni az ügyél adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
             }
         }
@@ -147,6 +150,7 @@ namespace ShoeDatabase
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
             }
         }
@@ -160,6 +164,7 @@ namespace ShoeDatabase
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
             }
         }
@@ -173,6 +178,7 @@ namespace ShoeDatabase
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show($"Hiba a böngésző megnyitásakor: {ex.Message}\n url: {url}");
             }
         }

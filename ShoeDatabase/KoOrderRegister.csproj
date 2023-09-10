@@ -111,6 +111,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Logs\Logger.cs" />
     <Compile Include="Model\BuckupModel.cs" />
     <Compile Include="Model\FileBLOB.cs" />
     <Compile Include="Model\Setting.cs" />

@@ -1,0 +1,13 @@
+
+Dokumentumok/koorderregister: products.db fájl ebben vanna minden ami a rendelés nyilvántartásához kell. (Érdemes idönként máshova elmenteni.)
+Dokumentumok/koorderregister/settings: settings.db fájl ebben a program beállításai vannak nem olyan fontos.
+Documentation: docx és pdf formába a leírása (egy korábbi verziohóz van lehetnek eltérések).
+setup.exe ez a telepítő az almozásnak.
+Első indítás:
+A program ha nem találja az adatbázist létre hozza az fent említett helyen (a beállítások menűben meg lehet neki adni másikat is.)
+A program leírása a fent említett helyen található.
+
+MIT licenc 1 mondatban:
+Bárki bármit csinálhat a programmal teljesen ingyen belegyezésem nélkül, modosíthatja magának (kifejezetten magának a publikus gitHub-ra csak az eredeti verzió kerül fel). Felelösget nem tudok vállalni a porgrammal okozott anyagi kár miatt. DE a developer fül alatt található online felületen elérhető vagyok és ahogy az időm engedi segítek.
+Forráskód:
+https://github.com/Koncsik-cyber/ShoeOrderCustumerRegister

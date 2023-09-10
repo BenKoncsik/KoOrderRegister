@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ShoeDatabase.Logs;
 using ShoeDatabase.Model;
 using System;
 using System.Collections.Generic;
@@ -114,85 +115,15 @@ namespace ShoeDatabase.Services
                         command.ExecuteNonQuery();
 
                     }
-                    //return connection;
                 }
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show("Nem sikerült adatbázis létrehozni: " + ex.Message);
             }
-           // return null;
         }
-        /*  public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
-          {
-              try
-              {
-                 List<CustomerProduct> customerProducts = new List<CustomerProduct>();
-                  using (var connection = OpenConnection())
-                  {
-                      if (connection != null && connection.State == ConnectionState.Closed)
-                      {
-                          connection.Open();
-                      }
-                      string query;
-                      if (string.IsNullOrEmpty(searchText))
-                      {
-                          query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate, p.note,
-                            c.name, c.address, c.tajNumber, c.id as customerId
-                    FROM products p
-                    LEFT JOIN customers c ON p.customerId = c.id";
-                      }
-                      else
-                      {
-                          query = @"SELECT p.id, p.orderNumber, p.orderDate, p.orderReleaseDate, p.note,
-                            c.name, c.address, c.tajNumber, c.id as customerId
-                    FROM products p
-                    LEFT JOIN customers c ON p.customerId = c.id
-                    WHERE c.name LIKE @SearchText OR
-                          c.address LIKE @SearchText OR
-                          c.tajNumber LIKE @SearchText OR
-                          p.orderNumber LIKE @SearchText OR
-                          p.orderDate LIKE @SearchText OR
-                          p.orderReleaseDate LIKE @SearchText";
-                      }
-
-                      using (SQLiteCommand command = new SQLiteCommand(query, connection))
-                      {
-                          if (!string.IsNullOrEmpty(searchText))
-                          {
-                              string searchPattern = "%" + searchText + "%";
-                              command.Parameters.AddWithValue("@SearchText", searchPattern);
-                          }
-
-                          using (SQLiteDataReader reader = command.ExecuteReader())
-                          {
-                              while (reader.Read())
-                              {
-                                  customerProducts.Add(new CustomerProduct
-                                  {
-                                      ProductId = reader.IsDBNull(0) ? -1 : reader.GetInt64(0),
-                                      OrderNumber = reader.IsDBNull(1) ? "" : reader.GetString(1),
-                                      OrderDate = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                                      OrderReleaseDate = reader.IsDBNull(3) ? "" : reader.GetString(3),
-                                      Note = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                                      Name = reader.IsDBNull(5) ? "" : reader.GetString(5),
-                                      Address = reader.IsDBNull(6) ? "" : reader.GetString(6),
-                                      TajNumber = reader.IsDBNull(7) ? "" : reader.GetString(7),
-                                      CustomerId = reader.IsDBNull(8) ? -1 : reader.GetInt64(8)
-                                  });
-                              }
-                          }
-                      }
-                  }
-                  return customerProducts;
-              }catch (Exception ex)
-              {
-                  System.Windows.MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
-                  return null;
-              }
-          }
-        */
-        public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
+    public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
         {
             List<CustomerProduct> customerProducts = new List<CustomerProduct>();
             SQLiteConnection connection = null;
@@ -251,6 +182,7 @@ namespace ShoeDatabase.Services
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 System.Windows.MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
                 return null;
             }
@@ -294,6 +226,7 @@ namespace ShoeDatabase.Services
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogException(ex);
                     transaction.Rollback();
                     MessageBox.Show($"Hiba történt a rendelés törlése során! Hibaüzenet: {ex.Message}");
                     return false;
@@ -398,6 +331,7 @@ namespace ShoeDatabase.Services
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 MessageBox.Show($"Hiba történt az adatok mentése során! Hibaüzenet: {ex.Message}");
                 return false;
             }
