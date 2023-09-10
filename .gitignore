@@ -37,3 +37,4 @@ ShoeDatabase/obj/publish
 
 # Include this file to force versioning empty directories
 !.gitignore
+ShoeDatabase
