@@ -10,12 +10,15 @@ ShoeDatabase/[Bb]in/
 ShoeDatabase/[Oo]bj/
 ShoeDatabase/[Pp]ublish/
 ShoeDatabase/[Dd]ebug/
+ShoeDatabase/obj/
 
 # Ignore user-specific files
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.exe
+*.application
 
 # Ignore .NET SDK options files
 *.rsp
