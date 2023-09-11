@@ -35,3 +35,5 @@ ShoeDatabase/obj/publish
 *.swp
 *.lock
 
+# Include this file to force versioning empty directories
+!.gitignore
