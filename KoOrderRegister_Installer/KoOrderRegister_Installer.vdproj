@@ -46,6 +46,12 @@
         "Entry"
         {
         "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
+        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
         "OwnerKey" = "8:_E77DF5C30AF4452FA37FDBF60940B8C9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -64,12 +70,6 @@
         "Entry"
         {
         "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
-        "OwnerKey" = "8:_D4BDDC92313842AB91A8D11C5F92B24F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
         "OwnerKey" = "8:_E9E018846E91B18299FEDC9AF4DE01EA"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -82,6 +82,12 @@
         "Entry"
         {
         "MsmKey" = "8:_1E1701758C5F4395A3CE97663E3B6738"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -189,12 +195,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D4BDDC92313842AB91A8D11C5F92B24F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_DC45CD918AFA41FBA4AD87027823B2EC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -214,13 +214,13 @@
         "Entry"
         {
         "MsmKey" = "8:_E85086B57BC12604BEF8383431ADC950"
-        "OwnerKey" = "8:_2742C014249B4B618D449D47ED57A07A"
+        "OwnerKey" = "8:_4173D5AB2989415C930C30AAB10AB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_E85086B57BC12604BEF8383431ADC950"
-        "OwnerKey" = "8:_4173D5AB2989415C930C30AAB10AB302"
+        "OwnerKey" = "8:_2742C014249B4B618D449D47ED57A07A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -250,13 +250,37 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4012D3A1FC64CE930AF1B393DC40E8FC"
+        "OwnerKey" = "8:_52D0E167BEDD412984C63ECC06BE6B76"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E77DF5C30AF4452FA37FDBF60940B8C9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9D51B337656D4E9C8B1F6AE2A122279B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_664A5B747AE0436A805440205353AF94"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4173D5AB2989415C930C30AAB10AB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -269,36 +293,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_25868B49624C41D6BD2CDA8FE978C52D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D4BDDC92313842AB91A8D11C5F92B24F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4173D5AB2989415C930C30AAB10AB302"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9D51B337656D4E9C8B1F6AE2A122279B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E77DF5C30AF4452FA37FDBF60940B8C9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_52D0E167BEDD412984C63ECC06BE6B76"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -331,6 +325,12 @@
         "OwnerKey" = "8:_E85086B57BC12604BEF8383431ADC950"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4012D3A1FC64CE930AF1B393DC40E8FC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -349,6 +349,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -365,6 +381,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -520,6 +544,37 @@
             {
             "SourcePath" = "8:..\\ShoeDatabase\\cipo_2.ico"
             "TargetName" = "8:cipo_2.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_200B7ACBD68B4AB3A2DDE87C75593B32"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ShoeDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_200B7ACBD68B4AB3A2DDE87C75593B32"
+                    {
+                    "Name" = "8:koOrderRegister.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ShoeDatabase\\bin\\Release\\koOrderRegister.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
             "Condition" = "8:"
@@ -933,37 +988,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D4BDDC92313842AB91A8D11C5F92B24F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ShoeDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_D4BDDC92313842AB91A8D11C5F92B24F"
-                    {
-                    "Name" = "8:ShoeDatabase.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\ShoeDatabase\\bin\\Release\\ShoeDatabase.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DC45CD918AFA41FBA4AD87027823B2EC"
             {
             "SourcePath" = "8:..\\LICENSE"
@@ -1197,15 +1221,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:KoOrderRegister_Installer"
-        "ProductCode" = "8:{E4A3791E-C39E-4364-9E35-D7F131EAFE54}"
-        "PackageCode" = "8:{1EAA6388-7ADE-4EF9-859F-DBCD52813EFB}"
-        "UpgradeCode" = "8:{12526E8E-5BA5-4F23-BA70-F6CDB21D73B7}"
+        "ProductCode" = "8:{09FCB347-9117-4CBC-8717-73CB9DB5466C}"
+        "PackageCode" = "8:{BF8D7047-D994-4F25-B455-A27966F18F28}"
+        "UpgradeCode" = "8:{14B4AC73-1A6F-4C3F-89D8-97E5BCE2E124}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.0"
+        "ProductVersion" = "8:3.0.0"
         "Manufacturer" = "8:Koncsik MIT Projects"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1318,46 +1342,32 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_0AAFBFE6B6A3476CB8B1A894C9B782FF"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_096F7BE18DB14CC3B266BE28BC0D9D78"
             {
-            "Name" = "8:KoOrderRegister"
+            "Name" = "8:ko Order Register"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_52D0E167BEDD412984C63ECC06BE6B76"
-            "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
-            "WorkingFolder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
-            "Icon" = "8:_1E1701758C5F4395A3CE97663E3B6738"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8F0E62E7D0C7478D8A39DE07E0B6EA97"
-            {
-            "Name" = "8:KoOrderRegister"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_52D0E167BEDD412984C63ECC06BE6B76"
-            "Folder" = "8:_DD8D44121D0D4C50A62CAC30B7A5FC43"
-            "WorkingFolder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
-            "Icon" = "8:_1E1701758C5F4395A3CE97663E3B6738"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CB481DE1984C4C4BB567F0A64EF32D26"
-            {
-            "Name" = "8:KoOrderRegister"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_52D0E167BEDD412984C63ECC06BE6B76"
+            "Target" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
             "Folder" = "8:_0B790F9CFBF440218CBC5BEDAD81FF33"
             "WorkingFolder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
             "Icon" = "8:_1E1701758C5F4395A3CE97663E3B6738"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3FB60D1CE0C34801B03EECF95430FF08"
+            {
+            "Name" = "8:ko Order Register"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
+            "Folder" = "8:_DD8D44121D0D4C50A62CAC30B7A5FC43"
+            "WorkingFolder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -1761,7 +1771,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_52D0E167BEDD412984C63ECC06BE6B76"
             {
-            "SourcePath" = "8:..\\ShoeDatabase\\obj\\Release\\ShoeDatabase.exe"
+            "SourcePath" = "8:..\\ShoeDatabase\\obj\\Debug\\ShoeDatabase.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"
