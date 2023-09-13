@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Shapes;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
+using ShoeDatabase.I18N;
 
 namespace ShoeDatabase.Services
 {
@@ -53,7 +54,7 @@ namespace ShoeDatabase.Services
                 }
                 else
                 {
-                    MessageBox.Show("Nem sikerült adatbázist létrehozni.");
+                    MessageBox.Show(Resources.ErrorDataaseConnection);
                 }
                 return connection;
             }
@@ -120,7 +121,7 @@ namespace ShoeDatabase.Services
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                MessageBox.Show("Nem sikerült adatbázis létrehozni: " + ex.Message);
+                MessageBox.Show($"{Resources.FaliedDatabaseConnection}:{ex.Message}");
             }
         }
     public static List<CustomerProduct> GetCustumerPriducts(string searchText = "")
@@ -183,7 +184,7 @@ namespace ShoeDatabase.Services
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                System.Windows.MessageBox.Show("Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat. " + ex.Message);
+                System.Windows.MessageBox.Show($"{Resources.InValidDatabes} {ex.Message}");
                 return null;
             }
             finally
@@ -228,7 +229,7 @@ namespace ShoeDatabase.Services
                 {
                     Logger.LogException(ex);
                     transaction.Rollback();
-                    MessageBox.Show($"Hiba történt a rendelés törlése során! Hibaüzenet: {ex.Message}");
+                    MessageBox.Show($"{Resources.ErrorOrderDelete} {Resources.ErrorMsgLabel} {ex.Message}");
                     return false;
                 }
             }
@@ -323,16 +324,16 @@ namespace ShoeDatabase.Services
                 }
 
                 if (newOrder)
-                    MessageBox.Show("Adatok sikeresen elmentve!");
+                    MessageBox.Show($"{Resources.SuccessfullSaving}");
                 else
-                    MessageBox.Show("Adatok sikeresen frissitve!");
+                    MessageBox.Show($"{Resources.SuccessfullUpdating}");
 
                 return true;
             }
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                MessageBox.Show($"Hiba történt az adatok mentése során! Hibaüzenet: {ex.Message}");
+                MessageBox.Show($"{Resources.ErrorSavingData} {Resources.ErrorMsgLabel} {ex.Message}");
                 return false;
             }
         }
@@ -344,7 +345,7 @@ namespace ShoeDatabase.Services
             using (var connection = OpenConnection())
             {
                 List<Custumer> customers = new List<Custumer>();
-                customers.Add(new Custumer("Új ember"));
+                customers.Add(new Custumer($"{Resources.NewMan}"));
                 return CustumerService.getAllCustumers(customers);
             }
         }

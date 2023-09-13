@@ -117,18 +117,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddOrChangeCostumer" xml:space="preserve">
+    <value>Ügyfél hozzáadása/változtatása</value>
+  </data>
+  <data name="AddresHeader" xml:space="preserve">
+    <value>Cím</value>
+  </data>
   <data name="AddressLabel" xml:space="preserve">
     <value>Cím:</value>
+  </data>
+  <data name="AreYouSureWantDeleteCostumer_1" xml:space="preserve">
+    <value>Biztosan törölni szeretné a</value>
+  </data>
+  <data name="AreYouSureWantDeleteCostumer_2" xml:space="preserve">
+    <value>ügyfél adatait?</value>
   </data>
   <data name="CancleHeader" xml:space="preserve">
     <value>Mégse</value>
   </data>
+  <data name="ChangeTitle" xml:space="preserve">
+    <value>Módósítás</value>
+  </data>
+  <data name="CheckDatabase" xml:space="preserve">
+    <value>Adatbázis Ellenőrzése</value>
+  </data>
+  <data name="ConformationDelete" xml:space="preserve">
+    <value>Törlés megerősítése</value>
+  </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Kapcsolat</value>
+  </data>
+  <data name="ContactX" xml:space="preserve">
+    <value>X (Twitter) kapcsolat</value>
+  </data>
+  <data name="DatabaseLocationLabel" xml:space="preserve">
+    <value>Adatbázis elérési útvonala:</value>
+  </data>
+  <data name="DatabaseLocationSelect" xml:space="preserve">
+    <value>Adatbázis elérési útvonala:</value>
+  </data>
+  <data name="DeleteCostumerTitle" xml:space="preserve">
+    <value>Ügyfél adatainak törlése (a rendelései megmaradnak)</value>
+  </data>
   <data name="DeleteHeader" xml:space="preserve">
     <value>Törlés</value>
+  </data>
+  <data name="DeleteOrderTitle" xml:space="preserve">
+    <value>Rendelés törlése</value>
+  </data>
+  <data name="DeleteSearchesTitle" xml:space="preserve">
+    <value>Keresés törlése</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Fejlesztő</value>
+  </data>
+  <data name="DeveloperWebPage" xml:space="preserve">
+    <value>Fejlesztő weboldala</value>
+  </data>
+  <data name="ErrorDataaseConnection" xml:space="preserve">
+    <value>Nem sikerült adatbázist létrehozni.</value>
+  </data>
+  <data name="ErrorDeleteCostumer" xml:space="preserve">
+    <value>Nem sikerült törölni az ügyél adatait, mert a kiválasztott elem nem a várt típusú.</value>
+  </data>
+  <data name="ErrorFileDelete" xml:space="preserve">
+    <value>Hiba történt a fájl törlésénél!</value>
+  </data>
+  <data name="ErrorFileRename" xml:space="preserve">
+    <value>Hiba történt a fájl átnevezése során.</value>
+  </data>
+  <data name="ErrorMsgLabel" xml:space="preserve">
+    <value>Hibaüzenet:</value>
+  </data>
+  <data name="ErrorOrderDelete" xml:space="preserve">
+    <value>Hiba történt a rendelés törlése során!</value>
+  </data>
+  <data name="ErrorSavingCostumer" xml:space="preserve">
+    <value>Hiba a ügyfél mentése során!</value>
+  </data>
+  <data name="ErrorSavingData" xml:space="preserve">
+    <value>Hiba történt az adatok mentése során!</value>
+  </data>
+  <data name="ErrorSavingFile" xml:space="preserve">
+    <value>Hiba történt a fájl mentésénél!</value>
+  </data>
+  <data name="FaliedDatabaseConnection" xml:space="preserve">
+    <value>Nem sikerült adatbázis létrehozni</value>
+  </data>
+  <data name="InsuranceNumberHeader" xml:space="preserve">
+    <value>TAJ szám</value>
+    <comment>Hospital / insurance unique number</comment>
   </data>
   <data name="InsuranceNumberLabel" xml:space="preserve">
     <value>TAJ szám:</value>
     <comment>Hospital / insurance unique number</comment>
+  </data>
+  <data name="InValidDatabes" xml:space="preserve">
+    <value>Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat.</value>
   </data>
   <data name="NameHeader" xml:space="preserve">
     <value>Név</value>
@@ -136,8 +221,20 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Név:</value>
   </data>
+  <data name="NewDataBase" xml:space="preserve">
+    <value>Új adatbázis létrehozása</value>
+  </data>
+  <data name="NewMan" xml:space="preserve">
+    <value>Új ügyfél</value>
+  </data>
+  <data name="NewOrederTitle" xml:space="preserve">
+    <value>Új Rendelés hozzáadása</value>
+  </data>
   <data name="NoteLabel" xml:space="preserve">
     <value>Mejegyzés:</value>
+  </data>
+  <data name="NotFoundFile" xml:space="preserve">
+    <value>A megadott fájl nem található.</value>
   </data>
   <data name="OpenHeader" xml:space="preserve">
     <value>Megnyítás</value>
@@ -151,6 +248,9 @@
   <data name="OrderNumberLable" xml:space="preserve">
     <value>Rendelési szám:</value>
   </data>
+  <data name="OrderRegisterTitle" xml:space="preserve">
+    <value>Rendelés nyilvántartó</value>
+  </data>
   <data name="PictureChoiceLabel" xml:space="preserve">
     <value>Fénykép kiválasztása:</value>
   </data>
@@ -160,10 +260,28 @@
   <data name="RenameHeader" xml:space="preserve">
     <value>Átnevezés</value>
   </data>
+  <data name="SavedCostomersLabel" xml:space="preserve">
+    <value>Elmentett ügyfelek:</value>
+  </data>
   <data name="SaveHeader" xml:space="preserve">
     <value>Mentés</value>
   </data>
   <data name="SaveInDeviceHeader" xml:space="preserve">
     <value>Eszközre mentés</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>Forrás kód (GitHub)</value>
+  </data>
+  <data name="SourceTitle" xml:space="preserve">
+    <value>Keresés</value>
+  </data>
+  <data name="SuccessfullSaving" xml:space="preserve">
+    <value>Adatok sikeresen elmentve!</value>
+  </data>
+  <data name="SuccessfullUpdating" xml:space="preserve">
+    <value>Adatok sikeresen frissitve!</value>
   </data>
 </root>

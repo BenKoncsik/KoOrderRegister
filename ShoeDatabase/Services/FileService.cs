@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using ShoeDatabase.I18N;
 
 namespace ShoeDatabase.Services
 {
@@ -44,7 +45,7 @@ namespace ShoeDatabase.Services
             catch (Exception ex)
             {
                 // Kezelje le a kivételt, például naplózás vagy hibaüzenet megjelenítése
-                Console.WriteLine($"Hiba történt a fájl törlése során: {ex.Message}");
+                Console.WriteLine($"{Resources.ErrorFileDelete} {Resources.ErrorMsgLabel} {ex.Message}");
                 return false;
             }
         }
@@ -101,7 +102,7 @@ namespace ShoeDatabase.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba történt a fájl átnevezése során: {ex.Message}");
+                MessageBox.Show($"{Resources.ErrorFileRename} {Resources.ErrorMsgLabel} {ex.Message}");
                 return false;
             }
         }
@@ -143,7 +144,7 @@ namespace ShoeDatabase.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while saving FileBLOB: {ex.Message}");
+                MessageBox.Show($"{Resources.ErrorSavingFile}   {Resources.ErrorMsgLabel} {ex.Message}");
                 return false;
             }
         }
@@ -152,7 +153,7 @@ namespace ShoeDatabase.Services
         {
             if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("A megadott fájl nem található.", filePath);
+                throw new FileNotFoundException($"{Resources.NotFoundFile}", filePath);
             }
 
             return new FileBLOB(fileName, File.ReadAllBytes(filePath), new BitmapImage(new Uri(filePath)));

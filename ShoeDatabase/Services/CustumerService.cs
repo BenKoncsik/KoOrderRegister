@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ShoeDatabase.I18N;
 
 namespace ShoeDatabase.Services
 {
@@ -87,7 +88,7 @@ namespace ShoeDatabase.Services
                 {
                     if (pruduct != null)
                     {
-                        var messageBoxResult = MessageBox.Show($"Biztosan törölni szeretné a {pruduct.Name} ügyfél adatait?", "Törlés megerősítése", MessageBoxButton.YesNo);
+                        var messageBoxResult = MessageBox.Show($"{Resources.AreYouSureWantDeleteCostumer_1} {pruduct.Name} {Resources.AreYouSureWantDeleteCostumer_2}", $"{Resources.ConformationDelete}", MessageBoxButton.YesNo);
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                         using (var connection = OrderService.OpenConnection())
@@ -105,7 +106,7 @@ namespace ShoeDatabase.Services
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Nem sikerült törölni az ügyél adatait, mert a kiválasztott elem nem a várt típusú. \nHiba" + ex.Message);
+                    MessageBox.Show($"{Resources.ErrorDeleteCostumer} {Resources.ErrorMsgLabel} " + ex.Message);
                 }
                 return false;
             }
@@ -139,7 +140,7 @@ namespace ShoeDatabase.Services
 
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba a vásárló mentése során: " + ex.Message);
+                MessageBox.Show($"{Resources.ErrorSavingCostumer} {Resources.ErrorMsgLabel}" + ex.Message);
                 return false;
             }
         }
