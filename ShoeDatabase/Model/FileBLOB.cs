@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace ShoeDatabase.Model
+namespace KoOrderRegister.Model
 {
     public class FileBLOB : INotifyPropertyChanged
     {

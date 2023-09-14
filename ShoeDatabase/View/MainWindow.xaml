@@ -1,6 +1,6 @@
-﻿<Window x:Class="ShoeDatabase.MainWindow"
+﻿<Window x:Class="KoOrderRegister.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:properties="clr-namespace:ShoeDatabase.I18N"
+        xmlns:properties="clr-namespace:KoOrderRegister.I18N"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Icon="../img/cipo_2.ico"
         Title="{x:Static properties:Resources.NewOrederTitle}" Height="450" Width="800">

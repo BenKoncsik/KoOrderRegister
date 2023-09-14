@@ -46,12 +46,6 @@
         "Entry"
         {
         "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
-        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
         "OwnerKey" = "8:_E77DF5C30AF4452FA37FDBF60940B8C9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -65,6 +59,12 @@
         {
         "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
         "OwnerKey" = "8:_2742C014249B4B618D449D47ED57A07A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_10D59A77FD7637B933D034FE4915411C"
+        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -256,12 +256,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E77DF5C30AF4452FA37FDBF60940B8C9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -293,6 +287,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_25868B49624C41D6BD2CDA8FE978C52D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_200B7ACBD68B4AB3A2DDE87C75593B32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -388,6 +388,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -564,7 +572,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ShoeDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:KoOrderRegister, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_200B7ACBD68B4AB3A2DDE87C75593B32"
@@ -1015,11 +1023,6 @@
             "AssemblyAsmDisplayName" = "8:ShoeDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E77DF5C30AF4452FA37FDBF60940B8C9"
-                    {
-                    "Name" = "8:ShoeDatabase.exe"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:..\\ShoeDatabase\\bin\\Release\\app.publish\\ShoeDatabase.exe"
             "TargetName" = "8:"
@@ -1221,19 +1224,19 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:KoOrderRegister_Installer"
-        "ProductCode" = "8:{09FCB347-9117-4CBC-8717-73CB9DB5466C}"
-        "PackageCode" = "8:{BF8D7047-D994-4F25-B455-A27966F18F28}"
+        "ProductCode" = "8:{0CDCE064-0002-4285-8504-CA19231F5F35}"
+        "PackageCode" = "8:{B3A2BE1D-07A0-454A-AAC9-6602E54B4DCD}"
         "UpgradeCode" = "8:{14B4AC73-1A6F-4C3F-89D8-97E5BCE2E124}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:3.0.0"
+        "ProductVersion" = "8:4.0.0"
         "Manufacturer" = "8:Koncsik MIT Projects"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:KoOrderRegister_Installer"
+        "Title" = "8:KoOrderRegister"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Koncsik Bendedek András"
         "Keywords" = "8:"
@@ -1771,7 +1774,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_52D0E167BEDD412984C63ECC06BE6B76"
             {
-            "SourcePath" = "8:..\\ShoeDatabase\\obj\\Debug\\ShoeDatabase.exe"
+            "SourcePath" = "8:..\\ShoeDatabase\\obj\\Release\\KoOrderRegister.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A1AC819BAA404512B8C2CCA90FFDD74F"

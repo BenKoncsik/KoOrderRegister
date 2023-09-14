@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Model;
+using KoOrderRegister.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ShoeDatabase.I18N;
+using KoOrderRegister.I18N;
 
-namespace ShoeDatabase.Services
+namespace KoOrderRegister.Services
 {
     public class CustumerService
     {

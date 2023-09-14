@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows;
 
-namespace ShoeDatabase.View
+namespace KoOrderRegister.View
 {
     public partial class RenameDialog : Window
     {

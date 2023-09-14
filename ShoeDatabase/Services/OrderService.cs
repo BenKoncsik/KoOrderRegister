@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Logs;
-using ShoeDatabase.Model;
+using KoOrderRegister.Logs;
+using KoOrderRegister.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +11,9 @@ using System.Windows.Forms;
 using System.Windows.Shapes;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
-using ShoeDatabase.I18N;
+using KoOrderRegister.I18N;
 
-namespace ShoeDatabase.Services
+namespace KoOrderRegister.Services
 {
     public class OrderService
     {

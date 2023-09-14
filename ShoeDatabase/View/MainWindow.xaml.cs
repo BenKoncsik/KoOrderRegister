@@ -1,8 +1,8 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Logs;
-using ShoeDatabase.Model;
-using ShoeDatabase.Services;
-using ShoeDatabase.View;
+using KoOrderRegister.Logs;
+using KoOrderRegister.Model;
+using KoOrderRegister.Services;
+using KoOrderRegister.View;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,7 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShoeDatabase
+namespace KoOrderRegister
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

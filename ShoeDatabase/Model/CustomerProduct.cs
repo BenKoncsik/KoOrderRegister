@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ShoeDatabase.Model
+namespace KoOrderRegister.Model
 {
     public class CustomerProduct
     {

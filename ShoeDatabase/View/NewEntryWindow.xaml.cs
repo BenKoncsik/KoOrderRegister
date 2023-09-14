@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Model;
-using ShoeDatabase.Services;
-using ShoeDatabase.View;
+using KoOrderRegister.Model;
+using KoOrderRegister.Services;
+using KoOrderRegister.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace ShoeDatabase
+namespace KoOrderRegister
 {
     /// <summary>
     /// Interaction logic for NewEntryWindow.xaml

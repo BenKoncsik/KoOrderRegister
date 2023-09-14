@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Model;
+using KoOrderRegister.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using ShoeDatabase.I18N;
+using KoOrderRegister.I18N;
 
-namespace ShoeDatabase.Services
+namespace KoOrderRegister.Services
 {
 
     public class FileService

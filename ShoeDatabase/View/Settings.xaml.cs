@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Model;
-using ShoeDatabase.Services;
+using KoOrderRegister.Model;
+using KoOrderRegister.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ShoeDatabase.View
+namespace KoOrderRegister.View
 {
   
     public partial class Settings : Window

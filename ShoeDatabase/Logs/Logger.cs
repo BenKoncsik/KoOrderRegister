@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoeDatabase.Logs
+namespace KoOrderRegister.Logs
 {
     public static class Logger
     {

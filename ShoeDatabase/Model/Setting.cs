@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ShoeDatabase.Model
+namespace KoOrderRegister.Model
 {
     public class Setting
     {

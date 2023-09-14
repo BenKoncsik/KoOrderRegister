@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using ShoeDatabase.Logs;
-using ShoeDatabase.Model;
+using KoOrderRegister.Logs;
+using KoOrderRegister.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ShoeDatabase.Services
+namespace KoOrderRegister.Services
 {
 
     public class SettingsService

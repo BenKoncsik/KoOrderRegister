@@ -1,5 +1,5 @@
-﻿<Window x:Class="ShoeDatabase.NewEntryWindow"
-        xmlns:properties="clr-namespace:ShoeDatabase.I18N"
+﻿<Window x:Class="KoOrderRegister.NewEntryWindow"
+        xmlns:properties="clr-namespace:KoOrderRegister.I18N"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
