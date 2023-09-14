@@ -127,7 +127,7 @@
     <value>Cím:</value>
   </data>
   <data name="AreYouSureWantDeleteCostumer_1" xml:space="preserve">
-    <value>Biztosan törölni szeretné a</value>
+    <value> Biztosan törölni szeretnéd a/az</value>
   </data>
   <data name="AreYouSureWantDeleteCostumer_2" xml:space="preserve">
     <value>ügyfél adatait?</value>
@@ -136,10 +136,10 @@
     <value>Mégse</value>
   </data>
   <data name="ChangeTitle" xml:space="preserve">
-    <value>Módósítás</value>
+    <value>Módosítás</value>
   </data>
   <data name="CheckDatabase" xml:space="preserve">
-    <value>Adatbázis Ellenőrzése</value>
+    <value>Adatbázis ellenőrzése</value>
   </data>
   <data name="ConformationDelete" xml:space="preserve">
     <value>Törlés megerősítése</value>
@@ -154,7 +154,7 @@
     <value>Adatbázis elérési útvonala:</value>
   </data>
   <data name="DatabaseLocationSelect" xml:space="preserve">
-    <value>Adatbázis elérési útvonala:</value>
+    <value>Adatbázis elérési útvonala</value>
   </data>
   <data name="DeleteCostumerTitle" xml:space="preserve">
     <value>Ügyfél adatainak törlése (a rendelései megmaradnak)</value>
@@ -202,7 +202,7 @@
     <value>Hiba történt a fájl mentésénél!</value>
   </data>
   <data name="FaliedDatabaseConnection" xml:space="preserve">
-    <value>Nem sikerült adatbázis létrehozni</value>
+    <value>Nem sikerült adatbázist létrehozni</value>
   </data>
   <data name="InsuranceNumberHeader" xml:space="preserve">
     <value>TAJ szám</value>
@@ -213,7 +213,7 @@
     <comment>Hospital / insurance unique number</comment>
   </data>
   <data name="InValidDatabes" xml:space="preserve">
-    <value>Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat.</value>
+    <value>Nem megfelelő az adatbázis, készíts egy újat vagy válasz egy másikat.</value>
   </data>
   <data name="NameHeader" xml:space="preserve">
     <value>Név</value>
@@ -237,10 +237,10 @@
     <value>A megadott fájl nem található.</value>
   </data>
   <data name="OpenHeader" xml:space="preserve">
-    <value>Megnyítás</value>
+    <value>Megnyitás</value>
   </data>
   <data name="OrderCompletionDateLabel" xml:space="preserve">
-    <value>Rendelési kiadásának dátuma:</value>
+    <value>Rendelés kiadásának dátuma:</value>
   </data>
   <data name="OrderDateLabel" xml:space="preserve">
     <value>Rendelés dátuma:</value>
@@ -273,7 +273,7 @@
     <value>Beállítások</value>
   </data>
   <data name="SourceCode" xml:space="preserve">
-    <value>Forrás kód (GitHub)</value>
+    <value>Forráskód (GitHub)</value>
   </data>
   <data name="SourceTitle" xml:space="preserve">
     <value>Keresés</value>

@@ -88,7 +88,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Biztosan törölni szeretné a.
+        ///   Looks up a localized string similar to  Biztosan törölni szeretnéd a/az.
         /// </summary>
         public static string AreYouSureWantDeleteCostumer_1 {
             get {
@@ -115,7 +115,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Módósítás.
+        ///   Looks up a localized string similar to Módosítás.
         /// </summary>
         public static string ChangeTitle {
             get {
@@ -124,7 +124,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adatbázis Ellenőrzése.
+        ///   Looks up a localized string similar to Adatbázis ellenőrzése.
         /// </summary>
         public static string CheckDatabase {
             get {
@@ -169,7 +169,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adatbázis elérési útvonala:.
+        ///   Looks up a localized string similar to Adatbázis elérési útvonala.
         /// </summary>
         public static string DatabaseLocationSelect {
             get {
@@ -313,7 +313,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nem sikerült adatbázis létrehozni.
+        ///   Looks up a localized string similar to Nem sikerült adatbázist létrehozni.
         /// </summary>
         public static string FaliedDatabaseConnection {
             get {
@@ -340,7 +340,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nem megfelelő az adatbázis készíts egy újat vagy válasz egy másikat..
+        ///   Looks up a localized string similar to Nem megfelelő az adatbázis, készíts egy újat vagy válasz egy másikat..
         /// </summary>
         public static string InValidDatabes {
             get {
@@ -412,7 +412,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Megnyítás.
+        ///   Looks up a localized string similar to Megnyitás.
         /// </summary>
         public static string OpenHeader {
             get {
@@ -421,7 +421,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rendelési kiadásának dátuma:.
+        ///   Looks up a localized string similar to Rendelés kiadásának dátuma:.
         /// </summary>
         public static string OrderCompletionDateLabel {
             get {
@@ -520,7 +520,7 @@ namespace ShoeDatabase.I18N {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forrás kód (GitHub).
+        ///   Looks up a localized string similar to Forráskód (GitHub).
         /// </summary>
         public static string SourceCode {
             get {
