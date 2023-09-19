@@ -340,13 +340,13 @@ namespace KoOrderRegister.Services
 
 
 
-        public static List<Custumer> GetCustomers()
+        public static List<Customer> GetCustomers()
         {
             using (var connection = OpenConnection())
             {
-                List<Custumer> customers = new List<Custumer>();
-                customers.Add(new Custumer($"{Resources.NewMan}"));
-                return CustumerService.getAllCustumers(customers);
+                List<Customer> customers = new List<Customer>();
+                customers.Add(new Customer($"{Resources.NewMan}"));
+                return CustomerService.getAllCustumers(customers);
             }
         }
 

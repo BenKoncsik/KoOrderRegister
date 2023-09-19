@@ -18,13 +18,13 @@ using System.Windows.Shapes;
 namespace KoOrderRegister.View
 {
     
-    public partial class NewCustumer : Window
+    public partial class NewCustomer : Window
     {
-        private List<Custumer> custumers = new List<Custumer>();
+        private List<Customer> custumers = new List<Customer>();
         private OrderService orderService = new OrderService();
-        private CustumerService custumerService = new CustumerService();
+        private CustomerService custumerService = new CustomerService();
         private long custumerId = -1;
-        public NewCustumer()
+        public NewCustomer()
         {
             InitializeComponent();
             custumers = OrderService.GetCustomers();
@@ -33,7 +33,7 @@ namespace KoOrderRegister.View
 
         private void CustomerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCustomer = (Custumer)custumerComboBox.SelectedItem;
+            var selectedCustomer = (Customer)custumerComboBox.SelectedItem;
             if (selectedCustomer != null && selectedCustomer.Id != -1)
             {
                 nameBox.Text = selectedCustomer.Name;
@@ -102,14 +102,14 @@ namespace KoOrderRegister.View
             {
                 note = noteBox.Text;
             }
-            if (custumerService.saveCustumer(new Custumer(custumerId, nameBox.Text, addressBox.Text, note, tajNumberBox.Text)))
+            if (custumerService.saveCustumer(new Customer(custumerId, nameBox.Text, addressBox.Text, note, tajNumberBox.Text)))
             {
                 MessageBox.Show("Sikeres Mentés");
                 custumers = OrderService.GetCustomers();
                 custumerComboBox.ItemsSource = custumers;
                 if (custumers != null)
                 {
-                    foreach (Custumer c in custumers)
+                    foreach (Customer c in custumers)
                     {
                         if (c.TAJNumber != null && c.TAJNumber.Equals(tajNumberBox.Text))
                         {
@@ -128,11 +128,11 @@ namespace KoOrderRegister.View
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    foreach (Custumer c in custumers)
+                    foreach (Customer c in custumers)
                     {
                         if (c.Id.Equals(custumerId))
                         {
-                            CustumerService.deleteCustumer(new CustomerProduct(c));
+                            CustomerService.deleteCustumer(new CustomerProduct(c));
                             break;
                         }
                     }

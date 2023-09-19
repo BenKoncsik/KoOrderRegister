@@ -126,10 +126,10 @@
   <data name="AddressLabel" xml:space="preserve">
     <value>Cím:</value>
   </data>
-  <data name="AreYouSureWantDeleteCostumer_1" xml:space="preserve">
+  <data name="AreYouSureWantDeleteCustomer_1" xml:space="preserve">
     <value> Biztosan törölni szeretnéd a/az</value>
   </data>
-  <data name="AreYouSureWantDeleteCostumer_2" xml:space="preserve">
+  <data name="AreYouSureWantDeleteCustomer_2" xml:space="preserve">
     <value>ügyfél adatait?</value>
   </data>
   <data name="CancleHeader" xml:space="preserve">
@@ -192,7 +192,7 @@
   <data name="ErrorOrderDelete" xml:space="preserve">
     <value>Hiba történt a rendelés törlése során!</value>
   </data>
-  <data name="ErrorSavingCostumer" xml:space="preserve">
+  <data name="ErrorSavingCustomer" xml:space="preserve">
     <value>Hiba a ügyfél mentése során!</value>
   </data>
   <data name="ErrorSavingData" xml:space="preserve">
@@ -260,7 +260,7 @@
   <data name="RenameHeader" xml:space="preserve">
     <value>Átnevezés</value>
   </data>
-  <data name="SavedCostomersLabel" xml:space="preserve">
+  <data name="SavedCustumersLabel" xml:space="preserve">
     <value>Elmentett ügyfelek:</value>
   </data>
   <data name="SaveHeader" xml:space="preserve">

@@ -88,7 +88,7 @@ namespace KoOrderRegister.Services
                 {
                     if (pruduct != null)
                     {
-                        var messageBoxResult = MessageBox.Show($"{Resources.AreYouSureWantDeleteCostumer_1} {pruduct.Name} {Resources.AreYouSureWantDeleteCostumer_2}", $"{Resources.ConformationDelete}", MessageBoxButton.YesNo);
+                        var messageBoxResult = MessageBox.Show($"{Resources.AreYouSureWantDeleteCustomer_1} {pruduct.Name} {Resources.AreYouSureWantDeleteCustomer_2}", $"{Resources.ConformationDelete}", MessageBoxButton.YesNo);
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                         using (var connection = OrderService.OpenConnection())
@@ -140,7 +140,7 @@ namespace KoOrderRegister.Services
 
             catch (Exception ex)
             {
-                MessageBox.Show($"{Resources.ErrorSavingCostumer} {Resources.ErrorMsgLabel}" + ex.Message);
+                MessageBox.Show($"{Resources.ErrorSavingCustomer} {Resources.ErrorMsgLabel}" + ex.Message);
                 return false;
             }
         }
