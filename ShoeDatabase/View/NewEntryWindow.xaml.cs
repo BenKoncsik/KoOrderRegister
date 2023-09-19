@@ -15,6 +15,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Threading.Tasks;
+using KoOrderRegister.I18N;
 
 namespace KoOrderRegister
 {
@@ -256,25 +258,40 @@ namespace KoOrderRegister
         }
 
 
-        private void PhotoButton_Click(object sender, RoutedEventArgs e)
+        private async void PhotoButton_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*",
-                Title = "Válassz ki egy fényképet"
+                Title = "Resources.ChoseOnePictureTitle"
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
+                ProgressBar.Visibility = Visibility.Visible;
                 photoButton.Content = System.IO.Path.GetFileName(openFileDialog.FileName);
                 photoFilePath = openFileDialog.FileName;
-                
+                ProgressBar.Value = 25;
                 foreach (string filename in openFileDialog.FileNames)
                 {
-                    images.Add(FileService.getFileBLOB(System.IO.Path.GetFileName(openFileDialog.FileName), photoFilePath));
+                    ProgressBar.Value = 50;
+                    var fileBLOB = await Task.Run(() =>
+                    {
+                        return new FileService().getFileBLOBUri(System.IO.Path.GetFileName(filename), new Uri(filename));
+                    });
+                    Dispatcher.Invoke(() =>
+                    {
+                        images.Add(fileBLOB);
+                    });
                 }
+                ProgressBar.Value = 100;
+                photoButton.Content = KoOrderRegister.I18N.Resources.PictureChoiceLabel;
+                await Task.Delay(1000);
+                ProgressBar.Visibility = Visibility.Collapsed;
             }
         }
+
+
 
         private void OpenImage_Click(object sender, RoutedEventArgs e)
         {

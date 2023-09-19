@@ -133,6 +133,15 @@ namespace KoOrderRegister.I18N {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Válassz ki egy fényképet.
+        /// </summary>
+        public static string ChoseOnePictureTitle {
+            get {
+                return ResourceManager.GetString("ChoseOnePictureTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Törlés megerősítése.
         /// </summary>
         public static string ConformationDelete {

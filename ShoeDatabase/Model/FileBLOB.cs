@@ -68,9 +68,31 @@ namespace KoOrderRegister.Model
             }
         }
 
+        private string _filePath;
+
+        public string FilePath
+        {
+            get { return _filePath; }
+            set
+            {
+                if (_filePath != value)
+                {
+                    _filePath = value;
+                    OnPropertyChanged(nameof(FilePath));
+                }
+            }
+        }
+
         public BitmapImage BitmapImage
         {
-            get { return _bitmapImage; }
+            get
+            {
+                if (_bitmapImage == null && !string.IsNullOrEmpty(_filePath))
+                {
+                    _bitmapImage = new BitmapImage(new Uri(_filePath));
+                }
+                return _bitmapImage;
+            }
             set
             {
                 if (_bitmapImage != value)
@@ -80,6 +102,31 @@ namespace KoOrderRegister.Model
                 }
             }
         }
+
+        public FileBLOB(string name, byte[] data, string filePath)
+        {
+            Name = name;
+            Data = data;
+            FilePath = filePath;
+        }
+
+        public FileBLOB(string name, byte[] data, Uri imageUri)
+        {
+            Name = name;
+            Data = data;
+
+            _bitmapImage = new BitmapImage();
+            _bitmapImage.BeginInit();
+            _bitmapImage.UriSource = imageUri;
+            _bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            _bitmapImage.EndInit();
+
+            if (!_bitmapImage.IsFrozen && _bitmapImage.CanFreeze)
+            {
+                _bitmapImage.Freeze();
+            }
+        }
+
 
         public FileBLOB() { }
 

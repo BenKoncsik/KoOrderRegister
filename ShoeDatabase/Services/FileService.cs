@@ -149,14 +149,24 @@ namespace KoOrderRegister.Services
             }
         }
 
-        public static FileBLOB getFileBLOB(string fileName, string filePath)
+        public FileBLOB getFileBLOB(string fileName, string filePath)
         {
             if (!File.Exists(filePath))
             {
                 throw new FileNotFoundException($"{Resources.NotFoundFile}", filePath);
             }
 
-            return new FileBLOB(fileName, File.ReadAllBytes(filePath), new BitmapImage(new Uri(filePath)));
+            return new FileBLOB(fileName, File.ReadAllBytes(filePath), filePath); 
+        }
+        public FileBLOB getFileBLOBUri(string fileName, Uri imageUri)
+        {
+            if (!File.Exists(imageUri.LocalPath))
+            {
+                throw new FileNotFoundException($"{Resources.NotFoundFile}", imageUri.LocalPath);
+            }
+
+            byte[] imageData = File.ReadAllBytes(imageUri.LocalPath);
+            return new FileBLOB(fileName, imageData, imageUri);
         }
 
         public static List<FileBLOB> getDataBaseFileBlobProductID(long productID)

@@ -141,6 +141,9 @@
   <data name="CheckDatabase" xml:space="preserve">
     <value>Adatbázis ellenőrzése</value>
   </data>
+  <data name="ChoseOnePictureTitle" xml:space="preserve">
+    <value>Válassz ki egy fényképet</value>
+  </data>
   <data name="ConformationDelete" xml:space="preserve">
     <value>Törlés megerősítése</value>
   </data>
