@@ -90,18 +90,18 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to  Biztosan törölni szeretnéd a/az.
         /// </summary>
-        public static string AreYouSureWantDeleteCostumer_1 {
+        public static string AreYouSureWantDeleteCustomer_1 {
             get {
-                return ResourceManager.GetString("AreYouSureWantDeleteCostumer_1", resourceCulture);
+                return ResourceManager.GetString("AreYouSureWantDeleteCustomer_1", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ügyfél adatait?.
         /// </summary>
-        public static string AreYouSureWantDeleteCostumer_2 {
+        public static string AreYouSureWantDeleteCustomer_2 {
             get {
-                return ResourceManager.GetString("AreYouSureWantDeleteCostumer_2", resourceCulture);
+                return ResourceManager.GetString("AreYouSureWantDeleteCustomer_2", resourceCulture);
             }
         }
         
@@ -288,9 +288,9 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to Hiba a ügyfél mentése során!.
         /// </summary>
-        public static string ErrorSavingCostumer {
+        public static string ErrorSavingCustomer {
             get {
-                return ResourceManager.GetString("ErrorSavingCostumer", resourceCulture);
+                return ResourceManager.GetString("ErrorSavingCustomer", resourceCulture);
             }
         }
         
@@ -486,9 +486,9 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to Elmentett ügyfelek:.
         /// </summary>
-        public static string SavedCostomersLabel {
+        public static string SavedCustumersLabel {
             get {
-                return ResourceManager.GetString("SavedCostomersLabel", resourceCulture);
+                return ResourceManager.GetString("SavedCustumersLabel", resourceCulture);
             }
         }
         

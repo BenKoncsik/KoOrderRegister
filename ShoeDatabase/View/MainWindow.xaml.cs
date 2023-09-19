@@ -31,7 +31,7 @@ namespace KoOrderRegister
     
         private static OrderService orderService = new OrderService();
         private static SettingsService settingsService = new SettingsService();
-        private static CustumerService custumerService = new CustumerService();
+        private static CustomerService custumerService = new CustomerService();
         public MainWindow()
         {
             InitializeComponent();
@@ -57,7 +57,7 @@ namespace KoOrderRegister
         }
         private void newCustumerBox_CLick(object sender, RoutedEventArgs e)
         {
-            NewCustumer newCustumer = new NewCustumer();
+            NewCustomer newCustumer = new NewCustomer();
             newCustumer.Closed += NewEntryWindow_Closed;
             newCustumer.Show();
 
@@ -122,7 +122,7 @@ namespace KoOrderRegister
             {
                 CustomerProduct selectedItem = (CustomerProduct)dataGrid.SelectedItem;
 
-                if (CustumerService.deleteCustumer(selectedItem))
+                if (CustomerService.deleteCustumer(selectedItem))
                 {
                     RefreshData();
                 }

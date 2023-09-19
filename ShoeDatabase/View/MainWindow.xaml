@@ -39,7 +39,7 @@
                 </TextBox.Style>
             </TextBox>
             <MenuItem Header="{x:Static properties:Resources.DeleteSearchesTitle}" Click="UpdateBox_CLick"/>
-            <MenuItem Header="{x:Static properties:Resources.AddOrChangeCostumer}" Click="newCustumerBox_CLick"/>
+            <MenuItem Header="{x:Static properties:Resources.AddOrChangeCustomer}" Click="newCustumerBox_CLick"/>
             <MenuItem Header="{x:Static properties:Resources.SettingsTitle}" Click="SettingsBox_CLick"/>
             <MenuItem Header="{x:Static properties:Resources.Developer}" HorizontalAlignment="Right">
                 <MenuItem Header="{x:Static properties:Resources.NewDataBase}" Click="CreateDatabase_Click" />
@@ -56,7 +56,7 @@
                 <ContextMenu>
                     <MenuItem Header="{x:Static properties:Resources.ChangeTitle}" Click="ContextMenu_Change"/>
                     <MenuItem Header="{x:Static properties:Resources.DeleteOrderTitle}" Click="ContextMenu_Delete" />
-                    <MenuItem Header="{x:Static properties:Resources.DeleteCostumerTitle}" Click="ContextMenu_Delete_Custumer" />
+                    <MenuItem Header="{x:Static properties:Resources.DeleteCustomerTitle}" Click="ContextMenu_Delete_Custumer" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>

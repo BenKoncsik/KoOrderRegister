@@ -24,7 +24,7 @@ namespace KoOrderRegister
     public partial class NewEntryWindow : Window
     { 
         private string photoFilePath = "NULL";
-        private List<Custumer> custumers = new List<Custumer>();
+        private List<Customer> custumers = new List<Customer>();
         private bool newOrder = true;
         private DateTime OrderDateTime { get; set; } = DateTime.Now;
         private CustomerProduct customerShoeInfo = new CustomerProduct();
@@ -34,10 +34,10 @@ namespace KoOrderRegister
         {
             InitializeComponent();
             noteBox.Text = "";
-            custumers = CustumerService.getAllCustumers(custumers);
+            custumers = CustomerService.getAllCustumers(custumers);
             if(custumers.Count <= 0)
             {
-                custumers.Add(new Custumer("Nincs ember felvéve!"));
+                custumers.Add(new Customer("Nincs ember felvéve!"));
             }
             custumerComboBox.ItemsSource = custumers;
 
@@ -53,7 +53,7 @@ namespace KoOrderRegister
             addressBox.Text = customer.Address;
             tajNumberBox.Text = customer.TajNumber;
             orderNumberBox.Text = customer.OrderNumber;
-            custumers = CustumerService.getAllCustumers();
+            custumers = CustomerService.getAllCustumers();
             noteBox.Text = customer.Note;
             custumerComboBox.ItemsSource = custumers;
             DateTime dateTime = DateTime.Now;
@@ -75,7 +75,7 @@ namespace KoOrderRegister
             }
             images = FileService.getFilesObservable(customerShoeInfo.ProductId);
             ImagesListView.ItemsSource = images;
-            foreach (Custumer c in custumers) 
+            foreach (Customer c in custumers) 
             {
                 if (c.TAJNumber.Equals(customer.TajNumber))
                 {
@@ -189,7 +189,7 @@ namespace KoOrderRegister
      
         private void CustomerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCustomer = (Custumer)custumerComboBox.SelectedItem;
+            var selectedCustomer = (Customer)custumerComboBox.SelectedItem;
             if(selectedCustomer != null && selectedCustomer.Id != -1) 
             {
                 customerShoeInfo.Name = selectedCustomer.Name;

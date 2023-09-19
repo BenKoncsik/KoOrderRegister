@@ -6,15 +6,15 @@ namespace KoOrderRegister.Model
     {
         public CustomerProduct() 
         { 
-            Custumer = new Custumer();
+            Custumer = new Customer();
             this.Files = new List<FileBLOB>();
         }
-        public CustomerProduct(Custumer c)
+        public CustomerProduct(Customer c)
         {
             Custumer = c;
             this.Files = new List<FileBLOB>();
         }
-        public CustomerProduct(long productID, string orderNumber, string orderDate, string orderEelaseDate, string note, Custumer custumer) 
+        public CustomerProduct(long productID, string orderNumber, string orderDate, string orderEelaseDate, string note, Customer custumer) 
         {
             this.ProductId = productID;
             this.OrderNumber = orderNumber; 
@@ -25,7 +25,7 @@ namespace KoOrderRegister.Model
             this.Files = new List<FileBLOB>();
 
         }
-        public Custumer Custumer { get; set; }
+        public Customer Custumer { get; set; }
         public long ProductId { get; set; }
         public string OrderNumber { get; set; }
         public string OrderDate { get; set; }
