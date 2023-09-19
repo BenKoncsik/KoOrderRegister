@@ -63,9 +63,9 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to Ügyfél hozzáadása/változtatása.
         /// </summary>
-        public static string AddOrChangeCostumer {
+        public static string AddOrChangeCustomer {
             get {
-                return ResourceManager.GetString("AddOrChangeCostumer", resourceCulture);
+                return ResourceManager.GetString("AddOrChangeCustomer", resourceCulture);
             }
         }
         
@@ -180,9 +180,9 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to Ügyfél adatainak törlése (a rendelései megmaradnak).
         /// </summary>
-        public static string DeleteCostumerTitle {
+        public static string DeleteCustomerTitle {
             get {
-                return ResourceManager.GetString("DeleteCostumerTitle", resourceCulture);
+                return ResourceManager.GetString("DeleteCustomerTitle", resourceCulture);
             }
         }
         
@@ -486,9 +486,9 @@ namespace KoOrderRegister.I18N {
         /// <summary>
         ///   Looks up a localized string similar to Elmentett ügyfelek:.
         /// </summary>
-        public static string SavedCustumersLabel {
+        public static string SavedCustomersLabel {
             get {
-                return ResourceManager.GetString("SavedCustumersLabel", resourceCulture);
+                return ResourceManager.GetString("SavedCustomersLabel", resourceCulture);
             }
         }
         

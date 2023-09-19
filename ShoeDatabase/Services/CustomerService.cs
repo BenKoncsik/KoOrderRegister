@@ -13,9 +13,9 @@ using KoOrderRegister.I18N;
 
 namespace KoOrderRegister.Services
 {
-    public class CustumerService
+    public class CustomerService
     {
-        public CustumerService() 
+        public CustomerService() 
         {
             if (!OrderService.databesInitzialized)
             {
@@ -25,13 +25,13 @@ namespace KoOrderRegister.Services
 
 
 
-        public static List<Custumer> getAllCustumers(List<Custumer> custumers = null)
+        public static List<Customer> getAllCustumers(List<Customer> custumers = null)
         {
             using (var connection = OrderService.OpenConnection())
             {
                 if (custumers == null)
                 {
-                    custumers = new List<Custumer>();
+                    custumers = new List<Customer>();
                 }
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT id, name, address, note, tajNumber  FROM customers";
@@ -39,7 +39,7 @@ namespace KoOrderRegister.Services
                 {
                     while (reader.Read())
                     {
-                        var customer = new Custumer
+                        var customer = new Customer
                         {
                             Id = reader.GetInt32(0),
                             Name = reader.GetString(1),
@@ -51,12 +51,12 @@ namespace KoOrderRegister.Services
                         custumers.Add(customer);
                     }
                 }
-                return custumers ?? new List<Custumer>();
+                return custumers ?? new List<Customer>();
             }
         }
 
 
-        public static Custumer GetCustomer(string name, string address, string tajNumber, string note = "")
+        public static Customer GetCustomer(string name, string address, string tajNumber, string note = "")
         {
             using (var connection = OrderService.OpenConnection())
             {
@@ -71,7 +71,7 @@ namespace KoOrderRegister.Services
                     {
                         if (reader.Read())
                         {
-                            return new Custumer(reader.GetInt32(0), name, address, tajNumber, note);
+                            return new Customer(reader.GetInt32(0), name, address, tajNumber, note);
                         }
                         else
                         {
@@ -111,7 +111,7 @@ namespace KoOrderRegister.Services
                 return false;
             }
 
-        public bool saveCustumer(Custumer custumer)
+        public bool saveCustumer(Customer custumer)
         {
             try
             {

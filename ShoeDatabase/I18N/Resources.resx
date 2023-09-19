@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddOrChangeCostumer" xml:space="preserve">
+  <data name="AddOrChangeCustomer" xml:space="preserve">
     <value>Ügyfél hozzáadása/változtatása</value>
   </data>
   <data name="AddresHeader" xml:space="preserve">
@@ -156,7 +156,7 @@
   <data name="DatabaseLocationSelect" xml:space="preserve">
     <value>Adatbázis elérési útvonala</value>
   </data>
-  <data name="DeleteCostumerTitle" xml:space="preserve">
+  <data name="DeleteCustomerTitle" xml:space="preserve">
     <value>Ügyfél adatainak törlése (a rendelései megmaradnak)</value>
   </data>
   <data name="DeleteHeader" xml:space="preserve">
@@ -260,7 +260,7 @@
   <data name="RenameHeader" xml:space="preserve">
     <value>Átnevezés</value>
   </data>
-  <data name="SavedCustumersLabel" xml:space="preserve">
+  <data name="SavedCustomersLabel" xml:space="preserve">
     <value>Elmentett ügyfelek:</value>
   </data>
   <data name="SaveHeader" xml:space="preserve">

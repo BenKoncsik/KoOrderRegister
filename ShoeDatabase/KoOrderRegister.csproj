@@ -115,12 +115,12 @@
     <Compile Include="Model\BuckupModel.cs" />
     <Compile Include="Model\FileBLOB.cs" />
     <Compile Include="Model\Setting.cs" />
-    <Compile Include="Services\CustumerService.cs" />
+    <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="View\NewCustumer.xaml.cs">
-      <DependentUpon>NewCustumer.xaml</DependentUpon>
+    <Compile Include="View\NewCustomer.xaml.cs">
+      <DependentUpon>NewCustomer.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RenameDialog.xaml.cs">
       <DependentUpon>RenameDialog.xaml</DependentUpon>
@@ -137,12 +137,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\CustomerProduct.cs" />
-    <Compile Include="Model\Custumer.cs" />
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\NewCustumer.xaml">
+    <Page Include="View\NewCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

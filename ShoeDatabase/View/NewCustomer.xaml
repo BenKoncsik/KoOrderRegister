@@ -29,7 +29,7 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static properties:Resources.SavedCostomersLabel}"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static properties:Resources.SavedCustomersLabel}"/>
         <ComboBox x:Name="custumerComboBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" 
                   DisplayMemberPath="Name" SelectedValuePath="Id" TextSearch.TextPath="Name"
                    SelectionChanged="CustomerComboBox_SelectionChanged" SelectedIndex="0" IsTextSearchEnabled="True" />

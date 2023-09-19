@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace KoOrderRegister.Model
 {
-    public class Custumer
+    public class Customer
     {
-        public Custumer() { }
-        public Custumer(string name) 
+        public Customer() { }
+        public Customer(string name) 
         {
             this.Name = name;
             this.Id = -1;
         }
-        public Custumer(long id, string name, string address, string note, string tajNumber)
+        public Customer(long id, string name, string address, string note, string tajNumber)
         {
             this.Name = name;
             this.Id = id;
