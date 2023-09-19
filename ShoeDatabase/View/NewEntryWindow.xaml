@@ -63,7 +63,7 @@
         <Label Grid.Row="8" Grid.Column="0" Content="{x:Static properties:Resources.PictureChoiceLabel}"/>
         <Button x:Name="photoButton" Grid.Row="8" Grid.Column="1" Click="PhotoButton_Click" HorizontalAlignment="Stretch">Fénykép kiválasztása</Button>
 
-        <ListView x:Name="ImagesListView" Grid.Row="9" Grid.ColumnSpan="2" Height="100" SelectionChanged="OnImageSelected">
+        <ListView x:Name="ImagesListView" Grid.Row="9" Grid.ColumnSpan="2" MinHeight="100" SelectionChanged="OnImageSelected">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{x:Static properties:Resources.OpenHeader}" Click="OpenImage_Click"/>
@@ -84,7 +84,7 @@
                     <GridViewColumn Width="auto" Header="{x:Static properties:Resources.PictureHeader}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Width="80" Height="80" Source="{Binding BitmapImage}" Stretch="UniformToFill"/>
+                                    <Image MinWidth="80" Height="250" Source="{Binding BitmapImage}" Stretch="UniformToFill"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
