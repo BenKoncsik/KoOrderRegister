@@ -1,0 +1,115 @@
+﻿<Window x:Class="KoOrderRegister.NewEntryWindow"
+        xmlns:properties="clr-namespace:KoOrderRegister.I18N"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="{x:Static properties:Resources.NewOrederTitle}" Height="450" Width="600">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Elmentett emberek:"/>
+            <ComboBox x:Name="custumerComboBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" 
+                  DisplayMemberPath="Name" SelectedValuePath="Id" TextSearch.TextPath="Name"
+                   SelectionChanged="CustomerComboBox_SelectionChanged" SelectedIndex="0" IsTextSearchEnabled="True" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="{x:Static properties:Resources.NameLabel}"/>
+            <TextBox x:Name="nameBox" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" IsReadOnly="True"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="{x:Static properties:Resources.AddressLabel}"/>
+            <TextBox x:Name="addressBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" IsReadOnly="True"/>
+
+            <Label Grid.Row="3" Grid.Column="0" Content="{x:Static properties:Resources.InsuranceNumberLabel}"/>
+            <TextBox x:Name="tajNumberBox" Grid.Row="3" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" TextChanged="TajNumberBox_TextChanged" HorizontalAlignment="Stretch" IsReadOnly="True"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Content="{x:Static properties:Resources.OrderNumberLable}"/>
+            <TextBox x:Name="orderNumberBox" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+
+
+            <Label Grid.Row="5" Grid.Column="0" Content="{x:Static properties:Resources.OrderDateLabel}"/>
+            <DatePicker x:Name="orderDateBox" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" SelectedDate="{x:Static sys:DateTime.Now}"/>
+
+            <Label Grid.Row="6" Grid.Column="0" Content="{x:Static properties:Resources.OrderCompletionDateLabel}"/>
+            <DatePicker x:Name="orderReleaseDateBox" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+
+            <Label Grid.Row="7" Grid.Column="0" Content="{x:Static properties:Resources.NoteLabel}"/>
+            <TextBox x:Name="noteBox" Grid.Row="7" Grid.Column="1"
+                Height="Auto" 
+                MinLines="3"
+                MaxLines="20"
+                TextWrapping="Wrap"
+                 HorizontalAlignment="Stretch"/>
+
+
+            <Label Grid.Row="8" Grid.Column="0" Content="{x:Static properties:Resources.PictureChoiceLabel}"/>
+            <Button x:Name="photoButton" Grid.Row="8" Grid.Column="1" Click="PhotoButton_Click" HorizontalAlignment="Stretch">Fénykép kiválasztása</Button>
+
+            <ListView x:Name="ImagesListView" Grid.Row="9" Grid.ColumnSpan="2" MinHeight="100" SelectionChanged="OnImageSelected">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static properties:Resources.OpenHeader}" Click="OpenImage_Click"/>
+                        <MenuItem Header="{x:Static properties:Resources.DeleteHeader}" Click="DeleteImage_Click"/>
+                        <MenuItem Header="{x:Static properties:Resources.RenameHeader}" Click="RenameImage_Click"/>
+                        <MenuItem Header="{x:Static properties:Resources.SaveInDeviceHeader}" Click="SaveImage_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="auto" Header="{x:Static properties:Resources.NameHeader}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="auto" Header="{x:Static properties:Resources.PictureHeader}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image MinWidth="80" Height="250" Source="{Binding BitmapImage}" Stretch="UniformToFill"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Button x:Name="CancelButton" Width="Auto" Height="50" Grid.Row="10" Grid.Column="0" Click="CancelButton_Click" Content="{x:Static properties:Resources.CancleHeader}"/>
+            <Button x:Name="SaveButton" Width="Auto" Height="50" Grid.Row="10"  Grid.Column="1" Click="SaveButton_Click" Content="{x:Static properties:Resources.SaveHeader}"/>
+        </Grid>
+        <ProgressBar x:Name="ProgressBar" Visibility="Collapsed" Height="20" Minimum="0" Maximum="100" Margin="0,394,0,0" Grid.RowSpan="2" VerticalAlignment="Top"/>
+    </Grid>
+
+
+</Window>
