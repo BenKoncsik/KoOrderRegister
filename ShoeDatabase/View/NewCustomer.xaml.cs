@@ -102,7 +102,8 @@ namespace KoOrderRegister.View
             {
                 note = noteBox.Text;
             }
-            if (custumerService.saveCustumer(new Customer(custumerId, nameBox.Text, addressBox.Text, note, tajNumberBox.Text)))
+            string tajNumber = tajNumberBox.Text;
+            if (custumerService.saveCustumer(new Customer(custumerId, nameBox.Text, addressBox.Text, note, tajNumber)))
             {
                 MessageBox.Show("Sikeres Mentés");
                 custumers = OrderService.GetCustomers();
@@ -111,7 +112,7 @@ namespace KoOrderRegister.View
                 {
                     foreach (Customer c in custumers)
                     {
-                        if (c.TAJNumber != null && c.TAJNumber.Equals(tajNumberBox.Text))
+                        if (c.TAJNumber != null && c.TAJNumber.Equals(tajNumber))
                         {
                             custumerComboBox.SelectedItem = c;
                             return;
