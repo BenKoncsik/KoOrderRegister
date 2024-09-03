@@ -1,9 +1,16 @@
-namespace KoOrderRegister.Modules.Order.List.Pages;
+using KoOrderRegister.Modules.Order.ViewModels;
+using KoOrderRegister.Utility;
+
+namespace KoOrderRegister.Modules.Order.Pages;
 
 public partial class OrderListPage : ContentPage
 {
-	public OrderListPage()
-	{
-		InitializeComponent();
-	}
+    public OrderListPage(OrderListViewModel viewMode)
+    {
+        InitializeComponent();
+        BindingContext = viewMode;
+    }
+
+    
+
 }

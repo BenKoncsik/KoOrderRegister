@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.Customer.Pages.PersonDetailsPage"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.Person}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{x:Static res:AppRes.Return}"
+                     IconImageSource="{AppThemeBinding Light='return_light.png', Dark='return_dark.png'}"
+                     Command="{Binding ReturnCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="20">
+            <!-- Az űrlap címkéi és beviteli mezői -->
+            <Grid ColumnDefinitions="Auto,*"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                <!-- Name -->
+                <Label Text="Name:"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.Name}"
+                       Grid.Row="0"
+                       Grid.Column="1" />
+
+                <!-- Address -->
+                <Label Text="Address:"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.Address}"
+                       Grid.Row="1"
+                       Grid.Column="1" />
+
+                <!-- Phone -->
+                <Label Text="Phone:"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.Phone}"
+                       Grid.Row="2"
+                       Grid.Column="1" />
+
+                <!-- Email -->
+                <Label Text="Email:"
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.Email}"
+                       Grid.Row="3"
+                       Grid.Column="1" />
+
+                <!-- Note -->
+                <Label Text="Note:"
+                       Grid.Row="4"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.Note}"
+                       Grid.Row="4"
+                       Grid.Column="1" />
+
+                <!-- National Health Insurance -->
+                <Label Text="National Health Insurance:"
+                       Grid.Row="5"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Customer.NationalHealthInsurance}"
+                       Grid.Row="5"
+                       Grid.Column="1" />
+            </Grid>
+
+            <!-- Mentés gomb -->
+            <Button Text="Save"
+                    Command="{Binding SaveCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

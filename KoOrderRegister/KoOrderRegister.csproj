@@ -57,11 +57,47 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\ai_dark.svg" />
+	  <None Remove="Resources\Images\ai_light.svg" />
+	  <None Remove="Resources\Images\ai_off_dark.svg" />
+	  <None Remove="Resources\Images\ai_off_light.svg" />
+	  <None Remove="Resources\Images\cloud_dark.svg" />
+	  <None Remove="Resources\Images\cloud_light.svg" />
+	  <None Remove="Resources\Images\cloud_off_dark.svg" />
+	  <None Remove="Resources\Images\cloud_off_light.svg" />
+	  <None Remove="Resources\Images\key_dark.svg" />
+	  <None Remove="Resources\Images\key_light.svg" />
+	  <None Remove="Resources\Images\notification_dark.svg" />
+	  <None Remove="Resources\Images\notification_light.svg" />
+	  <None Remove="Resources\Images\not_shared_icon_dark.svg" />
+	  <None Remove="Resources\Images\not_shared_icon_light.svg" />
+	  <None Remove="Resources\Images\pause_dark.svg" />
+	  <None Remove="Resources\Images\pause_light.svg" />
+	  <None Remove="Resources\Images\play_dark.svg" />
+	  <None Remove="Resources\Images\play_light.svg" />
+	  <None Remove="Resources\Images\qr_code_dark.svg" />
+	  <None Remove="Resources\Images\qr_code_light.svg" />
+	  <None Remove="Resources\Images\return_dark.svg" />
+	  <None Remove="Resources\Images\return_light.svg" />
+	  <None Remove="Resources\Images\shared_icon_dark.svg" />
+	  <None Remove="Resources\Images\shared_icon_light.svg" />
+	  <None Remove="Resources\Images\sync_dark.svg" />
+	  <None Remove="Resources\Images\sync_light.svg" />
+	  <None Remove="Resources\Images\update_dark.svg" />
+	  <None Remove="Resources\Images\update_light.svg" />
+	  <None Remove="Resources\Images\upload_dark.svg" />
+	  <None Remove="Resources\Images\upload_light.svg" />
+	  <None Remove="Resources\Images\x_dark.svg" />
+	  <None Remove="Resources\Images\x_light.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Mopups" Version="1.3.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
@@ -77,6 +113,9 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppRes.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
+	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,6 +126,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Modules\Customer\Pages\CustomerListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Modules\Order\List\Pages\OrderListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

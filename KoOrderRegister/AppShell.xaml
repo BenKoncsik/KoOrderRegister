@@ -4,7 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:KoOrderRegister"
-    Shell.FlyoutBehavior="Disabled"
+    xmlns:res="clr-namespace:KoOrderRegister.Localization"
+    xmlns:orderListViews="clr-namespace:KoOrderRegister.Modules.Order.Pages"
+    xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
+    Shell.FlyoutBehavior="Flyout"
     Title="KoOrderRegister">
 
 
@@ -14,11 +17,16 @@
                Padding="0, 10" />
     </Shell.FlyoutFooter>
 
+    <FlyoutItem Title="{x:Static res:AppRes.CustomerList}">
+        <ShellContent Title="{x:Static res:AppRes.CustomerList}"
+                      Route="CustomerListPage"
+                      ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
+    </FlyoutItem>
     
     <FlyoutItem Title="{x:Static res:AppRes.OrderList}">
         <ShellContent Title="{x:Static res:AppRes.OrderList}"
                       Route="OrderListPage"
-                      ContentTemplate="{DataTemplate views:OrderListPage}" />
+                      ContentTemplate="{DataTemplate orderListViews:OrderListPage}" />
     </FlyoutItem>
- 
+
 </Shell>

@@ -1,4 +1,6 @@
-﻿using KoOrderRegister.Modules.Order.List.Pages;
+﻿
+using KoOrderRegister.Modules.Customer.Pages;
+using KoOrderRegister.Modules.Order.Pages;
 
 namespace KoOrderRegister
 {
@@ -8,6 +10,8 @@ namespace KoOrderRegister
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(OrderListPage), typeof(OrderListPage));
+            Routing.RegisterRoute(nameof(CustomerListPage), typeof(CustomerListPage));
+            Routing.RegisterRoute(nameof(PersonDetailsPage), typeof(PersonDetailsPage));
         }
     }
 }

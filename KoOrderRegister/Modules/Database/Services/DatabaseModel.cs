@@ -16,7 +16,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public DatabaseModel()
         {
-            Init().Wait();
+            Task.Run(async () => await Init()).Wait();
         }
         private async Task Init()
         {
@@ -24,40 +24,68 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 return;
             }
-
-            Database = new SQLiteAsyncConnection(Constants.basePath, Constants.Flags);
-            await Database.CreateTableAsync<CustomerModel>();
-            await Database.CreateTableAsync<OrderModel>();
-            await Database.CreateTableAsync<FileModel>();
-            options = new SQLiteConnectionString(Constants.basePath, false);
+            try
+            {
+                Database = new SQLiteAsyncConnection(Constants.basePath, Constants.Flags);
+                await Database.CreateTableAsync<CustomerModel>();
+                await Database.CreateTableAsync<OrderModel>();
+                await Database.CreateTableAsync<FileModel>();
+                options = new SQLiteConnectionString(Constants.basePath, false);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
 
         }
 
         #region CustomerModel CRUD Implementation
         public async Task<int> CreateCustomer(CustomerModel customer)
         {
-            return await Database.InsertAsync(customer);
+            CustomerModel? result = await GetCustomerById(customer.Guid);
+            if(result == null)
+            {
+                return await Database.InsertAsync(customer);
+            }
+            else
+            {
+                return await UpdateCustomer(customer);
+            }
+            
         }
-
         public async Task<CustomerModel> GetCustomerById(Guid id)
         {
-            var customer = await Database.FindAsync<CustomerModel>(id);
+            string stringId = id.ToString();
+            var customer = await Database.FindAsync<CustomerModel>(stringId);
             if (customer != null)
             {
-                customer.Orders = await Database.Table<OrderModel>().Where(o => o.Customer.Id == id).ToListAsync();
+                var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId.Equals(stringId)).ToListAsync();
+                foreach (var order in orders)
+                {
+                    order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
+                }
+                customer.Orders = orders;
             }
             return customer;
         }
+
 
         public async Task<List<CustomerModel>> GetAllCustomers()
         {
             var customers = await Database.Table<CustomerModel>().ToListAsync();
             foreach (var customer in customers)
             {
-                customer.Orders = await Database.Table<OrderModel>().Where(o => o.Customer.Id == customer.Id).ToListAsync();
+                var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId == customer.Id).ToListAsync();
+                foreach (var order in orders)
+                {
+                    order.Files = await Database.Table<FileModel>().Where(f => f.OrderId == order.Id).ToListAsync();
+                }
+                customer.Orders = orders;
             }
             return customers;
         }
+
 
         public async Task<int> UpdateCustomer(CustomerModel customer)
         {
@@ -66,30 +94,40 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteCustomer(Guid id)
         {
+            string stringId = id.ToString();  // Convert Guid to string
             var customer = await GetCustomerById(id);
             if (customer != null)
             {
                 foreach (var order in customer.Orders)
                 {
-                    await DeleteOrder(order.Id);
+                    await DeleteOrder(Guid.Parse(order.Id));
                 }
                 return await Database.DeleteAsync(customer);
             }
             return 0;
         }
-#endregion
+        #endregion
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
         {
-            return await Database.InsertAsync(order);
+            OrderModel? result = await GetOrderById(order.Guid);
+            if(result == null)
+            {
+                return await Database.InsertAsync(order);
+            }
+            else
+            {
+                return await UpdateOrder(order);
+            }
         }
 
         public async Task<OrderModel> GetOrderById(Guid id)
         {
-            var order = await Database.FindAsync<OrderModel>(id);
+            string stringId = id.ToString();  // Convert Guid to string
+            var order = await Database.FindAsync<OrderModel>(stringId);
             if (order != null)
             {
-                order.Files = await Database.Table<FileModel>().Where(f => f.Order.Id == id).ToListAsync();
+                order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync();
             }
             return order;
         }
@@ -111,27 +149,38 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteOrder(Guid id)
         {
+            string stringId = id.ToString();  // Convert Guid to string
             var order = await GetOrderById(id);
             if (order != null)
             {
                 foreach (var file in order.Files)
                 {
-                    await DeleteFile(file.Id);
+                    await DeleteFile(Guid.Parse(file.Id));
                 }
                 return await Database.DeleteAsync(order);
             }
             return 0;
         }
-#endregion
+        #endregion
         #region FileModel CRUD Implementation
         public async Task<int> CreateFile(FileModel file)
         {
-            return await Database.InsertAsync(file);
+            FileModel? result = await GetFileById(file.Guid);
+            if(result == null)
+            {
+                return await Database.InsertAsync(file);
+            }
+            else
+            {
+                return await UpdateFile(file);
+            }
+            
         }
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            return await Database.FindAsync<FileModel>(id);
+            string stringId = id.ToString();  // Convert Guid to string
+            return await Database.FindAsync<FileModel>(stringId);
         }
 
         public async Task<List<FileModel>> GetAllFiles()
@@ -146,6 +195,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteFile(Guid id)
         {
+            string stringId = id.ToString();  // Convert Guid to string
             var file = await GetFileById(id);
             if (file != null)
             {
@@ -217,6 +267,7 @@ namespace KoOrderRegister.Modules.Database.Services
             SQLiteOpenFlags.SharedCache;
 
         public static string basePath =>
-            KoncsikHomeCore.Utility.PathExtensions.Concatenate(FileSystem.AppDataDirectory, DatabaseFilename);
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DatabaseFilename);
+            //Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
     }
 }

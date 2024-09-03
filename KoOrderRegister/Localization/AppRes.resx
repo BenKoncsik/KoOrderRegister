@@ -118,7 +118,79 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="OrderList" xml:space="preserve">
-    <value>Order List</value>
+    <value>Orders</value>
     <comment>Order List</comment>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Orders</value>
+    <comment>orders</comment>
+  </data>
+  <data name="OrderNumber" xml:space="preserve">
+    <value>Order Number</value>
+    <comment>Order Number</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+    <comment>Date</comment>
+  </data>
+  <data name="CustomerList" xml:space="preserve">
+    <value>Customers</value>
+    <comment>CustomerList</comment>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+    <comment>Update</comment>
+  </data>
+  <data name="AddNewCustomer" xml:space="preserve">
+    <value>Add New Customer</value>
+    <comment>AddNewCustomer</comment>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Person</value>
+    <comment>Person</comment>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+    <comment>Return</comment>
+  </data>
+  <data name="NHI" xml:space="preserve">
+    <value>National Health Insurance</value>
+    <comment>National Health Insurance</comment>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+    <comment>Phone</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Edit</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Delete</comment>
+  </data>
+  <data name="AreYouSureYouWantToDelete" xml:space="preserve">
+    <value>Are you sure you want to delete: </value>
+    <comment>Are you sure you want to delete: </comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>Yes</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+    <comment>No</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+    <comment>Ok</comment>
+  </data>
+  <data name="FailedToDelete" xml:space="preserve">
+    <value>Failed to delete.</value>
+    <comment>Failed to delete.</comment>
   </data>
 </root>
