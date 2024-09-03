@@ -1,0 +1,222 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using KoOrderRegister.Modules.Database.Models;
+using Newtonsoft.Json;
+using SQLite;
+namespace KoOrderRegister.Modules.Database.Services
+{
+    public class DatabaseModel : IDatabaseModel
+    {
+        private SQLiteAsyncConnection Database;
+        private SQLiteConnectionString options;
+
+        public DatabaseModel()
+        {
+            Init().Wait();
+        }
+        private async Task Init()
+        {
+            if (Database is not null)
+            {
+                return;
+            }
+
+            Database = new SQLiteAsyncConnection(Constants.basePath, Constants.Flags);
+            await Database.CreateTableAsync<CustomerModel>();
+            await Database.CreateTableAsync<OrderModel>();
+            await Database.CreateTableAsync<FileModel>();
+            options = new SQLiteConnectionString(Constants.basePath, false);
+
+        }
+
+        #region CustomerModel CRUD Implementation
+        public async Task<int> CreateCustomer(CustomerModel customer)
+        {
+            return await Database.InsertAsync(customer);
+        }
+
+        public async Task<CustomerModel> GetCustomerById(Guid id)
+        {
+            var customer = await Database.FindAsync<CustomerModel>(id);
+            if (customer != null)
+            {
+                customer.Orders = await Database.Table<OrderModel>().Where(o => o.Customer.Id == id).ToListAsync();
+            }
+            return customer;
+        }
+
+        public async Task<List<CustomerModel>> GetAllCustomers()
+        {
+            var customers = await Database.Table<CustomerModel>().ToListAsync();
+            foreach (var customer in customers)
+            {
+                customer.Orders = await Database.Table<OrderModel>().Where(o => o.Customer.Id == customer.Id).ToListAsync();
+            }
+            return customers;
+        }
+
+        public async Task<int> UpdateCustomer(CustomerModel customer)
+        {
+            return await Database.UpdateAsync(customer);
+        }
+
+        public async Task<int> DeleteCustomer(Guid id)
+        {
+            var customer = await GetCustomerById(id);
+            if (customer != null)
+            {
+                foreach (var order in customer.Orders)
+                {
+                    await DeleteOrder(order.Id);
+                }
+                return await Database.DeleteAsync(customer);
+            }
+            return 0;
+        }
+#endregion
+        #region OrderModel CRUD Implementation
+        public async Task<int> CreateOrder(OrderModel order)
+        {
+            return await Database.InsertAsync(order);
+        }
+
+        public async Task<OrderModel> GetOrderById(Guid id)
+        {
+            var order = await Database.FindAsync<OrderModel>(id);
+            if (order != null)
+            {
+                order.Files = await Database.Table<FileModel>().Where(f => f.Order.Id == id).ToListAsync();
+            }
+            return order;
+        }
+
+        public async Task<List<OrderModel>> GetAllOrders()
+        {
+            var orders = await Database.Table<OrderModel>().ToListAsync();
+            foreach (var order in orders)
+            {
+                order.Files = await Database.Table<FileModel>().Where(f => f.Order.Id == order.Id).ToListAsync();
+            }
+            return orders;
+        }
+
+        public async Task<int> UpdateOrder(OrderModel order)
+        {
+            return await Database.UpdateAsync(order);
+        }
+
+        public async Task<int> DeleteOrder(Guid id)
+        {
+            var order = await GetOrderById(id);
+            if (order != null)
+            {
+                foreach (var file in order.Files)
+                {
+                    await DeleteFile(file.Id);
+                }
+                return await Database.DeleteAsync(order);
+            }
+            return 0;
+        }
+#endregion
+        #region FileModel CRUD Implementation
+        public async Task<int> CreateFile(FileModel file)
+        {
+            return await Database.InsertAsync(file);
+        }
+
+        public async Task<FileModel> GetFileById(Guid id)
+        {
+            return await Database.FindAsync<FileModel>(id);
+        }
+
+        public async Task<List<FileModel>> GetAllFiles()
+        {
+            return await Database.Table<FileModel>().ToListAsync();
+        }
+
+        public async Task<int> UpdateFile(FileModel file)
+        {
+            return await Database.UpdateAsync(file);
+        }
+
+        public async Task<int> DeleteFile(Guid id)
+        {
+            var file = await GetFileById(id);
+            if (file != null)
+            {
+                return await Database.DeleteAsync(file);
+            }
+            return 0;
+        }
+        #endregion
+
+        #region export/import
+        public async Task<string> ExportDatabaseToJson()
+        {
+            var customers = await GetAllCustomers();
+            var orders = await GetAllOrders();
+            var files = await GetAllFiles();
+            var databaseExport = new
+            {
+                Customers = customers,
+                Orders = orders,
+                Files = files
+            };
+            return JsonConvert.SerializeObject(databaseExport);
+        }
+
+        public async Task ImportDatabaseFromJson(string jsonData)
+        {
+            var databaseImport = JsonConvert.DeserializeObject<DatabaseImportModel>(jsonData);
+            await Database.DropTableAsync<CustomerModel>();
+            await Database.DropTableAsync<OrderModel>();
+            await Database.DropTableAsync<FileModel>();
+
+            await Init(); 
+            foreach (var customer in databaseImport.Customers)
+            {
+                await CreateCustomer(customer);
+            }
+            foreach (var order in databaseImport.Orders)
+            {
+                await CreateOrder(order);
+            }
+            foreach (var file in databaseImport.Files)
+            {
+                await CreateFile(file);
+            }
+        }
+
+        public class DatabaseImportModel
+        {
+            public List<CustomerModel> Customers { get; set; }
+            public List<OrderModel> Orders { get; set; }
+            public List<FileModel> Files { get; set; }
+        }
+
+        #endregion
+    }
+
+
+    public static class Constants
+    {
+#if DEBUG
+        public const string DatabaseFilename = "order_debug.db";
+#else
+        public const string DatabaseFilename = "order.db";
+#endif
+
+        public const SQLiteOpenFlags Flags =
+            SQLiteOpenFlags.ReadWrite |
+            SQLiteOpenFlags.Create |
+            SQLiteOpenFlags.SharedCache;
+
+        public static string basePath =>
+            KoncsikHomeCore.Utility.PathExtensions.Concatenate(FileSystem.AppDataDirectory, DatabaseFilename);
+    }
+}

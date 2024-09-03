@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="KoOrderRegister.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:KoOrderRegister"
+    Shell.FlyoutBehavior="Disabled"
+    Title="KoOrderRegister">
+
+
+    <Shell.FlyoutFooter>
+        <Label Text="KoOrderRegister | Alpha"
+               HorizontalTextAlignment="Center"
+               Padding="0, 10" />
+    </Shell.FlyoutFooter>
+
+    
+    <FlyoutItem Title="{x:Static res:AppRes.OrderList}">
+        <ShellContent Title="{x:Static res:AppRes.OrderList}"
+                      Route="OrderListPage"
+                      ContentTemplate="{DataTemplate views:OrderListPage}" />
+    </FlyoutItem>
+ 
+</Shell>
