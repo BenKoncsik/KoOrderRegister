@@ -2,6 +2,8 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Customer.ViewModels;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.Order.List.Pages;
+using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
@@ -32,16 +34,19 @@ namespace KoOrderRegister
             builder.Services.AddSingleton<OrderListPage>();
             builder.Services.AddTransient<OrderListViewModel>();
 
+            builder.Services.AddSingleton<OrderDetailsPage>();
+            builder.Services.AddTransient<OrderDetailViewModel>();
+
             #endregion
             #region Customer Modul
 
             builder.Services.AddSingleton<CustomerListPage>();
             builder.Services.AddTransient<CustomerListViewModel>();
 
-            builder.Services.AddTransient<PersonDetailsPage>();
+            builder.Services.AddSingleton<PersonDetailsPage>();
             builder.Services.AddTransient<PersonDetailsViewModel>();
 
-            builder.Services.AddTransient<ShowCustomerPopUp>();
+            builder.Services.AddSingleton<ShowCustomerPopUp>();
             builder.Services.AddTransient<PersonDetailPopUp>();
 
             #endregion

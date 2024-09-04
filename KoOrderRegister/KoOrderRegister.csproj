@@ -105,8 +105,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Modules\Order\List\Services\" />
-	  <Folder Include="Modules\Order\Properties\Services\" />
-	  <Folder Include="Modules\Order\Properties\Pages\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -135,6 +133,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Customer\Pages\ShowCutomerPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Modules\Order\List\Pages\OrderDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Order\List\Pages\OrderListPage.xaml">

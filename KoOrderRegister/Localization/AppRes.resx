@@ -241,4 +241,48 @@
     <value>Copyd</value>
     <comment>Copyd</comment>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Order</value>
+    <comment>Order</comment>
+  </data>
+  <data name="OrderNumberLabel" xml:space="preserve">
+    <value>Order number:</value>
+    <comment>OrderNumber</comment>
+  </data>
+  <data name="DateLabel" xml:space="preserve">
+    <value>Date:</value>
+    <comment>DateLabel</comment>
+  </data>
+  <data name="AddNewOrder" xml:space="preserve">
+    <value>Add new order</value>
+    <comment>AddNewOrder</comment>
+  </data>
+  <data name="OutDateLabel" xml:space="preserve">
+    <value>Order issue date:</value>
+    <comment>OutDateLabel</comment>
+  </data>
+  <data name="StartDateLabel" xml:space="preserve">
+    <value>Order pickup date:</value>
+    <comment>StartDateLabel</comment>
+  </data>
+  <data name="SelectCustomer" xml:space="preserve">
+    <value>Select customer:</value>
+    <comment>SelectCustomer</comment>
+  </data>
+  <data name="ChooseAnCustomer" xml:space="preserve">
+    <value>Choose an customer</value>
+    <comment>Choose an customer</comment>
+  </data>
+  <data name="ProductIdLabel" xml:space="preserve">
+    <value>Product id:</value>
+    <comment>ProductIdLabel</comment>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Order pickup date</value>
+    <comment>StartDate</comment>
+  </data>
+  <data name="SelectFiles" xml:space="preserve">
+    <value>Select files</value>
+    <comment>Select files</comment>
+  </data>
 </root>

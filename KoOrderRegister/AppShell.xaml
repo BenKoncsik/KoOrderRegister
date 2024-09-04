@@ -17,16 +17,18 @@
                Padding="0, 10" />
     </Shell.FlyoutFooter>
 
+    <FlyoutItem Title="{x:Static res:AppRes.OrderList}">
+        <ShellContent Title="{x:Static res:AppRes.OrderList}"
+                      Route="OrderListPage"
+                      ContentTemplate="{DataTemplate orderListViews:OrderListPage}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="{x:Static res:AppRes.CustomerList}">
         <ShellContent Title="{x:Static res:AppRes.CustomerList}"
                       Route="CustomerListPage"
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
     </FlyoutItem>
     
-    <FlyoutItem Title="{x:Static res:AppRes.OrderList}">
-        <ShellContent Title="{x:Static res:AppRes.OrderList}"
-                      Route="OrderListPage"
-                      ContentTemplate="{DataTemplate orderListViews:OrderListPage}" />
-    </FlyoutItem>
+
 
 </Shell>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using KoOrderRegister.Modules.Database.Models;
+﻿using KoOrderRegister.Modules.Database.Models;
 using Newtonsoft.Json;
 using SQLite;
 namespace KoOrderRegister.Modules.Database.Services
@@ -13,6 +7,9 @@ namespace KoOrderRegister.Modules.Database.Services
     {
         private SQLiteAsyncConnection Database;
         private SQLiteConnectionString options;
+
+        private static int MAX_DEGREE_OF_PARALLELISM = Environment.ProcessorCount;
+        private static SemaphoreSlim SEMAPHORE => new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
 
         public DatabaseModel()
         {
@@ -135,10 +132,29 @@ namespace KoOrderRegister.Modules.Database.Services
         public async Task<List<OrderModel>> GetAllOrders()
         {
             var orders = await Database.Table<OrderModel>().ToListAsync();
-            foreach (var order in orders)
+            var tasks = orders.Select(async order =>
             {
-                order.Files = await Database.Table<FileModel>().Where(f => f.Order.Id == order.Id).ToListAsync();
-            }
+                await SEMAPHORE.WaitAsync();
+                try
+                {
+                    var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).CountAsync();
+                    if (fileCount > 0)
+                    {
+                        order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
+                    }
+                    if (!string.IsNullOrEmpty(order.CustomerId))
+                    {
+                        order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                    }
+                    
+                }
+                finally
+                {
+                    SEMAPHORE.Release();
+                }
+            });
+
+            await Task.WhenAll(tasks);
             return orders;
         }
 
@@ -181,6 +197,17 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             string stringId = id.ToString();  // Convert Guid to string
             return await Database.FindAsync<FileModel>(stringId);
+        }
+
+        public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
+        {
+            string stringId = id.ToString();  // Convert Guid to string
+            var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).CountAsync();
+            if (fileCount > 0)
+            {
+                return await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync();
+            }
+            return new List<FileModel>();
         }
 
         public async Task<List<FileModel>> GetAllFiles()

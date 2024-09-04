@@ -18,6 +18,8 @@ namespace KoOrderRegister.Modules.Database.Models
         public string Note { get; set; } = string.Empty;
         public string OrderId { get; set; } = string.Empty;
         [Ignore]
+        public string FilePath { get; set; } = string.Empty;
+        [Ignore]
         public OrderModel Order { get; set; }
         [Ignore]
         public Guid Guid => Guid.Parse(Id);

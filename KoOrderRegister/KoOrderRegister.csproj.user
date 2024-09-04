@@ -19,6 +19,9 @@
     <MauiXaml Update="Modules\Customer\Pages\ShowCutomerPopUp.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Modules\Order\List\Pages\OrderDetailsPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Modules\Order\List\Pages\OrderListPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

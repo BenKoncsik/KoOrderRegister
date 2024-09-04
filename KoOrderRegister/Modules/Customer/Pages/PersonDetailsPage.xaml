@@ -23,7 +23,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.Name}"
                        Grid.Row="0"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
 
                 <!-- Address -->
                 <Label Text="{x:Static res:AppRes.AddressLabel}"
@@ -32,7 +33,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.Address}"
                        Grid.Row="1"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
 
                 <!-- Phone -->
                 <Label Text="{x:Static res:AppRes.PhoneLabel}"
@@ -41,7 +43,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.Phone}"
                        Grid.Row="2"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
 
                 <!-- Email -->
                 <Label Text="{x:Static res:AppRes.EmailLabel}"
@@ -50,7 +53,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.Email}"
                        Grid.Row="3"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
 
                 <!-- Note -->
                 <Label Text="{x:Static res:AppRes.NoteLabel}"
@@ -59,7 +63,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.Note}"
                        Grid.Row="4"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
 
                 <!-- National Health Insurance -->
                 <Label Text="{x:Static res:AppRes.NHILabel}"
@@ -68,7 +73,8 @@
                        VerticalOptions="Center" />
                 <Entry Text="{Binding Customer.NationalHealthInsurance}"
                        Grid.Row="5"
-                       Grid.Column="1" />
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
             </Grid>
 
             <Grid ColumnDefinitions="*,*"
@@ -77,14 +83,14 @@
                 <Button Text="{x:Static res:AppRes.Save}"
                         Command="{Binding SaveCommand}" 
                         Grid.Row="0"
-                        Grid.Column="0"
+                        Grid.Column="1"
                         Margin="10, 10, 10, 10"
                         />
                 <Button Text="{x:Static res:AppRes.Delete}"
                         Command="{Binding DeleteCommand}"
-                        IsVisible="{Binding IsEdit}"
+                        IsEnabled="{Binding IsEdit}"
                         Grid.Row="0"
-                        Grid.Column="1" 
+                        Grid.Column="0" 
                         Margin="10, 10, 10, 10"
                         />
             </Grid>

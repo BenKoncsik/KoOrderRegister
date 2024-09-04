@@ -6,10 +6,16 @@
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
              Title="{x:Static res:AppRes.Orders}">
     <ContentPage.ToolbarItems>
-     
+        <ToolbarItem Text="{x:Static res:AppRes.Update}"
+                     IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
+                     Command="{Binding UpdateOrderCommand}" />
+        <ToolbarItem Text="{x:Static res:AppRes.AddNewOrder}"
+                     IconImageSource="{AppThemeBinding Light='add_person_light.png', Dark='add_person_dark.png'}"
+                     Command="{Binding AddNewOrderCommand}" />
+
     </ContentPage.ToolbarItems>
     <ScrollView>
-            <VerticalStackLayout Padding="20">
+        <VerticalStackLayout Padding="20">
             <Grid Padding="10"
                   RowDefinitions="Auto"
                   ColumnDefinitions="*,*,*">
@@ -17,7 +23,7 @@
                        Grid.Column="0"
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
-                <Label Text="{x:Static res:AppRes.Date}"
+                <Label Text="{x:Static res:AppRes.StartDate}"
                        Grid.Column="1"
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
@@ -26,33 +32,46 @@
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
             </Grid>
-            <CollectionView x:Name="ordersCollectionView"
-                                ItemsSource="{Binding Orders}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Padding="10"
-                                  RowDefinitions="Auto,Auto,Auto"
-                                  ColumnDefinitions="*,*,*">
-                                <Label Text="{Binding OrderNumber}"
-                                       Grid.Row="0"
-                                       Grid.Column="0" />
-                            <Label Text="{Binding OrderDate}"
-                                   Grid.Row="0"
-                                   Grid.Column="1" />
-                            <Label Text="{Binding Order.Name}"
-                                       Grid.Row="0"
-                                       Grid.Column="2" />
 
-                            <BoxView HeightRequest="1"
-                                     Color="Gray"
-                                     Grid.ColumnSpan="3"
-                                     Grid.Row="1"
-                                     HorizontalOptions="Fill"
-                                     Margin="0,10,0,0" />
-                        </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+            <ListView x:Name="ordersListView"
+                      ItemsSource="{Binding Orders}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!-- Context menu -->
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="{x:Static res:AppRes.Edit}"
+                                          Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                          CommandParameter="{Binding .}" />
+
+                                <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                          CommandParameter="{Binding .}" />
+                            </ViewCell.ContextActions>
+                            <Grid Padding="10"
+                                  RowDefinitions="Auto, Auto"
+                                  ColumnDefinitions="*,*,*">
+                                <!--<Grid.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                              Command="{Binding Path=BindingContext.ToggleDetailsCommand, Source={x:Reference Name=customersListView}}"
+                                                              CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>-->
+                                <Label Text="{Binding OrderNumber}"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Center" />
+                                <Label Text="{Binding StartDate}"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center" />
+                                <Label Text="{Binding Customer.Name}"
+                                       Grid.Column="2"
+                                       HorizontalOptions="Center" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+    </ScrollView>
+
     </ContentPage>

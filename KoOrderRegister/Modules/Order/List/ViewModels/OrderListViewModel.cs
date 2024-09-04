@@ -1,33 +1,78 @@
-﻿using KoOrderRegister.Modules.Database.Models;
+﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.Order.List.Pages;
 using KoOrderRegister.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {
-    public class OrderListViewModel
+    public class OrderListViewModel : INotifyPropertyChanged
     {
         private readonly IDatabaseModel _database;
-        public ObservableCollection<OrderModel> Orders { get; set; }
+        private readonly OrderDetailsPage _orderDetailsPage;
+        public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
         #region Commands
-
+        public ICommand AddNewOrderCommand => new Command(NewOrder);
+        public Command<OrderModel> EditOrderCommand => new Command<OrderModel>(EditOrder);
+        public Command<OrderModel> DeleteOrderCommand => new Command<OrderModel>(DeleteOrder);
+        public ICommand UpdateOrderCommand => new Command(UpdateOrders);
         #endregion
-        public OrderListViewModel(IDatabaseModel database)
+        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage)
         {
             _database = database;
+            _orderDetailsPage = orderDetailsPage;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public async void NewOrder()
+        {
+            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+        }
+
+        public async void EditOrder(OrderModel order)
+        {
+            order.Files = await _database.GetAllFilesByOrderId(order.Guid);
+            _orderDetailsPage.EditOrder(order);
+            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
         }
 
         public async void UpdateOrders()
         {
-            Orders.Clear();
+            if(Orders != null)
+            {
+                Orders.Clear();
+            }
             foreach(var order in await _database.GetAllOrders())
             {
                 Orders.Add(order);
+            }
+        }
+
+        public async void DeleteOrder(OrderModel order)
+        {
+            if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.No, AppRes.Yes))
+            {
+                if (await _database.DeleteOrder(order.Guid) > 0)
+                {
+                    Orders.Remove(order);
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + order.OrderNumber, AppRes.Ok);
+                }
             }
         }
 
