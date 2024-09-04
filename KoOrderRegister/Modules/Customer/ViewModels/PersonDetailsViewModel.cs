@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Modules.Database.Models;
+﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         #region Commands
             public ICommand ReturnCommand => new Command(ClosePage);
             public ICommand SaveCommand => new Command(SavePerson);
+            public ICommand DeleteCommand => new Command(DeletePerson);
         #endregion
 
         private CustomerModel _customer = new CustomerModel();
@@ -30,6 +32,17 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 OnPropertyChanged(nameof(Customer));
             }
         }
+        private bool _isEdit = false;
+        public bool IsEdit 
+        {
+            get => _isEdit;
+            set
+            {
+                _isEdit = value;
+                OnPropertyChanged(nameof(IsEdit));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName = null)
@@ -44,17 +57,32 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         public async void SavePerson()
         {
             int result = await _database.CreateCustomer(Customer);
-
+            if(result == 1)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Customer.Name, AppRes.Ok);
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + Customer.Name, AppRes.Ok);
+            }
         }
 
-        public async Task DeletePerson()
+        public async void DeletePerson()
         {
-            if(Customer != null)
+            
+            if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + Customer.Name, AppRes.Yes, AppRes.No))
             {
-                int result = await _database.DeleteCustomer(Guid.Parse(Customer.Id));
-                if(result > 0)
+                if (Customer != null)
                 {
-                    ClosePage();
+                    int result = await _database.DeleteCustomer(Guid.Parse(Customer.Id));
+                    if (result > 0)
+                    {
+                        ClosePage();
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + Customer.Name, AppRes.Ok);
+                    }
                 }
             }
                 

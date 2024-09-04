@@ -193,4 +193,52 @@
     <value>Failed to delete.</value>
     <comment>Failed to delete.</comment>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>Save</comment>
+  </data>
+  <data name="FailedToSave" xml:space="preserve">
+    <value>Failed to save!</value>
+    <comment>FailedToSave</comment>
+  </data>
+  <data name="SuccessToSave" xml:space="preserve">
+    <value>Success to save</value>
+    <comment>SuccessToSave</comment>
+  </data>
+  <data name="NHILabel" xml:space="preserve">
+    <value>National Health Insurance:</value>
+    <comment>NHIL:</comment>
+  </data>
+  <data name="NoteLabel" xml:space="preserve">
+    <value>Note:</value>
+    <comment>NoteLabel</comment>
+  </data>
+  <data name="PhoneLabel" xml:space="preserve">
+    <value>Phone:</value>
+    <comment>PhoneLabel</comment>
+  </data>
+  <data name="AddressLabel" xml:space="preserve">
+    <value>Address:</value>
+    <comment>AddressLabel</comment>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name:</value>
+    <comment>NameLabel</comment>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Email:</value>
+    <comment>EmailLabel</comment>
+  </data>
+  <data name="CustomerDetails" xml:space="preserve">
+    <value>Customer details</value>
+    <comment>CustomerDetails</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>Copy</comment>
+  </data>
+  <data name="Copyd" xml:space="preserve">
+    <value>Copyd</value>
+    <comment>Copyd</comment>
+  </data>
 </root>

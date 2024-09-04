@@ -14,6 +14,9 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     {
         private readonly IDatabaseModel _database;
         public ObservableCollection<OrderModel> Orders { get; set; }
+        #region Commands
+
+        #endregion
         public OrderListViewModel(IDatabaseModel database)
         {
             _database = database;

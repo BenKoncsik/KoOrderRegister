@@ -4,9 +4,24 @@ namespace KoOrderRegister.Modules.Customer.Pages;
 
 public partial class CustomerListPage : ContentPage
 {
-	public CustomerListPage(CustomerListViewModel viewModel)
+    private readonly CustomerListViewModel _viewModel;
+    public CustomerListPage(CustomerListViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
+        _viewModel = viewModel;
+		BindingContext = _viewModel;
 	}
+
+    /*
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        _viewModel.Update();
+    }*/
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.Update();
+    }
 }

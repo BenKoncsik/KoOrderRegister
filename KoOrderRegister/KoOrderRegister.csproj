@@ -65,6 +65,8 @@
 	  <None Remove="Resources\Images\cloud_light.svg" />
 	  <None Remove="Resources\Images\cloud_off_dark.svg" />
 	  <None Remove="Resources\Images\cloud_off_light.svg" />
+	  <None Remove="Resources\Images\copy_dark.svg" />
+	  <None Remove="Resources\Images\copy_light.svg" />
 	  <None Remove="Resources\Images\key_dark.svg" />
 	  <None Remove="Resources\Images\key_light.svg" />
 	  <None Remove="Resources\Images\notification_dark.svg" />
@@ -130,6 +132,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Customer\Pages\CustomerListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Modules\Customer\Pages\ShowCutomerPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Order\List\Pages\OrderListPage.xaml">

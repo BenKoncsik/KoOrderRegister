@@ -2,6 +2,7 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using Mopups.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +19,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
     {
         private readonly IDatabaseModel _database;
         private PersonDetailsPage _personDetailsPage;
+        private ShowCustomerPopUp _showCustomerPopUp;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -37,14 +39,25 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         public ICommand AddNewCustomerCommand => new Command(AddNewCustomer);
         public Command<CustomerModel> DeleteCustomerCommand => new Command<CustomerModel>(DeleteCustomer);
         public Command<CustomerModel> EditCustomerCommand => new Command<CustomerModel>(EditCustumer);
+        public Command<CustomerModel> ToggleDetailsCommand => new Command<CustomerModel>(ToggleDetails);
         #endregion
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage)
+        private bool _isDetailsVisible = false;
+        public bool IsDetailsVisible
+        {
+            get => _isDetailsVisible;
+            set
+            {
+                _isDetailsVisible = value;
+            }
+        }
+        public CustomerListViewModel(IDatabaseModel database, 
+            PersonDetailsPage personDetailsPage,
+            ShowCustomerPopUp showCustomerPopUp)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
-
-            Update();
+            _showCustomerPopUp = showCustomerPopUp;
         }
 
         public async void Update()
@@ -84,6 +97,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                     await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + customer.Name, AppRes.Ok);
                 }
             }
+        }
+
+
+        public async void ToggleDetails(CustomerModel customer)
+        {
+            _showCustomerPopUp.EditCustomer(customer);
+            await MopupService.Instance.PushAsync(_showCustomerPopUp);
         }
 
     }

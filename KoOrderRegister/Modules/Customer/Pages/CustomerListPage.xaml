@@ -50,8 +50,14 @@
                                           CommandParameter="{Binding .}" />
                             </ViewCell.ContextActions>
                             <Grid Padding="10"
-                                  RowDefinitions="Auto"
+                                  RowDefinitions="Auto, Auto"
                                   ColumnDefinitions="*,*,*">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.ToggleDetailsCommand, Source={x:Reference Name=customersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+
                                 <Label Text="{Binding Name}"
                                        Grid.Column="0"
                                        HorizontalOptions="Center" />

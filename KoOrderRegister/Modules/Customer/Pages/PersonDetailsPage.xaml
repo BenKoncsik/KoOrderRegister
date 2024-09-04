@@ -17,7 +17,7 @@
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
                 <!-- Name -->
-                <Label Text="Name:"
+                <Label Text="{x:Static res:AppRes.NameLabel}"
                        Grid.Row="0"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -26,7 +26,7 @@
                        Grid.Column="1" />
 
                 <!-- Address -->
-                <Label Text="Address:"
+                <Label Text="{x:Static res:AppRes.AddressLabel}"
                        Grid.Row="1"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -35,7 +35,7 @@
                        Grid.Column="1" />
 
                 <!-- Phone -->
-                <Label Text="Phone:"
+                <Label Text="{x:Static res:AppRes.PhoneLabel}"
                        Grid.Row="2"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -44,7 +44,7 @@
                        Grid.Column="1" />
 
                 <!-- Email -->
-                <Label Text="Email:"
+                <Label Text="{x:Static res:AppRes.EmailLabel}"
                        Grid.Row="3"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -53,7 +53,7 @@
                        Grid.Column="1" />
 
                 <!-- Note -->
-                <Label Text="Note:"
+                <Label Text="{x:Static res:AppRes.NoteLabel}"
                        Grid.Row="4"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -62,7 +62,7 @@
                        Grid.Column="1" />
 
                 <!-- National Health Insurance -->
-                <Label Text="National Health Insurance:"
+                <Label Text="{x:Static res:AppRes.NHILabel}"
                        Grid.Row="5"
                        Grid.Column="0"
                        VerticalOptions="Center" />
@@ -71,9 +71,24 @@
                        Grid.Column="1" />
             </Grid>
 
-            <!-- Mentés gomb -->
-            <Button Text="Save"
-                    Command="{Binding SaveCommand}" />
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto">
+                
+                <Button Text="{x:Static res:AppRes.Save}"
+                        Command="{Binding SaveCommand}" 
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="10, 10, 10, 10"
+                        />
+                <Button Text="{x:Static res:AppRes.Delete}"
+                        Command="{Binding DeleteCommand}"
+                        IsVisible="{Binding IsEdit}"
+                        Grid.Row="0"
+                        Grid.Column="1" 
+                        Margin="10, 10, 10, 10"
+                        />
+            </Grid>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
