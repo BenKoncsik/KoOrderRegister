@@ -5,7 +5,15 @@
              xmlns:orderListViewsModel="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
              xmlns:vm="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
+             xmlns:converter="clr-namespace:KoOrderRegister.Modules.Order.List.Converters"
              Title="{x:Static res:AppRes.Order}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:FileContentToVisibilityConverter x:Key="FileContentToVisibility" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{x:Static res:AppRes.Return}"
                      IconImageSource="{AppThemeBinding Light='return_light.png', Dark='return_dark.png'}"
@@ -110,35 +118,8 @@
                                                Grid.Column="1"
                                                Grid.Row="0"
                                            Margin="10, 0, 10,10" />
-                                        <Image Grid.Column="2"
-                                               Grid.Row="0"
-                                               Source="{AppThemeBinding Light='open_light.png', Dark='open_dark.png'}"
-                                               VerticalOptions="Start"
-                                               HorizontalOptions="Start"
-                                               Aspect="AspectFit"
-                                               Margin="10, 10, 0, 0"
-                                               WidthRequest="20"
-                                               HeightRequest="20">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=filesList}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    <Image Grid.Column="3"
-                                           Grid.Row="0"
-                                           Source="{AppThemeBinding Light='save_light.png', Dark='save_dark.png'}"
-                                           VerticalOptions="Start"
-                                           HorizontalOptions="Start"
-                                           Aspect="AspectFit"
-                                           Margin="10, 10, 0, 0"
-                                           WidthRequest="20"
-                                           HeightRequest="20">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=filesList}}"
-                                                                  CommandParameter="{Binding .}" />
-                                        </Image.GestureRecognizers>
-                                    </Image>
-                                    <Image Grid.Column="4"
+
+                                    <Image Grid.Column="2"
                                            Grid.Row="0"
                                            Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
                                            VerticalOptions="Start"
@@ -152,6 +133,36 @@
                                                                   CommandParameter="{Binding .}" />
                                         </Image.GestureRecognizers>
                                     </Image>
+                                    <Image Grid.Column="3"
+                                               Grid.Row="0"
+                                               IsVisible="{Binding Content, Converter={StaticResource FileContentToVisibility}}"
+                                               Source="{AppThemeBinding Light='open_light.png', Dark='open_dark.png'}"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"
+                                               Aspect="AspectFit"
+                                               Margin="10, 10, 0, 0"
+                                               WidthRequest="20"
+                                               HeightRequest="20">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=filesList}}"
+                                                                      CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Image Grid.Column="4"
+                                               Grid.Row="0"
+                                               IsVisible="{Binding Content, Converter={StaticResource FileContentToVisibility}}"
+                                               Source="{AppThemeBinding Light='save_light.png', Dark='save_dark.png'}"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"
+                                               Aspect="AspectFit"
+                                               Margin="10, 10, 0, 0"
+                                               WidthRequest="20"
+                                               HeightRequest="20">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=filesList}}"
+                                                                      CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
                                 </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
