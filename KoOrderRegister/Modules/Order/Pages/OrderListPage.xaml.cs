@@ -6,18 +6,23 @@ namespace KoOrderRegister.Modules.Order.Pages;
 
 public partial class OrderListPage : ContentPage
 {
-    private readonly OrderListViewModel _viewMode;
+    private readonly OrderListViewModel _viewModel;
     public OrderListPage(OrderListViewModel viewMode)
     {
         InitializeComponent();
-        _viewMode = viewMode;
-        BindingContext = _viewMode;
+        _viewModel = viewMode;
+        BindingContext = _viewModel;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _viewMode.UpdateOrders();
+        _viewModel.UpdateOrders();
     }
 
+    protected void OnTextChanged(object sender, EventArgs e)
+    {
+        SearchBar searchBar = (SearchBar)sender;
+        _viewModel.Search(searchBar.Text);
+    }
 }

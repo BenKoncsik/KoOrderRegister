@@ -150,12 +150,6 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void Return()
         {
-            Order = new OrderModel();
-            IsEdit = false;
-            if(Files != null)
-            {
-                Files.Clear();
-            }
             App.Current.MainPage.Navigation.PopAsync();
         }
 

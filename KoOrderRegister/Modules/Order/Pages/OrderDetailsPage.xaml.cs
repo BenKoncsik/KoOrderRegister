@@ -37,4 +37,15 @@ public partial class OrderDetailsPage : ContentPage
         _viewModel.Update();
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if(_viewModel.Files != null)
+        {
+            _viewModel.Files.Clear();
+        }
+        _viewModel.IsEdit = false;
+        _viewModel.Order = new OrderModel();
+    }
+
 }	

@@ -103,6 +103,26 @@ namespace KoOrderRegister.Modules.Database.Services
             }
             return 0;
         }
+
+        public async Task<List<CustomerModel>> SearchCustomer(string search)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                return await GetAllCustomers();
+            }
+
+            string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
+
+            var query = $@"SELECT * FROM Customers 
+                           WHERE LOWER(Name) LIKE ? OR 
+                                 LOWER(Address) LIKE ? OR
+                                 LOWER(Phone) LIKE ? OR
+                                 LOWER(Email) LIKE ? OR
+                                 LOWER(Note) LIKE ? OR
+                                 LOWER(NationalHealthInsurance) LIKE ?";
+
+            return await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+        }
         #endregion
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
@@ -176,6 +196,50 @@ namespace KoOrderRegister.Modules.Database.Services
                 return await Database.DeleteAsync(order);
             }
             return 0;
+        }
+
+        public async Task<List<OrderModel>> SearchOrders(string search)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                return await GetAllOrders();
+            }
+
+            string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
+
+            var query = $@"SELECT o.* FROM Orders o
+                           JOIN Customers c ON o.CustomerId = c.Id
+                           WHERE LOWER(o.OrderNumber) LIKE ? OR 
+                           LOWER(o.Note) LIKE ? OR
+                           LOWER(c.Name) LIKE ? OR
+                           LOWER(c.Address) LIKE ? OR
+                           LOWER(c.Phone) LIKE ? OR
+                           LOWER(c.Email) LIKE ? OR
+                           LOWER(c.NationalHealthInsurance) LIKE ?";
+
+
+            List<OrderModel> orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery);
+            List<Task> tasks = new List<Task>();
+            foreach(var order in orders)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    await SEMAPHORE.WaitAsync();
+                    try
+                    {
+                        if (order.CustomerId != null || !string.IsNullOrEmpty(order.CustomerId))
+                        {
+                            order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                        }
+                    }
+                    finally
+                    {
+                        SEMAPHORE.Release();
+                    }
+                }));
+            }
+            await Task.WhenAll(tasks);
+            return orders;
         }
         #endregion
         #region FileModel CRUD Implementation

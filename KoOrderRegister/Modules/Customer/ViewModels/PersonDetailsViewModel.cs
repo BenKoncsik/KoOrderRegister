@@ -89,8 +89,6 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         }
         public void ClosePage()
         {
-            Customer = new CustomerModel();
-            IsEdit = false;
             App.Current.MainPage.Navigation.PopAsync();
         }
     }

@@ -24,4 +24,10 @@ public partial class CustomerListPage : ContentPage
         base.OnAppearing();
         _viewModel.Update();
     }
+
+    protected void OnTextChanged(object sender, EventArgs e)
+    {
+        SearchBar searchBar = (SearchBar)sender;
+        _viewModel.Search(searchBar.Text);
+    }
 }
