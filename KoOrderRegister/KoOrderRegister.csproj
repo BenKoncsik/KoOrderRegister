@@ -73,6 +73,8 @@
 	  <None Remove="Resources\Images\notification_light.svg" />
 	  <None Remove="Resources\Images\not_shared_icon_dark.svg" />
 	  <None Remove="Resources\Images\not_shared_icon_light.svg" />
+	  <None Remove="Resources\Images\open_dark.svg" />
+	  <None Remove="Resources\Images\open_light.svg" />
 	  <None Remove="Resources\Images\pause_dark.svg" />
 	  <None Remove="Resources\Images\pause_light.svg" />
 	  <None Remove="Resources\Images\play_dark.svg" />
@@ -81,6 +83,8 @@
 	  <None Remove="Resources\Images\qr_code_light.svg" />
 	  <None Remove="Resources\Images\return_dark.svg" />
 	  <None Remove="Resources\Images\return_light.svg" />
+	  <None Remove="Resources\Images\save_dark.svg" />
+	  <None Remove="Resources\Images\save_light.svg" />
 	  <None Remove="Resources\Images\shared_icon_dark.svg" />
 	  <None Remove="Resources\Images\shared_icon_light.svg" />
 	  <None Remove="Resources\Images\sync_dark.svg" />
@@ -101,10 +105,6 @@
 		<PackageReference Include="Mopups" Version="1.3.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Modules\Order\List\Services\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -135,10 +135,10 @@
 	  <MauiXaml Update="Modules\Customer\Pages\ShowCutomerPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Modules\Order\List\Pages\OrderDetailsPage.xaml">
+	  <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Modules\Order\List\Pages\OrderListPage.xaml">
+	  <MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

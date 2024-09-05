@@ -1,7 +1,7 @@
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Order.List.ViewModels;
 
-namespace KoOrderRegister.Modules.Order.List.Pages;
+namespace KoOrderRegister.Modules.Order.Pages;
 
 public partial class OrderDetailsPage : ContentPage
 {

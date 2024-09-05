@@ -285,4 +285,13 @@
     <value>Select files</value>
     <comment>Select files</comment>
   </data>
+  <data name="FailedToOpen" xml:space="preserve">
+    <value>Failed tTo open: </value>
+    <comment>FailedToOpen</comment>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Open
+</comment>
+  </data>
 </root>

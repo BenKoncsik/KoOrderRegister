@@ -196,6 +196,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed tTo open: .
+        /// </summary>
+        internal static string FailedToOpen {
+            get {
+                return ResourceManager.GetString("FailedToOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to save!.
         /// </summary>
         internal static string FailedToSave {
@@ -264,6 +273,15 @@ namespace KoOrderRegister.Localization {
         internal static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         

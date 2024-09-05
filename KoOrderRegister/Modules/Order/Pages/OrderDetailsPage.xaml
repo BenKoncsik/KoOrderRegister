@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KoOrderRegister.Modules.Order.List.Pages.OrderDetailsPage"
+             x:Class="KoOrderRegister.Modules.Order.Pages.OrderDetailsPage"
              xmlns:orderListViewsModel="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
              xmlns:vm="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
@@ -87,7 +87,7 @@
                     Padding="20"
                     >
                     <Grid ColumnDefinitions="*"
-                          RowDefinitions="Auto, Auto">
+                          RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                         <Button Text="{x:Static res:AppRes.SelectFiles}"
                                 Command="{Binding SelectedFilesCommand}" 
                                 Grid.Row="0"
@@ -112,7 +112,7 @@
                                            Margin="10, 0, 10,10" />
                                         <Image Grid.Column="2"
                                                Grid.Row="1"
-                                               Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
+                                               Source="{AppThemeBinding Light='open_light.png', Dark='open_dark.png'}"
                                                VerticalOptions="Start"
                                                HorizontalOptions="Start"
                                                Aspect="AspectFit"
@@ -120,11 +120,39 @@
                                                WidthRequest="20"
                                                HeightRequest="20">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=filesList}}"
+                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=filesList}}"
                                                                       CommandParameter="{Binding .}" />
                                             </Image.GestureRecognizers>
                                         </Image>
-                                    </Grid>
+                                    <Image Grid.Column="3"
+                                           Grid.Row="1"
+                                           Source="{AppThemeBinding Light='save_light.png', Dark='save_dark.png'}"
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="Start"
+                                           Aspect="AspectFit"
+                                           Margin="10, 0, 0, 0"
+                                           WidthRequest="20"
+                                           HeightRequest="20">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=filesList}}"
+                                                                  CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                    <Image Grid.Column="4"
+                                           Grid.Row="1"
+                                           Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="Start"
+                                           Aspect="AspectFit"
+                                           Margin="10, 0, 0, 0"
+                                           WidthRequest="20"
+                                           HeightRequest="20">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=filesList}}"
+                                                                  CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

@@ -1,11 +1,15 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.Order.List.Services;
+using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +21,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         private static int MAX_DEGREE_OF_PARALLELISM = Environment.ProcessorCount;
         private static SemaphoreSlim SEMAPHORE => new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
         private readonly IDatabaseModel _database;
+        private readonly IFileService _fileService;
         private OrderModel _order = new OrderModel();
         public OrderModel Order
         {
@@ -64,10 +69,13 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public ICommand DeleteCommand => new Command(DeleteOrder);
         public ICommand SelectedFilesCommand => new Command(SelectedFiles);
         public Command<FileModel> RemoveFileCommand => new Command<FileModel>(RemoveFile);
+        public Command<FileModel> OpenFileCommand => new Command<FileModel>(OpenFile);
+        public Command<FileModel> SaveFileCommand => new Command<FileModel>(SaveFile);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database)
+        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService)
         {
             _database = database;
+            _fileService = fileService;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,6 +109,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                                     byte[] content = new byte[stream.Length];
                                     await stream.ReadAsync(content, 0, content.Length);
                                     file.Content = content;
+                                    file.HashCode = await _fileService.CalculateHashAsync(content);
                                 }
                             }
                             await _database.CreateFile(file);
@@ -136,7 +145,6 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                     await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + Order.OrderNumber, AppRes.Ok);
                 }
             }
-            
         }
 
         public async void Return()
@@ -179,7 +187,8 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                     {
                         OrderId = Order.Id,
                         Name = fileResult.FileName,
-                        FilePath = fileResult.FullPath
+                        FilePath = fileResult.FullPath,
+                        ContentType = fileResult.ContentType
                     });
                 }
             }
@@ -192,7 +201,33 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
-
         }
+
+        public async void OpenFile(FileModel file)
+        {
+            if(file.Content == null)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppRes.Open, AppRes.FailedToOpen + " " + file.Name, AppRes.Ok);
+                return;
+            }
+            var filePath = await _fileService.SaveFileToTmp(file);
+            await Launcher.OpenAsync(new OpenFileRequest
+            {
+                File = new ReadOnlyFile(filePath)
+            });
+        }
+
+        public async void SaveFile(FileModel file)
+        {
+            if (file.Content == null)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + file.Name, AppRes.Ok);
+                return;
+            }
+        }
+
+
+
+
     }
 }

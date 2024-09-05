@@ -2,9 +2,9 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Customer.ViewModels;
 using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Order.List.Pages;
-using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Modules.Order.Pages;
+using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using Microsoft.Extensions.Logging;
@@ -36,6 +36,8 @@ namespace KoOrderRegister
 
             builder.Services.AddSingleton<OrderDetailsPage>();
             builder.Services.AddTransient<OrderDetailViewModel>();
+
+            builder.Services.AddSingleton<IFileService, FileService>();
 
             #endregion
             #region Customer Modul

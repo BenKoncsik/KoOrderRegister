@@ -1,7 +1,7 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Order.List.Pages;
+using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Utility;
 using System;
 using System.Collections.Generic;

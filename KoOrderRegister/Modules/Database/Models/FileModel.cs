@@ -17,6 +17,7 @@ namespace KoOrderRegister.Modules.Database.Models
         public string ContentType { get; set; }
         public string Note { get; set; } = string.Empty;
         public string OrderId { get; set; } = string.Empty;
+        public string HashCode { get; set; } = string.Empty;
         [Ignore]
         public string FilePath { get; set; } = string.Empty;
         [Ignore]
