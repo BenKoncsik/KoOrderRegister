@@ -9,6 +9,7 @@
     <ContentPage.Resources>
     <ResourceDictionary>
         <entrycheker:EmailValidationBehavior x:Key="EmailValidator" />
+        <entrycheker:PhoneNumberValidationBehavior x:Key="PhoneValidator" />
     </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -52,7 +53,11 @@
                 <Entry Text="{Binding Customer.Phone}"
                        Grid.Row="2"
                        Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                       Margin="10, 0, 10,10">
+                    <Entry.Behaviors>
+                        <entrycheker:PhoneNumberValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
 
                 <!-- Email -->
                 <Label Text="{x:Static res:AppRes.EmailLabel}"
