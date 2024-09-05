@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage x:Class="KoOrderRegister.Modules.Customer.Pages.ShowCustomerPopUp"
+                  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:res="clr-namespace:KoOrderRegister.Localization"
+                  xmlns:vm="clr-namespace:KoOrderRegister.Modules.Customer.ViewModels"
+                  Title="{x:Static res:AppRes.CustomerDetails}"
+                  BackgroundInputTransparent="False"
+                  CloseWhenBackgroundIsClicked="False"
+                  HasSystemPadding="True"
+                  BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+    <Mopups:PopupPage.Animation>
+        <Animations:MoveAnimation PositionIn="Top"
+                                  PositionOut="Top" />
+    </Mopups:PopupPage.Animation>
+
+    <StackLayout Padding="20,20,20,20"
+                 HorizontalOptions="FillAndExpand"
+                 VerticalOptions="Center">
+        <StackLayout Padding="0,10,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Image Grid.Column="1"
+                       Grid.Row="0"
+                       Grid.RowSpan="4"
+                       Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
+                       VerticalOptions="Start"
+                       HorizontalOptions="End"
+                       Aspect="AspectFit"
+                       Margin="0, 0, 10, 0"
+                       WidthRequest="20"
+                       HeightRequest="20">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CloseCommand}" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <VerticalStackLayout Padding="20"
+                                     Spacing="20"
+                                     Grid.Row="1"
+                                     Grid.Column="0">
+                    <Grid ColumnDefinitions="Auto,Auto, Auto"
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                          RowSpacing="10"
+                          >
+                        <!-- Name -->
+                        <Label Text="{x:Static res:AppRes.NameLabel}"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.Name}"
+                               Grid.Row="0"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="0"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.Name}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!-- Address -->
+                        <Label Text="{x:Static res:AppRes.AddressLabel}"
+                               Grid.Row="1"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.Address}"
+                               Grid.Row="1"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="1"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.Address}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!-- Phone -->
+                        <Label Text="{x:Static res:AppRes.PhoneLabel}"
+                               Grid.Row="2"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.Phone}"
+                               Grid.Row="2"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="2"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.Phone}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!-- Email -->
+                        <Label Text="{x:Static res:AppRes.EmailLabel}"
+                               Grid.Row="3"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.Email}"
+                               Grid.Row="3"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="3"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.Email}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!-- Note -->
+                        <Label Text="{x:Static res:AppRes.NoteLabel}"
+                               Grid.Row="4"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.Note}"
+                               Grid.Row="4"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="4"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.Note}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!-- National Health Insurance -->
+                        <Label Text="{x:Static res:AppRes.NHILabel}"
+                               Grid.Row="5"
+                               Grid.Column="0"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding Customer.NationalHealthInsurance}"
+                               Grid.Row="5"
+                               Grid.Column="1" />
+                        <Image Grid.Column="2"
+                               Grid.Row="5"
+                               Source="{AppThemeBinding Light='copy_light.png', Dark='copy_dark.png'}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Start"
+                               Aspect="AspectFit"
+                               Margin="0, 0, 0, 0"
+                               WidthRequest="20"
+                               HeightRequest="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PersonDetailPopUp}}, Path=CopyCommand}"
+                                                      CommandParameter="{Binding Customer.NationalHealthInsurance}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Grid>
+                </VerticalStackLayout>
+            </Grid>
+        </StackLayout>
+    </StackLayout>
+</Mopups:PopupPage>
