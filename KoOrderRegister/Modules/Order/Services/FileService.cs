@@ -15,6 +15,7 @@ namespace KoOrderRegister.Modules.Database.Services
  
     public class FileService : IFileService
     {
+        private const string CANCLE_FOLDER = "CANCLE_FOLDER";
         public async Task<bool> SaveFileToLocal(FileModel file)
         {
             if(file.Content == null)
@@ -23,11 +24,20 @@ namespace KoOrderRegister.Modules.Database.Services
             }
             try
             {
-                string folderPath = await PickFolderAsync();
+                CancellationToken cancellationToken = new CancellationToken();
+                string folderPath = await PickFolderAsync(cancellationToken);
+                if (folderPath.Equals(CANCLE_FOLDER))
+                {
+                    throw new FileSaveException(CANCLE_FOLDER);
+                }
                 string filePath = Path.Combine(folderPath, file.Name);
                 await File.WriteAllBytesAsync(filePath, file.Content); 
                 return true;
 
+            }
+            catch (FileSaveException ex)
+            {
+                throw ex;
             }
             catch (Exception ex)
             {
@@ -73,16 +83,23 @@ namespace KoOrderRegister.Modules.Database.Services
         }
 
 
-        private async Task<string> PickFolderAsync()
+        private async Task<string> PickFolderAsync(CancellationToken cancellationToken)
         {
             try
             {
-                CancellationToken cancellationToken = new CancellationToken();
                 var folderResult = await FolderPicker.PickAsync(cancellationToken);
-
+                
                 if (folderResult != null)
                 {
-                    return folderResult.Folder.Path;
+                    if(folderResult.Folder == null || folderResult.Folder.Path == null)
+                    {
+                        return CANCLE_FOLDER;
+                    }
+                    else
+                    {
+                        return folderResult.Folder.Path;
+                    }
+                    
                 }
                 else
                 {

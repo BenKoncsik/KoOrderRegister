@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Localization;
+﻿using CommunityToolkit.Maui.Storage;
+using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.List.Services;
@@ -224,14 +225,22 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + file.Name, AppRes.Ok);
                 return;
             }
-            if(await _fileService.SaveFileToLocal(file))
+            try
             {
-                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + file.Name, AppRes.Ok);
+                if (await _fileService.SaveFileToLocal(file))
+                {
+                    await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + file.Name, AppRes.Ok);
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + file.Name, AppRes.Ok);
+                }
             }
-            else
+            catch (FileSaveException ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + file.Name, AppRes.Ok);
+                Console.WriteLine($"Cancle folderpicker! | Ex msg: {ex.Message}");
             }
+
 
         }
 
