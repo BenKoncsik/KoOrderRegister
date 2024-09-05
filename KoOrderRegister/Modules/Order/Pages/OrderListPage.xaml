@@ -52,11 +52,11 @@
                             <Grid Padding="10"
                                   RowDefinitions="Auto, Auto"
                                   ColumnDefinitions="*,*,*">
-                                <!--<Grid.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                              Command="{Binding Path=BindingContext.ToggleDetailsCommand, Source={x:Reference Name=customersListView}}"
-                                                              CommandParameter="{Binding .}" />
-                                    </Grid.GestureRecognizers>-->
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
                                 <Label Text="{Binding OrderNumber}"
                                        Grid.Column="0"
                                        HorizontalOptions="Center" />
