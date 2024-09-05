@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Modules.Database.Models;
+﻿using CommunityToolkit.Maui.Storage;
+using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Order.List.Services;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KoOrderRegister.Modules.Database.Services
@@ -13,20 +15,24 @@ namespace KoOrderRegister.Modules.Database.Services
  
     public class FileService : IFileService
     {
-        public async Task<string> SaveFileToLocal(FileModel file)
+        public async Task<bool> SaveFileToLocal(FileModel file)
         {
-            var documentsPath = FileSystem.AppDataDirectory;
-            var filePath = Path.Combine(documentsPath, file.Name);
-
+            if(file.Content == null)
+            {
+                return false;
+            }
             try
             {
-                File.WriteAllBytes(filePath, file.Content);
-                return filePath;
+                string folderPath = await PickFolderAsync();
+                string filePath = Path.Combine(folderPath, file.Name);
+                await File.WriteAllBytesAsync(filePath, file.Content); 
+                return true;
+
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error saving file: {ex.Message}");
-                return null;
+                Console.WriteLine($"An error occurred while picking the folder: {ex.Message}");
+                return false;
             }
         }
 
@@ -65,5 +71,31 @@ namespace KoOrderRegister.Modules.Database.Services
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
         }
+
+
+        private async Task<string> PickFolderAsync()
+        {
+            try
+            {
+                CancellationToken cancellationToken = new CancellationToken();
+                var folderResult = await FolderPicker.PickAsync(cancellationToken);
+
+                if (folderResult != null)
+                {
+                    return folderResult.Folder.Path;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while picking the folder: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+
     }
 }

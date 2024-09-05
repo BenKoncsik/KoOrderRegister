@@ -87,7 +87,7 @@
                     Padding="20"
                     >
                     <Grid ColumnDefinitions="*"
-                          RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                      RowDefinitions="Auto, Auto">
                         <Button Text="{x:Static res:AppRes.SelectFiles}"
                                 Command="{Binding SelectedFilesCommand}" 
                                 Grid.Row="0"
@@ -100,23 +100,23 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid RowDefinitions="*"
-                                          ColumnDefinitions="Auto, *, Auto">
+                                          ColumnDefinitions="Auto, *, Auto, Auto, Auto">
                                     <Label Text="{x:Static res:AppRes.NameLabel}"
-                                           Grid.Row="5"
                                            Grid.Column="0"
+                                           Grid.Row="0"
                                            VerticalOptions="Center" />
 
                                     <Entry Text="{Binding Name}"
                                                Grid.Column="1"
-                                               Grid.Row="1"
+                                               Grid.Row="0"
                                            Margin="10, 0, 10,10" />
                                         <Image Grid.Column="2"
-                                               Grid.Row="1"
+                                               Grid.Row="0"
                                                Source="{AppThemeBinding Light='open_light.png', Dark='open_dark.png'}"
                                                VerticalOptions="Start"
                                                HorizontalOptions="Start"
                                                Aspect="AspectFit"
-                                               Margin="10, 0, 0, 0"
+                                               Margin="10, 10, 0, 0"
                                                WidthRequest="20"
                                                HeightRequest="20">
                                             <Image.GestureRecognizers>
@@ -125,12 +125,12 @@
                                             </Image.GestureRecognizers>
                                         </Image>
                                     <Image Grid.Column="3"
-                                           Grid.Row="1"
+                                           Grid.Row="0"
                                            Source="{AppThemeBinding Light='save_light.png', Dark='save_dark.png'}"
                                            VerticalOptions="Start"
                                            HorizontalOptions="Start"
                                            Aspect="AspectFit"
-                                           Margin="10, 0, 0, 0"
+                                           Margin="10, 10, 0, 0"
                                            WidthRequest="20"
                                            HeightRequest="20">
                                         <Image.GestureRecognizers>
@@ -139,12 +139,12 @@
                                         </Image.GestureRecognizers>
                                     </Image>
                                     <Image Grid.Column="4"
-                                           Grid.Row="1"
+                                           Grid.Row="0"
                                            Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
                                            VerticalOptions="Start"
                                            HorizontalOptions="Start"
                                            Aspect="AspectFit"
-                                           Margin="10, 0, 0, 0"
+                                           Margin="10, 10, 0, 0"
                                            WidthRequest="20"
                                            HeightRequest="20">
                                         <Image.GestureRecognizers>

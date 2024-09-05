@@ -9,7 +9,7 @@ namespace KoOrderRegister.Modules.Order.List.Services
 {
     public interface IFileService
     {
-        Task<string> SaveFileToLocal(FileModel file);
+        TaskTask<bool> SaveFileToLocal(FileModel file);
         Task<string> SaveFileToTmp(FileModel file);
         Task<string> CalculateHashAsync(byte[] content);
 
