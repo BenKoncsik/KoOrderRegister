@@ -110,6 +110,10 @@
         </Setter>
     </Style>
 
+    <!-- Custome style Text-->
+        
+    
+    <!-- End Custome-->
     <Style TargetType="Entry">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />

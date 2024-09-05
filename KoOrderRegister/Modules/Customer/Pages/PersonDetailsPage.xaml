@@ -3,7 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KoOrderRegister.Modules.Customer.Pages.PersonDetailsPage"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             xmlns:entrycheker="clr-namespace:KoOrderRegister.EntryCheckers"
              Title="{x:Static res:AppRes.Person}">
+
+    <ContentPage.Resources>
+    <ResourceDictionary>
+        <entrycheker:EmailValidationBehavior x:Key="EmailValidator" />
+    </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{x:Static res:AppRes.Return}"
                      IconImageSource="{AppThemeBinding Light='return_light.png', Dark='return_dark.png'}"
@@ -54,7 +62,11 @@
                 <Entry Text="{Binding Customer.Email}"
                        Grid.Row="3"
                        Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                       Margin="10, 0, 10,10">
+                    <Entry.Behaviors>
+                        <entrycheker:EmailValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
 
                 <!-- Note -->
                 <Label Text="{x:Static res:AppRes.NoteLabel}"
