@@ -25,7 +25,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="20"
                              Spacing="20">
-            <!-- Az űrlap címkéi és beviteli mezői -->
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto, Auto"
                   Margin="10, 10, 10, 10">

@@ -18,4 +18,11 @@ public partial class PersonDetailsPage : ContentPage
         _viewModel.IsEdit = true;
         _viewModel.Customer = customer;
     }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _viewModel.Customer = new CustomerModel();
+        _viewModel.IsEdit = false;
+    }
 }

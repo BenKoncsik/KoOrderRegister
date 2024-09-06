@@ -18,12 +18,14 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     {
         private readonly IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
+        public string SearchTXT { get; set; } = "";
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
         #region Commands
         public ICommand AddNewOrderCommand => new Command(NewOrder);
         public Command<OrderModel> EditOrderCommand => new Command<OrderModel>(EditOrder);
         public Command<OrderModel> DeleteOrderCommand => new Command<OrderModel>(DeleteOrder);
         public ICommand UpdateOrderCommand => new Command(UpdateOrders);
+        public Command<string> SearchCommand => new Command<string>(Search);
         #endregion
         public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage)
         {
@@ -51,14 +53,22 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
-            if(Orders != null)
+            if (string.IsNullOrEmpty(SearchTXT))
             {
-                Orders.Clear();
+                if (Orders != null)
+                {
+                    Orders.Clear();
+                }
+                foreach (var order in await _database.GetAllOrders())
+                {
+                    Orders.Add(order);
+                }
             }
-            foreach(var order in await _database.GetAllOrders())
+            else
             {
-                Orders.Add(order);
+                Search(SearchTXT);
             }
+            
         }
 
         public async void DeleteOrder(OrderModel order)
@@ -76,8 +86,17 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
         }
 
-
-
-
+        public async void Search(string search)
+        {
+            SearchTXT = search;
+            if (Orders != null)
+            {
+                Orders.Clear();
+            }
+            foreach (var order in await _database.SearchOrders(search))
+            {
+                Orders.Add(order);
+            }
+        }
     }
 }

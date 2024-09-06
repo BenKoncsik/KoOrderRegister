@@ -2,6 +2,7 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using Microsoft.Maui.Controls;
 using Mopups.Services;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         private ShowCustomerPopUp _showCustomerPopUp;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        public string SearchTXT { get; set; } = "";
         protected virtual void OnPropertyChanged(string propertyName)
         {
             try
@@ -40,6 +42,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         public Command<CustomerModel> DeleteCustomerCommand => new Command<CustomerModel>(DeleteCustomer);
         public Command<CustomerModel> EditCustomerCommand => new Command<CustomerModel>(EditCustumer);
         public Command<CustomerModel> ToggleDetailsCommand => new Command<CustomerModel>(ToggleDetails);
+        public Command<string> SearchCommand => new Command<string>(Search);
         #endregion
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         private bool _isDetailsVisible = false;
@@ -62,14 +65,22 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Update()
         {
-            if(Customers != null)
+            if (string.IsNullOrEmpty(SearchTXT))
             {
-                Customers.Clear();
+                if (Customers != null)
+                {
+                    Customers.Clear();
+                }
+                foreach (var customer in await _database.GetAllCustomers())
+                {
+                    Customers.Add(customer);
+                }
             }
-            foreach(var customer in await _database.GetAllCustomers())
+            else
             {
-                Customers.Add(customer);
+                Search(SearchTXT);
             }
+            
         }
 
         public async void AddNewCustomer()
@@ -106,5 +117,18 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             await MopupService.Instance.PushAsync(_showCustomerPopUp);
         }
 
+
+        public async void Search(string search)
+        {
+            SearchTXT = search;
+            if (Customers != null)
+            {
+                Customers.Clear();
+            }
+            foreach (var order in await _database.SearchCustomer(search))
+            {
+                Customers.Add(order);
+            }
+        }
     }
 }

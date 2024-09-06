@@ -294,4 +294,8 @@
     <comment>Open
 </comment>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>Search</comment>
+  </data>
 </root>
