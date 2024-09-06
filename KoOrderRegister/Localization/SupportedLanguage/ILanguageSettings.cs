@@ -8,9 +8,12 @@ namespace KoOrderRegister.Localization.SupportedLanguage
 {
     public interface ILanguageSettings
     {
-        Task<string> GetLanguageName();
-        Task<string> GetLanguageDisplayName();
-        Task<long> GetLanguageId();
+        string DisplayName { get; }
+        string GetLanguageName();
+        string GetLanguageDisplayName();
+        // The phone country code (e.g. +1 for US, +36 for Hun, ....)
+        string GetLanguageId();
+        string GetCultureName();
         Task SetRegioSpecification();
 
 

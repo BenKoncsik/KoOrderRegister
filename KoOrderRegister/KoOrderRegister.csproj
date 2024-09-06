@@ -117,17 +117,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Localization\AppRes.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>AppRes.resx</DependentUpon>
-	  </Compile>
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Update="Localization\AppRes.de-DE.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>AppRes.deu-DEU.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Localization\AppRes.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppRes.Designer.cs</LastGenOutput>

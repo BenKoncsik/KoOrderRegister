@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Localization.SupportedLanguage
+namespace KoOrderRegister.Localization.SupportedLanguage.Language
 {
-    public class English_US : ILanguageSettings
+    public class German_DEU : ILanguageSettings
     {
-        private string _languageName = "English_US";
-        private string _cultureName = "en-US";
-        private string _languageDisplayName = "English (United States)";
-        private string _languageId = "+1";
+        private string _languageName = "German_DE";
+        private string _cultureName = "de-DE";
+        private string _languageDisplayName = "Deutsch (German) [AI Translated]";
+        private string _languageId = "+49";
 
         public string DisplayName { get => GetLanguageDisplayName(); }
 
@@ -37,7 +37,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage
 
         public async Task SetRegioSpecification()
         {
-            
+
         }
     }
 }
