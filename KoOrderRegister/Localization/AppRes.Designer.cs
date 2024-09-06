@@ -61,7 +61,7 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Customer.
+        ///   Looks up a localized string similar to Add new customer.
         /// </summary>
         internal static string AddNewCustomer {
             get {
@@ -444,6 +444,15 @@ namespace KoOrderRegister.Localization {
         internal static string SuccessToSave {
             get {
                 return ResourceManager.GetString("SuccessToSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        internal static string Test {
+            get {
+                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
         
