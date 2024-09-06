@@ -14,6 +14,11 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Localization\AppRes.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -27,6 +32,9 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

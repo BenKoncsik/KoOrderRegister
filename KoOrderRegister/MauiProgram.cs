@@ -9,6 +9,8 @@ using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
+using KoOrderRegister.Modules.Settings.Pages;
+using KoOrderRegister.Modules.Settings.ViewModels;
 
 namespace KoOrderRegister
 {
@@ -51,6 +53,11 @@ namespace KoOrderRegister
             builder.Services.AddSingleton<ShowCustomerPopUp>();
             builder.Services.AddTransient<PersonDetailPopUp>();
 
+            #endregion
+
+            #region Settings Modul
+            builder.Services.AddSingleton<SettingsPage>();
+            builder.Services.AddTransient<SettingsViewModel>();
             #endregion
 
 #if DEBUG
