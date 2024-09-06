@@ -294,4 +294,20 @@
     <comment>Open
 </comment>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>Search</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Settings</comment>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select language</value>
+    <comment>Select language:</comment>
+  </data>
+  <data name="SelectLanguageLabel" xml:space="preserve">
+    <value>Select language:</value>
+    <comment>Select language:</comment>
+  </data>
 </root>

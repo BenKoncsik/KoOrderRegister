@@ -15,6 +15,7 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<List<CustomerModel>> GetAllCustomers();
         Task<int> UpdateCustomer(CustomerModel customer);
         Task<int> DeleteCustomer(Guid id);
+        Task<List<CustomerModel>> SearchCustomer(string search);
         #endregion
 
         #region OrderModel CRUD Operations
@@ -23,6 +24,7 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<List<OrderModel>> GetAllOrders();
         Task<int> UpdateOrder(OrderModel order);
         Task<int> DeleteOrder(Guid id);
+        Task<List<OrderModel>> SearchOrders(string search);
         #region
         #endregion FileModel CRUD Operations
         Task<int> CreateFile(FileModel file);

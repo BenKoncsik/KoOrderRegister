@@ -10,12 +10,18 @@
                      IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
                      Command="{Binding UpdateOrderCommand}" />
         <ToolbarItem Text="{x:Static res:AppRes.AddNewOrder}"
-                     IconImageSource="{AppThemeBinding Light='add_person_light.png', Dark='add_person_dark.png'}"
+                     IconImageSource="{AppThemeBinding Light='add_light.png', Dark='add_dark.png'}"
                      Command="{Binding AddNewOrderCommand}" />
-
+       
     </ContentPage.ToolbarItems>
+  
     <ScrollView>
         <VerticalStackLayout Padding="20">
+            <SearchBar x:Name="searchBar"
+                       Placeholder="{x:Static res:AppRes.Search}"
+                       TextChanged="OnTextChanged"
+                       SearchCommand="{Binding SearchCommand}"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
             <Grid Padding="10"
                   RowDefinitions="Auto"
                   ColumnDefinitions="*,*,*">
@@ -52,11 +58,11 @@
                             <Grid Padding="10"
                                   RowDefinitions="Auto, Auto"
                                   ColumnDefinitions="*,*,*">
-                                <!--<Grid.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                              Command="{Binding Path=BindingContext.ToggleDetailsCommand, Source={x:Reference Name=customersListView}}"
-                                                              CommandParameter="{Binding .}" />
-                                    </Grid.GestureRecognizers>-->
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
                                 <Label Text="{Binding OrderNumber}"
                                        Grid.Column="0"
                                        HorizontalOptions="Center" />

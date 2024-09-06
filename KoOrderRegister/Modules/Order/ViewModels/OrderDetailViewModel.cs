@@ -3,6 +3,7 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Utility;
 using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,6 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 {
     public class OrderDetailViewModel : INotifyPropertyChanged
     {
-        private static int MAX_DEGREE_OF_PARALLELISM = Environment.ProcessorCount;
-        private static SemaphoreSlim SEMAPHORE => new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
         private readonly IDatabaseModel _database;
         private readonly IFileService _fileService;
         private OrderModel _order = new OrderModel();
@@ -98,29 +97,22 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 List<Task> tasks = new List<Task>();
                 foreach (FileModel file in Files)
                 {
-                    tasks.Add(Task.Run(async () =>
+                    tasks.Add(ThreadManager.Run(async () =>
                     {
-                        await SEMAPHORE.WaitAsync();
-                        try
+                        if (file.Content == null)
                         {
-                            if(file.Content == null)
+                            using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
                             {
-                                using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
-                                {
-                                    byte[] content = new byte[stream.Length];
-                                    await stream.ReadAsync(content, 0, content.Length);
-                                    file.Content = content;
-                                    file.HashCode = await _fileService.CalculateHashAsync(content);
-                                }
+                                byte[] content = new byte[stream.Length];
+                                await stream.ReadAsync(content, 0, content.Length);
+                                file.Content = content;
+                                file.HashCode = await _fileService.CalculateHashAsync(content);
                             }
-                            await _database.CreateFile(file);
                         }
-                        finally
-                        {
-                            SEMAPHORE.Release();
-                        }
+                        await _database.CreateFile(file);
                     }));
                 }
+
                 await Task.WhenAll(tasks);
             }
             if (await _database.CreateOrder(Order) > 0)
@@ -150,12 +142,6 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void Return()
         {
-            Order = new OrderModel();
-            IsEdit = false;
-            if(Files != null)
-            {
-                Files.Clear();
-            }
             App.Current.MainPage.Navigation.PopAsync();
         }
 
@@ -238,7 +224,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
             catch (FileSaveException ex)
             {
-                Console.WriteLine($"Cancle folderpicker! | Ex msg: {ex.Message}");
+                Console.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
             }
 
 

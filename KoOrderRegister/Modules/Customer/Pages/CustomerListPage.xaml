@@ -10,13 +10,18 @@
                      IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
                      Command="{Binding UpdateCommand}" />
         <ToolbarItem Text="{x:Static res:AppRes.AddNewCustomer}"
-                     IconImageSource="{AppThemeBinding Light='add_person_light.png', Dark='add_person_dark.png'}"
+                     IconImageSource="{AppThemeBinding Light='add_light.png', Dark='add_dark.png'}"
                      Command="{Binding AddNewCustomerCommand}" />
     </ContentPage.ToolbarItems>
 
 
     <ScrollView>
         <VerticalStackLayout Padding="20">
+            <SearchBar x:Name="searchBar"
+                       Placeholder="{x:Static res:AppRes.Search}"
+                       SearchCommand="{Binding SearchCommand}"
+                       TextChanged="OnTextChanged"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
             <Grid Padding="10"
                   RowDefinitions="Auto"
                   ColumnDefinitions="*,*,*">
@@ -54,7 +59,7 @@
                                   ColumnDefinitions="*,*,*">
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                          Command="{Binding Path=BindingContext.ToggleDetailsCommand, Source={x:Reference Name=customersListView}}"
+                                                          Command="{Binding Path=BindingContext.EditCustomerCommand, Source={x:Reference Name=customersListView}}"
                                                           CommandParameter="{Binding .}" />
                                 </Grid.GestureRecognizers>
 
