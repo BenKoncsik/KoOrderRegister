@@ -88,6 +88,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to restore it from backup? Menden data will be deleted from what is currently in the application!.
+        /// </summary>
+        internal static string AreYouSureYouRestore {
+            get {
+                return ResourceManager.GetString("AreYouSureYouRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete: .
         /// </summary>
         internal static string AreYouSureYouWantToDelete {
@@ -160,6 +169,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database restored successfully.
+        /// </summary>
+        internal static string DatabaseRestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("DatabaseRestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date.
         /// </summary>
         internal static string Date {
@@ -228,6 +246,24 @@ namespace KoOrderRegister.Localization {
         internal static string FailedToSave {
             get {
                 return ResourceManager.GetString("FailedToSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to restor database.
+        /// </summary>
+        internal static string FaliedToRestore {
+            get {
+                return ResourceManager.GetString("FaliedToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        internal static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         
@@ -390,6 +426,15 @@ namespace KoOrderRegister.Localization {
         internal static string PlsChoosLocatoinToBackup {
             get {
                 return ResourceManager.GetString("PlsChoosLocatoinToBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a backup file to restore.
+        /// </summary>
+        internal static string PlsSelectBackupFile {
+            get {
+                return ResourceManager.GetString("PlsSelectBackupFile", resourceCulture);
             }
         }
         

@@ -15,9 +15,9 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             Task.Run(async () => await Init()).Wait();
         }
-        private async Task Init()
+        private async Task Init(bool force = false)
         {
-            if (Database is not null)
+            if (Database is not null && !force)
             {
                 return;
             }
@@ -301,7 +301,7 @@ namespace KoOrderRegister.Modules.Database.Services
             await Database.DropTableAsync<OrderModel>();
             await Database.DropTableAsync<FileModel>();
 
-            await Init(); 
+            await Init(force: true); 
             foreach (var customer in databaseImport.Customers)
             {
                 await CreateCustomer(customer);

@@ -333,4 +333,20 @@
   <data name="PlsChoosLocatoinToBackup" xml:space="preserve">
     <value>Please choose a location to save your backup</value>
   </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>Loading</comment>
+  </data>
+  <data name="AreYouSureYouRestore" xml:space="preserve">
+    <value>Are you sure you want to restore it from backup? Menden data will be deleted from what is currently in the application!</value>
+  </data>
+  <data name="PlsSelectBackupFile" xml:space="preserve">
+    <value>Please select a backup file to restore</value>
+  </data>
+  <data name="FaliedToRestore" xml:space="preserve">
+    <value>Failed to restor database</value>
+  </data>
+  <data name="DatabaseRestoredSuccessfully" xml:space="preserve">
+    <value>Database restored successfully</value>
+  </data>
 </root>
