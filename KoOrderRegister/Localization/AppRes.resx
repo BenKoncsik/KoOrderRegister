@@ -310,4 +310,7 @@
     <value>Select language:</value>
     <comment>Select language:</comment>
   </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
 </root>
