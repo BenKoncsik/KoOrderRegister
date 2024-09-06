@@ -326,4 +326,11 @@
     <value>Backup database:</value>
     <comment>BackupDatabase</comment>
   </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Price:</value>
+    <comment>PriceLabel</comment>
+  </data>
+  <data name="PlsChoosLocatoinToBackup" xml:space="preserve">
+    <value>Please choose a location to save your backup</value>
+  </data>
 </root>

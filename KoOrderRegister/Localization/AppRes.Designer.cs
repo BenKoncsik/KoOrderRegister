@@ -385,6 +385,24 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a location to save your backup.
+        /// </summary>
+        internal static string PlsChoosLocatoinToBackup {
+            get {
+                return ResourceManager.GetString("PlsChoosLocatoinToBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price:.
+        /// </summary>
+        internal static string PriceLabel {
+            get {
+                return ResourceManager.GetString("PriceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product id:.
         /// </summary>
         internal static string ProductIdLabel {

@@ -1,4 +1,6 @@
-﻿using KoOrderRegister.Localization.SupportedLanguage;
+﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization.SupportedLanguage;
+using KoOrderRegister.Modules.Database.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +15,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 {
     public class SettingsViewModel : INotifyPropertyChanged
     {
+        private readonly IDatabaseModel _databaseModel;
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
         private ILanguageSettings _selectedItem;
         public ILanguageSettings SelectedItem
@@ -47,14 +50,32 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        public SettingsViewModel()
+        public SettingsViewModel(IDatabaseModel databaseModel)
         {
-   
+            _databaseModel = databaseModel;
         }
 
         public async void BackUp()
         {
+            
+            var filePickerOptions = new PickOptions
+            {
+                PickerTitle = AppRes.PlsChoosLocatoinToBackup,
+            };
 
+            var result = await FilePicker.PickAsync(filePickerOptions);
+            if (result != null)
+            {
+                ActivityIndicator activityIndicator = new ActivityIndicator { IsRunning = true };
+
+                string jsonContent = await _databaseModel.ExportDatabaseToJson();
+                var fileName = "koBackup.kncsk";
+                var fullPath = Path.Combine(result.FullPath, fileName);
+                File.WriteAllText(fullPath, jsonContent);
+                activityIndicator.IsRunning = false;
+
+
+            }
         }   
         
         public async void Restore()

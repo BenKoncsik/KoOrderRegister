@@ -78,6 +78,15 @@
                        Grid.Row="4"
                        Grid.Column="1"
                        Margin="10, 0, 10,10" />
+                <!-- Order Price -->
+                <Label Text="{x:Static res:AppRes.PriceLabel}"
+                       Grid.Row="4"
+                       Grid.Column="0"
+                       VerticalOptions="Center" />
+                <Entry Text="{Binding Order.Price}"
+                       Grid.Row="4"
+                       Grid.Column="1"
+                       Margin="10, 0, 10,10" />
                 <!-- Note -->
                 <Label Text="{x:Static res:AppRes.NoteLabel}"
                        Grid.Row="5"
