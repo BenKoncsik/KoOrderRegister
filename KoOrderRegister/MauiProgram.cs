@@ -9,10 +9,6 @@ using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
-using KoOrderRegister.Modules.Settings.Pages;
-using KoOrderRegister.Modules.Settings.ViewModels;
-using System.Globalization;
-using KoOrderRegister.Localization.SupportedLanguage;
 
 namespace KoOrderRegister
 {
@@ -35,10 +31,10 @@ namespace KoOrderRegister
 
             #region Order Modul
 
-            builder.Services.AddTransient<OrderListPage>();
+            builder.Services.AddSingleton<OrderListPage>();
             builder.Services.AddTransient<OrderListViewModel>();
 
-            builder.Services.AddTransient<OrderDetailsPage>();
+            builder.Services.AddSingleton<OrderDetailsPage>();
             builder.Services.AddTransient<OrderDetailViewModel>();
 
             builder.Services.AddSingleton<IFileService, FileService>();
@@ -46,30 +42,22 @@ namespace KoOrderRegister
             #endregion
             #region Customer Modul
 
-            builder.Services.AddTransient<CustomerListPage>();
+            builder.Services.AddSingleton<CustomerListPage>();
             builder.Services.AddTransient<CustomerListViewModel>();
 
-            builder.Services.AddTransient<PersonDetailsPage>();
+            builder.Services.AddSingleton<PersonDetailsPage>();
             builder.Services.AddTransient<PersonDetailsViewModel>();
 
-            builder.Services.AddTransient<ShowCustomerPopUp>();
+            builder.Services.AddSingleton<ShowCustomerPopUp>();
             builder.Services.AddTransient<PersonDetailPopUp>();
 
-            #endregion
-
-            #region Settings Modul
-            builder.Services.AddTransient<SettingsPage>();
-            builder.Services.AddTransient<SettingsViewModel>();
             #endregion
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            
 
-            ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
-            CultureInfo culture = new CultureInfo(languageSettings.GetCultureName());
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
             return builder.Build();
         }
     }
