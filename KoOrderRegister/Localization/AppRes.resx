@@ -310,4 +310,20 @@
     <value>Select language:</value>
     <comment>Select language:</comment>
   </data>
+  <data name="BackupDatabase" xml:space="preserve">
+    <value>Backup database</value>
+    <comment>BackupDatabase</comment>
+  </data>
+  <data name="RestoreDatabase" xml:space="preserve">
+    <value>Restore database</value>
+    <comment>RestoreDatabase</comment>
+  </data>
+  <data name="RestoreDatabaseLabel" xml:space="preserve">
+    <value>Restore database:</value>
+    <comment>RestoreDatabase:</comment>
+  </data>
+  <data name="BackupDatabaseLabel" xml:space="preserve">
+    <value>Backup database:</value>
+    <comment>BackupDatabase</comment>
+  </data>
 </root>

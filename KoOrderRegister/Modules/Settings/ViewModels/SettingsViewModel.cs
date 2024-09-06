@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Settings.ViewModels
 {
@@ -36,6 +37,8 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             }
         }
         #region Commands
+        public ICommand BackUpDatabaseCommand => new Command(BackUp);
+        public ICommand RestoreDatabaseCommand => new Command(Restore);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,7 +52,15 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
    
         }
 
+        public async void BackUp()
+        {
+
+        }   
         
+        public async void Restore()
+        {
+
+        }
 
         public void ChangeLanguage(ILanguageSettings languageSettings)
         {

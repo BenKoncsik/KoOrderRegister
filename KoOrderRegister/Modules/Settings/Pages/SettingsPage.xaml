@@ -10,15 +10,43 @@
         <VerticalStackLayout>
             <Grid Padding="10"
                   ColumnDefinitions="Auto, *"
-                  RowDefinitions="Auto"
+                  RowDefinitions="Auto, Auto, Auto"
                   >
-                <Label Text="{x:Static res:AppRes.SelectLanguage}"/>
+                <Label Text="{x:Static res:AppRes.SelectLanguage}"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="10, 0, 10,10"
+                       />
                 <Picker ItemsSource="{Binding LanguageSettings}"
                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                         ItemDisplayBinding="{Binding DisplayName}"
                         Margin="10, 0, 10,10"
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Grid.Column="1"/>
+
+                <Label Text="{x:Static res:AppRes.BackupDatabaseLabel}"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="10, 20, 10,10"
+                       />
+                <Button Text="{x:Static res:AppRes.BackupDatabase}"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Command="{Binding BackUpDatabaseCommand}"
+                        Margin="10, 10, 10,10"
+                        />
+
+                <Label Text="{x:Static res:AppRes.RestoreDatabaseLabel}"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="10, 20, 10,10" 
+                       />
+                <Button Text="{x:Static res:AppRes.RestoreDatabase}"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Command="{Binding RestoreDatabaseCommand}"
+                        Margin="10, 10, 10,10"
+                        />
 
             </Grid>
         </VerticalStackLayout>

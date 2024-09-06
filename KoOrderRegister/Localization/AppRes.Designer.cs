@@ -61,7 +61,7 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Customer.
+        ///   Looks up a localized string similar to Add new customer.
         /// </summary>
         internal static string AddNewCustomer {
             get {
@@ -93,6 +93,24 @@ namespace KoOrderRegister.Localization {
         internal static string AreYouSureYouWantToDelete {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup database.
+        /// </summary>
+        internal static string BackupDatabase {
+            get {
+                return ResourceManager.GetString("BackupDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup database:.
+        /// </summary>
+        internal static string BackupDatabaseLabel {
+            get {
+                return ResourceManager.GetString("BackupDatabaseLabel", resourceCulture);
             }
         }
         
@@ -372,6 +390,24 @@ namespace KoOrderRegister.Localization {
         internal static string ProductIdLabel {
             get {
                 return ResourceManager.GetString("ProductIdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore database.
+        /// </summary>
+        internal static string RestoreDatabase {
+            get {
+                return ResourceManager.GetString("RestoreDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore database:.
+        /// </summary>
+        internal static string RestoreDatabaseLabel {
+            get {
+                return ResourceManager.GetString("RestoreDatabaseLabel", resourceCulture);
             }
         }
         
