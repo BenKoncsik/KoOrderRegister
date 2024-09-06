@@ -156,7 +156,11 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             {
                 Customers.Add(customer);
             }
-            SelectedItem = Customers.First();
+            if(Customers.Count > 0)
+            {
+                SelectedItem = Customers.First();
+            }
+            
         }
 
         public async void SelectedFiles()
