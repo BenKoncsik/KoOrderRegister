@@ -9,7 +9,7 @@
     xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
     xmlns:settings="clr-namespace:KoOrderRegister.Modules.Settings.Pages"
     Shell.FlyoutBehavior="Flyout"
-    Title="KoOrderRegister">
+    Title="Ko Order-Register">
 
 
     <Shell.FlyoutFooter>
