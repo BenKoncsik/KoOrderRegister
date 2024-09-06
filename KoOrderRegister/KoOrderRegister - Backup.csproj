@@ -24,7 +24,7 @@
 		<ApplicationTitle>KoOrderRegister</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.koorderregister</ApplicationId>
+		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -38,13 +38,13 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<GenerateAppInstallerFile>True</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>9D1DF366CFD9315E597704028A3B72D9AB7F42CA</PackageCertificateThumbprint>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
 		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>https://github.com/BenKoncsik/KoOrderRegister/releases</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-		<PackageCertificateThumbprint>9D1DF366CFD9315E597704028A3B72D9AB7F42CA</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -128,10 +128,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Localization\AppRes.de-DE.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>AppRes.deu-DEU.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	  <EmbeddedResource Update="Localization\AppRes.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppRes.Designer.cs</LastGenOutput>
@@ -154,13 +150,6 @@
 	  <MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Modules\Settings\Services\" />
 	</ItemGroup>
 
 </Project>
