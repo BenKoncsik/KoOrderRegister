@@ -335,6 +335,10 @@ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
     License is not intended to restrict the license of any rights under
     applicable law.
 
+### Additional Permissions Clause:
+
+You are permitted to use this program for commercial purposes, including providing services or generating profit through the program's usage, as long as the program itself is not sold directly. Furthermore, you may not create derivative works based on the program that are sold for profit.
+
 
 Creative Commons Notice
 
