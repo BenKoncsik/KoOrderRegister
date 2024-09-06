@@ -7,6 +7,7 @@
     xmlns:res="clr-namespace:KoOrderRegister.Localization"
     xmlns:orderListViews="clr-namespace:KoOrderRegister.Modules.Order.Pages"
     xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
+    xmlns:settings="clr-namespace:KoOrderRegister.Modules.Settings.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="KoOrderRegister">
 
@@ -28,7 +29,13 @@
                       Route="CustomerListPage"
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
     </FlyoutItem>
-    
+
+    <FlyoutItem Title="{x:Static res:AppRes.Settings}">
+        <ShellContent Title="{x:Static res:AppRes.Settings}"
+                      Route="SettingsPage"
+                      ContentTemplate="{DataTemplate settings:SettingsPage}" />
+    </FlyoutItem>
+
 
 
 </Shell>

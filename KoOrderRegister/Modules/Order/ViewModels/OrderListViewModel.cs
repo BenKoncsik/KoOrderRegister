@@ -1,4 +1,5 @@
 ﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
