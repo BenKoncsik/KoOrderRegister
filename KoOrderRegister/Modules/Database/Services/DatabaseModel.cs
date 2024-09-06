@@ -1,4 +1,5 @@
 ﻿using KoOrderRegister.Modules.Database.Models;
+using KoOrderRegister.Utility;
 using Newtonsoft.Json;
 using SQLite;
 namespace KoOrderRegister.Modules.Database.Services
@@ -8,8 +9,7 @@ namespace KoOrderRegister.Modules.Database.Services
         private SQLiteAsyncConnection Database;
         private SQLiteConnectionString options;
 
-        private static int MAX_DEGREE_OF_PARALLELISM = Environment.ProcessorCount;
-        private static SemaphoreSlim SEMAPHORE => new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
+        
 
         public DatabaseModel()
         {
@@ -152,27 +152,19 @@ namespace KoOrderRegister.Modules.Database.Services
         public async Task<List<OrderModel>> GetAllOrders()
         {
             var orders = await Database.Table<OrderModel>().ToListAsync();
-            var tasks = orders.Select(async order =>
-            {
-                await SEMAPHORE.WaitAsync();
-                try
-                {
-                    var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).CountAsync();
-                    if (fileCount > 0)
-                    {
-                        order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
-                    }
-                    if (!string.IsNullOrEmpty(order.CustomerId))
-                    {
-                        order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
-                    }
-                    
-                }
-                finally
-                {
-                    SEMAPHORE.Release();
-                }
-            });
+            var tasks = orders.Select(order =>
+                 ThreadManager.Run(async () =>
+                 {
+                     var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).CountAsync();
+                     if (fileCount > 0)
+                     {
+                         order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
+                     }
+                     if (!string.IsNullOrEmpty(order.CustomerId))
+                     {
+                         order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                     }
+                 }));
 
             await Task.WhenAll(tasks);
             return orders;
@@ -204,9 +196,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 return await GetAllOrders();
             }
-
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
-
             var query = $@"SELECT o.* FROM Orders o
                            JOIN Customers c ON o.CustomerId = c.Id
                            WHERE LOWER(o.OrderNumber) LIKE ? OR 
@@ -218,23 +208,16 @@ namespace KoOrderRegister.Modules.Database.Services
                            LOWER(c.NationalHealthInsurance) LIKE ?";
 
 
-            List<OrderModel> orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery);
+            List<OrderModel> orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+
             List<Task> tasks = new List<Task>();
-            foreach(var order in orders)
+            foreach (var order in orders)
             {
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(ThreadManager.Run(async () =>
                 {
-                    await SEMAPHORE.WaitAsync();
-                    try
+                    if (!string.IsNullOrEmpty(order.CustomerId))
                     {
-                        if (order.CustomerId != null || !string.IsNullOrEmpty(order.CustomerId))
-                        {
-                            order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
-                        }
-                    }
-                    finally
-                    {
-                        SEMAPHORE.Release();
+                        order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                     }
                 }));
             }
