@@ -342,4 +342,31 @@
   <data name="DatabaseRestoredSuccessfully" xml:space="preserve">
     <value>Sikeres vissza állítás</value>
   </data>
+  <data name="Test" xml:space="preserve">
+    <value>Teszt</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Új verzió elérhető</value>
+  </data>
+  <data name="UpdateApp" xml:space="preserve">
+    <value>Alkamazás frissítése</value>
+  </data>
+  <data name="Douwnload" xml:space="preserve">
+    <value>Letöltés</value>
+  </data>
+  <data name="CheckAppUpdate" xml:space="preserve">
+    <value>Újabb alkmazás vezió keresése</value>
+  </data>
+  <data name="CheckAppUpdateLabel" xml:space="preserve">
+    <value>Alkalmazás frissítés keresése:</value>
+  </data>
+  <data name="Cancle" xml:space="preserve">
+    <value>Mégsem</value>
+  </data>
+  <data name="UpdateDownloaded" xml:space="preserve">
+    <value>A frissítés letöltödött</value>
+  </data>
+  <data name="UpdateDownlaodStartInBackground" xml:space="preserve">
+    <value>Az frissítés letöltése a hátérben elindult</value>
+  </data>
 </root>

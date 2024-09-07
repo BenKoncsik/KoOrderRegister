@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KoOrderRegister.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage
     public static class LanguageManager
     {
         public static List<ILanguageSettings> LanguageSettingsInstances = new List<ILanguageSettings>();
+
         static LanguageManager()
         {
             LoadLanguageSettings();
