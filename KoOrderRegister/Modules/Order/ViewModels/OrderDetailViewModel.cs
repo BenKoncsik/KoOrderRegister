@@ -23,6 +23,17 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         private readonly IDatabaseModel _database;
         private readonly IFileService _fileService;
         private OrderModel _order = new OrderModel();
+
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
         public OrderModel Order
         {
             get => _order;
@@ -92,6 +103,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         }
         public async void SaveOrder()
         {
+            IsLoading = true;
             if (Files != null)
             {
                 List<Task> tasks = new List<Task>();
@@ -99,15 +111,20 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 {
                     tasks.Add(ThreadManager.Run(async () =>
                     {
-                        if (file.Content == null)
+                        if (file.Content == null && file.FileResult != null)
                         {
-                            using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+                            List<byte> contentList = new List<byte>();
+                            using (var stream = await file.FileResult.OpenReadAsync())
                             {
-                                byte[] content = new byte[stream.Length];
-                                await stream.ReadAsync(content, 0, content.Length);
-                                file.Content = content;
-                                file.HashCode = await _fileService.CalculateHashAsync(content);
+                                byte[] buffer = new byte[1048576]; 
+                                int bytesRead;
+                                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    contentList.AddRange(buffer.Take(bytesRead)); 
+                                }
                             }
+                            file.Content = contentList.ToArray();
+                            file.HashCode = await _fileService.CalculateHashAsync(file.Content);
                         }
                         await _database.CreateFile(file);
                     }));
@@ -115,6 +132,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
                 await Task.WhenAll(tasks);
             }
+            IsLoading = false;
             if (await _database.CreateOrder(Order) > 0)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
@@ -179,7 +197,8 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                         OrderId = Order.Id,
                         Name = fileResult.FileName,
                         FilePath = fileResult.FullPath,
-                        ContentType = fileResult.ContentType
+                        ContentType = fileResult.ContentType,
+                        FileResult = fileResult
                     });
                 }
             }
@@ -196,12 +215,17 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void OpenFile(FileModel file)
         {
-            if(file.Content == null)
+            IsLoading = true;
+            file = await _database.GetFileById(file.Guid);
+            
+            if (file.Content == null)
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Open, AppRes.FailedToOpen + " " + file.Name, AppRes.Ok);
                 return;
             }
             var filePath = await _fileService.SaveFileToTmp(file);
+            IsLoading = false;
             await Launcher.OpenAsync(new OpenFileRequest
             {
                 File = new ReadOnlyFile(filePath)
@@ -210,13 +234,17 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void SaveFile(FileModel file)
         {
+            IsLoading = true;
+            file = await _database.GetFileById(file.Guid);
             if (file.Content == null)
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + file.Name, AppRes.Ok);
                 return;
             }
             try
             {
+                IsLoading = false;
                 if (await _fileService.SaveFileToLocal(file))
                 {
                     await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + file.Name, AppRes.Ok);

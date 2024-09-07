@@ -47,7 +47,6 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void EditOrder(OrderModel order)
         {
-            order.Files = await _database.GetAllFilesByOrderId(order.Guid);
             _orderDetailsPage.EditOrder(order);
             await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
         }
@@ -56,11 +55,12 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         {
             if (string.IsNullOrEmpty(SearchTXT))
             {
+                var orderRun = _database.GetAllOrders();
                 if (Orders != null)
                 {
                     Orders.Clear();
                 }
-                foreach (var order in await _database.GetAllOrders())
+                foreach (var order in await orderRun)
                 {
                     Orders.Add(order);
                 }
