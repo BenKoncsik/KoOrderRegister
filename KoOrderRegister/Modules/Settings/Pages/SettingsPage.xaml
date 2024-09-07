@@ -68,7 +68,7 @@
                                        WidthRequest="250"
                                        VerticalOptions="Center" 
                                        Margin="25"/>
-                    <Label Text="{x:Static res:AppRes.Loading}" 
+                    <Label Text="{Binding LoadingTXT}" 
                            VerticalOptions="Center" 
                            HorizontalOptions="Center"
                            Margin="20"/>

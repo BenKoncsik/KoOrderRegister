@@ -12,34 +12,41 @@ namespace KoOrderRegister.Platforms.Windows.Service
     {
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
-
-        public UpdateService()
-        {
-            
-        }
-
-        public async void CheckForAppInstallerUpdatesAndLaunchAsync()
+        private static DateTime _lastUpdateCheck = DateTime.MinValue;
+        public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
             {
                 var (latestVersion, msixUrl) = await GetLatestReleaseInfoAsync();
-                if (latestVersion == null) return;
+                if (latestVersion == null) return new AppUpdateInfo();
 
                 var currentVersion = $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
                 if (new Version(latestVersion) > new Version(currentVersion))
                 {
-                    await DownloadDialog(msixUrl, currentVersion, latestVersion);
+                    return  new AppUpdateInfo
+                    {
+                        OldVersion = currentVersion,
+                        NewVersion = latestVersion,
+                        DownloadUrl = msixUrl
+                    };
+                    
                 }
 #if DEBUG
                 else
                 {
-                    await DownloadDialog(msixUrl, currentVersion, latestVersion);
+                    return new AppUpdateInfo
+                    {
+                        OldVersion = currentVersion,
+                        NewVersion = latestVersion,
+                        DownloadUrl = msixUrl
+                    };
                 }
 #endif
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return new AppUpdateInfo();
             }
 
         }
@@ -87,7 +94,7 @@ namespace KoOrderRegister.Platforms.Windows.Service
             }
         }
 
-        public async Task DownloadDialog(string updateUrl, string oldVersion, string newVersion)
+        /*public async Task DownloadDialog(string updateUrl, string oldVersion, string newVersion)
         {
             if(await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, 
                 $"{AppRes.NewVersionAvailable}: ${oldVersion}-->${newVersion}", 
@@ -104,7 +111,7 @@ namespace KoOrderRegister.Platforms.Windows.Service
                     await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(filePath) });
                 }                
             }
-        }
+        }*/
 
 
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)

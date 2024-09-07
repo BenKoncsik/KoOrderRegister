@@ -8,14 +8,15 @@ namespace KoOrderRegister.Services
 {
     public class PlaceHolderAppUpdateService : IAppUpdateService
     {
-        public void CheckForAppInstallerUpdatesAndLaunchAsync()
+        public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
-            
+            return new AppUpdateInfo();
+        }
+        public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
+        {
+            return string.Empty;
         }
 
-        public async Task DownloadDialog(string updateUrl, string oldVersion, string newVersion)
-        {
-            
-        }
+
     }
 }
