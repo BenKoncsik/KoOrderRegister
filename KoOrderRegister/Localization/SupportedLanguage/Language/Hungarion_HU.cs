@@ -37,7 +37,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage.Language
 
         public async Task SetRegioSpecification()
         {
-
+           
         }
     }
 }

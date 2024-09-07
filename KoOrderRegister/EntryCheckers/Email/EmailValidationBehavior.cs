@@ -5,9 +5,9 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.EntryCheckers
+namespace KoOrderRegister.EntryCheckers.Email
 {
-    public class EmailValidationBehavior : Behavior<Entry>
+    public class EmailValidationBehavior : LocalizedBehavior<Entry>
     {
         protected override void OnAttachedTo(Entry bindable)
         {
@@ -47,6 +47,11 @@ namespace KoOrderRegister.EntryCheckers
             {
                 return false;
             }
+        }
+
+        protected override void SetLocalizedBehavior(Entry bindable)
+        {
+            
         }
     }
 }

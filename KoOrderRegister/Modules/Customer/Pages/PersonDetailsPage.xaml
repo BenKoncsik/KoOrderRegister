@@ -3,13 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KoOrderRegister.Modules.Customer.Pages.PersonDetailsPage"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
-             xmlns:entrycheker="clr-namespace:KoOrderRegister.EntryCheckers"
+             xmlns:PhoneEntrycheker="clr-namespace:KoOrderRegister.EntryCheckers.Phone"
+             xmlns:EmailEntrycheker="clr-namespace:KoOrderRegister.EntryCheckers.Email"
+             xmlns:INSentrycheker="clr-namespace:KoOrderRegister.EntryCheckers.INS"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Title="{x:Static res:AppRes.Person}">
 
     <ContentPage.Resources>
     <ResourceDictionary>
-        <entrycheker:EmailValidationBehavior x:Key="EmailValidator" />
-        <entrycheker:PhoneNumberValidationBehavior x:Key="PhoneValidator" />
+            <EmailEntrycheker:EmailValidationBehavior x:Key="EmailValidator" />
+            <PhoneEntrycheker:PhoneNumberValidationBehavior x:Key="PhoneValidator" />
+            <INSentrycheker:BaseINSBehavior x:Key="INSValidator" />
     </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -55,7 +59,7 @@
                        Grid.Column="1"
                        Margin="10, 0, 10,10">
                     <Entry.Behaviors>
-                        <entrycheker:PhoneNumberValidationBehavior />
+                        <PhoneEntrycheker:PhoneNumberValidationBehavior />
                     </Entry.Behaviors>
                 </Entry>
 
@@ -69,7 +73,7 @@
                        Grid.Column="1"
                        Margin="10, 0, 10,10">
                     <Entry.Behaviors>
-                        <entrycheker:EmailValidationBehavior />
+                        <EmailEntrycheker:EmailValidationBehavior />
                     </Entry.Behaviors>
                 </Entry>
 
@@ -91,7 +95,11 @@
                 <Entry Text="{Binding Customer.NationalHealthInsurance}"
                        Grid.Row="5"
                        Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                       Margin="10, 0, 10,10">
+                    <Entry.Behaviors>
+                        <INSentrycheker:BaseINSBehavior />
+                    </Entry.Behaviors>
+                </Entry>
             </Grid>
 
             <Grid ColumnDefinitions="*,*"
