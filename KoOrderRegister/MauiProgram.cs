@@ -13,6 +13,7 @@ using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Modules.Settings.ViewModels;
 using System.Globalization;
 using KoOrderRegister.Localization.SupportedLanguage;
+using KoOrderRegister.Services;
 
 namespace KoOrderRegister
 {
@@ -62,6 +63,14 @@ namespace KoOrderRegister
             builder.Services.AddSingleton<SettingsViewModel>();
             #endregion
 
+            #region Update
+            #if WINDOWS
+                builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Windows.Service.UpdateService>();
+            #else
+                 builder.Services.AddSingleton<IAppUpdateService, PlaceHolderAppUpdateService>();
+            #endif
+
+            #endregion
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

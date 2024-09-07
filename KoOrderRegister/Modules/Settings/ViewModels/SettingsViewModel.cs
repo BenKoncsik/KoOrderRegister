@@ -2,6 +2,7 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
     public class SettingsViewModel : INotifyPropertyChanged
     {
         private readonly IDatabaseModel _databaseModel;
+        private readonly IAppUpdateService _updateService;
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
         private ILanguageSettings _selectedItem;
         public ILanguageSettings SelectedItem
@@ -56,6 +58,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         #region Commands
         public ICommand BackUpDatabaseCommand => new Command(BackUp);
         public ICommand RestoreDatabaseCommand => new Command(Restore);
+        public ICommand AppUpdateCommand => new Command(UpdateApp);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,9 +67,11 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        public SettingsViewModel(IDatabaseModel databaseModel)
+        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService)
         {
             _databaseModel = databaseModel;
+            _updateService = updateService;
+            _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
         }
 
         public async void BackUp()
@@ -132,6 +137,11 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         public void ChangeLanguage(ILanguageSettings languageSettings)
         {
             LanguageManager.SetLanguage(languageSettings);
+        }
+
+        public async void UpdateApp()
+        {
+            _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
         }
     }
 }

@@ -352,4 +352,34 @@
   <data name="Test" xml:space="preserve">
     <value>Test</value>
   </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>New version available</value>
+    <comment>NewVersionAvailable</comment>
+  </data>
+  <data name="UpdateApp" xml:space="preserve">
+    <value>App Update</value>
+  </data>
+  <data name="Douwnload" xml:space="preserve">
+    <value>Douwnload</value>
+  </data>
+  <data name="CheckAppUpdate" xml:space="preserve">
+    <value>Check app update</value>
+    <comment>CheckAppUpdate</comment>
+  </data>
+  <data name="CheckAppUpdateLabel" xml:space="preserve">
+    <value>Check app update:</value>
+    <comment>CheckAppUpdateLabel</comment>
+  </data>
+  <data name="Cancle" xml:space="preserve">
+    <value>Cancle</value>
+    <comment>Cancle</comment>
+  </data>
+  <data name="UpdateDownloaded" xml:space="preserve">
+    <value>Update downloaded</value>
+    <comment>UpdateDownloaded</comment>
+  </data>
+  <data name="UpdateDownlaodStartInBackground" xml:space="preserve">
+    <value>Update downlaod start in background</value>
+    <comment>UpdateDownlaodStartInBackground</comment>
+  </data>
 </root>

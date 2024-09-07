@@ -157,10 +157,6 @@
     <value>Zurück</value>
     <comment>Zurück</comment>
   </data>
-  <data name="NHI" xml:space="preserve">
-    <value>Versicherungsnummer</value>
-    <comment>Sozialversicherungsnummer</comment>
-  </data>
   <data name="Phone" xml:space="preserve">
     <value>Telefon</value>
     <comment>Telefon</comment>
@@ -315,5 +311,8 @@
   </data>
   <data name="PriceLabel" xml:space="preserve">
     <value>Ár</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Új verzió érhető el</value>
   </data>
 </root>

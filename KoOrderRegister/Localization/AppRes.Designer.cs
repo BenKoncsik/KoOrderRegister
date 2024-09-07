@@ -124,6 +124,33 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancle.
+        /// </summary>
+        internal static string Cancle {
+            get {
+                return ResourceManager.GetString("Cancle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check app update.
+        /// </summary>
+        internal static string CheckAppUpdate {
+            get {
+                return ResourceManager.GetString("CheckAppUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check app update:.
+        /// </summary>
+        internal static string CheckAppUpdateLabel {
+            get {
+                return ResourceManager.GetString("CheckAppUpdateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose an customer.
         /// </summary>
         internal static string ChooseAnCustomer {
@@ -205,6 +232,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Douwnload.
+        /// </summary>
+        internal static string Douwnload {
+            get {
+                return ResourceManager.GetString("Douwnload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         internal static string Edit {
@@ -282,6 +318,15 @@ namespace KoOrderRegister.Localization {
         internal static string NameLabel {
             get {
                 return ResourceManager.GetString("NameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version available.
+        /// </summary>
+        internal static string NewVersionAvailable {
+            get {
+                return ResourceManager.GetString("NewVersionAvailable", resourceCulture);
             }
         }
         
@@ -588,6 +633,33 @@ namespace KoOrderRegister.Localization {
         internal static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to App Update.
+        /// </summary>
+        internal static string UpdateApp {
+            get {
+                return ResourceManager.GetString("UpdateApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update downlaod start in background.
+        /// </summary>
+        internal static string UpdateDownlaodStartInBackground {
+            get {
+                return ResourceManager.GetString("UpdateDownlaodStartInBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update downloaded.
+        /// </summary>
+        internal static string UpdateDownloaded {
+            get {
+                return ResourceManager.GetString("UpdateDownloaded", resourceCulture);
             }
         }
         
