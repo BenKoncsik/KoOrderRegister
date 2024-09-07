@@ -59,7 +59,7 @@ namespace KoOrderRegister
 
             #region Settings Modul
             builder.Services.AddTransient<SettingsPage>();
-            builder.Services.AddTransient<SettingsViewModel>();
+            builder.Services.AddSingleton<SettingsViewModel>();
             #endregion
 
 #if DEBUG

@@ -1,6 +1,8 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +13,34 @@ namespace KoOrderRegister.Modules.Database.Models
     public class CustomerModel
     {
         [PrimaryKey]
+        [JsonProperty("id")]
         public string Id { get; set; }
+
+        [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("address")]
         public string Address { get; set; }
+
+        [JsonProperty("phone")]
+        [DefaultValue("unknown")]
         public string Phone { get; set; }
+
+        [JsonProperty("email")]
+        [DefaultValue("unknown@example.com")]
         public string Email { get; set; }
+
+        [JsonProperty("note")]
         public string Note { get; set; } = string.Empty;
+
+        [JsonProperty("nationalHealthInsurance")]
+        [DefaultValue("unknown")]
         public string NationalHealthInsurance { get; set; }
         [Ignore]
+        [JsonIgnore]
         public List<OrderModel> Orders { get; set; } = new List<OrderModel>();
         [Ignore]
+        [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);
         public CustomerModel()
         {
@@ -35,5 +55,7 @@ namespace KoOrderRegister.Modules.Database.Models
             Email = email;
             NationalHealthInsurance = nhi;
         }
+
+        
     }
 }

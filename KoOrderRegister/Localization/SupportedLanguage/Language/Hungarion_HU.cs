@@ -10,7 +10,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage.Language
     {
         private string _languageName = "Hungarian_HU";
         private string _cultureName = "hu-HU";
-        private string _languageDisplayName = "Hungarian (Hungarian)";
+        private string _languageDisplayName = "Magyar (Hungarian)";
         private string _languageId = "+36";
 
         public string DisplayName { get => GetLanguageDisplayName(); }

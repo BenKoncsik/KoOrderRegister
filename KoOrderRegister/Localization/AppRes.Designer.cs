@@ -88,11 +88,38 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to restore it from backup? Menden data will be deleted from what is currently in the application!.
+        /// </summary>
+        internal static string AreYouSureYouRestore {
+            get {
+                return ResourceManager.GetString("AreYouSureYouRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete: .
         /// </summary>
         internal static string AreYouSureYouWantToDelete {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup database.
+        /// </summary>
+        internal static string BackupDatabase {
+            get {
+                return ResourceManager.GetString("BackupDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup database:.
+        /// </summary>
+        internal static string BackupDatabaseLabel {
+            get {
+                return ResourceManager.GetString("BackupDatabaseLabel", resourceCulture);
             }
         }
         
@@ -138,6 +165,15 @@ namespace KoOrderRegister.Localization {
         internal static string CustomerList {
             get {
                 return ResourceManager.GetString("CustomerList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database restored successfully.
+        /// </summary>
+        internal static string DatabaseRestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("DatabaseRestoredSuccessfully", resourceCulture);
             }
         }
         
@@ -210,6 +246,24 @@ namespace KoOrderRegister.Localization {
         internal static string FailedToSave {
             get {
                 return ResourceManager.GetString("FailedToSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to restor database.
+        /// </summary>
+        internal static string FaliedToRestore {
+            get {
+                return ResourceManager.GetString("FaliedToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        internal static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         
@@ -367,11 +421,56 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a location to save your backup.
+        /// </summary>
+        internal static string PlsChoosLocatoinToBackup {
+            get {
+                return ResourceManager.GetString("PlsChoosLocatoinToBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a backup file to restore.
+        /// </summary>
+        internal static string PlsSelectBackupFile {
+            get {
+                return ResourceManager.GetString("PlsSelectBackupFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price:.
+        /// </summary>
+        internal static string PriceLabel {
+            get {
+                return ResourceManager.GetString("PriceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product id:.
         /// </summary>
         internal static string ProductIdLabel {
             get {
                 return ResourceManager.GetString("ProductIdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore database.
+        /// </summary>
+        internal static string RestoreDatabase {
+            get {
+                return ResourceManager.GetString("RestoreDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore database:.
+        /// </summary>
+        internal static string RestoreDatabaseLabel {
+            get {
+                return ResourceManager.GetString("RestoreDatabaseLabel", resourceCulture);
             }
         }
         
