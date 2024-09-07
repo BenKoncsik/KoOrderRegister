@@ -2,15 +2,23 @@
 using KoOrderRegister.Services;
 using Newtonsoft.Json;
 using System;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 
 namespace KoOrderRegister.Platforms.Android.Service
 {
     public class UpdateService : IAppUpdateService
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
         private static DateTime _lastUpdateCheck = DateTime.MinValue;
+        
+        public UpdateService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("GitHubClient");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
+        }
+        
         public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
@@ -53,8 +61,6 @@ namespace KoOrderRegister.Platforms.Android.Service
 
         public async Task<(string version, string msixUrl)> GetLatestReleaseInfoAsync()
         {
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "YourApp");
-
             var response = await _httpClient.GetAsync(_apiUrl);
             if (response.IsSuccessStatusCode)
             {
@@ -63,7 +69,7 @@ namespace KoOrderRegister.Platforms.Android.Service
                 string msixUrl = string.Empty;
                 string version = string.Empty;
                 // Check for the correct architecture
-                var architecture = RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
+                var architecture = "android";
                 foreach (var asset in release.Assets)
                 {
                     if (asset.name.ToLower().Contains(architecture.ToLower()))
@@ -94,45 +100,44 @@ namespace KoOrderRegister.Platforms.Android.Service
         }
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-
-            if (!response.IsSuccessStatusCode)
+            var httpClient = new HttpClient(); // Consider reusing HttpClient instances or using IHttpClientFactory
+            try
             {
-                throw new Exception($"Error {response.StatusCode} downloading file.");
-            }
-
-            var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-            var readBytes = 0L;
-            var buffer = new byte[8192];
-            var isMoreToRead = true;
-
-            string localPath = Path.Combine(FileSystem.CacheDirectory, "KORUpdate.msix");
-
-            using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            {
-                do
+                var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
+                if (!response.IsSuccessStatusCode)
                 {
-                    var read = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (read == 0)
-                    {
-                        isMoreToRead = false;
-                    }
-                    else
-                    {
-                        await fileStream.WriteAsync(buffer, 0, read);
+                    throw new Exception($"Error {response.StatusCode} downloading file.");
+                }
 
-                        readBytes += read;
-                        progress.Report((readBytes / (double)totalBytes) * 100);
+                var totalBytes = response.Content.Headers.ContentLength ?? -1L;
+                var readBytes = 0L;
+                var buffer = new byte[8192];
+
+                string localPath = Path.Combine(FileSystem.CacheDirectory, "KOR_update.apk");
+
+                using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
+                {
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    {
+                        int read;
+                        while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        {
+                            await fileStream.WriteAsync(buffer, 0, read);
+                            readBytes += read;
+                            progress.Report((double)readBytes / totalBytes * 100);
+                        }
                     }
                 }
-                while (isMoreToRead);
-            }
 
-            return localPath;
+                return localPath;
+            }
+            finally
+            {
+                httpClient.Dispose();
+            }
         }
 
+
     }
-    }
+}
 

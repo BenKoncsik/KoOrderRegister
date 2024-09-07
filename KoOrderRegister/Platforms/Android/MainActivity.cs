@@ -10,6 +10,7 @@ namespace KoOrderRegister
     public class MainActivity : MauiAppCompatActivity
     {
         public static string AppVersion { get; private set; } = string.Empty;
+       
         protected override void OnCreate(Bundle savedInstanceState)
         {
             AppVersion = VersionUtils.GetAppVersion(this);

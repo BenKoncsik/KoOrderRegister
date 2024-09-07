@@ -10,9 +10,16 @@ namespace KoOrderRegister.Platforms.Windows.Service
 {
     public class UpdateService : IAppUpdateService
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
         private static DateTime _lastUpdateCheck = DateTime.MinValue;
+        
+        public UpdateService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("GitHubClient");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
+        }
+        
         public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
@@ -110,7 +117,7 @@ namespace KoOrderRegister.Platforms.Windows.Service
             var buffer = new byte[8192];
             var isMoreToRead = true;
 
-            string localPath = Path.Combine(FileSystem.CacheDirectory, "KORUpdate.msix");
+            string localPath = Path.Combine(FileSystem.CacheDirectory, "KOR_update.msix");
 
             using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
             using (var stream = await response.Content.ReadAsStreamAsync())
