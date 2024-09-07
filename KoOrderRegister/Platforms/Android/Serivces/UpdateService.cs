@@ -21,13 +21,13 @@ namespace KoOrderRegister.Platforms.Android.Service
                 var currentVersion = MainActivity.AppVersion;
                 if (new Version(latestVersion) > new Version(currentVersion))
                 {
-                    return  new AppUpdateInfo
+                    return new AppUpdateInfo
                     {
                         OldVersion = currentVersion,
                         NewVersion = latestVersion,
                         DownloadUrl = msixUrl
                     };
-                    
+
                 }
 #if DEBUG
                 else
@@ -40,13 +40,14 @@ namespace KoOrderRegister.Platforms.Android.Service
                     };
                 }
 #endif
+                return new AppUpdateInfo();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return new AppUpdateInfo();
             }
-
+            
         }
 
 

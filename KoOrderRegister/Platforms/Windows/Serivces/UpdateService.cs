@@ -42,6 +42,7 @@ namespace KoOrderRegister.Platforms.Windows.Service
                     };
                 }
 #endif
+                return new AppUpdateInfo();
             }
             catch (Exception ex)
             {
