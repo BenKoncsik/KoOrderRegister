@@ -3,10 +3,8 @@ using KoOrderRegister.Services;
 using Newtonsoft.Json;
 using System;
 using System.Runtime.InteropServices;
-using Windows.ApplicationModel;
-using Windows.UI.Popups;
 
-namespace KoOrderRegister.Platforms.Windows.Service
+namespace KoOrderRegister.Platforms.Android.Service
 {
     public class UpdateService : IAppUpdateService
     {
@@ -20,7 +18,7 @@ namespace KoOrderRegister.Platforms.Windows.Service
                 var (latestVersion, msixUrl) = await GetLatestReleaseInfoAsync();
                 if (latestVersion == null) return new AppUpdateInfo();
 
-                var currentVersion = $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
+                var currentVersion = MainActivity.AppVersion;
                 if (new Version(latestVersion) > new Version(currentVersion))
                 {
                     return  new AppUpdateInfo
@@ -93,7 +91,6 @@ namespace KoOrderRegister.Platforms.Windows.Service
                 public string name { get; set; }
             }
         }
-
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
             var httpClient = new HttpClient();

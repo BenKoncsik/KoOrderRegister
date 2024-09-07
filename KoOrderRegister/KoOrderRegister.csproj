@@ -27,7 +27,7 @@
 		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.6.14</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -129,6 +129,9 @@
 	  </Compile>
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Platforms\Android\Serivces\UpdateService.cs">
+	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
