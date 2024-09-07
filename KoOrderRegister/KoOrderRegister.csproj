@@ -42,9 +42,12 @@
 		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
-		<AppInstallerUri>https://github.com/BenKoncsik/KoOrderRegister/releases</AppInstallerUri>
+		<AppInstallerUri>https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<PackageCertificateThumbprint>9D1DF366CFD9315E597704028A3B72D9AB7F42CA</PackageCertificateThumbprint>
+		<Configurations>Debug;Release;arm</Configurations>
+		<Platforms>AnyCPU;ARM64</Platforms>
+		<!--<PlatformTarget>x64</PlatformTarget>-->
 	</PropertyGroup>
 
 	<ItemGroup>
