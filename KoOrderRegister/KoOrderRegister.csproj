@@ -60,10 +60,10 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -77,6 +77,31 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-125.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-400.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-100.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-125.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
 	  <None Remove="Resources\Images\add_dark.svg" />
 	  <None Remove="Resources\Images\add_light.svg" />
 	  <None Remove="Resources\Images\ai_dark.svg" />
@@ -117,6 +142,34 @@
 	  <None Remove="Resources\Images\upload_light.svg" />
 	  <None Remove="Resources\Images\x_dark.svg" />
 	  <None Remove="Resources\Images\x_light.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-100.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-125.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-150.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-200.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-400.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-100.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-125.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-150.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-200.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-400.png" />
 	</ItemGroup>
 
 	<ItemGroup>
