@@ -145,6 +145,9 @@
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
+	  <Compile Update="Platforms\iOS\Utils\DownloadManager.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>

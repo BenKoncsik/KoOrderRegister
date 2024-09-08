@@ -71,7 +71,6 @@ namespace KoOrderRegister.Platforms.Windows.Service
                 var release = JsonConvert.DeserializeObject<GitHubRelease>(jsonResponse);
                 string msixUrl = string.Empty;
                 string version = string.Empty;
-                // Check for the correct architecture
                 var architecture = RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
                 foreach (var asset in release.Assets)
                 {
@@ -104,43 +103,8 @@ namespace KoOrderRegister.Platforms.Windows.Service
 
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Error {response.StatusCode} downloading file.");
-            }
-
-            var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-            var readBytes = 0L;
-            var buffer = new byte[8192];
-            var isMoreToRead = true;
-
-            string localPath = Path.Combine(FileSystem.CacheDirectory, "KOR_update.msix");
-
-            using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            {
-                do
-                {
-                    var read = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (read == 0)
-                    {
-                        isMoreToRead = false;
-                    }
-                    else
-                    {
-                        await fileStream.WriteAsync(buffer, 0, read);
-
-                        readBytes += read;
-                        progress.Report((readBytes / (double)totalBytes) * 100);
-                    }
-                }
-                while (isMoreToRead);
-            }
-
-            return localPath;
+            DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
+            return await DownloadManager.DownloadManager.DownloadAsync("KOR_update.msix", fileUrl, progress);
         }
 
     }

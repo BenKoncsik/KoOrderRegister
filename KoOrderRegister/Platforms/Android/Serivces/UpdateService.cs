@@ -100,41 +100,8 @@ namespace KoOrderRegister.Platforms.Android.Service
         }
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
-            var httpClient = new HttpClient(); // Consider reusing HttpClient instances or using IHttpClientFactory
-            try
-            {
-                var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Error {response.StatusCode} downloading file.");
-                }
-
-                var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-                var readBytes = 0L;
-                var buffer = new byte[8192];
-
-                string localPath = Path.Combine(FileSystem.CacheDirectory, "KOR_update.apk");
-
-                using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
-                {
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        int read;
-                        while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                        {
-                            await fileStream.WriteAsync(buffer, 0, read);
-                            readBytes += read;
-                            progress.Report((double)readBytes / totalBytes * 100);
-                        }
-                    }
-                }
-
-                return localPath;
-            }
-            finally
-            {
-                httpClient.Dispose();
-            }
+            DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
+            return await DownloadManager.DownloadManager.DownloadAsync("KOR_update.apk", fileUrl, progress);
         }
 
 
