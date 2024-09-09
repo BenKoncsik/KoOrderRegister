@@ -31,14 +31,16 @@ powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%C
 
 echo Please enter your keystore password:
 set /p KEYPASS=""
-set "KeystorePassword=!KEYPASS!"
+
 
 
 echo Publishing the application...
-dotnet publish "..\KoOrderRegister.sln" -c Release -f net8.0-android
+REM dotnet publish "..\KoOrderRegister.csproj" -c Release -f net8.0-android
+dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
 
-echo Delete key store password
-set "KeystorePassword="
+REM echo Delete key store password
+REM set "KeystorePassword="
+
 REM Cél APK útvonal
 set "ORIGINAL_APK=..\bin\Release\net8.0-android\hu.kncsk.koorderregister-Signed.apk"
 
