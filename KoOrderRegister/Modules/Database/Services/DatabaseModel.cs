@@ -9,6 +9,9 @@ namespace KoOrderRegister.Modules.Database.Services
         private SQLiteAsyncConnection Database;
         private SQLiteConnectionString options;
 
+        private static string CUSTOMER_TABLE = "Customers";
+        private static string ORDER_TABLE = "Orders";
+        private static string FILES_TABLE = "Files";
         
 
         public DatabaseModel()
@@ -60,7 +63,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId.Equals(stringId)).ToListAsync();
                 foreach (var order in orders)
                 {
-                    order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
+                    order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
                 }
                 customer.Orders = orders;
             }
@@ -76,7 +79,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId == customer.Id).ToListAsync();
                 foreach (var order in orders)
                 {
-                    order.Files = await Database.Table<FileModel>().Where(f => f.OrderId == order.Id).ToListAsync();
+                    order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
                 }
                 customer.Orders = orders;
             }
@@ -91,7 +94,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteCustomer(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString(); 
             var customer = await GetCustomerById(id);
             if (customer != null)
             {
@@ -113,7 +116,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
 
-            var query = $@"SELECT * FROM Customers 
+            var query = $@"SELECT * FROM ${CUSTOMER_TABLE} 
                            WHERE LOWER(Name) LIKE ? OR 
                                  LOWER(Address) LIKE ? OR
                                  LOWER(Phone) LIKE ? OR
@@ -140,11 +143,11 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<OrderModel> GetOrderById(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString();  
             var order = await Database.FindAsync<OrderModel>(stringId);
             if (order != null)
             {
-                order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync();
+                order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
             }
             return order;
         }
@@ -158,7 +161,7 @@ namespace KoOrderRegister.Modules.Database.Services
                      var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).CountAsync();
                      if (fileCount > 0)
                      {
-                         order.Files = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).ToListAsync();
+                         order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
                      }
                      if (!string.IsNullOrEmpty(order.CustomerId))
                      {
@@ -177,7 +180,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteOrder(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString();  
             var order = await GetOrderById(id);
             if (order != null)
             {
@@ -197,8 +200,8 @@ namespace KoOrderRegister.Modules.Database.Services
                 return await GetAllOrders();
             }
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
-            var query = $@"SELECT o.* FROM Orders o
-                           JOIN Customers c ON o.CustomerId = c.Id
+            var query = $@"SELECT o.* FROM {ORDER_TABLE} o
+                           JOIN {CUSTOMER_TABLE} c ON o.CustomerId = c.Id
                            WHERE LOWER(o.OrderNumber) LIKE ? OR 
                            LOWER(o.Note) LIKE ? OR
                            LOWER(c.Name) LIKE ? OR
@@ -237,12 +240,11 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 return await UpdateFile(file);
             }
-            
         }
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString();  
             return await Database.FindAsync<FileModel>(stringId);
         }
 
@@ -276,6 +278,17 @@ namespace KoOrderRegister.Modules.Database.Services
                 return await Database.DeleteAsync(file);
             }
             return 0;
+        }
+
+        private async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(string id)
+        {
+            var query = $"SELECT id, orderId, name, contentType, note, hashCode FROM {FILES_TABLE} WHERE orderId = ?";
+            List<FileModel> fileModels = await Database.QueryAsync<FileModel>(query, id);
+            foreach(var file in fileModels)
+            {
+                file.IsDatabaseContent = true;
+            }
+            return fileModels;
         }
         #endregion
 
@@ -341,7 +354,6 @@ namespace KoOrderRegister.Modules.Database.Services
             SQLiteOpenFlags.SharedCache;
 
         public static string basePath =>
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DatabaseFilename);
-            //Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DatabaseFilename);
     }
 }

@@ -241,6 +241,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading.
+        /// </summary>
+        internal static string Downloading {
+            get {
+                return ResourceManager.GetString("Downloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         internal static string Edit {

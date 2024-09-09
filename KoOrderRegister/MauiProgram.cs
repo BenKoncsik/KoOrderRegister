@@ -64,11 +64,17 @@ namespace KoOrderRegister
             #endregion
 
             #region Update
-            #if WINDOWS
+            builder.Services.AddHttpClient("GitHubClient", client =>
+            {
+                
+            });
+#if WINDOWS
                 builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Windows.Service.UpdateService>();
-            #else
-                 builder.Services.AddSingleton<IAppUpdateService, PlaceHolderAppUpdateService>();
-            #endif
+#elif ANDROID
+            builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Android.Service.UpdateService>();
+#else
+            builder.Services.AddSingleton<IAppUpdateService, PlaceHolderAppUpdateService>();
+#endif
 
             #endregion
 #if DEBUG

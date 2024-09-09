@@ -10,36 +10,51 @@ namespace KoOrderRegister.Platforms.Windows.Service
 {
     public class UpdateService : IAppUpdateService
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
-
-        public UpdateService()
+        private static DateTime _lastUpdateCheck = DateTime.MinValue;
+        
+        public UpdateService(IHttpClientFactory httpClientFactory)
         {
-            
+            _httpClient = httpClientFactory.CreateClient("GitHubClient");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
         }
-
-        public async void CheckForAppInstallerUpdatesAndLaunchAsync()
+        
+        public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
             {
                 var (latestVersion, msixUrl) = await GetLatestReleaseInfoAsync();
-                if (latestVersion == null) return;
+                if (latestVersion == null) return new AppUpdateInfo();
 
                 var currentVersion = $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
                 if (new Version(latestVersion) > new Version(currentVersion))
                 {
-                    await DownloadDialog(msixUrl, currentVersion, latestVersion);
+                    return  new AppUpdateInfo
+                    {
+                        OldVersion = currentVersion,
+                        NewVersion = latestVersion,
+                        DownloadUrl = msixUrl
+                    };
+                    
                 }
 #if DEBUG
                 else
                 {
-                    await DownloadDialog(msixUrl, currentVersion, latestVersion);
+                    return new AppUpdateInfo
+                    {
+                        OldVersion = currentVersion,
+                        NewVersion = latestVersion,
+                        DownloadUrl = msixUrl
+                    };
                 }
 #endif
+                return new AppUpdateInfo();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return new AppUpdateInfo();
             }
 
         }
@@ -56,7 +71,6 @@ namespace KoOrderRegister.Platforms.Windows.Service
                 var release = JsonConvert.DeserializeObject<GitHubRelease>(jsonResponse);
                 string msixUrl = string.Empty;
                 string version = string.Empty;
-                // Check for the correct architecture
                 var architecture = RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
                 foreach (var asset in release.Assets)
                 {
@@ -87,65 +101,10 @@ namespace KoOrderRegister.Platforms.Windows.Service
             }
         }
 
-        public async Task DownloadDialog(string updateUrl, string oldVersion, string newVersion)
-        {
-            if(await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, 
-                $"{AppRes.NewVersionAvailable}: ${oldVersion}-->${newVersion}", 
-                AppRes.Ok, AppRes.No))
-            {
-                Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownlaodStartInBackground, AppRes.Ok);
-                string filePath = await DownloadFileAsync(updateUrl, new Progress<double>(progress =>
-               {
-                   Console.WriteLine($"Downloaded {progress}%");
-               }));
-
-                if(await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancle))
-                {
-                    await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(filePath) });
-                }                
-            }
-        }
-
-
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Error {response.StatusCode} downloading file.");
-            }
-
-            var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-            var readBytes = 0L;
-            var buffer = new byte[8192];
-            var isMoreToRead = true;
-
-            string localPath = Path.Combine(FileSystem.CacheDirectory, "KORUpdate.msix");
-
-            using (var fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer.Length, true))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            {
-                do
-                {
-                    var read = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (read == 0)
-                    {
-                        isMoreToRead = false;
-                    }
-                    else
-                    {
-                        await fileStream.WriteAsync(buffer, 0, read);
-
-                        readBytes += read;
-                        progress.Report((readBytes / (double)totalBytes) * 100);
-                    }
-                }
-                while (isMoreToRead);
-            }
-
-            return localPath;
+            DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
+            return await DownloadManager.DownloadManager.DownloadAsync("KOR_update.msix", fileUrl, progress);
         }
 
     }

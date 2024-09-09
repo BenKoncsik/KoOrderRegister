@@ -25,6 +25,9 @@ namespace KoOrderRegister.Modules.Database.Models
             get => Content == null ? null : Convert.ToBase64String(Content);
             set => Content = string.IsNullOrEmpty(value) ? null : Convert.FromBase64String(value);
         }
+        [Ignore]
+        [JsonIgnore]
+        public FileResult FileResult { get; set; }
         [JsonProperty("contentType")]
         public string ContentType { get; set; }
         [JsonProperty("note")]
@@ -44,6 +47,9 @@ namespace KoOrderRegister.Modules.Database.Models
         [Ignore]
         [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);
+        [Ignore]
+        [JsonIgnore]
+        public bool IsDatabaseContent { get; set; } = false;
         public FileModel()
         {
             Id = Guid.NewGuid().ToString();

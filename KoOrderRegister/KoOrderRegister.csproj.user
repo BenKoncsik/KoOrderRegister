@@ -4,11 +4,14 @@
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net8.0-windows10.0.19041.0</ActiveDebugFramework>
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
-    <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
+    <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
     <AppxShowAllApps>False</AppxShowAllApps>
     <_LastSelectedProfileId>MSIX-win10-x64.pubxml</_LastSelectedProfileId>
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
+    <DefaultDevice>Windows Subsystem for Android</DefaultDevice>
+    <AppIconSource>I:\xampp\htdocs\gitHub\KoOrderRegister\KoOrderRegister\Resources\AppIcon\icon.png</AppIconSource>
+    <SplashScreenSource>I:\xampp\htdocs\gitHub\KoOrderRegister\KoOrderRegister\Resources\Splash\windows_splash.png</SplashScreenSource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

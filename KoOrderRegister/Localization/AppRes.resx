@@ -382,4 +382,8 @@
     <value>Update downlaod start in background</value>
     <comment>UpdateDownlaodStartInBackground</comment>
   </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading</value>
+    <comment>Downloading</comment>
+  </data>
 </root>

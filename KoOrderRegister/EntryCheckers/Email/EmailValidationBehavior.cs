@@ -5,9 +5,9 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.EntryCheckers
+namespace KoOrderRegister.EntryCheckers.Email
 {
-    public class EmailValidationBehavior : Behavior<Entry>
+    public class EmailValidationBehavior : LocalizedBehavior<Entry>
     {
         protected override void OnAttachedTo(Entry bindable)
         {
@@ -27,7 +27,7 @@ namespace KoOrderRegister.EntryCheckers
             {
                 if (IsValidEmail(args.NewTextValue))
                 {
-                    entry.TextColor = Application.Current.UserAppTheme == AppTheme.Dark ? Colors.Black : Colors.White;
+                    entry.TextColor = Application.Current.UserAppTheme == AppTheme.Dark ? Colors.White : Colors.Black;
                 }
                 else
                 {
@@ -47,6 +47,11 @@ namespace KoOrderRegister.EntryCheckers
             {
                 return false;
             }
+        }
+
+        protected override void SetLocalizedBehavior(Entry bindable)
+        {
+            
         }
     }
 }

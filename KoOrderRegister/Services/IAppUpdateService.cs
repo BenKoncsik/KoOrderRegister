@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace KoOrderRegister.Services
 {
+    public struct AppUpdateInfo
+    {
+        public string OldVersion { get; set; }
+        public string NewVersion { get; set; }
+        public string DownloadUrl { get; set; }
+    }
     public interface IAppUpdateService
     {
-        Task DownloadDialog(string updateUrl, string oldVersion, string newVersion);
-        void CheckForAppInstallerUpdatesAndLaunchAsync();
+        //Task DownloadDialog(string updateUrl, string oldVersion, string newVersion);
+        Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync();
+        Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress);
     }
 }

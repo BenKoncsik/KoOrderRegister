@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.EntryCheckers
+namespace KoOrderRegister.EntryCheckers.Phone
 {
-    public class PhoneNumberValidationBehavior : Behavior<Entry>
+    public class PhoneNumberValidationBehavior : LocalizedBehavior<Entry>
     {
         protected override void OnAttachedTo(Entry bindable)
         {
@@ -41,7 +41,7 @@ namespace KoOrderRegister.EntryCheckers
             var plusPrefix = digits.StartsWith("+") ? "+" : "";
             if (plusPrefix == "+")
             {
-                digits = digits.Substring(1);  
+                digits = digits.Substring(1);
             }
 
             if (digits.Length > 15)
@@ -52,6 +52,11 @@ namespace KoOrderRegister.EntryCheckers
             digits = plusPrefix + digits;
 
             return digits;
+        }
+
+        protected override void SetLocalizedBehavior(Entry bindable)
+        {
+            
         }
     }
 }

@@ -19,6 +19,20 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
     {
         private readonly IDatabaseModel _databaseModel;
         private readonly IAppUpdateService _updateService;
+
+        private string _loadingTXT = AppRes.Loading;
+        public string LoadingTXT
+        {
+            get => _loadingTXT;
+            set
+            {
+                if (value != _loadingTXT)
+                {
+                    _loadingTXT = value;
+                    OnPropertyChanged(nameof(LoadingTXT));
+                }
+            }
+        }
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
         private ILanguageSettings _selectedItem;
         public ILanguageSettings SelectedItem
@@ -141,7 +155,27 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         public async void UpdateApp()
         {
-            _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
+            AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
+            if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
+                $"{AppRes.NewVersionAvailable}: ${info.OldVersion}-->${info.NewVersion}",
+                AppRes.Ok, AppRes.No))
+            {
+                LoadingTXT = AppRes.Downloading;
+                IsLoading = true;
+                string filePath = await _updateService.DownloadFileAsync(info.DownloadUrl, new Progress<double>(progress =>
+                {
+                    Console.WriteLine($"Downloaded {progress}%");
+                    LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
+                }));
+                IsLoading = false;
+                LoadingTXT = AppRes.Loading;
+                if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancle))
+                {
+                    await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(filePath) });
+                }
+                
+            }
+
         }
     }
 }

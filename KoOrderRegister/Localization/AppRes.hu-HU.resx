@@ -369,4 +369,7 @@
   <data name="UpdateDownlaodStartInBackground" xml:space="preserve">
     <value>Az frissítés letöltése a hátérben elindult</value>
   </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Letöltés</value>
+  </data>
 </root>
