@@ -24,7 +24,8 @@
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.7.16</ApplicationDisplayVersion>
@@ -197,7 +198,7 @@
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Platforms\Android\Serivces\UpdateService.cs">
+	  <Compile Update="Platforms\Android\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">

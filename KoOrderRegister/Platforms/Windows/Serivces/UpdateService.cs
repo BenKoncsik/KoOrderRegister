@@ -13,9 +13,10 @@ namespace KoOrderRegister.Platforms.Windows.Service
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
         private static DateTime _lastUpdateCheck = DateTime.MinValue;
-        
+        public string AppVersion => $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}"; 
         public UpdateService(IHttpClientFactory httpClientFactory)
         {
+            AppShell.AppVersion = $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}";
             _httpClient = httpClientFactory.CreateClient("GitHubClient");
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
         }

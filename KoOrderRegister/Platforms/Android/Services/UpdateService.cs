@@ -5,26 +5,30 @@ using System;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 
-namespace KoOrderRegister.Platforms.Android.Service
+namespace KoOrderRegister.Platforms.Android.Services
 {
     public class UpdateService : IAppUpdateService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
         private static DateTime _lastUpdateCheck = DateTime.MinValue;
-        
+        public string AppVersion => MainActivity.AppVersion;
         public UpdateService(IHttpClientFactory httpClientFactory)
         {
+            AppShell.AppVersion = AppVersion;
             _httpClient = httpClientFactory.CreateClient("GitHubClient");
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
         }
-        
+
         public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
             {
                 var (latestVersion, msixUrl) = await GetLatestReleaseInfoAsync();
-                if (latestVersion == null) return new AppUpdateInfo();
+                if (string.IsNullOrEmpty(latestVersion))
+                {
+                    return new AppUpdateInfo();
+                }
 
                 var currentVersion = MainActivity.AppVersion;
                 if (new Version(latestVersion) > new Version(currentVersion))

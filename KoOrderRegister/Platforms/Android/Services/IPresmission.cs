@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DownloadManager
+namespace KoOrderRegister.Platforms.Android.Services
 {
-    static partial class DownloadManager
+    public interface IPermissions
     {
-        static string PlatformFolder() => FileSystem.CacheDirectory;
     }
 }

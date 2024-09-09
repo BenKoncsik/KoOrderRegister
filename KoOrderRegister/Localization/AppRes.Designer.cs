@@ -367,6 +367,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No new version.
+        /// </summary>
+        internal static string NoNewVersion {
+            get {
+                return ResourceManager.GetString("NoNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note:.
         /// </summary>
         internal static string NoteLabel {
