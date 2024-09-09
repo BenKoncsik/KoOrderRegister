@@ -78,9 +78,17 @@ namespace KoOrderRegister.Platforms.Android.Services
                 {
                     if (asset.name.ToLower().Contains(architecture.ToLower()))
                     {
-                        msixUrl = asset.browser_download_url;
-                        version = asset.browser_download_url.Split("/").Last().Split("_")[1];
-                        break;
+                        string responseVersion = asset.browser_download_url.Split("/").Last().Split("_")[1];
+                        if (string.IsNullOrEmpty(version))
+                        {
+                            msixUrl = asset.browser_download_url;
+                            version = responseVersion;
+                        }
+                        else if(new Version(version) < new Version(responseVersion))
+                        {
+                            msixUrl = asset.browser_download_url;
+                            version = responseVersion;
+                        }
                     }
 
                 }
