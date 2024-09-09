@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="912" height="2280" viewBox="0 0 912 2280" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+    <rect x="0" y="0" width="456" height="456" fill="#B0E0E6" />
+  <image href="appiconfg.svg" x="456" y="0" width="456" height="456" />
+  <image href="appiconfg.svg" x="0" y="0" width="456" height="456" />
+  
+  <rect x="0" y="456" width="456" height="456" fill="#ADD8E6" />
+  <image href="appiconfg.svg" x="456" y="456" width="456" height="456" />
+  <image href="appiconfg.svg" x="0" y="456" width="456" height="456" />
+  
+   <rect x="0" y="912" width="456" height="456" fill="#87CEEB" />
+  <image href="appiconfg.svg" x="456" y="912" width="456" height="456" />
+  <image href="appiconfg.svg" x="0" y="912" width="456" height="456" />
+  
+	<rect x="0" y="1368" width="456" height="456" fill="#A0D9D9" />
+  <image href="appiconfg.svg" x="456" y="1368" width="456" height="456" />
+  <image href="appiconfg.svg" x="0" y="1368" width="456" height="456" />
+  
+   <rect x="0" y="1824" width="456" height="456" fill="#B2DFEE" />
+  <image href="appiconfg.svg" x="456" y="1824" width="456" height="456" />
+  <image href="appiconfg.svg" x="0" y="1824" width="456" height="456" />
+</svg>
