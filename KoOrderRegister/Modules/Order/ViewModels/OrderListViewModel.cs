@@ -69,7 +69,6 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             {
                 Search(SearchTXT);
             }
-            
         }
 
         public async void DeleteOrder(OrderModel order)

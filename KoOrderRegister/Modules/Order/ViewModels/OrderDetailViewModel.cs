@@ -55,6 +55,59 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
 
+        private DateTime _SelectedStartDate = DateTime.Now;
+        public DateTime SelectedStartDate 
+        {
+            get => _SelectedEndDate;
+            set
+            {
+                if (!value.Equals(_SelectedEndDate))
+                {
+                    _SelectedEndDate = value;
+                    OnPropertyChanged(nameof(SelectedStartDate));
+                }
+            }
+        }
+        private TimeSpan _SelectedStartTime = DateTime.Now.TimeOfDay;
+        public TimeSpan SelectedStartTime 
+        {
+            get => _SelectedStartTime;
+            set
+            {
+                if (value.Equals(_SelectedStartTime))
+                {
+                    _SelectedStartTime = value;
+                    OnPropertyChanged(nameof(SelectedStartTime));
+                }
+            }
+        }
+        private DateTime _SelectedEndDate = DateTime.Now;
+        public DateTime SelectedEndDate 
+        {
+            get => _SelectedEndDate;
+            set
+            {
+                if (value.Equals(_SelectedEndDate))
+                {
+                    _SelectedEndDate = value;
+                    OnPropertyChanged(nameof(SelectedEndDate));
+                }
+            }
+        }
+        private TimeSpan _SelectedEndTime = DateTime.Now.TimeOfDay;
+        public TimeSpan SelectedEndTime
+        {
+            get => _SelectedEndTime;
+            set
+            {
+                if (value.Equals(_SelectedEndTime))
+                {
+                    _SelectedEndTime = value;
+                    OnPropertyChanged(nameof(SelectedEndTime));
+                }
+            }
+        }
+
         public ObservableCollection<CustomerModel> Customers {get; set;} = new ObservableCollection<CustomerModel>();
         private CustomerModel _selectedItem;
         public CustomerModel SelectedItem
@@ -100,6 +153,10 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             SelectedItem = order.Customer;
             Order = order;
+            SelectedEndDate = Order.EndOrder;
+            SelectedEndTime = Order.EndOrder.TimeOfDay;
+            SelectedStartDate = Order.StartDate;
+            SelectedStartTime = Order.StartDate.TimeOfDay;
         }
         public async void SaveOrder()
         {
@@ -133,6 +190,8 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 await Task.WhenAll(tasks);
             }
             IsLoading = false;
+            Order.StartDate = _SelectedStartDate + _SelectedStartTime;
+            Order.EndOrder = _SelectedEndDate + _SelectedEndTime;
             if (await _database.CreateOrder(Order) > 0)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
