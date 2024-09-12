@@ -195,15 +195,16 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
                 await Task.WhenAll(tasks);
             }
-            IsLoading = false;
             Order.StartDate = _SelectedStartDate.Date + _SelectedStartTime;
             Order.EndDate = _SelectedEndDate.Date + _SelectedEndTime;
             if (await _database.CreateOrder(Order) > 0)
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
             }
             else
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + Order.OrderNumber, AppRes.Ok);
             }
         }
@@ -212,12 +213,15 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + Order.OrderNumber, AppRes.No, AppRes.Yes))
             {
+                IsLoading = true;
                 if (await _database.DeleteOrder(Order.Guid) > 0)
                 {
+                    IsLoading = false;
                     Return();
                 }
                 else
                 {
+                    IsLoading = false;
                     await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + Order.OrderNumber, AppRes.Ok);
                 }
             }
@@ -271,11 +275,13 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void RemoveFile(FileModel file)
         {
-            if(file.Content != null)
+            IsLoading = true;
+            if (file.Content != null)
             {
                 await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
+            IsLoading = false;
         }
 
         public async void OpenFile(FileModel file)

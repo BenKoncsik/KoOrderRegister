@@ -204,7 +204,7 @@
         </ScrollView>
         <Grid IsVisible="{Binding IsLoading}"
               BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-              Opacity="0.8">
+              Opacity="0.4">
             <VerticalStackLayout>
                 <ActivityIndicator IsRunning="{Binding IsLoading}"
                                    HorizontalOptions="Center"

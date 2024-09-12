@@ -24,6 +24,16 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public string SearchTXT { get; set; } = "";
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
         protected virtual void OnPropertyChanged(string propertyName)
         {
             try
@@ -67,6 +77,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         {
             if (string.IsNullOrEmpty(SearchTXT))
             {
+                IsLoading = true;
                 if (Customers != null)
                 {
                     Customers.Clear();
@@ -75,6 +86,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 {
                     Customers.Add(customer);
                 }
+                IsLoading = false;
             }
             else
             {
@@ -120,6 +132,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Search(string search)
         {
+            IsLoading = true;
             SearchTXT = search;
             if (Customers != null)
             {
@@ -129,6 +142,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             {
                 Customers.Add(order);
             }
+            IsLoading = false;
         }
     }
 }
