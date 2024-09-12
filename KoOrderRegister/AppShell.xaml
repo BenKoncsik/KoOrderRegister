@@ -13,7 +13,8 @@
 
 
     <Shell.FlyoutFooter>
-        <Label Text="KoOrderRegister | Alpha"
+        <Label Text="KOR V0.0.0"
+               x:Name="AppVersionLabel"
                HorizontalTextAlignment="Center"
                Padding="0, 10" />
     </Shell.FlyoutFooter>

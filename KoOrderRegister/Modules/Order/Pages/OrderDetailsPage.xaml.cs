@@ -46,6 +46,10 @@ public partial class OrderDetailsPage : ContentPage
         }
         _viewModel.IsEdit = false;
         _viewModel.Order = new OrderModel();
+        _viewModel.SelectedStartTime = DateTime.Now.TimeOfDay;
+        _viewModel.SelectedEndTime = DateTime.Now.TimeOfDay;
+        _viewModel.SelectedStartDate = DateTime.Now.Date;
+        _viewModel.SelectedEndDate = DateTime.Now.Date;
     }
 
 }	

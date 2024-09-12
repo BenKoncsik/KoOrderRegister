@@ -27,7 +27,7 @@
 		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.6.19</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.7.15</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -44,18 +44,32 @@
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-		<PackageCertificateThumbprint>9D1DF366CFD9315E597704028A3B72D9AB7F42CA</PackageCertificateThumbprint>
-		<Configurations>Debug;Release;arm</Configurations>
-		<Platforms>AnyCPU;ARM64</Platforms>
-		<!--<PlatformTarget>x64</PlatformTarget>-->
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU</Platforms>
+		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+	
+		
+	</PropertyGroup>
+	<!-- Windows publish -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+	</PropertyGroup>
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
+		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+	</PropertyGroup>
+	<!-- Andoird publish-->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -69,6 +83,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-400.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-lightunplated.png" />
+	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-unplated.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-100.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-125.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
+	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
 	  <None Remove="Resources\Images\add_dark.svg" />
 	  <None Remove="Resources\Images\add_light.svg" />
 	  <None Remove="Resources\Images\ai_dark.svg" />
@@ -112,7 +150,36 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-100.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-125.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-150.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-200.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-400.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-lightunplated.png" />
+	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-unplated.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-100.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-125.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-150.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-200.png" />
+	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-400.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -134,6 +201,9 @@
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\iOS\Utils\DownloadManager.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	</ItemGroup>
@@ -172,6 +242,14 @@
 
 	<ItemGroup>
 	  <Folder Include="Modules\Settings\Services\" />
+	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Platforms\Windows\Icon\%24placeholder%24.scale-125.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

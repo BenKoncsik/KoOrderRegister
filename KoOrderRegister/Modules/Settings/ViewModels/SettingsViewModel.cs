@@ -156,6 +156,11 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         public async void UpdateApp()
         {
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
+            if(string.IsNullOrEmpty(info.NewVersion) || string.IsNullOrEmpty(info.DownloadUrl))
+            {
+                await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.NoNewVersion, AppRes.Ok);
+                return;
+            }
             if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
                 $"{AppRes.NewVersionAvailable}: ${info.OldVersion}-->${info.NewVersion}",
                 AppRes.Ok, AppRes.No))

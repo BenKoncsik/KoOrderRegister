@@ -24,10 +24,11 @@
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.7.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.7.16</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -39,25 +40,39 @@
 		<GenerateAppInstallerFile>True</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-		<AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-		<PackageCertificateThumbprint>9D1DF366CFD9315E597704028A3B72D9AB7F42CA</PackageCertificateThumbprint>
 		<Configurations>Debug;Release</Configurations>
 		<Platforms>AnyCPU</Platforms>
+		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 	
 		
 	</PropertyGroup>
 	<!-- Windows publish -->
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>A10612AF095FD8F8255F4C6691D88F79EF2B135E</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+		
 	</PropertyGroup>
+	<!-- Andoird publish-->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
@@ -78,7 +93,6 @@
 
 	<ItemGroup>
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-125.png" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-400.png" />
@@ -192,7 +206,7 @@
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Platforms\Android\Serivces\UpdateService.cs">
+	  <Compile Update="Platforms\Android\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">
@@ -238,6 +252,13 @@
 	<ItemGroup>
 	  <Folder Include="Modules\Settings\Services\" />
 	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Platforms\Windows\Icon\%24placeholder%24.scale-125.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

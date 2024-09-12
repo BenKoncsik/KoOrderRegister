@@ -372,4 +372,7 @@
   <data name="Downloading" xml:space="preserve">
     <value>Letöltés</value>
   </data>
+  <data name="NoNewVersion" xml:space="preserve">
+    <value>Nincsen újabb verzió</value>
+  </data>
 </root>

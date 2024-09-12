@@ -29,6 +29,8 @@ namespace DownloadManager
             CancellationToken token = default(CancellationToken))
         {
             var path = PlatformFolder();
+            
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
 
             using (var response = await Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
             {

@@ -55,6 +55,59 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
 
+        private DateTime _SelectedStartDate = DateTime.Now;
+        public DateTime SelectedStartDate 
+        {
+            get => _SelectedStartDate;
+            set
+            {
+                if (!value.Equals(_SelectedStartDate))
+                {
+                    _SelectedStartDate = value;
+                    OnPropertyChanged(nameof(SelectedStartDate));
+                }
+            }
+        }
+        private TimeSpan _SelectedStartTime = DateTime.Now.TimeOfDay;
+        public TimeSpan SelectedStartTime 
+        {
+            get => _SelectedStartTime;
+            set
+            {
+                if (!value.Equals(_SelectedStartTime))
+                {
+                    _SelectedStartTime = value;
+                    OnPropertyChanged(nameof(SelectedStartTime));
+                }
+            }
+        }
+        private DateTime _SelectedEndDate = DateTime.Now;
+        public DateTime SelectedEndDate 
+        {
+            get => _SelectedEndDate;
+            set
+            {
+                if (!value.Equals(_SelectedEndDate))
+                {
+                    _SelectedEndDate = value;
+                    OnPropertyChanged(nameof(SelectedEndDate));
+                }
+            }
+        }
+        private TimeSpan _SelectedEndTime = DateTime.Now.TimeOfDay;
+        public TimeSpan SelectedEndTime
+        {
+            get => _SelectedEndTime;
+            set
+            {
+                if (!value.Equals(_SelectedEndTime))
+                {
+                    _SelectedEndTime = value;
+                    OnPropertyChanged(nameof(SelectedEndTime));
+                }
+            }
+        }
+
         public ObservableCollection<CustomerModel> Customers {get; set;} = new ObservableCollection<CustomerModel>();
         private CustomerModel _selectedItem;
         public CustomerModel SelectedItem
@@ -100,6 +153,16 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             SelectedItem = order.Customer;
             Order = order;
+            SelectedEndDate = Order.EndDate;
+            SelectedEndTime = Order.EndDate.TimeOfDay;
+            SelectedStartDate = Order.StartDate;
+            SelectedStartTime = Order.StartDate.TimeOfDay;
+#if DEBUG
+            Console.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
+            Console.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
+#endif
         }
         public async void SaveOrder()
         {
@@ -132,13 +195,16 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
                 await Task.WhenAll(tasks);
             }
-            IsLoading = false;
+            Order.StartDate = _SelectedStartDate.Date + _SelectedStartTime;
+            Order.EndDate = _SelectedEndDate.Date + _SelectedEndTime;
             if (await _database.CreateOrder(Order) > 0)
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
             }
             else
             {
+                IsLoading = false;
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + Order.OrderNumber, AppRes.Ok);
             }
         }
@@ -147,12 +213,15 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + Order.OrderNumber, AppRes.No, AppRes.Yes))
             {
+                IsLoading = true;
                 if (await _database.DeleteOrder(Order.Guid) > 0)
                 {
+                    IsLoading = false;
                     Return();
                 }
                 else
                 {
+                    IsLoading = false;
                     await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + Order.OrderNumber, AppRes.Ok);
                 }
             }
@@ -206,11 +275,13 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void RemoveFile(FileModel file)
         {
-            if(file.Content != null)
+            IsLoading = true;
+            if (file.Content != null)
             {
                 await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
+            IsLoading = false;
         }
 
         public async void OpenFile(FileModel file)

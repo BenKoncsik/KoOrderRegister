@@ -71,20 +71,24 @@ namespace KoOrderRegister
 #if WINDOWS
                 builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Windows.Service.UpdateService>();
 #elif ANDROID
-            builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Android.Service.UpdateService>();
+            builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Android.Services.UpdateService>();
+            builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
+
 #else
             builder.Services.AddSingleton<IAppUpdateService, PlaceHolderAppUpdateService>();
 #endif
-
+            
             #endregion
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
+            #region Language settings
             ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
+            languageSettings.SetRegioSpecification();
             CultureInfo culture = new CultureInfo(languageSettings.GetCultureName());
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
+            #endregion
             return builder.Build();
         }
     }

@@ -6,6 +6,7 @@ namespace KoOrderRegister
 {
     public partial class App : Application
     {
+        private readonly AppShell _appShell;
         public App()
         {
             InitializeComponent();

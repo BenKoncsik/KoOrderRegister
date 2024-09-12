@@ -19,6 +19,16 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     {
         private readonly IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
         public string SearchTXT { get; set; } = "";
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
         #region Commands
@@ -53,8 +63,10 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
+            
             if (string.IsNullOrEmpty(SearchTXT))
             {
+                IsLoading = true;
                 var orderRun = _database.GetAllOrders();
                 if (Orders != null)
                 {
@@ -64,6 +76,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 {
                     Orders.Add(order);
                 }
+                IsLoading = false;
             }
             else
             {
@@ -89,6 +102,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void Search(string search)
         {
+            IsLoading = true;
             SearchTXT = search;
             if (Orders != null)
             {
@@ -98,6 +112,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             {
                 Orders.Add(order);
             }
+            IsLoading = false;
         }
     }
 }

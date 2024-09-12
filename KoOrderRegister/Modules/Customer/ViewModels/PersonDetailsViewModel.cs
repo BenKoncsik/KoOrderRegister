@@ -42,9 +42,17 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 OnPropertyChanged(nameof(IsEdit));
             }
         }
-
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -56,8 +64,10 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void SavePerson()
         {
+            IsLoading = true;
             int result = await _database.CreateCustomer(Customer);
-            if(result == 1)
+            IsLoading = false;
+            if (result == 1)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Customer.Name, AppRes.Ok);
             }
@@ -69,12 +79,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void DeletePerson()
         {
-            
+            IsLoading = true;
             if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + Customer.Name, AppRes.Yes, AppRes.No))
             {
                 if (Customer != null)
                 {
                     int result = await _database.DeleteCustomer(Guid.Parse(Customer.Id));
+                    IsLoading = false;
                     if (result > 0)
                     {
                         ClosePage();

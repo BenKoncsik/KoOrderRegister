@@ -55,18 +55,25 @@
                            Grid.Row="2"
                            Grid.Column="0"
                            VerticalOptions="Center" />
-                    <DatePicker Date="{Binding Order.StartDate}"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Margin="10, 0, 10,10" />
+                    <HorizontalStackLayout Grid.Row="2"
+                                           Grid.Column="1"
+                                           Margin="10, 0, 10,10">
+                        <DatePicker Date="{Binding SelectedStartDate}"/>
+                        <TimePicker Time="{Binding SelectedStartTime}"
+                                    Margin="10, 10, 0, 0"/>
+                    </HorizontalStackLayout>
+
                     <Label Text="{x:Static res:AppRes.OutDateLabel}"
                            Grid.Row="3"
                            Grid.Column="0"
                            VerticalOptions="Center" />
-                    <DatePicker Date="{Binding Order.EndOrder}"
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Margin="10, 0, 10,10" />
+                    <HorizontalStackLayout Grid.Row="3"
+                                           Grid.Column="1"
+                                           Margin="10, 0, 10,10">
+                        <DatePicker Date="{Binding SelectedEndDate}" />
+                        <TimePicker Time="{Binding SelectedEndTime}"
+                                    Margin="10, 10, 0, 0" />
+                    </HorizontalStackLayout>
                     <!-- Product id-->
                     <Label Text="{x:Static res:AppRes.ProductIdLabel}"
                            Grid.Row="4"
@@ -197,7 +204,7 @@
         </ScrollView>
         <Grid IsVisible="{Binding IsLoading}"
               BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-              Opacity="0.8">
+              Opacity="0.4">
             <VerticalStackLayout>
                 <ActivityIndicator IsRunning="{Binding IsLoading}"
                                    HorizontalOptions="Center"

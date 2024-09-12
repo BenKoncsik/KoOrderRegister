@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using KoOrderRegister.Utility;
+using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace KoOrderRegister.Modules.Database.Models
         [JsonProperty("startDate")]
         public DateTime StartDate { get; set; } = DateTime.Now;
         [JsonProperty("endOrder")]
-        public DateTime EndOrder { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; } = DateTime.Now;
 
         [JsonProperty("customerId")]
         public string CustomerId { get; set; }
@@ -41,6 +42,9 @@ namespace KoOrderRegister.Modules.Database.Models
         [Ignore]
         [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);
+        [Ignore]
+        [JsonIgnore]
+        public string OrderDate => $"{StartDate.ToString(DateFormat.DateTimeFormat)} - {EndDate.ToString(DateFormat.DateTimeFormat)}";
 
         public OrderModel()
         {

@@ -29,14 +29,25 @@ echo Updated version to %NEW_VERSION%
 echo Updating the project file with new version...
 powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
+echo Please enter your keystore password:
+set /p KEYPASS=""
+
+
+
 echo Publishing the application...
-dotnet publish "..\KoOrderRegister.sln" -c Release -f net8.0-android
+REM dotnet publish "..\KoOrderRegister.csproj" -c Release -f net8.0-android
+dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
+
+REM echo Delete key store password
+REM set "KeystorePassword="
 
 REM Cél APK útvonal
 set "ORIGINAL_APK=..\bin\Release\net8.0-android\hu.kncsk.koorderregister-Signed.apk"
 
 REM Új APK neve a frissített verzióval
 set "NEW_APK_NAME=..\bin\Release\net8.0-android\KoOrderRegister_%NEW_VERSION%_android.apk"
+
+
 
 echo Renaming the APK file...
 move "%ORIGINAL_APK%" "%NEW_APK_NAME%"

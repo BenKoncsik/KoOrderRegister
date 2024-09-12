@@ -17,6 +17,8 @@ namespace KoOrderRegister.Services
             return string.Empty;
         }
 
+        public string AppVersion => "0.0.0";
+
 
     }
 }

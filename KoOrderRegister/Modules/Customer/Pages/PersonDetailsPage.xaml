@@ -119,7 +119,22 @@
                         Margin="10, 10, 10, 10"
                         />
             </Grid>
-            
+            <Grid IsVisible="{Binding IsLoading}"
+                  BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
+                  Opacity="0.4">
+                <VerticalStackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="250"
+                                       WidthRequest="250"
+                                       VerticalOptions="Center"
+                                       Margin="25" />
+                    <Label Text="{x:Static res:AppRes.Loading}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           Margin="20" />
+                </VerticalStackLayout>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

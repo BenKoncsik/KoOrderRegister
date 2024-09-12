@@ -386,4 +386,8 @@
     <value>Downloading</value>
     <comment>Downloading</comment>
   </data>
+  <data name="NoNewVersion" xml:space="preserve">
+    <value>No new version</value>
+    <comment>NoNewVersion</comment>
+  </data>
 </root>
