@@ -25,7 +25,8 @@
             <Grid RowDefinitions="*,*">
                 <Grid Padding="10"
                       RowDefinitions="Auto"
-                      ColumnDefinitions="*,*,*">
+                      ColumnDefinitions="*,*,*"
+                      Grid.Row="0">
                     <Label Text="{x:Static res:AppRes.Name}"
                            Grid.Column="0"
                            FontAttributes="Bold"
@@ -40,7 +41,8 @@
                            HorizontalOptions="Center" />
                 </Grid>
                 <ListView x:Name="customersListView"
-                          ItemsSource="{Binding Customers}">
+                          ItemsSource="{Binding Customers}"
+                          Grid.Row="1">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
