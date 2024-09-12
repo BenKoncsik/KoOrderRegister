@@ -84,6 +84,7 @@ namespace KoOrderRegister
 #endif
             #region Language settings
             ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
+            languageSettings.SetRegioSpecification();
             CultureInfo culture = new CultureInfo(languageSettings.GetCultureName());
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;

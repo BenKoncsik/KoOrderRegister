@@ -58,12 +58,12 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         private DateTime _SelectedStartDate = DateTime.Now;
         public DateTime SelectedStartDate 
         {
-            get => _SelectedEndDate;
+            get => _SelectedStartDate;
             set
             {
-                if (!value.Equals(_SelectedEndDate))
+                if (!value.Equals(_SelectedStartDate))
                 {
-                    _SelectedEndDate = value;
+                    _SelectedStartDate = value;
                     OnPropertyChanged(nameof(SelectedStartDate));
                 }
             }
@@ -74,7 +74,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             get => _SelectedStartTime;
             set
             {
-                if (value.Equals(_SelectedStartTime))
+                if (!value.Equals(_SelectedStartTime))
                 {
                     _SelectedStartTime = value;
                     OnPropertyChanged(nameof(SelectedStartTime));
@@ -87,7 +87,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             get => _SelectedEndDate;
             set
             {
-                if (value.Equals(_SelectedEndDate))
+                if (!value.Equals(_SelectedEndDate))
                 {
                     _SelectedEndDate = value;
                     OnPropertyChanged(nameof(SelectedEndDate));
@@ -100,7 +100,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             get => _SelectedEndTime;
             set
             {
-                if (value.Equals(_SelectedEndTime))
+                if (!value.Equals(_SelectedEndTime))
                 {
                     _SelectedEndTime = value;
                     OnPropertyChanged(nameof(SelectedEndTime));
@@ -153,10 +153,16 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             SelectedItem = order.Customer;
             Order = order;
-            SelectedEndDate = Order.EndOrder;
-            SelectedEndTime = Order.EndOrder.TimeOfDay;
+            SelectedEndDate = Order.EndDate;
+            SelectedEndTime = Order.EndDate.TimeOfDay;
             SelectedStartDate = Order.StartDate;
             SelectedStartTime = Order.StartDate.TimeOfDay;
+#if DEBUG
+            Console.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
+            Console.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
+#endif
         }
         public async void SaveOrder()
         {
@@ -190,8 +196,8 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 await Task.WhenAll(tasks);
             }
             IsLoading = false;
-            Order.StartDate = _SelectedStartDate + _SelectedStartTime;
-            Order.EndOrder = _SelectedEndDate + _SelectedEndTime;
+            Order.StartDate = _SelectedStartDate.Date + _SelectedStartTime;
+            Order.EndDate = _SelectedEndDate.Date + _SelectedEndTime;
             if (await _database.CreateOrder(Order) > 0)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KoOrderRegister.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage.Language
 
         public async Task SetRegioSpecification()
         {
-           
+            DateFormat.SetLocalFormat(@"yyyy.MM.dd HH:mm");
         }
     }
 }
