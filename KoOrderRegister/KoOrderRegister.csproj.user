@@ -7,7 +7,7 @@
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
     <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
     <AppxShowAllApps>False</AppxShowAllApps>
-    <_LastSelectedProfileId>MSIX-win10-x64.pubxml</_LastSelectedProfileId>
+    <_LastSelectedProfileId>MSIX-win10-x86.pubxml</_LastSelectedProfileId>
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
     <DefaultDevice>Windows Subsystem for Android</DefaultDevice>
     <AppIconSource>I:\xampp\htdocs\gitHub\KoOrderRegister\KoOrderRegister\Resources\AppIcon\icon.png</AppIconSource>

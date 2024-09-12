@@ -24,10 +24,11 @@
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.7.15</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.8.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -55,9 +56,17 @@
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+		
 	</PropertyGroup>
 	<!-- Andoird publish-->
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
@@ -197,7 +206,7 @@
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Platforms\Android\Serivces\UpdateService.cs">
+	  <Compile Update="Platforms\Android\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">

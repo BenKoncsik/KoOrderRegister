@@ -90,6 +90,6 @@ namespace KoOrderRegister.EntryCheckers.INS
                  unformattedPosition = Math.Min(unformattedPosition, unformattedText.Length);
                  string formattedSubstring = FormatText(unformattedText.Substring(0, unformattedPosition));
                  return formattedSubstring.Length;
-             }
-         }*/
-        }
+             }*/
+    }
+}
