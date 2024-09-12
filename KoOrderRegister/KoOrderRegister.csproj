@@ -28,7 +28,7 @@
 		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.8.1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.8.19</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -46,9 +46,9 @@
 		<AppInstallerUri>https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<Configurations>Debug;Release</Configurations>
-		<Platforms>AnyCPU</Platforms>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
+		<Platforms>x64</Platforms>
 	
 		
 	</PropertyGroup>
@@ -57,11 +57,18 @@
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
+		<PublishSingleFile>false</PublishSingleFile>
+
+		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<Platform>x64</Platform>
+		<Configuration>Release</Configuration>
+		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+		<PublishReadyToRun>false</PublishReadyToRun>
+		<SelfContained>True</SelfContained>
+		<PublishAppxPackage>true</PublishAppxPackage>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
-		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
