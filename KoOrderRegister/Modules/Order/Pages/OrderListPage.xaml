@@ -8,29 +8,36 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{x:Static res:AppRes.Update}"
                      IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
-                     Command="{Binding UpdateOrderCommand}" />
+                     Command="{Binding UpdateOrderCommand}"
+                     ToolTipProperties.Text="{x:Static res:AppRes.Update}"
+                     />
         <ToolbarItem Text="{x:Static res:AppRes.AddNewOrder}"
                      IconImageSource="{AppThemeBinding Light='add_light.png', Dark='add_dark.png'}"
-                     Command="{Binding AddNewOrderCommand}" />
+                     Command="{Binding AddNewOrderCommand}"
+                     ToolTipProperties.Text="{x:Static res:AppRes.AddNewOrder}"
+                     />
        
     </ContentPage.ToolbarItems>
  
     <ScrollView>
-        <VerticalStackLayout Padding="20">
+        <VerticalStackLayout>
+            <StackLayout  Padding="3, 10, 3, 20">
             <SearchBar x:Name="searchBar"
                        Placeholder="{x:Static res:AppRes.Search}"
                        TextChanged="OnTextChanged"
                        SearchCommand="{Binding SearchCommand}"
                        SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+            </StackLayout>
             <Grid RowDefinitions="*,*">
-            <Grid Padding="10"
+            <Grid Padding="3, 0, 0, 3"
                       RowDefinitions="Auto"
                       ColumnDefinitions="*,*,*"
                   Grid.Row="0">
                     <Label Text="{x:Static res:AppRes.OrderNumber}"
                            Grid.Column="0"
                            FontAttributes="Bold"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
                     <Label Text="{x:Static res:AppRes.Date}"
                            Grid.Column="1"
                            FontAttributes="Bold"
@@ -58,8 +65,7 @@
                                               Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=ordersListView}}"
                                               CommandParameter="{Binding .}" />
                                 </ViewCell.ContextActions>
-                                <Grid Padding="10"
-                                      RowDefinitions="Auto, Auto"
+                                <Grid RowDefinitions="Auto, Auto"
                                       ColumnDefinitions="*,*,*">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer NumberOfTapsRequired="1"
@@ -68,13 +74,22 @@
                                     </Grid.GestureRecognizers>
                                     <Label Text="{Binding OrderNumber}"
                                            Grid.Column="0"
-                                           HorizontalOptions="Center" />
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Margin="2, 25, 0, 25"
+                                           />
                                     <Label Text="{Binding OrderDate}"
                                            Grid.Column="1"
-                                           HorizontalOptions="Center" />
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Margin="2, 25, 0, 25"
+                                           />
                                     <Label Text="{Binding Customer.Name}"
                                            Grid.Column="2"
-                                           HorizontalOptions="Center" />
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Margin="2, 25, 0, 25"
+                                           />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
