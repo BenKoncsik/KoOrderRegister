@@ -1,36 +1,35 @@
-﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Services;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Net.Http;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace KoOrderRegister.Platforms.Android.Services
+namespace KoOrderRegister.Services
 {
-    public class UpdateService : IAppUpdateService
+    public class AppUpdateService : IAppUpdateService
     {
+        private readonly IVersionService _versionService;
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
-        private static DateTime _lastUpdateCheck = DateTime.MinValue;
-        public string AppVersion => MainActivity.AppVersion;
-        public UpdateService(IHttpClientFactory httpClientFactory)
+        public string AppVersion { get; }
+        public AppUpdateService(IHttpClientFactory httpClientFactory, IVersionService versionService)
         {
-            AppShell.AppVersion = AppVersion;
+            _versionService = versionService;
+            AppVersion = _versionService.AppVersion;
+            AppShell.AppVersion = _versionService.AppVersion;
             _httpClient = httpClientFactory.CreateClient("GitHubClient");
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("YourApp");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("app-client");
         }
-
         public async Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync()
         {
             try
             {
                 var (latestVersion, msixUrl) = await GetLatestReleaseInfoAsync();
-                if (string.IsNullOrEmpty(latestVersion))
-                {
-                    return new AppUpdateInfo();
-                }
+                if (latestVersion == null) return new AppUpdateInfo();
 
-                var currentVersion = MainActivity.AppVersion;
+                var currentVersion = _versionService.AppVersion;
                 if (new Version(latestVersion) > new Version(currentVersion))
                 {
                     return new AppUpdateInfo
@@ -59,12 +58,11 @@ namespace KoOrderRegister.Platforms.Android.Services
                 Console.WriteLine(ex.Message);
                 return new AppUpdateInfo();
             }
-            
         }
-
-
         public async Task<(string version, string msixUrl)> GetLatestReleaseInfoAsync()
         {
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "app-client");
+
             var response = await _httpClient.GetAsync(_apiUrl);
             if (response.IsSuccessStatusCode)
             {
@@ -72,8 +70,7 @@ namespace KoOrderRegister.Platforms.Android.Services
                 var release = JsonConvert.DeserializeObject<GitHubRelease>(jsonResponse);
                 string msixUrl = string.Empty;
                 string version = string.Empty;
-                // Check for the correct architecture
-                var architecture = "android";
+                var architecture = _versionService.DeviceType.ToLowerInvariant();
                 foreach (var asset in release.Assets)
                 {
                     if (asset.name.ToLower().Contains(architecture.ToLower()))
@@ -84,7 +81,7 @@ namespace KoOrderRegister.Platforms.Android.Services
                             msixUrl = asset.browser_download_url;
                             version = responseVersion;
                         }
-                        else if(new Version(version) < new Version(responseVersion))
+                        else if (new Version(version) < new Version(responseVersion))
                         {
                             msixUrl = asset.browser_download_url;
                             version = responseVersion;
@@ -110,13 +107,13 @@ namespace KoOrderRegister.Platforms.Android.Services
                 public string name { get; set; }
             }
         }
+
         public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
         {
             DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
-            return await DownloadManager.DownloadManager.DownloadAsync("KOR_update.apk", fileUrl, progress);
+            return await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
         }
 
 
     }
 }
-
