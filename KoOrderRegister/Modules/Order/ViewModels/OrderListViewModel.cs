@@ -30,18 +30,27 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
         }
         public string SearchTXT { get; set; } = "";
+        private CancellationTokenSource _searchCancellationTokenSource;
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
         #region Commands
-        public ICommand AddNewOrderCommand => new Command(NewOrder);
-        public Command<OrderModel> EditOrderCommand => new Command<OrderModel>(EditOrder);
-        public Command<OrderModel> DeleteOrderCommand => new Command<OrderModel>(DeleteOrder);
-        public ICommand UpdateOrderCommand => new Command(UpdateOrders);
-        public Command<string> SearchCommand => new Command<string>(Search);
+        public ICommand AddNewOrderCommand { get; }
+        public ICommand EditOrderCommand { get; }
+        public ICommand DeleteOrderCommand { get; }
+        public ICommand UpdateOrderCommand { get; }
+        public ICommand SearchCommand { get; }
         #endregion
         public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage)
         {
             _database = database;
             _orderDetailsPage = orderDetailsPage;
+
+            AddNewOrderCommand = new Command(NewOrder);
+            EditOrderCommand = new Command<OrderModel>(EditOrder);
+            DeleteOrderCommand = new Command<OrderModel>(DeleteOrder);
+            UpdateOrderCommand = new Command(UpdateOrders);
+            SearchCommand = new Command<string>(Search);
+
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -102,17 +111,45 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void Search(string search)
         {
+            _searchCancellationTokenSource?.Cancel();
+
+            _searchCancellationTokenSource = new CancellationTokenSource();
+            var token = _searchCancellationTokenSource.Token;
+
+            try
+            {
+                
+                await Task.Delay(300, token);
+
+                
+                if (!token.IsCancellationRequested)
+                {
+                    await PerformSearch(search);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                
+            }
+        }
+
+        private async Task PerformSearch(string search)
+        {
             IsLoading = true;
             SearchTXT = search;
-            if (Orders != null)
+            Orders?.Clear();
+
+            var searchResults = await _database.SearchOrders(search);
+            foreach (var order in searchResults)
             {
-                Orders.Clear();
+                if (!Orders.Any(o => o.Id.Equals(order.Id)))
+                {
+                    Orders?.Add(order);
+                }
             }
-            foreach (var order in await _database.SearchOrders(search))
-            {
-                Orders.Add(order);
-            }
+
             IsLoading = false;
         }
+
     }
 }
