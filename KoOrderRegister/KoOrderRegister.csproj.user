@@ -9,7 +9,7 @@
     <AppxShowAllApps>False</AppxShowAllApps>
     <_LastSelectedProfileId>MSIX-win10-x64.pubxml</_LastSelectedProfileId>
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
-    <DefaultDevice>Windows Subsystem for Android</DefaultDevice>
+    <DefaultDevice>pixel_5_-_api_33</DefaultDevice>
     <AppIconSource>I:\xampp\htdocs\gitHub\KoOrderRegister\KoOrderRegister\Resources\AppIcon\icon.png</AppIconSource>
     <SplashScreenSource>I:\xampp\htdocs\gitHub\KoOrderRegister\KoOrderRegister\Resources\Splash\windows_splash.png</SplashScreenSource>
   </PropertyGroup>

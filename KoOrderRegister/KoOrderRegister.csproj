@@ -82,7 +82,9 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicont.png" BaseSize="512,512" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicontr.png" BaseSize="512,512" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
@@ -99,6 +101,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Android\AndroidManifest.xml" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
 	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
@@ -166,6 +169,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidManifestOverlay Include="Platforms\Android\AndroidManifest.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-100.png" />
 	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-125.png" />
 	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-150.png" />
@@ -196,8 +203,8 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.90" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.90" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Mopups" Version="1.3.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
