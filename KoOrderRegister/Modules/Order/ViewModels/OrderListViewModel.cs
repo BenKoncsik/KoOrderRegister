@@ -5,11 +5,11 @@ using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Utility;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -19,19 +19,31 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     {
         private readonly IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
+
         private bool _isLoading = false;
         public bool IsLoading
         {
             get => _isLoading;
             set
             {
-                _isLoading = value;
-                OnPropertyChanged(nameof(IsLoading));
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
             }
         }
+
         public string SearchTXT { get; set; } = "";
         private CancellationTokenSource _searchCancellationTokenSource;
+
+        private int updatePage = 1;
+        private int searchPage = 1;
+        private bool hasMoreUpdateItems = true;
+        private bool hasMoreSearchItems = true;
+
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
+
         #region Commands
         public ICommand AddNewOrderCommand { get; }
         public ICommand EditOrderCommand { get; }
@@ -39,6 +51,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand UpdateOrderCommand { get; }
         public ICommand SearchCommand { get; }
         #endregion
+
         public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage)
         {
             _database = database;
@@ -49,16 +62,22 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             DeleteOrderCommand = new Command<OrderModel>(DeleteOrder);
             UpdateOrderCommand = new Command(UpdateOrders);
             SearchCommand = new Command<string>(Search);
-
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (TargetInvocationException ex)
+            {
+                Console.WriteLine($"Inner Exception: {ex.InnerException}");
+            }
         }
+
         public async void NewOrder()
         {
             await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
@@ -72,31 +91,47 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
-            
-            if (string.IsNullOrEmpty(SearchTXT))
+            hasMoreUpdateItems = true;
+            updatePage = 1;
+            _updateOrders();
+        }
+        private async void _updateOrders()
+        {
+            if (IsLoading || !hasMoreUpdateItems)
+                return;
+
+            IsLoading = updatePage == 1 ? true : false;
+            hasMoreUpdateItems = true;
+            var orders = await _database.GetAllOrders(updatePage);
+
+            if (orders.Count > 0)
             {
-                IsLoading = true;
-                var orderRun = _database.GetAllOrders();
-                if (Orders != null)
+                foreach (var order in orders)
                 {
-                    Orders.Clear();
+                    if (!Orders.Any(o => o.Id.Equals(order.Id)))
+                    {
+                        Orders.Add(order);
+                    }
                 }
-                foreach (var order in await orderRun)
-                {
-                    Orders.Add(order);
-                }
-                IsLoading = false;
+
+                updatePage++; 
             }
             else
             {
-                Search(SearchTXT);
+                hasMoreUpdateItems = false; 
             }
-            
+
+            IsLoading = false;
+            if (hasMoreUpdateItems)
+            {
+                _updateOrders();
+            }
         }
 
         public async void DeleteOrder(OrderModel order)
         {
-            if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.No, AppRes.Yes))
+            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.Yes, AppRes.No);
+            if (result)
             {
                 if (await _database.DeleteOrder(order.Guid) > 0)
                 {
@@ -109,8 +144,13 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
         }
 
-        public async void Search(string search)
+        public void Search(string search)
         {
+            
+            searchPage = 1;
+            hasMoreSearchItems = true;
+            Orders.Clear();
+
             _searchCancellationTokenSource?.Cancel();
 
             _searchCancellationTokenSource = new CancellationTokenSource();
@@ -118,38 +158,68 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
             try
             {
-                
-                await Task.Delay(300, token);
-
-                
-                if (!token.IsCancellationRequested)
+                Task.Delay(300, token).ContinueWith(async t =>
                 {
-                    await PerformSearch(search);
-                }
+                    if (!token.IsCancellationRequested)
+                    {
+                        await PerformSearch(search);
+                    }
+                }, token);
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException ex)
             {
-                
+                Console.WriteLine(ex);
             }
         }
 
         private async Task PerformSearch(string search)
         {
-            IsLoading = true;
-            SearchTXT = search;
-            Orders?.Clear();
-
-            var searchResults = await _database.SearchOrders(search);
-            foreach (var order in searchResults)
+            if (!hasMoreSearchItems)
             {
-                if (!Orders.Any(o => o.Id.Equals(order.Id)))
-                {
-                    Orders?.Add(order);
-                }
+                return;
             }
 
+            IsLoading = searchPage == 1 ? true : false;
+            SearchTXT = search;
+
+            var searchResults = await _database.SearchOrders(search, searchPage);
+
+            if (searchResults.Count > 0)
+            {
+                foreach (var order in searchResults)
+                {
+                    if (!Orders.Any(o => o.Id.Equals(order.Id)))
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Orders?.Add(order);
+                        });
+                    }
+                }
+
+                searchPage++;   
+            }
+            else
+            {
+                hasMoreSearchItems = false; 
+            }
             IsLoading = false;
+            await PerformSearch(SearchTXT);
         }
 
+        public void LoadMoreItems()
+        {
+            if (IsLoading)
+                return;
+
+            if (string.IsNullOrEmpty(SearchTXT))
+            {
+                UpdateOrders();
+            }
+            else
+            {
+                _ = PerformSearch(SearchTXT);
+            }
+        }
     }
 }

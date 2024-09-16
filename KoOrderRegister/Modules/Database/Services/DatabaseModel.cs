@@ -1,7 +1,9 @@
 ﻿using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Utility;
+using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
+
 namespace KoOrderRegister.Modules.Database.Services
 {
     public class DatabaseModel : IDatabaseModel
@@ -12,7 +14,9 @@ namespace KoOrderRegister.Modules.Database.Services
         private static string CUSTOMER_TABLE = "Customers";
         private static string ORDER_TABLE = "Orders";
         private static string FILES_TABLE = "Files";
-        
+
+        private static int PAGE_SIZE = 5;
+
 
         public DatabaseModel()
         {
@@ -60,7 +64,9 @@ namespace KoOrderRegister.Modules.Database.Services
             var customer = await Database.FindAsync<CustomerModel>(stringId);
             if (customer != null)
             {
-                var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId.Equals(stringId)).ToListAsync();
+                var orders = await Database.Table<OrderModel>()
+                    .Where(o => o.CustomerId.Equals(stringId))
+                    .ToListAsync();
                 foreach (var order in orders)
                 {
                     order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
@@ -71,19 +77,45 @@ namespace KoOrderRegister.Modules.Database.Services
         }
 
 
-        public async Task<List<CustomerModel>> GetAllCustomers()
+        public async Task<List<CustomerModel>> GetAllCustomers(int page = int.MinValue)
         {
-            var customers = await Database.Table<CustomerModel>().ToListAsync();
-            foreach (var customer in customers)
+            if(page == int.MinValue)
             {
-                var orders = await Database.Table<OrderModel>().Where(o => o.CustomerId == customer.Id).ToListAsync();
-                foreach (var order in orders)
+                var customers = await Database.Table<CustomerModel>().ToListAsync();
+                foreach (var customer in customers)
                 {
-                    order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                    var orders = await Database.Table<OrderModel>()
+                        .Where(o => o.CustomerId == customer.Id)
+                        .ToListAsync();
+                    foreach (var order in orders)
+                    {
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                    }
+                    customer.Orders = orders;
                 }
-                customer.Orders = orders;
+                return customers;
             }
-            return customers;
+            else
+            {
+                var customers = await Database.Table<CustomerModel>()
+                    .ThenBy(c => c.Name)
+                    .Skip((page - 1) * PAGE_SIZE)
+                    .Take(PAGE_SIZE)
+                    .ToListAsync();
+                foreach (var customer in customers)
+                {
+                    var orders = await Database.Table<OrderModel>()
+                        .Where(o => o.CustomerId == customer.Id)
+                        .ToListAsync();
+                    foreach (var order in orders)
+                    {
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                    }
+                    customer.Orders = orders;
+                }
+                return customers;
+            }
+            
         }
 
 
@@ -107,24 +139,46 @@ namespace KoOrderRegister.Modules.Database.Services
             return 0;
         }
 
-        public async Task<List<CustomerModel>> SearchCustomer(string search)
+        public async Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue)
         {
             if (string.IsNullOrEmpty(search))
             {
                 return await GetAllCustomers();
             }
-
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
+            List<CustomerModel> customers = new List<CustomerModel>();
 
-            var query = $@"SELECT * FROM {CUSTOMER_TABLE} 
-                           WHERE LOWER(Name) LIKE ? OR 
-                                 LOWER(Address) LIKE ? OR
-                                 LOWER(Phone) LIKE ? OR
-                                 LOWER(Email) LIKE ? OR
-                                 LOWER(Note) LIKE ? OR
-                                 LOWER(NationalHealthInsurance) LIKE ?";
-  
-            return await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+            if (page != int.MinValue)
+            {
+                string query = $@"SELECT * FROM {CUSTOMER_TABLE} 
+                       WHERE LOWER(Name) LIKE ? OR 
+                       LOWER(Address) LIKE ? OR
+                       LOWER(Phone) LIKE ? OR
+                       LOWER(Email) LIKE ? OR
+                       LOWER(Note) LIKE ? OR
+                       LOWER(NationalHealthInsurance) LIKE ?";
+                customers = await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+            }
+            else
+            {
+                string query = $@"
+                      SELECT * FROM {CUSTOMER_TABLE}
+                      WHERE LOWER(Name) LIKE ? OR 
+                      LOWER(Address) LIKE ? OR
+                      LOWER(Phone) LIKE ? OR
+                      LOWER(Email) LIKE ? OR
+                      LOWER(Note) LIKE ? OR
+                      LOWER(NationalHealthInsurance) LIKE ?
+                      LIMIT ?
+                      OFFSET ?";
+               customers = await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, 
+                    likeQuery, likeQuery, likeQuery, PAGE_SIZE,  (PAGE_SIZE * (page - 1)));
+            }
+           return customers
+                .GroupBy(c => c.Id)
+                .Select(g => g.First())
+                .ToList();
+
         }
         #endregion
         #region OrderModel CRUD Implementation
@@ -152,22 +206,37 @@ namespace KoOrderRegister.Modules.Database.Services
             return order;
         }
 
-        public async Task<List<OrderModel>> GetAllOrders()
+        public async Task<List<OrderModel>> GetAllOrders(int page = int.MinValue)
         {
-            var orders = await Database.Table<OrderModel>().ToListAsync();
+            List<OrderModel> orders = new List<OrderModel>();
+            if (page == int.MinValue)
+            {
+                orders = await Database.Table<OrderModel>()
+                    .OrderBy(o => o.StartDate)
+                    .ToListAsync();  
+            }
+            else
+            {
+                orders = await Database.Table<OrderModel>()
+                    .ThenBy(o => o.StartDate)
+                    .Skip((page - 1) * PAGE_SIZE)
+                    .Take(PAGE_SIZE).ToListAsync();
+            }
             var tasks = orders.Select(order =>
-                 ThreadManager.Run(async () =>
-                 {
-                     var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(order.Id)).CountAsync();
-                     if (fileCount > 0)
-                     {
-                         order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
-                     }
-                     if (!string.IsNullOrEmpty(order.CustomerId))
-                     {
-                         order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
-                     }
-                 }));
+                    ThreadManager.Run(async () =>
+                    {
+                        var fileCount = await Database.Table<FileModel>()
+                        .Where(f => f.OrderId.Equals(order.Id))
+                        .CountAsync();
+                        if (fileCount > 0)
+                        {
+                            order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                        }
+                        if (!string.IsNullOrEmpty(order.CustomerId))
+                        {
+                            order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                        }
+                    }));
 
             await Task.WhenAll(tasks);
             return orders;
@@ -193,14 +262,19 @@ namespace KoOrderRegister.Modules.Database.Services
             return 0;
         }
 
-        public async Task<List<OrderModel>> SearchOrders(string search)
+        public async Task<List<OrderModel>> SearchOrders(string search, int page = int.MinValue)
         {
             if (string.IsNullOrEmpty(search))
             {
                 return await GetAllOrders();
             }
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
-            var query = $@"SELECT o.* FROM {ORDER_TABLE} o
+            List<OrderModel> orders = new List<OrderModel>();
+
+
+            if (page == int.MinValue)
+            {
+                var query = $@"SELECT o.* FROM {ORDER_TABLE} o
                            JOIN {CUSTOMER_TABLE} c ON o.CustomerId = c.Id
                            WHERE LOWER(o.OrderNumber) LIKE ? OR 
                            LOWER(o.Note) LIKE ? OR
@@ -211,7 +285,32 @@ namespace KoOrderRegister.Modules.Database.Services
                            LOWER(c.NationalHealthInsurance) LIKE ?";
 
 
-            List<OrderModel> orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+                orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+            }
+            else
+            {
+                var query = $@"SELECT o.* FROM {ORDER_TABLE} o
+                           JOIN {CUSTOMER_TABLE} c ON o.CustomerId = c.Id
+                           WHERE LOWER(o.OrderNumber) LIKE ? OR 
+                           LOWER(o.Note) LIKE ? OR
+                           LOWER(c.Name) LIKE ? OR
+                           LOWER(c.Address) LIKE ? OR
+                           LOWER(c.Phone) LIKE ? OR
+                           LOWER(c.Email) LIKE ? OR
+                           LOWER(c.NationalHealthInsurance) LIKE ?
+                           LIMIT ?
+                           OFFSET ?";
+
+
+                orders = await Database.QueryAsync<OrderModel>(query, likeQuery, 
+                    likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, 
+                    PAGE_SIZE, (PAGE_SIZE * (page - 1)));
+            }
+            
+            orders = orders
+                .GroupBy(c => c.Id)
+                .Select(g => g.First())
+                .ToList();
 
             List<Task> tasks = new List<Task>();
             foreach (var order in orders)
@@ -252,10 +351,14 @@ namespace KoOrderRegister.Modules.Database.Services
         public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
         {
             string stringId = id.ToString();  
-            var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).CountAsync();
+            var fileCount = await Database.Table<FileModel>()
+                .Where(f => f.OrderId.Equals(stringId))
+                .CountAsync();
             if (fileCount > 0)
             {
-                return await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync();
+                return await Database.Table<FileModel>()
+                    .Where(f => f.OrderId.Equals(stringId))
+                    .ToListAsync();
             }
             return new List<FileModel>();
         }

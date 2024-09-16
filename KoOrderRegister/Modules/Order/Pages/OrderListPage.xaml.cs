@@ -25,4 +25,14 @@ public partial class OrderListPage : ContentPage
         SearchBar searchBar = (SearchBar)sender;
         _viewModel.Search(searchBar.Text);
     }
+
+    private void ListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+    {
+        var items = _viewModel.Orders;
+
+        if (items != null && items.Count > 0 && e.Item == items[items.Count - 1])
+        {
+         //   _viewModel.LoadMoreItems();
+        }
+    }
 }
