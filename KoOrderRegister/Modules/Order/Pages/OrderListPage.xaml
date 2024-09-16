@@ -18,7 +18,7 @@
     </ContentPage.ToolbarItems>
  
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Spacing="10">
             <StackLayout  Padding="3, 10, 3, 20">
             <SearchBar x:Name="searchBar"
                        Placeholder="{x:Static res:AppRes.Search}"
@@ -48,6 +48,9 @@
 
                 <ListView x:Name="ordersListView"
                           ItemsSource="{Binding Orders}"
+                          SeparatorVisibility="Default"
+                          SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                          RowHeight="150"
                           Grid.Row="1">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -63,8 +66,9 @@
                                               Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=ordersListView}}"
                                               CommandParameter="{Binding .}" />
                                 </ViewCell.ContextActions>
-                                <Grid RowDefinitions="Auto, Auto"
-                                      ColumnDefinitions="*,*,*">
+                                <Grid RowDefinitions="*"
+                                      ColumnDefinitions="*,*,*"
+                                      Padding="5,10">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer NumberOfTapsRequired="1"
                                                               Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
@@ -74,20 +78,17 @@
                                            Grid.Column="0"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25"
-                                           />
+                                          />
                                     <Label Text="{Binding OrderDate}"
                                            Grid.Column="1"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25"
-                                           />
+                                          />
                                     <Label Text="{Binding Customer.Name}"
                                            Grid.Column="2"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25"
-                                           />
+                                            />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

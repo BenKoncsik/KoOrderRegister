@@ -116,14 +116,14 @@ namespace KoOrderRegister.Modules.Database.Services
 
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
 
-            var query = $@"SELECT * FROM ${CUSTOMER_TABLE} 
+            var query = $@"SELECT * FROM {CUSTOMER_TABLE} 
                            WHERE LOWER(Name) LIKE ? OR 
                                  LOWER(Address) LIKE ? OR
                                  LOWER(Phone) LIKE ? OR
                                  LOWER(Email) LIKE ? OR
                                  LOWER(Note) LIKE ? OR
                                  LOWER(NationalHealthInsurance) LIKE ?";
-
+  
             return await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
         }
         #endregion

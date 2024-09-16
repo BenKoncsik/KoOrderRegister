@@ -22,119 +22,123 @@
                      IconImageSource="{AppThemeBinding Light='return_light.png', Dark='return_dark.png'}"
                      Command="{Binding ReturnCommand}" />
     </ContentPage.ToolbarItems>
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="20"
+                                 Spacing="20">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20"
-                             Spacing="20">
-            <!-- Az űrlap címkéi és beviteli mezői -->
-            <Grid ColumnDefinitions="Auto,*"
-                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                <!-- Name -->
-                <Label Text="{x:Static res:AppRes.NameLabel}"
-                       Grid.Row="0"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.Name}"
-                       Grid.Row="0"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                <!-- Az űrlap címkéi és beviteli mezői -->
+                <Grid ColumnDefinitions="Auto,*"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                    <!-- Name -->
+                    <Label Text="{x:Static res:AppRes.NameLabel}"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.Name}"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10" />
 
-                <!-- Address -->
-                <Label Text="{x:Static res:AppRes.AddressLabel}"
-                       Grid.Row="1"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.Address}"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                    <!-- Address -->
+                    <Label Text="{x:Static res:AppRes.AddressLabel}"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.Address}"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10" />
 
-                <!-- Phone -->
-                <Label Text="{x:Static res:AppRes.PhoneLabel}"
-                       Grid.Row="2"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.Phone}"
-                       Grid.Row="2"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10">
-                    <Entry.Behaviors>
-                        <PhoneEntrycheker:PhoneNumberValidationBehavior />
-                    </Entry.Behaviors>
-                </Entry>
+                    <!-- Phone -->
+                    <Label Text="{x:Static res:AppRes.PhoneLabel}"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.Phone}"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10">
+                        <Entry.Behaviors>
+                            <PhoneEntrycheker:PhoneNumberValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
 
-                <!-- Email -->
-                <Label Text="{x:Static res:AppRes.EmailLabel}"
-                       Grid.Row="3"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.Email}"
-                       Grid.Row="3"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10">
-                    <Entry.Behaviors>
-                        <EmailEntrycheker:EmailValidationBehavior />
-                    </Entry.Behaviors>
-                </Entry>
+                    <!-- Email -->
+                    <Label Text="{x:Static res:AppRes.EmailLabel}"
+                           Grid.Row="3"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.Email}"
+                           Grid.Row="3"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10">
+                        <Entry.Behaviors>
+                            <EmailEntrycheker:EmailValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
 
-                <!-- Note -->
-                <Label Text="{x:Static res:AppRes.NoteLabel}"
-                       Grid.Row="4"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.Note}"
-                       Grid.Row="4"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10" />
+                    <!-- Note -->
+                    <Label Text="{x:Static res:AppRes.NoteLabel}"
+                           Grid.Row="4"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.Note}"
+                           Grid.Row="4"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10" />
 
-                <!-- National Health Insurance -->
-                <Label Text="{x:Static res:AppRes.NHILabel}"
-                       Grid.Row="5"
-                       Grid.Column="0"
-                       VerticalOptions="Center" />
-                <Entry Text="{Binding Customer.NationalHealthInsurance}"
-                       Grid.Row="5"
-                       Grid.Column="1"
-                       Margin="10, 0, 10,10">
-                    <Entry.Behaviors>
-                        <INSentrycheker:BaseINSBehavior />
-                    </Entry.Behaviors>
-                </Entry>
-            </Grid>
+                    <!-- National Health Insurance -->
+                    <Label Text="{x:Static res:AppRes.NHILabel}"
+                           Grid.Row="5"
+                           Grid.Column="0"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding Customer.NationalHealthInsurance}"
+                           Grid.Row="5"
+                           Grid.Column="1"
+                           Margin="10, 0, 10,10">
+                        <Entry.Behaviors>
+                            <INSentrycheker:BaseINSBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Grid>
 
-            <Grid ColumnDefinitions="*,*"
-                  RowDefinitions="Auto">
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto">
+
+                    <Button Text="{x:Static res:AppRes.Save}"
+                            Command="{Binding SaveCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="10, 10, 10, 10" />
+                    <Button Text="{x:Static res:AppRes.Delete}"
+                            Command="{Binding DeleteCommand}"
+                            IsEnabled="{Binding IsEdit}"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="10, 10, 10, 10" />
+                </Grid>
+
                 
-                <Button Text="{x:Static res:AppRes.Save}"
-                        Command="{Binding SaveCommand}" 
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="10, 10, 10, 10"
-                        />
-                <Button Text="{x:Static res:AppRes.Delete}"
-                        Command="{Binding DeleteCommand}"
-                        IsEnabled="{Binding IsEdit}"
-                        Grid.Row="0"
-                        Grid.Column="0" 
-                        Margin="10, 10, 10, 10"
-                        />
-            </Grid>
-            <Grid IsVisible="{Binding IsLoading}"
-                  BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-                  Opacity="0.4">
-                <VerticalStackLayout>
-                    <ActivityIndicator IsRunning="{Binding IsLoading}"
-                                       HorizontalOptions="Center"
-                                       HeightRequest="250"
-                                       WidthRequest="250"
-                                       VerticalOptions="Center"
-                                       Margin="25" />
-                    <Label Text="{x:Static res:AppRes.Loading}"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"
-                           Margin="20" />
-                </VerticalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+           
+        </ScrollView>
+
+        <Grid IsVisible="{Binding IsLoading}"
+              BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
+              Opacity="0.4">
+            <VerticalStackLayout>
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   HorizontalOptions="Center"
+                                   HeightRequest="250"
+                                   WidthRequest="250"
+                                   VerticalOptions="Center"
+                                   Margin="25" />
+                <Label Text="{x:Static res:AppRes.Loading}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       Margin="20" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>
