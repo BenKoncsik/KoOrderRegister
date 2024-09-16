@@ -221,6 +221,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     if (!string.IsNullOrEmpty(order.CustomerId))
                     {
                         order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
                     }
                 }));
             }
@@ -250,7 +251,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString();  
             var fileCount = await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).CountAsync();
             if (fileCount > 0)
             {
@@ -271,7 +272,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteFile(Guid id)
         {
-            string stringId = id.ToString();  // Convert Guid to string
+            string stringId = id.ToString();  
             var file = await GetFileById(id);
             if (file != null)
             {

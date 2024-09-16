@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Platforms.Windows.Service;
+﻿using KoOrderRegister.Platforms.Windows.Services;
 using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,

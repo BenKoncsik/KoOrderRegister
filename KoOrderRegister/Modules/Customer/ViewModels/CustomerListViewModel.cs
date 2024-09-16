@@ -24,6 +24,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public string SearchTXT { get; set; } = "";
+        private CancellationTokenSource _searchCancellationTokenSource;
         private bool _isLoading = false;
         public bool IsLoading
         {
@@ -132,16 +133,42 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Search(string search)
         {
+            _searchCancellationTokenSource?.Cancel();
+
+            _searchCancellationTokenSource = new CancellationTokenSource();
+            var token = _searchCancellationTokenSource.Token;
+
+            try
+            {
+
+                await Task.Delay(300, token);
+
+                if (!token.IsCancellationRequested)
+                {
+                    await PerformSearch(search);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
+        }
+
+        private async Task PerformSearch(string search)
+        {
             IsLoading = true;
             SearchTXT = search;
-            if (Customers != null)
+            Customers?.Clear();
+
+            var searchResults = await _database.SearchCustomer(search);
+            foreach (var cutomer in searchResults)
             {
-                Customers.Clear();
+                if (!Customers.Any(o => o.Id.Equals(cutomer.Id)))
+                {
+                    Customers?.Add(cutomer);
+                }
             }
-            foreach (var order in await _database.SearchCustomer(search))
-            {
-                Customers.Add(order);
-            }
+
             IsLoading = false;
         }
     }
