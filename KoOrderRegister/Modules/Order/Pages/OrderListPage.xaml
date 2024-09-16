@@ -9,13 +9,11 @@
         <ToolbarItem Text="{x:Static res:AppRes.Update}"
                      IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
                      Command="{Binding UpdateOrderCommand}"
-                     ToolTipProperties.Text="{x:Static res:AppRes.Update}"
-                     />
+                     ToolTipProperties.Text="{x:Static res:AppRes.Update}"/>
         <ToolbarItem Text="{x:Static res:AppRes.AddNewOrder}"
                      IconImageSource="{AppThemeBinding Light='add_light.png', Dark='add_dark.png'}"
                      Command="{Binding AddNewOrderCommand}"
-                     ToolTipProperties.Text="{x:Static res:AppRes.AddNewOrder}"
-                     />
+                     ToolTipProperties.Text="{x:Static res:AppRes.AddNewOrder}"/>
        
     </ContentPage.ToolbarItems>
  
