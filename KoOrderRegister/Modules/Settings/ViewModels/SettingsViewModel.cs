@@ -162,7 +162,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 return;
             }
             if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
-                $"{AppRes.NewVersionAvailable}: ${info.OldVersion}-->${info.NewVersion}",
+                $"{AppRes.NewVersionAvailable}: {info.OldVersion} --> {info.NewVersion}",
                 AppRes.Ok, AppRes.No))
             {
                 LoadingTXT = AppRes.Downloading;
