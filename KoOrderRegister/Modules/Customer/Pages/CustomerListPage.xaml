@@ -18,7 +18,7 @@
 
 
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Spacing="10">
             <StackLayout Padding="3, 10, 3, 20">
             <SearchBar x:Name="searchBar"
                        Placeholder="{x:Static res:AppRes.Search}"
@@ -46,6 +46,9 @@
                 </Grid>
                 <ListView x:Name="customersListView"
                           ItemsSource="{Binding Customers}"
+                          SeparatorVisibility="Default"
+                          SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                          RowHeight="150"
                           Grid.Row="1">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -61,7 +64,7 @@
                                               Command="{Binding Path=BindingContext.DeleteCustomerCommand, Source={x:Reference Name=customersListView}}"
                                               CommandParameter="{Binding .}" />
                                 </ViewCell.ContextActions>
-                                <Grid>
+                                <Grid  Padding="5,10">
                                     <Grid.ColumnDefinitions >
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
@@ -69,8 +72,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Grid.RowDefinitions >
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     
                                     <Grid.GestureRecognizers>
