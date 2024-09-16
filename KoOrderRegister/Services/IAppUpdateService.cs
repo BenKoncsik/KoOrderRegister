@@ -14,7 +14,6 @@ namespace KoOrderRegister.Services
     }
     public interface IAppUpdateService
     {
-        //Task DownloadDialog(string updateUrl, string oldVersion, string newVersion);
         Task<AppUpdateInfo> CheckForAppInstallerUpdatesAndLaunchAsync();
         Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress);
         string AppVersion { get; }

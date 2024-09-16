@@ -68,14 +68,15 @@ namespace KoOrderRegister
             {
                 
             });
+            builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #if WINDOWS
-                builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Windows.Service.UpdateService>();
+                builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Windows.Services.VersionService>();
 #elif ANDROID
-            builder.Services.AddSingleton<IAppUpdateService, KoOrderRegister.Platforms.Android.Services.UpdateService>();
+            builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Android.Services.VersionService>();
             builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
 
 #else
-            builder.Services.AddSingleton<IAppUpdateService, PlaceHolderAppUpdateService>();
+            builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #endif
             
             #endregion
