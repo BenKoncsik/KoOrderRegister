@@ -30,6 +30,7 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<int> CreateFile(FileModel file);
         Task<FileModel> GetFileById(Guid id);
         Task<List<FileModel>> GetAllFilesByOrderId(Guid id);
+        Task<List<FileModel>> GetFilesByOrderIdWithOutContent(Guid id);
         Task<List<FileModel>> GetAllFiles();
         Task<int> UpdateFile(FileModel file);
         Task<int> DeleteFile(Guid id);

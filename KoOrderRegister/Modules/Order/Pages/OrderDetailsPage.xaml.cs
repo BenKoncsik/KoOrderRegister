@@ -28,6 +28,13 @@ public partial class OrderDetailsPage : ContentPage
                 _viewModel.Files.Add(file);
             }
         }
+        else
+        {
+            if (_viewModel.Files != null)
+            {
+                _viewModel.Files.Clear();
+            }
+        }
         
     }
 

@@ -69,7 +69,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     .ToListAsync();
                 foreach (var order in orders)
                 {
-                    order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                    order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                 }
                 customer.Orders = orders;
             }
@@ -89,7 +89,7 @@ namespace KoOrderRegister.Modules.Database.Services
                         .ToListAsync();
                     foreach (var order in orders)
                     {
-                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                     }
                     customer.Orders = orders;
                 }
@@ -109,7 +109,7 @@ namespace KoOrderRegister.Modules.Database.Services
                         .ToListAsync();
                     foreach (var order in orders)
                     {
-                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                     }
                     customer.Orders = orders;
                 }
@@ -201,7 +201,7 @@ namespace KoOrderRegister.Modules.Database.Services
             var order = await Database.FindAsync<OrderModel>(stringId);
             if (order != null)
             {
-                order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
             }
             return order;
         }
@@ -230,7 +230,7 @@ namespace KoOrderRegister.Modules.Database.Services
                         .CountAsync();
                         if (fileCount > 0)
                         {
-                            order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                            order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                         }
                         if (!string.IsNullOrEmpty(order.CustomerId))
                         {
@@ -320,7 +320,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     if (!string.IsNullOrEmpty(order.CustomerId))
                     {
                         order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
-                        order.Files = await GetFilesByOrderIdWithOutContent(order.Id);
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                     }
                 }));
             }
@@ -375,19 +375,20 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<int> DeleteFile(Guid id)
         {
+            
             string stringId = id.ToString();  
             var file = await GetFileById(id);
             if (file != null)
             {
-                return await Database.DeleteAsync(file);
+                return await Database.DeleteAsync(file);   
             }
             return 0;
         }
 
-        private async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(string id)
+        public async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(Guid id)
         {
             var query = $"SELECT id, orderId, name, contentType, note, hashCode FROM {FILES_TABLE} WHERE orderId = ?";
-            List<FileModel> fileModels = await Database.QueryAsync<FileModel>(query, id);
+            List<FileModel> fileModels = await Database.QueryAsync<FileModel>(query, id.ToString());
             foreach(var file in fileModels)
             {
                 file.IsDatabaseContent = true;
@@ -458,6 +459,6 @@ namespace KoOrderRegister.Modules.Database.Services
             SQLiteOpenFlags.SharedCache;
 
         public static string basePath =>
-                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DatabaseFilename);
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),  DatabaseFilename);
     }
 }
