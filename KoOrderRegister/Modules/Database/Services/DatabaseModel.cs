@@ -148,7 +148,7 @@ namespace KoOrderRegister.Modules.Database.Services
             string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
             List<CustomerModel> customers = new List<CustomerModel>();
 
-            if (page != int.MinValue)
+            if (page == int.MinValue)
             {
                 string query = $@"SELECT * FROM {CUSTOMER_TABLE} 
                        WHERE LOWER(Name) LIKE ? OR 

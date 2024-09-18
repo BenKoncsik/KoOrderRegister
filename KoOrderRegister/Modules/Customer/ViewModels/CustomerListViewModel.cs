@@ -191,7 +191,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         private async Task PerformSearch(string search)
         {
-            if (IsLoading || !hasMoreSearchItems)
+            if (!hasMoreSearchItems)
             {
                 return;
             }
