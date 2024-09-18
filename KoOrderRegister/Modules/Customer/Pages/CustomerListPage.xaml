@@ -48,6 +48,7 @@
                           ItemsSource="{Binding Customers}"
                           SeparatorVisibility="Default"
                           SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                          ItemAppearing="ListView_ItemAppearing"
                           RowHeight="150"
                           Grid.Row="1">
                     <ListView.ItemTemplate>
