@@ -238,16 +238,45 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             {
                 Customers.Clear();
             }
-          
+
             foreach (var customer in await _database.GetAllCustomers())
             {
                 Customers.Add(customer);
             }
-            if(Customers.Count > 0)
+            if (Customers.Count > 0)
             {
                 SelectedItem = Customers.First();
             }
-            
+            if (IsEdit)
+            {
+                await ThreadManager.Run(async () =>
+                {
+                    var orderFiles = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
+                    Order.Files = orderFiles;
+
+                    var filesToAdd = orderFiles
+                        .Where(of => !Files.Any(f => f.Guid.Equals(of.Guid)))
+                        .ToList();
+
+                    var filesToRemove = Files
+                        .Where(f => !orderFiles.Any(of => of.Guid.Equals(f.Guid)))
+                        .ToList();
+
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        foreach (var file in filesToAdd)
+                        {
+                            Files.Add(file);
+                        }
+
+                        foreach (var file in filesToRemove)
+                        {
+                            Files.Remove(file);
+                        }
+                    });
+                });
+
+            }
         }
 
         public async void SelectedFiles()
@@ -276,9 +305,9 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public async void RemoveFile(FileModel file)
         {
             IsLoading = true;
-            if (file.Content != null)
+            if (file.FileResult == null)
             {
-                await _database.DeleteFile(file.Guid);
+              await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
             IsLoading = false;

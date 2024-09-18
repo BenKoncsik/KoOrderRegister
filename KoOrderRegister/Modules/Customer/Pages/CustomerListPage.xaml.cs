@@ -11,14 +11,15 @@ public partial class CustomerListPage : ContentPage
         _viewModel = viewModel;
 		BindingContext = _viewModel;
 	}
-
-    /*
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    private void ListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
     {
-        base.OnNavigatedTo(args);
-        _viewModel.Update();
-    }*/
+        var items = _viewModel.Customers;
 
+        if (items != null && e.Item == items[items.Count - 1])
+        {
+          //  _viewModel.LoadMoreItems();
+        }
+    }
     protected override void OnAppearing()
     {
         base.OnAppearing();
