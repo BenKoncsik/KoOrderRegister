@@ -205,20 +205,5 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             IsRefreshing = false;
             await PerformSearch(SearchTXT);
         }
-
-        public void LoadMoreItems()
-        {
-            if (IsRefreshing)
-                return;
-
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-                UpdateOrders();
-            }
-            else
-            {
-                _ = PerformSearch(SearchTXT);
-            }
-        }
     }
 }

@@ -21,11 +21,11 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         private readonly IDatabaseModel _database;
         private readonly PersonDetailsPage _personDetailsPage;
         #region Binding varrible
-        
-      
+
+
         #endregion
 
-        
+
         public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _searchCancellationTokenSource;
 
@@ -36,11 +36,11 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
 
         #region Commands
-        public ICommand UpdateCommand => new Command(Update);
-        public ICommand AddNewCustomerCommand => new Command(AddNewCustomer);
-        public Command<CustomerModel> DeleteCustomerCommand => new Command<CustomerModel>(DeleteCustomer);
-        public Command<CustomerModel> EditCustomerCommand => new Command<CustomerModel>(EditCustomer);
-        public Command<string> SearchCommand => new Command<string>(Search);
+        public ICommand UpdateCommand { get; }
+        public ICommand AddNewCustomerCommand { get; }
+        public Command<CustomerModel> DeleteCustomerCommand { get; }
+        public Command<CustomerModel> EditCustomerCommand { get; }
+        public Command<string> SearchCommand { get; }
         #endregion
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
@@ -62,7 +62,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
-        }
+
+        UpdateCommand = new Command(Update);
+        AddNewCustomerCommand = new Command(AddNewCustomer);
+        DeleteCustomerCommand = new Command<CustomerModel>(DeleteCustomer);
+        EditCustomerCommand = new Command<CustomerModel>(EditCustomer);
+        SearchCommand = new Command<string>(Search);
+    }
 
         public async void Update()
         {
@@ -205,21 +211,6 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
             IsRefreshing = false;
             await PerformSearch(SearchTXT);
-        }
-
-        public void LoadMoreItems()
-        {
-            if (IsRefreshing)
-                return;
-
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-                Update();
-            }
-            else
-            {
-                _ = PerformSearch(SearchTXT);
-            }
         }
     }
 }
