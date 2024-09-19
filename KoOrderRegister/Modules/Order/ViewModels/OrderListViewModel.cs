@@ -19,22 +19,23 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     {
         private readonly IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
-
-        private bool _isLoading = false;
-        public bool IsLoading
+        #region Binding varrible
+        private bool _isRefreshing = false;
+        public bool IsRefreshing
         {
-            get => _isLoading;
+            get => _isRefreshing;
             set
             {
-                if (_isLoading != value)
+                if (value != _isRefreshing)
                 {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
+                    _isRefreshing = value;
+                    OnPropertyChanged(nameof(IsRefreshing));
                 }
             }
         }
 
-        public string SearchTXT { get; set; } = "";
+        #endregion
+        public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _searchCancellationTokenSource;
 
         private int updatePage = 1;
@@ -93,14 +94,24 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         {
             hasMoreUpdateItems = true;
             updatePage = 1;
-            _updateOrders();
+            if (SearchTXT.Equals("") || SearchTXT.Equals(string.Empty))
+            {
+                await _updateOrders();
+            }
+            else
+            {
+                await PerformSearch(SearchTXT);
+            }
+            IsRefreshing = false;
         }
-        private async void _updateOrders()
+        private async Task _updateOrders()
         {
-            if (IsLoading || !hasMoreUpdateItems)
+            if (!hasMoreUpdateItems)
+            {
                 return;
-
-            IsLoading = updatePage == 1 ? true : false;
+            }
+               
+            IsRefreshing = updatePage == 1 ? true : false;
             hasMoreUpdateItems = true;
             var orders = await _database.GetAllOrders(updatePage);
 
@@ -121,7 +132,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 hasMoreUpdateItems = false; 
             }
 
-            IsLoading = false;
+            IsRefreshing = false;
             if (hasMoreUpdateItems)
             {
                 _updateOrders();
@@ -179,7 +190,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 return;
             }
 
-            IsLoading = searchPage == 1 ? true : false;
+            IsRefreshing = searchPage == 1 ? true : false;
             SearchTXT = search;
 
             var searchResults = await _database.SearchOrders(search, searchPage);
@@ -203,13 +214,13 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             {
                 hasMoreSearchItems = false; 
             }
-            IsLoading = false;
+            IsRefreshing = false;
             await PerformSearch(SearchTXT);
         }
 
         public void LoadMoreItems()
         {
-            if (IsLoading)
+            if (IsRefreshing)
                 return;
 
             if (string.IsNullOrEmpty(SearchTXT))
