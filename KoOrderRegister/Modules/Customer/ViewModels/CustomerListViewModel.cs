@@ -2,6 +2,7 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.ViewModel;
 using Microsoft.Maui.Controls;
 using Mopups.Services;
 using System;
@@ -15,29 +16,16 @@ using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {
-    public class CustomerListViewModel : INotifyPropertyChanged
+    public class CustomerListViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
-        private PersonDetailsPage _personDetailsPage;
-        private ShowCustomerPopUp _showCustomerPopUp;
+        private readonly PersonDetailsPage _personDetailsPage;
         #region Binding varrible
-        private bool _isRefreshing = false;
-        public bool IsRefreshing 
-        {
-            get => _isRefreshing;
-            set
-            {
-                if(value != _isRefreshing)
-                {
-                    _isRefreshing = value;
-                    OnPropertyChanged(nameof(IsRefreshing));
-                }
-            }
-        }
+        
       
         #endregion
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        
         public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _searchCancellationTokenSource;
 
@@ -45,29 +33,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         private int searchPage = 1;
         private bool hasMoreUpdateItems = true;
         private bool hasMoreSearchItems = true;
-    
 
-        
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            try
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            catch (TargetInvocationException ex)
-            {
-                Console.WriteLine($"Inner Exception: {ex.InnerException}");
-            }
-
-        }
 
         #region Commands
         public ICommand UpdateCommand => new Command(Update);
         public ICommand AddNewCustomerCommand => new Command(AddNewCustomer);
         public Command<CustomerModel> DeleteCustomerCommand => new Command<CustomerModel>(DeleteCustomer);
         public Command<CustomerModel> EditCustomerCommand => new Command<CustomerModel>(EditCustomer);
-        public Command<CustomerModel> ToggleDetailsCommand => new Command<CustomerModel>(ToggleDetails);
         public Command<string> SearchCommand => new Command<string>(Search);
         #endregion
 
@@ -86,13 +58,10 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             }
         }
 
-        public CustomerListViewModel(IDatabaseModel database,
-            PersonDetailsPage personDetailsPage,
-            ShowCustomerPopUp showCustomerPopUp)
+        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
-            _showCustomerPopUp = showCustomerPopUp;
         }
 
         public async void Update()
@@ -113,7 +82,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         private async Task _update()
         {
-            if (IsRefreshing || !hasMoreUpdateItems)
+            if (!hasMoreUpdateItems)
             {
                 return;
             }
@@ -172,12 +141,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             }
         }
 
-        public async void ToggleDetails(CustomerModel customer)
-        {
-            _showCustomerPopUp.EditCustomer(customer);
-            await MopupService.Instance.PushAsync(_showCustomerPopUp);
-        }
-
+       
         public void Search(string search)
         {
             searchPage = 1;
