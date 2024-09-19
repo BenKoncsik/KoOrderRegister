@@ -3,6 +3,7 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using Microsoft.Maui.Storage;
@@ -127,7 +128,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> OpenFileCommand => new Command<FileModel>(OpenFile);
         public Command<FileModel> SaveFileCommand => new Command<FileModel>(SaveFile);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService)
+        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
             _fileService = fileService;

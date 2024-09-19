@@ -2,6 +2,7 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -37,7 +38,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage)
+        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
