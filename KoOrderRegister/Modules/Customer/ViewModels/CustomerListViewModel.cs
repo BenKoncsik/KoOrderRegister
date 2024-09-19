@@ -20,29 +20,34 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         private readonly IDatabaseModel _database;
         private PersonDetailsPage _personDetailsPage;
         private ShowCustomerPopUp _showCustomerPopUp;
+        #region Binding varrible
+        private bool _isRefreshing = false;
+        public bool IsRefreshing 
+        {
+            get => _isRefreshing;
+            set
+            {
+                if(value != _isRefreshing)
+                {
+                    _isRefreshing = value;
+                    OnPropertyChanged(nameof(IsRefreshing));
+                }
+            }
+        }
+      
+        #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public string SearchTXT { get; set; } = "";
+        public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _searchCancellationTokenSource;
 
         private int updatePage = 1;
         private int searchPage = 1;
         private bool hasMoreUpdateItems = true;
         private bool hasMoreSearchItems = true;
-        private bool _isLoading = false;
+    
 
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                if (_isLoading != value)
-                {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
+        
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -92,17 +97,28 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Update()
         {
+            IsRefreshing = true;
             hasMoreUpdateItems = true;
             updatePage = 1;
-            _update();
+            if (SearchTXT.Equals("") || SearchTXT.Equals(string.Empty))
+            {
+               await _update();
+            }
+            else
+            {
+                await PerformSearch(SearchTXT);
+            }
+            IsRefreshing = false;
         }
 
-        private async void _update()
+        private async Task _update()
         {
-            if (IsLoading || !hasMoreUpdateItems)
+            if (IsRefreshing || !hasMoreUpdateItems)
+            {
                 return;
+            }
 
-            IsLoading = updatePage == 1? true : false;
+            IsRefreshing = updatePage == 1? true : false;
             hasMoreUpdateItems = true;
 
             var customers = await _database.GetAllCustomers(updatePage);
@@ -124,7 +140,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 hasMoreUpdateItems = false;
             }
 
-            IsLoading = false;
+            IsRefreshing = false;
             _update();
         }
 
@@ -197,7 +213,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             }
                 
 
-            IsLoading = searchPage == 1? true : false;
+            IsRefreshing = searchPage == 1? true : false;
             SearchTXT = search;
 
             var searchResults = await _database.SearchCustomer(search, searchPage);
@@ -223,13 +239,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 hasMoreSearchItems = false;
             }
 
-            IsLoading = false;
+            IsRefreshing = false;
             await PerformSearch(SearchTXT);
         }
 
         public void LoadMoreItems()
         {
-            if (IsLoading)
+            if (IsRefreshing)
                 return;
 
             if (string.IsNullOrEmpty(SearchTXT))

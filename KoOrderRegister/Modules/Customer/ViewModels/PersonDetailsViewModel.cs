@@ -21,7 +21,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             public ICommand SaveCommand => new Command(SavePerson);
             public ICommand DeleteCommand => new Command(DeletePerson);
         #endregion
-
+        #region Binding varrible
         private CustomerModel _customer = new CustomerModel();
         public CustomerModel Customer
         {
@@ -52,6 +52,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 OnPropertyChanged(nameof(IsLoading));
             }
         }
+        #endregion
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName = null)
         {

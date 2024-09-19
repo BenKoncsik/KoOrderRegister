@@ -28,8 +28,8 @@
 		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.9.1</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>2.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
@@ -58,7 +58,7 @@
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 		<PublishSingleFile>false</PublishSingleFile>
-		<Version>1.9.1.0</Version>
+		<Version>2.0.0.0</Version>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 		<Platform>x64</Platform>
 		<Configuration>Release</Configuration>

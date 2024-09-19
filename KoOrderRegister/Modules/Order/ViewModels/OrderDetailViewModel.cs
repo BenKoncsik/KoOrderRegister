@@ -23,7 +23,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         private readonly IDatabaseModel _database;
         private readonly IFileService _fileService;
         private OrderModel _order = new OrderModel();
-
+        #region Binding varrible
         private bool _isLoading = false;
         public bool IsLoading
         {
@@ -125,7 +125,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 }
             }
         }
-
+        #endregion
         public ObservableCollection<FileModel> Files { get; set; } = new ObservableCollection<FileModel>();
         #region Commands
         public ICommand ReturnCommand => new Command(Return);
