@@ -127,6 +127,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> RemoveFileCommand => new Command<FileModel>(RemoveFile);
         public Command<FileModel> OpenFileCommand => new Command<FileModel>(OpenFile);
         public Command<FileModel> SaveFileCommand => new Command<FileModel>(SaveFile);
+        public Command<FileModel> EditFileCommand => new Command<FileModel>(SaveFile);
         #endregion
         public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, IAppUpdateService updateService) : base(updateService)
         {

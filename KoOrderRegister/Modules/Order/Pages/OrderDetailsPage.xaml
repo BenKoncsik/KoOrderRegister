@@ -5,7 +5,7 @@
              xmlns:orderListViewsModel="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
              xmlns:vm="clr-namespace:KoOrderRegister.Modules.Order.ViewModels"
-             xmlns:converter="clr-namespace:KoOrderRegister.Modules.Order.List.Converters"
+             xmlns:converter="clr-namespace:KoOrderRegister.Modules.Order.Converters"
              Title="{x:Static res:AppRes.Order}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -112,72 +112,53 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Margin="10, 0, 10,10" />
-                        <CollectionView x:Name="filesList"
+                        <!-- Files -->
+                        <ListView x:Name="ordersListView"
                                         Grid.Row="1"
                                         Grid.Column="0"
-                                        ItemsSource="{Binding Files}">
-                            <CollectionView.ItemTemplate>
+                                        ItemsSource="{Binding Files}"
+                                        RowHeight="100"
+                                  MinimumHeightRequest="100">
+                            <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid RowDefinitions="*"
-                                          ColumnDefinitions="Auto, *, Auto, Auto, Auto">
-                                        <Label Text="{x:Static res:AppRes.NameLabel}"
-                                               Grid.Column="0"
-                                               Grid.Row="0"
-                                               VerticalOptions="Center" />
+                                    <ViewCell>
+                                        <!-- Context menu -->
+                                        <ViewCell.ContextActions>
+                                            <MenuItem Text="{x:Static res:AppRes.Porperties}"
+                                                      Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                      CommandParameter="{Binding .}" />
+                                            <MenuItem Text="{x:Static res:AppRes.Open}"
+                                                      Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                      CommandParameter="{Binding .}" />
 
-                                        <Entry Text="{Binding Name}"
-                                               Grid.Column="1"
-                                               Grid.Row="0"
-                                               Margin="10, 0, 10,10" />
+                                            <MenuItem Text="{x:Static res:AppRes.SaveToDevice}"
+                                                      IsDestructive="True"
+                                                      Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                      CommandParameter="{Binding .}" />
+                                            <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                                      IsDestructive="True"
+                                                      Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                      CommandParameter="{Binding .}" />
+                                        </ViewCell.ContextActions>
+                                        <Grid RowDefinitions="*"
+                                              ColumnDefinitions="*">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                                      Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                                      CommandParameter="{Binding .}" />
+                                            </Grid.GestureRecognizers>
 
-                                        <Image Grid.Column="2"
-                                               Grid.Row="0"
-                                               Source="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
-                                               VerticalOptions="Start"
-                                               HorizontalOptions="Start"
-                                               Aspect="AspectFit"
-                                               Margin="10, 10, 0, 0"
-                                               WidthRequest="20"
-                                               HeightRequest="20">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=filesList}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                        <Image Grid.Column="3"
-                                               Grid.Row="0"
-                                               IsVisible="{Binding IsDatabaseContent}"
-                                               Source="{AppThemeBinding Light='open_light.png', Dark='open_dark.png'}"
-                                               VerticalOptions="Start"
-                                               HorizontalOptions="Start"
-                                               Aspect="AspectFit"
-                                               Margin="10, 10, 0, 0"
-                                               WidthRequest="20"
-                                               HeightRequest="20">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=filesList}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                        <Image Grid.Column="4"
-                                               Grid.Row="0"
-                                               IsVisible="{Binding IsDatabaseContent}"
-                                               Source="{AppThemeBinding Light='save_light.png', Dark='save_dark.png'}"
-                                               VerticalOptions="Start"
-                                               HorizontalOptions="Start"
-                                               Aspect="AspectFit"
-                                               Margin="10, 10, 0, 0"
-                                               WidthRequest="20"
-                                               HeightRequest="20">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=filesList}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </Grid>
+                                            <Label Text="{Binding Name}"
+                                                   Grid.Column="0"
+                                                   Grid.Row="0"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+
+                                        </Grid>
+                                    </ViewCell>
                                 </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
 
                 </VerticalStackLayout>
@@ -202,11 +183,11 @@
                 </Grid>
             </VerticalStackLayout>
         </ScrollView>
-        <Grid IsVisible="{Binding IsLoading}"
+        <Grid IsVisible="{Binding IsRefreshing}"
               BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
               Opacity="0.4">
             <VerticalStackLayout>
-                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                <ActivityIndicator IsRunning="{Binding IsRefreshing}"
                                    HorizontalOptions="Center"
                                    HeightRequest="250"
                                    WidthRequest="250"

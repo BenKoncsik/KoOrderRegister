@@ -375,4 +375,10 @@
   <data name="NoNewVersion" xml:space="preserve">
     <value>Nincsen újabb verzió</value>
   </data>
+  <data name="SaveToDevice" xml:space="preserve">
+    <value>Mentés az eszközre</value>
+  </data>
+  <data name="OpenPrperties" xml:space="preserve">
+    <value>Tulajdonságok</value>
+  </data>
 </root>

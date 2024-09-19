@@ -390,4 +390,10 @@
     <value>No new version</value>
     <comment>NoNewVersion</comment>
   </data>
+  <data name="SaveToDevice" xml:space="preserve">
+    <value>Save to device</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Porperties</value>
+  </data>
 </root>

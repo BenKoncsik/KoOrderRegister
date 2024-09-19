@@ -520,6 +520,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Porperties.
+        /// </summary>
+        internal static string Properties {
+            get {
+                return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore database.
         /// </summary>
         internal static string RestoreDatabase {
@@ -552,6 +561,15 @@ namespace KoOrderRegister.Localization {
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save to device.
+        /// </summary>
+        internal static string SaveToDevice {
+            get {
+                return ResourceManager.GetString("SaveToDevice", resourceCulture);
             }
         }
         
