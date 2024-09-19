@@ -124,7 +124,7 @@
            
         </ScrollView>
 
-        <Grid IsVisible="{Binding IsLoading}"
+        <Grid IsVisible="{Binding IsRefreshing}"
               BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
               Opacity="0.4">
             <VerticalStackLayout>

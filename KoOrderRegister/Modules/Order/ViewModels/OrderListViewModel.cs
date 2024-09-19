@@ -4,6 +4,7 @@ using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Utility;
+using KoOrderRegister.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,25 +16,12 @@ using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {
-    public class OrderListViewModel : INotifyPropertyChanged
+    public class OrderListViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
         #region Binding varrible
-        private bool _isRefreshing = false;
-        public bool IsRefreshing
-        {
-            get => _isRefreshing;
-            set
-            {
-                if (value != _isRefreshing)
-                {
-                    _isRefreshing = value;
-                    OnPropertyChanged(nameof(IsRefreshing));
-                }
-            }
-        }
-
+       
         #endregion
         public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _searchCancellationTokenSource;
@@ -216,21 +204,6 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
             IsRefreshing = false;
             await PerformSearch(SearchTXT);
-        }
-
-        public void LoadMoreItems()
-        {
-            if (IsRefreshing)
-                return;
-
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-                UpdateOrders();
-            }
-            else
-            {
-                _ = PerformSearch(SearchTXT);
-            }
         }
     }
 }

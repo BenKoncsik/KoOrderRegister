@@ -53,8 +53,6 @@ namespace KoOrderRegister
             builder.Services.AddTransient<PersonDetailsPage>();
             builder.Services.AddTransient<PersonDetailsViewModel>();
 
-            builder.Services.AddTransient<ShowCustomerPopUp>();
-            builder.Services.AddTransient<PersonDetailPopUp>();
 
             #endregion
 
