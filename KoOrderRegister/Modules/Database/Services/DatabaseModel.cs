@@ -3,6 +3,7 @@ using KoOrderRegister.Utility;
 using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
+using System.Collections.Concurrent;
 
 namespace KoOrderRegister.Modules.Database.Services
 {
@@ -242,6 +243,29 @@ namespace KoOrderRegister.Modules.Database.Services
             return orders;
         }
 
+        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsync()
+        {
+            List<OrderModel> orders = new List<OrderModel>();
+            orders = await Database.Table<OrderModel>()
+                .OrderBy(o => o.StartDate)
+                .ToListAsync();
+            foreach (var order in orders)
+            {
+                var fileCount = await Database.Table<FileModel>()
+                    .Where(f => f.OrderId.Equals(order.Id))
+                    .CountAsync();
+                if (fileCount > 0)
+                {
+                    order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
+                }
+                if (!string.IsNullOrEmpty(order.CustomerId))
+                {
+                    order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                }
+                yield return order;
+            }
+        }
+
         public async Task<int> UpdateOrder(OrderModel order)
         {
             return await Database.UpdateAsync(order);
@@ -312,8 +336,9 @@ namespace KoOrderRegister.Modules.Database.Services
                 .Select(g => g.First())
                 .ToList();
 
-            List<Task> tasks = new List<Task>();
-            foreach (var order in orders)
+            ConcurrentBag<Task> tasks = new ConcurrentBag<Task>();
+
+            void RunBackgroundTask(OrderModel order)
             {
                 tasks.Add(ThreadManager.Run(async () =>
                 {
@@ -324,6 +349,19 @@ namespace KoOrderRegister.Modules.Database.Services
                     }
                 }));
             }
+
+            orders.AsParallel().ForAll(order => RunBackgroundTask(order));
+            /*foreach (var order in orders)
+            {
+                tasks.Add(ThreadManager.Run(async () =>
+                {
+                    if (!string.IsNullOrEmpty(order.CustomerId))
+                    {
+                        order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                        order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
+                    }
+                }));
+            }*/
             await Task.WhenAll(tasks);
             return orders;
         }
