@@ -113,52 +113,57 @@
                                 Grid.Column="0"
                                 Margin="10, 0, 10,10" />
                         <!-- Files -->
-                        <ListView x:Name="ordersListView"
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        ItemsSource="{Binding Files}"
-                                        RowHeight="100"
-                                  MinimumHeightRequest="100">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <!-- Context menu -->
-                                        <ViewCell.ContextActions>
-                                            <MenuItem Text="{x:Static res:AppRes.Porperties}"
-                                                      Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                      CommandParameter="{Binding .}" />
-                                            <MenuItem Text="{x:Static res:AppRes.Open}"
-                                                      Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                      CommandParameter="{Binding .}" />
+                        <RefreshView Command="{Binding UpdateFilesCommand}"
+                                     IsRefreshing="{Binding IsLoadingFiles}"
+                                     Grid.Row="2">
+                            <ListView x:Name="ordersListView"
+                                      Grid.Row="1"
+                                      Grid.Column="0"
+                                      ItemsSource="{Binding Files}"
+                                      RowHeight="100"
+                                      MinimumHeightRequest="100"
+                                      MaximumHeightRequest="500">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <!-- Context menu -->
+                                            <ViewCell.ContextActions>
+                                                <MenuItem Text="{x:Static res:AppRes.Porperties}"
+                                                          Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                                <MenuItem Text="{x:Static res:AppRes.Open}"
+                                                          Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
 
-                                            <MenuItem Text="{x:Static res:AppRes.SaveToDevice}"
-                                                      IsDestructive="True"
-                                                      Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                      CommandParameter="{Binding .}" />
-                                            <MenuItem Text="{x:Static res:AppRes.Delete}"
-                                                      IsDestructive="True"
-                                                      Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                      CommandParameter="{Binding .}" />
-                                        </ViewCell.ContextActions>
-                                        <Grid RowDefinitions="*"
-                                              ColumnDefinitions="*">
-                                            <Grid.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                                      Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Grid.GestureRecognizers>
+                                                <MenuItem Text="{x:Static res:AppRes.SaveToDevice}"
+                                                          IsDestructive="True"
+                                                          Command="{Binding Path=BindingContext.SaveFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                                <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                                          IsDestructive="True"
+                                                          Command="{Binding Path=BindingContext.RemoveFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                            </ViewCell.ContextActions>
+                                            <Grid RowDefinitions="*"
+                                                  ColumnDefinitions="*">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                                          Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
+                                                                          CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
 
-                                            <Label Text="{Binding Name}"
-                                                   Grid.Column="0"
-                                                   Grid.Row="0"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center" />
+                                                <Label Text="{Binding Name}"
+                                                       Grid.Column="0"
+                                                       Grid.Row="0"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
 
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </RefreshView>
                     </Grid>
 
                 </VerticalStackLayout>

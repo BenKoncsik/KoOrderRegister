@@ -20,14 +20,7 @@ public partial class OrderDetailsPage : ContentPage
         _viewModel.EditOrder(order);
         if(order.Files != null)
         {
-            if (_viewModel.Files != null)
-            {
-                _viewModel.Files.Clear();
-            }
-            foreach (var file in order.Files)
-            {
-                _viewModel.Files.Add(file);
-            }
+            _viewModel.UpdateFiles();
         }
         else
         {

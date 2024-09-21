@@ -396,4 +396,32 @@
   <data name="Properties" xml:space="preserve">
     <value>Porperties</value>
   </data>
+  <data name="SorrySomethingWrong" xml:space="preserve">
+    <value>Sorry something wrong</value>
+    <comment>SorrySomethingWrong</comment>
+  </data>
+  <data name="Porperties" xml:space="preserve">
+    <value>Porperties</value>
+    <comment>Porperties</comment>
+  </data>
+  <data name="HashCodeLabel" xml:space="preserve">
+    <value>Hash code:</value>
+    <comment>HashCode</comment>
+  </data>
+  <data name="OpenAdvancedDetails" xml:space="preserve">
+    <value>Open advanced details</value>
+    <comment>OpenAdvanceDetails</comment>
+  </data>
+  <data name="CloseAdvancedDetails" xml:space="preserve">
+    <value>Close advanced details</value>
+    <comment>CloseAdvancedDetails</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Close</comment>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Size:</value>
+    <comment>SizeLabel</comment>
+  </data>
 </root>

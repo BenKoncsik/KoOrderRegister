@@ -45,19 +45,6 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 }
             }
         }
-        private bool _isLoading = false;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                if (value != _isLoading)
-                {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
         #region Commands
         public ICommand BackUpDatabaseCommand => new Command(BackUp);
         public ICommand RestoreDatabaseCommand => new Command(Restore);
@@ -81,12 +68,12 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             var result = await FolderPicker.PickAsync(new CancellationToken());
             if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
             {
-                IsLoading = true;
+                IsRefreshing = true;
                 string jsonContent = await _databaseModel.ExportDatabaseToJson();
                 var fileName = "koBackup.kncsk";
                 var fullPath = Path.Combine(result.Folder.Path, fileName);
-                File.WriteAllText(fullPath, jsonContent);
-                IsLoading = false;
+                //File.WriteAllText(fullPath, jsonContent);
+                IsRefreshing = false;
             }
         }   
         
@@ -110,17 +97,17 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                     });
                     if (pickResult != null)
                     {
-                        IsLoading = true;
+                        IsRefreshing = true;
                         var jsonData = await File.ReadAllTextAsync(pickResult.FullPath);
                         if (!string.IsNullOrEmpty(jsonData))
                         {
                             await _databaseModel.ImportDatabaseFromJson(jsonData);
-                            IsLoading = false;
+                            IsRefreshing = false;
                             await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.DatabaseRestoredSuccessfully, AppRes.Ok);
                         }
                         else
                         {
-                            IsLoading = false;
+                            IsRefreshing = false;
                             await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.FaliedToRestore, AppRes.Ok);
                         }
                     }
@@ -128,10 +115,10 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error picking file: {ex.Message}");
-                    IsLoading = false;
+                    IsRefreshing = false;
                     await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.FaliedToRestore, AppRes.Ok);
                 }
-                IsLoading = false;
+                IsRefreshing = false;
 
             }
         }

@@ -1,0 +1,95 @@
+<Mopups:PopupPage x:Class="KoOrderRegister.Modules.DatabaseFile.Page.FilePropertiesPopup"
+                  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:res="clr-namespace:KoOrderRegister.Localization"
+                  xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                  Title="{Binding FileModel.Name}"
+                  BackgroundInputTransparent="False"
+                  CloseWhenBackgroundIsClicked="True"
+                  HasSystemPadding="False"
+                  BackgroundColor="{AppThemeBinding Light='White', Dark='Black'}"
+                  Opacity="0.2">
+
+    <Mopups:PopupPage.Animation>
+        <Animations:MoveAnimation PositionIn="Center"
+                                  PositionOut="Center" />
+    </Mopups:PopupPage.Animation>
+
+    <ScrollView Margin="0"
+                HorizontalOptions="Center"
+                Orientation="Vertical"
+                VerticalOptions="Center"
+                >
+        
+        <VerticalStackLayout Padding="20"
+                             HorizontalOptions="Center"
+                             Spacing="20"
+                             VerticalOptions="Center"
+                             >
+
+            <HorizontalStackLayout Spacing="10"
+                                   VerticalOptions="Center"
+                                   MinimumWidthRequest="1000">
+                <Label Text="{x:Static res:AppRes.NameLabel}"
+                       VerticalOptions="Center" />
+
+                <Entry Text="{Binding File.Name}"
+                       Margin="10, 0, 10,10"
+                       HorizontalOptions="FillAndExpand"
+                       MinimumWidthRequest="1000" />
+            </HorizontalStackLayout>
+            <Button Text="{Binding AdvancedDetailsTXT}"
+                    Command="{Binding OpenCloseAdvancedDetailsCommand}"/>
+            <VerticalStackLayout IsVisible="{Binding IsAdvancedDetails}">
+                <HorizontalStackLayout Spacing="10"
+                                       VerticalOptions="Center"
+                                       MinimumWidthRequest="1000">
+                    <Label Text="{x:Static res:AppRes.NoteLabel}"
+                           VerticalOptions="Center" />
+
+                    <Entry Text="{Binding File.Note}"
+                           Margin="10, 0, 10,10"
+                           HorizontalOptions="FillAndExpand"
+                           MinimumWidthRequest="1000" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10"
+                                       VerticalOptions="Center"
+                                       MinimumWidthRequest="1000">
+                    <Label Text="{x:Static res:AppRes.SizeLabel}"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding FileSize}"
+                           Margin="10, 0, 10,10"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"
+                           MinimumWidthRequest="1000" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10"
+                                       VerticalOptions="Center"
+                                       MinimumWidthRequest="1000">
+                    <Label Text="{x:Static res:AppRes.HashCodeLabel}"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding File.HashCode}"
+                           Margin="10, 0, 10,10"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"
+                           MinimumWidthRequest="1000" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+           
+
+            <Button Text="{x:Static res:AppRes.Delete}"
+                    Command="{Binding DeleteCommand}" />
+
+            <Button Text="{x:Static res:AppRes.Close}"
+                    Command="{Binding CancelCommand}" />
+
+            <Button Text="{x:Static res:AppRes.Save}"
+                    Command="{Binding SaveCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</Mopups:PopupPage>

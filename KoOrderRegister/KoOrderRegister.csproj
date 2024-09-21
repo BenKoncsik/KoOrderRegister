@@ -220,6 +220,9 @@
 	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
 	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml.cs">
+	    <DependentUpon>FilePropertiesPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Platforms\Android\Services\UpdateService.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
@@ -247,6 +250,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Customer\Pages\CustomerListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
