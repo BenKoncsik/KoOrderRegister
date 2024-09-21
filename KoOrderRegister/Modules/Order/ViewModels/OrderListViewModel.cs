@@ -3,6 +3,7 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
+using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System;
@@ -41,7 +42,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand SearchCommand { get; }
         #endregion
 
-        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage)
+        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
             _orderDetailsPage = orderDetailsPage;

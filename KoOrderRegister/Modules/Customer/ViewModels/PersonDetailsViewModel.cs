@@ -1,14 +1,8 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
@@ -46,7 +40,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
       
         #endregion
      
-        public PersonDetailsViewModel(IDatabaseModel database)
+        public PersonDetailsViewModel(IDatabaseModel database, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
         }

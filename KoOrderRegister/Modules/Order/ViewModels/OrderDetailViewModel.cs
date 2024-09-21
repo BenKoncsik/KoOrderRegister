@@ -2,10 +2,13 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using Microsoft.Maui.Storage;
+using Mopups.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,10 +24,13 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 {
     public class OrderDetailViewModel : BaseViewModel
     {
+        #region DI
         private readonly IDatabaseModel _database;
         private readonly IFileService _fileService;
-        private OrderModel _order = new OrderModel();
+        private readonly FilePropertiesPopup _filePropertiesPopup;
+        #endregion
         #region Binding varrible
+        private OrderModel _order = new OrderModel();
         public OrderModel Order
         {
             get => _order;
@@ -43,6 +49,17 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             {
                 _isEdit = value;
                 OnPropertyChanged(nameof(IsEdit));
+            }
+        }
+
+        private bool _isLoadingFiles = false;
+        public bool IsLoadingFiles
+        {
+            get => _isLoadingFiles;
+            set
+            {
+                _isLoadingFiles = value;
+                OnPropertyChanged(nameof(IsLoadingFiles));
             }
         }
 
@@ -126,18 +143,14 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> RemoveFileCommand => new Command<FileModel>(RemoveFile);
         public Command<FileModel> OpenFileCommand => new Command<FileModel>(OpenFile);
         public Command<FileModel> SaveFileCommand => new Command<FileModel>(SaveFile);
+        public Command<FileModel> EditFileCommand => new Command<FileModel>(EditFile);
+        public ICommand UpdateFilesCommand => new Command(UpdateFiles);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService)
+        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, IAppUpdateService updateService, FilePropertiesPopup filePropertiesPopup) : base(updateService)
         {
             _database = database;
             _fileService = fileService;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _filePropertiesPopup = filePropertiesPopup;
         }
 
         public void EditOrder(OrderModel order)
@@ -163,9 +176,13 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 List<Task> tasks = new List<Task>();
                 foreach (FileModel file in Files)
                 {
+                    if (file.IsDatabaseContent)
+                    {
+                        continue;
+                    }
                     tasks.Add(ThreadManager.Run(async () =>
                     {
-                        if (file.Content == null && file.FileResult != null)
+                        if (!file.IsDatabaseContent && file.FileResult != null)
                         {
                             List<byte> contentList = new List<byte>();
                             using (var stream = await file.FileResult.OpenReadAsync())
@@ -349,8 +366,35 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             {
                 Console.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
             }
+        }
 
+        public async void UpdateFiles()
+        {
+            IsLoadingFiles = true;
+            List<FileModel> files = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
+            if(files == null)
+            {
+                IsLoadingFiles = false;
+                return;
+            }
+            if (Order.Files != null)
+            {
+                Order.Files.Clear();
+                Files.Clear();
+            }
+            foreach (FileModel file in files)
+            {
+                Order.Files.Add(file);
+                Files.Add(file);
+            }
 
+            IsLoadingFiles = false;
+        }
+
+        public async void EditFile(FileModel file)
+        {
+            _filePropertiesPopup.EditFile(file);
+            await MopupService.Instance.PushAsync(_filePropertiesPopup);
         }
 
 

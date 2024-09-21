@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Order.List.Converters
+namespace KoOrderRegister.Modules.Order.Converters
 {
     public class FileContentToVisibilityConverter : IValueConverter
     {

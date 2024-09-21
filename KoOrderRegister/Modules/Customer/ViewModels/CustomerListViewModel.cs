@@ -2,16 +2,9 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
-using Microsoft.Maui.Controls;
-using Mopups.Services;
-using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
@@ -44,21 +37,8 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         #endregion
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
-        private bool _isDetailsVisible = false;
-        public bool IsDetailsVisible
-        {
-            get => _isDetailsVisible;
-            set
-            {
-                if (_isDetailsVisible != value)
-                {
-                    _isDetailsVisible = value;
-                    OnPropertyChanged(nameof(IsDetailsVisible));
-                }
-            }
-        }
-
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage)
+        
+        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
@@ -107,7 +87,6 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                         Customers.Add(customer);
                     }
                 }
-
                 updatePage++;
             }
             else
@@ -116,7 +95,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             }
 
             IsRefreshing = false;
-            _update();
+            await _update();
         }
 
         public async void AddNewCustomer()

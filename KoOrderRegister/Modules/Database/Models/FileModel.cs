@@ -60,4 +60,6 @@ namespace KoOrderRegister.Modules.Database.Models
             Content = content;
         }
     }
+
+
 }

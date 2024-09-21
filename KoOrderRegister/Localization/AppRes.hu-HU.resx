@@ -375,4 +375,31 @@
   <data name="NoNewVersion" xml:space="preserve">
     <value>Nincsen újabb verzió</value>
   </data>
+  <data name="SaveToDevice" xml:space="preserve">
+    <value>Mentés az eszközre</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Tulajdonságok</value>
+  </data>
+  <data name="SorrySomethingWrong" xml:space="preserve">
+    <value>Elnézést valami hiba történt</value>
+  </data>
+  <data name="Porperties" xml:space="preserve">
+    <value>Tulajdonságok</value>
+  </data>
+  <data name="HashCodeLabel" xml:space="preserve">
+    <value>Hash code:</value>
+  </data>
+  <data name="OpenAdvancedDetails" xml:space="preserve">
+    <value>Haladó beállítások megnyítása</value>
+  </data>
+  <data name="CloseAdvancedDetails" xml:space="preserve">
+    <value>Haladó beállítások bezárása</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Bezárás</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Méret:</value>
+  </data>
 </root>

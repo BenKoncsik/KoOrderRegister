@@ -365,7 +365,9 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<List<FileModel>> GetAllFiles()
         {
-            return await Database.Table<FileModel>().ToListAsync();
+            List<FileModel> files = await Database.Table<FileModel>().ToListAsync();
+            files.ForEach(f => f.IsDatabaseContent = true);
+            return files;
         }
 
         public async Task<int> UpdateFile(FileModel file)
@@ -394,6 +396,13 @@ namespace KoOrderRegister.Modules.Database.Services
                 file.IsDatabaseContent = true;
             }
             return fileModels;
+        }
+
+        public async Task<string> GetFileContentSize(Guid id)
+        {
+            var query = $"SELECT SUM(length(content)) FROM {FILES_TABLE} WHERE id = ?";
+            long length = await Database.ExecuteScalarAsync<long>(query, id.ToString());
+            return length.ToStringSize();
         }
         #endregion
 
