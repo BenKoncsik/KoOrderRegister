@@ -5,6 +5,7 @@ using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
@@ -20,12 +21,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
 
         public string SearchTXT { get; set; } = string.Empty;
-        private CancellationTokenSource _searchCancellationTokenSource;
-
-        private int updatePage = 1;
-        private int searchPage = 1;
-        private bool hasMoreUpdateItems = true;
-        private bool hasMoreSearchItems = true;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
 
         #region Commands
@@ -52,50 +48,50 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Update()
         {
-            IsRefreshing = true;
-            hasMoreUpdateItems = true;
-            updatePage = 1;
-            if (SearchTXT.Equals("") || SearchTXT.Equals(string.Empty))
+            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+            }
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            Customers.Clear();
+            if (string.IsNullOrEmpty(SearchTXT))
             {
                await _update();
             }
             else
             {
-                await PerformSearch(SearchTXT);
+                await _search(SearchTXT);
             }
-            IsRefreshing = false;
+           
         }
 
         private async Task _update()
         {
-            if (!hasMoreUpdateItems)
+            IsRefreshing = true;
+            try
             {
-                return;
-            }
-
-            IsRefreshing = updatePage == 1? true : false;
-            hasMoreUpdateItems = true;
-
-            var customers = await _database.GetAllCustomers(updatePage);
-
-            if (customers.Count > 0)
-            {
-                foreach (var customer in customers)
+                await foreach (CustomerModel customer in _database.GetAllCustomersAsStream(_cancellationTokenSource.Token))
                 {
                     if (!Customers.Any(c => c.Id.Equals(customer.Id)))
                     {
-                        Customers.Add(customer);
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Customers?.Add(customer);
+                        });
                     }
                 }
-                updatePage++;
             }
-            else
+            catch (OperationCanceledException)
             {
-                hasMoreUpdateItems = false;
-            }
 
-            IsRefreshing = false;
-            await _update();
+            }
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
 
         public async void AddNewCustomer()
@@ -126,50 +122,18 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             }
         }
 
-       
-        public void Search(string search)
+        public async void Search(string search)
         {
-            searchPage = 1;
-            hasMoreSearchItems = true;
-            Customers.Clear();
-
-            _searchCancellationTokenSource?.Cancel();
-
-            _searchCancellationTokenSource = new CancellationTokenSource();
-            var token = _searchCancellationTokenSource.Token;
-
-            try
-            {
-                Task.Delay(300, token).ContinueWith(async t =>
-                {
-                    if (!token.IsCancellationRequested)
-                    {
-                        await PerformSearch(search);
-                    }
-                }, token);
-            }
-            catch (TaskCanceledException)
-            {
-
-            }
+            SearchTXT = search;
+            Update();
         }
 
-        private async Task PerformSearch(string search)
+
+        private async Task _search(string search)
         {
-            if (!hasMoreSearchItems)
+            try
             {
-                return;
-            }
-                
-
-            IsRefreshing = searchPage == 1? true : false;
-            SearchTXT = search;
-
-            var searchResults = await _database.SearchCustomer(search, searchPage);
-
-            if (searchResults.Count > 0)
-            {
-                foreach (var customer in searchResults)
+                await foreach (CustomerModel customer in _database.SearchCustomerAsStream(search, _cancellationTokenSource.Token))
                 {
                     if (!Customers.Any(o => o.Id.Equals(customer.Id)))
                     {
@@ -177,19 +141,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                         {
                             Customers?.Add(customer);
                         });
-                        
                     }
                 }
-
-                searchPage++;
             }
-            else
+            catch (OperationCanceledException)
             {
-                hasMoreSearchItems = false;
-            }
 
-            IsRefreshing = false;
-            await PerformSearch(SearchTXT);
+            }   
         }
     }
 }

@@ -33,7 +33,8 @@ namespace KoOrderRegister.Modules.Database.Models
 
         [Ignore]
         [JsonIgnore]
-        public List<FileModel> Files { get; set; }
+        public List<FileModel> Files { get; set; } = new List<FileModel>();
+      
         [JsonProperty("note")]
         public string Note { get; set; }
 

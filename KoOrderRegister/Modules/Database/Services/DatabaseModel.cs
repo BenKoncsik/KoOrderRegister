@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace KoOrderRegister.Modules.Database.Services
 {
@@ -116,7 +117,31 @@ namespace KoOrderRegister.Modules.Database.Services
                 }
                 return customers;
             }
-            
+        }
+
+        public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream(CancellationToken cancellationToken)
+        {
+                var customers = await Database.Table<CustomerModel>().ToListAsync();
+                foreach (var customer in customers)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var orders = await Database.Table<OrderModel>()
+                                .Where(o => o.CustomerId == customer.Id)
+                                .ToListAsync();
+
+                            foreach (var order in orders)
+                            {
+                                await foreach (FileModel file in GetFilesByOrderIdWithOutContentAsStream(order.Guid, cancellationToken))
+                                {
+                                    if (file != null)
+                                    {
+                                        order.Files.Add(file);
+                                    }
+                                }
+                            }
+                            customer.Orders = orders;
+                            yield return customer;
+                }
         }
 
 
@@ -181,6 +206,34 @@ namespace KoOrderRegister.Modules.Database.Services
                 .ToList();
 
         }
+
+        public async IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                await foreach(var customer in GetAllCustomersAsStream(cancellationToken))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return customer;                    
+                }
+            }
+            string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";
+            string query = $@"SELECT * FROM {CUSTOMER_TABLE} 
+                       WHERE LOWER(Name) LIKE ? OR 
+                       LOWER(Address) LIKE ? OR
+                       LOWER(Phone) LIKE ? OR
+                       LOWER(Email) LIKE ? OR
+                       LOWER(Note) LIKE ? OR
+                       LOWER(NationalHealthInsurance) LIKE ?";
+            List<CustomerModel>  customers = await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+
+            foreach (var customer in customers.GroupBy(c => c.Id).Select(g => g.First()).ToList())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return customer;
+            }
+        }
+
         #endregion
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
@@ -243,14 +296,16 @@ namespace KoOrderRegister.Modules.Database.Services
             return orders;
         }
 
-        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsync()
+        
+
+        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream(CancellationToken cancellationToken)
         {
-            List<OrderModel> orders = new List<OrderModel>();
-            orders = await Database.Table<OrderModel>()
-                .OrderBy(o => o.StartDate)
-                .ToListAsync();
+            List<OrderModel> orders = await Database.Table<OrderModel>()
+                    .OrderBy(o => o.StartDate)
+                    .ToListAsync();
             foreach (var order in orders)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var fileCount = await Database.Table<FileModel>()
                     .Where(f => f.OrderId.Equals(order.Id))
                     .CountAsync();
@@ -351,20 +406,48 @@ namespace KoOrderRegister.Modules.Database.Services
             }
 
             orders.AsParallel().ForAll(order => RunBackgroundTask(order));
-            /*foreach (var order in orders)
-            {
-                tasks.Add(ThreadManager.Run(async () =>
-                {
-                    if (!string.IsNullOrEmpty(order.CustomerId))
-                    {
-                        order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
-                        order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
-                    }
-                }));
-            }*/
             await Task.WhenAll(tasks);
             return orders;
         }
+
+        public async IAsyncEnumerable<OrderModel> SearchOrdersAsStream(string search, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                await foreach(var order in GetAllOrdersAsStream(cancellationToken))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return order;
+                } 
+            }
+            string likeQuery = $"%{search.Trim().ToLowerInvariant().Replace(" ", "%")}%";          
+            var query = $@"SELECT o.* FROM {ORDER_TABLE} o
+                        JOIN {CUSTOMER_TABLE} c ON o.CustomerId = c.Id
+                        WHERE LOWER(o.OrderNumber) LIKE ? OR 
+                        LOWER(o.Note) LIKE ? OR
+                        LOWER(c.Name) LIKE ? OR
+                        LOWER(c.Address) LIKE ? OR
+                        LOWER(c.Phone) LIKE ? OR
+                        LOWER(c.Email) LIKE ? OR
+                        LOWER(c.NationalHealthInsurance) LIKE ?";
+
+            List<OrderModel>  orders = await Database.QueryAsync<OrderModel>(query, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery);
+
+            foreach(var order in orders.GroupBy(c => c.Id).Select(g => g.First()).ToList())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (!string.IsNullOrEmpty(order.CustomerId))
+                {
+                    order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
+                    order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
+                }
+                yield return order;
+            }
+            
+   
+
+        }
+
         #endregion
         #region FileModel CRUD Implementation
         public async Task<int> CreateFile(FileModel file)
@@ -401,11 +484,39 @@ namespace KoOrderRegister.Modules.Database.Services
             return new List<FileModel>();
         }
 
+        public async IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid id, CancellationToken cancellationToken)
+        {
+            string stringId = id.ToString();
+            var fileCount = await Database.Table<FileModel>()
+                .Where(f => f.OrderId.Equals(stringId))
+                .CountAsync();
+            if (fileCount > 0)
+            {
+                foreach(var file in await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync())
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return file;  
+                }
+            }
+            yield return null;
+        }
+
         public async Task<List<FileModel>> GetAllFiles()
         {
             List<FileModel> files = await Database.Table<FileModel>().ToListAsync();
-            files.ForEach(f => f.IsDatabaseContent = true);
+            files.AsParallel().Where(f => f.IsDatabaseContent = true);
             return files;
+        }
+
+        public async IAsyncEnumerable<FileModel> GetAllFilesAsStream(CancellationToken cancellationToken)
+        {
+            List<FileModel> files = await Database.Table<FileModel>().ToListAsync();
+            foreach(var file in files)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                file.IsDatabaseContent = true;
+                yield return file;
+            }
         }
 
         public async Task<int> UpdateFile(FileModel file)
@@ -436,6 +547,17 @@ namespace KoOrderRegister.Modules.Database.Services
             return fileModels;
         }
 
+        public async IAsyncEnumerable<FileModel> GetFilesByOrderIdWithOutContentAsStream(Guid id, CancellationToken cancellationToken)
+        {
+            var query = $"SELECT id, orderId, name, contentType, note, hashCode FROM {FILES_TABLE} WHERE orderId = ?";
+            foreach (var file in await Database.QueryAsync<FileModel>(query, id.ToString()))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                file.IsDatabaseContent = true;
+                yield return file;
+            }
+        }
+
         public async Task<string> GetFileContentSize(Guid id)
         {
             var query = $"SELECT SUM(length(content)) FROM {FILES_TABLE} WHERE id = ?";
@@ -461,7 +583,11 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task ImportDatabaseFromJson(string jsonData)
         {
-            var databaseImport = JsonConvert.DeserializeObject<DatabaseImportModel>(jsonData);
+            DatabaseImportModel? databaseImport = JsonConvert.DeserializeObject<DatabaseImportModel>(jsonData);
+            if(databaseImport == null)
+            {
+                return;
+            }
             await Database.DropTableAsync<CustomerModel>();
             await Database.DropTableAsync<OrderModel>();
             await Database.DropTableAsync<FileModel>();
@@ -481,6 +607,7 @@ namespace KoOrderRegister.Modules.Database.Services
             }
         }
 
+ 
         public class DatabaseImportModel
         {
             public List<CustomerModel> Customers { get; set; }
