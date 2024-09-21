@@ -25,13 +25,9 @@ namespace KoOrderRegister.Modules.Order.ViewModels
        
         #endregion
         public string SearchTXT { get; set; } = string.Empty;
-        private CancellationTokenSource _searchCancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
 
-        private int updatePage = 1;
-        private int searchPage = 1;
-        private bool hasMoreUpdateItems = true;
-        private bool hasMoreSearchItems = true;
-
+ 
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
 
         #region Commands
@@ -81,50 +77,47 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
-            hasMoreUpdateItems = true;
-            updatePage = 1;
-            if (SearchTXT.Equals("") || SearchTXT.Equals(string.Empty))
+            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+            }
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            Orders.Clear();
+            if (string.IsNullOrEmpty(SearchTXT))
             {
                 await _updateOrders();
             }
             else
             {
-                await PerformSearch(SearchTXT);
+                await _search(SearchTXT);
             }
-            IsRefreshing = false;
         }
         private async Task _updateOrders()
         {
-            if (!hasMoreUpdateItems)
+            IsRefreshing = true;
+            try
             {
-                return;
-            }
-               
-            IsRefreshing = updatePage == 1 ? true : false;
-            hasMoreUpdateItems = true;
-            var orders = await _database.GetAllOrders(updatePage);
-
-            if (orders.Count > 0)
-            {
-                foreach (var order in orders)
+                await foreach (OrderModel order in _database.GetAllOrdersAsStream(_cancellationTokenSource.Token))
                 {
-                    if (!Orders.Any(o => o.Id.Equals(order.Id)))
+                    if (!Orders.Any(c => c.Id.Equals(order.Id)))
                     {
-                        Orders.Add(order);
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Orders?.Add(order);
+                        });
                     }
                 }
-
-                updatePage++; 
             }
-            else
+            catch (OperationCanceledException)
             {
-                hasMoreUpdateItems = false; 
-            }
 
-            IsRefreshing = false;
-            if (hasMoreUpdateItems)
+            }
+            finally
             {
-                _updateOrders();
+                IsRefreshing = false;
             }
         }
 
@@ -146,49 +139,18 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public void Search(string search)
         {
-            
-            searchPage = 1;
-            hasMoreSearchItems = true;
-            Orders.Clear();
-
-            _searchCancellationTokenSource?.Cancel();
-
-            _searchCancellationTokenSource = new CancellationTokenSource();
-            var token = _searchCancellationTokenSource.Token;
-
-            try
-            {
-                Task.Delay(300, token).ContinueWith(async t =>
-                {
-                    if (!token.IsCancellationRequested)
-                    {
-                        await PerformSearch(search);
-                    }
-                }, token);
-            }
-            catch (TaskCanceledException ex)
-            {
-                Console.WriteLine(ex);
-            }
+            SearchTXT = search;
+            UpdateOrders();
         }
 
-        private async Task PerformSearch(string search)
+        private async Task _search(string search)
         {
-            if (!hasMoreSearchItems)
+            IsRefreshing = true;
+            try
             {
-                return;
-            }
-
-            IsRefreshing = searchPage == 1 ? true : false;
-            SearchTXT = search;
-
-            var searchResults = await _database.SearchOrders(search, searchPage);
-
-            if (searchResults.Count > 0)
-            {
-                foreach (var order in searchResults)
+                await foreach (OrderModel order in _database.SearchOrdersAsStream(search, _cancellationTokenSource.Token))
                 {
-                    if (!Orders.Any(o => o.Id.Equals(order.Id)))
+                    if (!Orders.Any(c => c.Id.Equals(order.Id)))
                     {
                         MainThread.BeginInvokeOnMainThread(() =>
                         {
@@ -196,15 +158,15 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                         });
                     }
                 }
-
-                searchPage++;   
             }
-            else
+            catch (OperationCanceledException)
             {
-                hasMoreSearchItems = false; 
+
             }
-            IsRefreshing = false;
-            await PerformSearch(SearchTXT);
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
     }
 }
