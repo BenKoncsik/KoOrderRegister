@@ -6,33 +6,8 @@ on:
       - main
 
 jobs:
-  prepare-version:
-    runs-on: ubuntu-latest
-    outputs:
-      new-version: ${{ steps.set_version.outputs.new-version }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set new version
-        id: set_version
-        run: |
-          echo "Reading current version from csproj file..."
-          CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
-          echo "Current version: $CURRENT_VERSION"
-          
-          IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
-          MAJOR=${ADDR[0]}
-          MINOR=${ADDR[1]}
-          BUILD=${ADDR[2]}
-          
-          # Increment the build number
-          NEW_BUILD=$((BUILD + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$NEW_BUILD"
-          
-          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "New version: $NEW_VERSION"
 
   build-android:
-    needs: prepare-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -73,7 +48,6 @@ jobs:
           path: output/*.apk
 
   build-windows:
-    needs: [prepare-version, build-android]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
