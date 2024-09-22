@@ -6,32 +6,54 @@ on:
       - main
 
 jobs:
-
-  build-android:
+ prepare-version:
     runs-on: ubuntu-latest
+    outputs:
+      new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set new version
+        id: set_version
+        run: |
+          echo "Reading current version from csproj file..."
+          CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
+          echo "Current version: $CURRENT_VERSION"
+          
+          IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
+          MAJOR=${ADDR[0]}
+          MINOR=${ADDR[1]}
+          BUILD=${ADDR[2]}
+          
+          # Increment the build number
+          NEW_BUILD=$((BUILD + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_BUILD"
+          
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+ build-android:
+    needs: prepare-version
+    runs-on: [self-hosted, ko-order-register-vbblj-2l84g]
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: List Files in Project Directory
+        run: ls -la KoOrderRegister/
+      
+      - name: Display .csproj File
+        run: cat KoOrderRegister/KoOrderRegister.csproj
+      
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x'
       
-      - name: Install xmlstarlet
-        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
-      
-      - name: Update version in project file
-        run: |
-          xmlstarlet ed -L -u "//ApplicationDisplayVersion" -v "${{ needs.prepare-version.outputs.new-version }}" KoOrderRegister/KoOrderRegister.csproj
-      
-      - name: Display .csproj File
-        run: cat KoOrderRegister/KoOrderRegister.csproj
-      
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
       
+      # További lépések, mint build és upload
       - name: Build APK
         run: |
-          dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release \
+          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
           -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
@@ -47,32 +69,29 @@ jobs:
           name: apk
           path: output/*.apk
 
-  build-windows:
-    runs-on: windows-latest
+ build-windows:
+    needs: [prepare-version, build-android]
+    runs-on: [self-hosted, ko-order-register-vbblj-2l84g]
     steps:
       - uses: actions/checkout@v3
+      
+      - name: List Files in Project Directory
+        run: ls -la KoOrderRegister/
+      
+      - name: Display .csproj File
+        run: cat KoOrderRegister/KoOrderRegister.csproj
+      
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x' 
       
-      - name: Update version in project file
-        shell: pwsh
-        run: |
-          $csprojPath = "KoOrderRegister/KoOrderRegister.csproj"
-          [xml]$xml = Get-Content $csprojPath
-          $xml.Project.PropertyGroup.ApplicationDisplayVersion = '${{ needs.prepare-version.outputs.new-version }}'
-          $xml.Save($csprojPath)
-      
-      - name: Display .csproj File
-        run: Get-Content KoOrderRegister/KoOrderRegister.csproj
-      
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
       
       - name: Build MSIX
         run: |
-          dotnet publish "KoOrderRegister.csproj" -r win-x64 -c Release \
+          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -r win-x64 -c Release \
           -f net8.0-windows10.0.19041.0 \
           -p:Version=${{ needs.prepare-version.outputs.new-version }} \
           -p:PackageType=Msix \
