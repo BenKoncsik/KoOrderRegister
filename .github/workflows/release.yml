@@ -1,0 +1,84 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  prepare-version:
+    runs-on: ubuntu-latest
+    outputs:
+      new-version: ${{ steps.set_version.outputs.new-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set new version
+      id: set_version
+      run: |
+        echo "Reading current version from csproj file..."
+        CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
+        echo "Current version: $CURRENT_VERSION"
+        
+        IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
+        MAJOR=${ADDR[0]}
+        MINOR=${ADDR[1]}
+        BUILD=${ADDR[2]}
+        
+        # Increment the build number
+        NEW_BUILD=$((BUILD + 1))
+        NEW_VERSION="$MAJOR.$MINOR.$NEW_BUILD"
+        
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        echo "::set-output name=new-version::$NEW_VERSION"
+
+  build-android:
+    needs: prepare-version
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Update version in project file
+      run: |
+        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister.csproj
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build APK
+      run: |
+        dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=$KEYPASS -p:AndroidSigningStorePass=$KEYPASS -o output
+
+    - name: Upload APK to GitHub Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk
+        path: output/*.apk
+
+
+  build-windows:
+    needs: [prepare-version, build-android]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x' 
+
+    - name: Update version in project file
+      run: |
+        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister.csproj
+
+    - name: Build MSIX
+      run: |
+        dotnet publish "KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -p:Version=${{ needs.prepare-version.outputs.new-version }} -p:PackageType=Msix -o output
+
+    - name: Upload MSIX to GitHub Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: msix
+        path: output/*.msix
