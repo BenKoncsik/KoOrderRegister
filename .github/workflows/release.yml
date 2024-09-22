@@ -53,7 +53,7 @@ jobs:
         dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=$KEYPASS -p:AndroidSigningStorePass=$KEYPASS -o output
 
     - name: Upload APK to GitHub Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: apk
         path: output/*.apk
