@@ -37,6 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
       - name: List Files in Project Directory
         run: ls -la KoOrderRegister/
 
@@ -48,10 +51,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       
-    #  - name: Install .NET Workloads
-     #   run: dotnet workload restore
-
-      # Alternatív megoldás: Explicit telepítés
       - name: Install MAUI Workloads
         run: dotnet workload install maui-android
 
@@ -90,6 +89,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
       - name: List Files in Project Directory
         run: ls -la KoOrderRegister/
 
@@ -100,11 +102,7 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x' 
-      
-    #  - name: Install .NET Workloads
-     #   run: dotnet workload restore
-
-      # Alternatív megoldás: Explicit telepítés
+          
       - name: Install MAUI Workloads
         run: dotnet workload install maui-android
 
