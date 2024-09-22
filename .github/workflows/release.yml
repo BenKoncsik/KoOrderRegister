@@ -48,12 +48,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       
-      - name: Install .NET Workloads
-        run: dotnet workload restore
+    #  - name: Install .NET Workloads
+     #   run: dotnet workload restore
 
       # Alternatív megoldás: Explicit telepítés
-      # - name: Install MAUI Workloads
-      #   run: dotnet workload install maui-android maui-ios maui-maccatalyst
+      - name: Install MAUI Workloads
+        run: dotnet workload install maui-android maui-ios maui-maccatalyst
 
       - name: Decode Keystore File
         run: |
@@ -101,12 +101,12 @@ jobs:
         with:
           dotnet-version: '8.0.x' 
       
-      - name: Install .NET Workloads
-        run: dotnet workload restore
+    #  - name: Install .NET Workloads
+     #   run: dotnet workload restore
 
       # Alternatív megoldás: Explicit telepítés
-      # - name: Install MAUI Workloads
-      #   run: dotnet workload install maui-android maui-ios maui-maccatalyst
+      - name: Install MAUI Workloads
+        run: dotnet workload install maui-android maui-ios maui-maccatalyst
 
       - name: Update version in project file
         shell: pwsh
