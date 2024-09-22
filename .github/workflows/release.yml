@@ -16,7 +16,7 @@ jobs:
       id: set_version
       run: |
         echo "Reading current version from csproj file..."
-        CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
+        CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
         echo "Current version: $CURRENT_VERSION"
         
         IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
@@ -43,7 +43,7 @@ jobs:
 
     - name: Update version in project file
       run: |
-        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister.csproj
+        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister/KoOrderRegister.csproj
 
     - name: Restore dependencies
       run: dotnet restore
@@ -71,11 +71,11 @@ jobs:
 
     - name: Update version in project file
       run: |
-        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister.csproj
+        sed -i "s|<ApplicationDisplayVersion>.*</ApplicationDisplayVersion>|<ApplicationDisplayVersion>${{ needs.prepare-version.outputs.new-version }}</ApplicationDisplayVersion>|g" KoOrderRegister/KoOrderRegister.csproj
 
     - name: Build MSIX
       run: |
-        dotnet publish "KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -p:Version=${{ needs.prepare-version.outputs.new-version }} -p:PackageType=Msix -o output
+        dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -p:Version=${{ needs.prepare-version.outputs.new-version }} -p:PackageType=Msix -o output
 
     - name: Upload MSIX to GitHub Artifacts
       uses: actions/upload-artifact@v2
