@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
- prepare-version:
+  prepare-version:
     runs-on: ubuntu-latest
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
@@ -30,30 +30,45 @@ jobs:
           
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "New version: $NEW_VERSION"
- build-android:
+
+  build-android:
     needs: prepare-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: List Files in Project Directory
         run: ls -la KoOrderRegister/
-      
+
       - name: Display .csproj File
         run: cat KoOrderRegister/KoOrderRegister.csproj
-      
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x'
       
+      - name: Install .NET Workloads
+        run: dotnet workload restore
+
+      # Alternatív megoldás: Explicit telepítés
+      # - name: Install MAUI Workloads
+      #   run: dotnet workload install maui-android maui-ios maui-maccatalyst
+
+      - name: Decode Keystore File
+        run: |
+          echo "${{ secrets.KEYSTORE_B64 }}" | base64 --decode > KoOrderRegister/kor.keystore
+
+      - name: Update version in project file
+        run: |
+          xmlstarlet ed -L -u "//ApplicationDisplayVersion" -v "${{ needs.prepare-version.outputs.new-version }}" KoOrderRegister/KoOrderRegister.csproj
+
       - name: Restore dependencies
         run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
-      
-      # További lépések, mint build és upload
+
       - name: Build APK
         run: |
-          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
+          dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
           -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
@@ -62,36 +77,51 @@ jobs:
           -o output
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
-      
+
       - name: Upload APK to GitHub Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: apk
           path: output/*.apk
 
- build-windows:
+  build-windows:
     needs: [prepare-version, build-android]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: List Files in Project Directory
         run: ls -la KoOrderRegister/
-      
+
       - name: Display .csproj File
         run: cat KoOrderRegister/KoOrderRegister.csproj
-      
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x' 
+      
+      - name: Install .NET Workloads
+        run: dotnet workload restore
+
+      # Alternatív megoldás: Explicit telepítés
+      # - name: Install MAUI Workloads
+      #   run: dotnet workload install maui-android maui-ios maui-maccatalyst
+
+      - name: Update version in project file
+        shell: pwsh
+        run: |
+          $csprojPath = "KoOrderRegister/KoOrderRegister.csproj"
+          [xml]$xml = Get-Content $csprojPath
+          $xml.Project.PropertyGroup.ApplicationDisplayVersion = '${{ needs.prepare-version.outputs.new-version }}'
+          $xml.Save($csprojPath)
       
       - name: Restore dependencies
         run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
       
       - name: Build MSIX
         run: |
-          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -r win-x64 -c Release \
+          dotnet publish "KoOrderRegister.csproj" -r win-x64 -c Release \
           -f net8.0-windows10.0.19041.0 \
           -p:Version=${{ needs.prepare-version.outputs.new-version }} \
           -p:PackageType=Msix \
