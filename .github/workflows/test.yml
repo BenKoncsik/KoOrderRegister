@@ -34,8 +34,8 @@ jobs:
             git add version.txt
             git commit -m "Update version to $MAJOR.$MINOR.$PATCH"
       - name: Push changes
-          uses: ad-m/github-push-action@master
-          with:
-            github_token: ${{ secrets.TOKEN }}
-            branch: 'barnch-name'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: 'barnch-name'
 
