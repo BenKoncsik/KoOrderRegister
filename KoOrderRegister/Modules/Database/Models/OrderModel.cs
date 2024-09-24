@@ -14,7 +14,7 @@ namespace KoOrderRegister.Modules.Database.Models
     {
         [PrimaryKey]
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; init; }
         [JsonProperty("startDate")]
         public DateTime StartDate { get; set; } = DateTime.Now;
         [JsonProperty("endOrder")]
@@ -33,7 +33,8 @@ namespace KoOrderRegister.Modules.Database.Models
 
         [Ignore]
         [JsonIgnore]
-        public List<FileModel> Files { get; set; }
+        public List<FileModel> Files { get; set; } = new List<FileModel>();
+      
         [JsonProperty("note")]
         public string Note { get; set; }
 

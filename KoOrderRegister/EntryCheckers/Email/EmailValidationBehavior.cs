@@ -27,7 +27,7 @@ namespace KoOrderRegister.EntryCheckers.Email
             {
                 if (IsValidEmail(args.NewTextValue))
                 {
-                    entry.TextColor = Application.Current.UserAppTheme == AppTheme.Dark ? Colors.Black : Colors.White;
+                    entry.TextColor = Application.Current.PlatformAppTheme.Equals(AppTheme.Dark) ? Colors.White : Colors.Black;
                 }
                 else
                 {

@@ -1,18 +1,13 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using KoOrderRegister.Services;
+using KoOrderRegister.ViewModel;
 using System.Windows.Input;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {
-    public class PersonDetailsViewModel : INotifyPropertyChanged
+    public class PersonDetailsViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
 
@@ -21,7 +16,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             public ICommand SaveCommand => new Command(SavePerson);
             public ICommand DeleteCommand => new Command(DeletePerson);
         #endregion
-
+        #region Binding varrible
         private CustomerModel _customer = new CustomerModel();
         public CustomerModel Customer
         {
@@ -42,31 +37,19 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
                 OnPropertyChanged(nameof(IsEdit));
             }
         }
-        private bool _isLoading = false;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged(nameof(IsLoading));
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public PersonDetailsViewModel(IDatabaseModel database)
+      
+        #endregion
+     
+        public PersonDetailsViewModel(IDatabaseModel database, IAppUpdateService updateService) : base(updateService)
         {
             _database = database;
         }
 
         public async void SavePerson()
         {
-            IsLoading = true;
+            IsRefreshing = true;
             int result = await _database.CreateCustomer(Customer);
-            IsLoading = false;
+            IsRefreshing = false;
             if (result == 1)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Customer.Name, AppRes.Ok);
@@ -79,13 +62,13 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void DeletePerson()
         {
-            IsLoading = true;
+            IsRefreshing = true;
             if (await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + Customer.Name, AppRes.Yes, AppRes.No))
             {
                 if (Customer != null)
                 {
                     int result = await _database.DeleteCustomer(Guid.Parse(Customer.Id));
-                    IsLoading = false;
+                    IsRefreshing = false;
                     if (result > 0)
                     {
                         ClosePage();

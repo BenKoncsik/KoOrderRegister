@@ -14,6 +14,8 @@ using KoOrderRegister.Modules.Settings.ViewModels;
 using System.Globalization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
+using KoOrderRegister.Modules.DatabaseFile.Page;
+using KoOrderRegister.Modules.DatabaseFile.ViewModel;
 
 namespace KoOrderRegister
 {
@@ -45,6 +47,7 @@ namespace KoOrderRegister
             builder.Services.AddSingleton<IFileService, FileService>();
 
             #endregion
+
             #region Customer Modul
 
             builder.Services.AddTransient<CustomerListPage>();
@@ -53,8 +56,6 @@ namespace KoOrderRegister
             builder.Services.AddTransient<PersonDetailsPage>();
             builder.Services.AddTransient<PersonDetailsViewModel>();
 
-            builder.Services.AddTransient<ShowCustomerPopUp>();
-            builder.Services.AddTransient<PersonDetailPopUp>();
 
             #endregion
 
@@ -78,8 +79,15 @@ namespace KoOrderRegister
 #else
             builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #endif
-            
+
             #endregion
+
+            #region File Modul
+            builder.Services.AddTransient<FilePropertiesPopup>();
+            builder.Services.AddTransient<FilePropertiesViewModel>();
+            #endregion
+
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
