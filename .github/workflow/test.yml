@@ -1,18 +1,19 @@
 name: Test
 
 on:
-  commit:
+  push:
     branches:
       - 92-create-github-runner
 
 jobs:
   prepare-version:
-    #runs-on: ubuntu-latest
     runs-on: [self-hosted]
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set new version
         id: set_version
         run: |
@@ -20,10 +21,10 @@ jobs:
           CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
           echo "Current version: $CURRENT_VERSION"
           
-          IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
-          MAJOR=${ADDR[0]}
-          MINOR=${ADDR[1]}
-          BUILD=${ADDR[2]}
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          BUILD=${VERSION_PARTS[2]}
           
           # Increment the build number
           NEW_BUILD=$((BUILD + 1))
@@ -31,6 +32,7 @@ jobs:
           
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "New version: $NEW_VERSION"
+
 
   build-android:
     needs: prepare-version
