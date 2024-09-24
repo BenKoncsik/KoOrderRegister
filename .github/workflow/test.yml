@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  push:
+    branches: [ "92-test-barnch" ]
+  pull_request:
+    branches: [ "92-test-barnch" ]
+
+jobs:
+  prepare-version:
+    runs-on: [self-hosted]
+    outputs:
+      new-version: ${{ steps.set_version.outputs.new-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set new version
+        id: set_version
+        run: |
+          echo "Reading current version from csproj file..."
+          CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
+          echo "Current version: $CURRENT_VERSION"
+          
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          BUILD=${VERSION_PARTS[2]}
+          
+          # Increment the build number
+          NEW_BUILD=$((BUILD + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_BUILD"
+          
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
