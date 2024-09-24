@@ -22,8 +22,10 @@ jobs:
       - name: Read Version
         id: version
         run: |
-            IFS='.' 
-            read MAJOR MINOR PATCH < version.txt
+            MAJOR=$(awk -F'.' '{print $1}' version.txt)
+            MINOR=$(awk -F'.' '{print $2}' version.txt)
+            PATCH=$(awk -F'.' '{print $3}' version.txt)
+            echo "Current version: $MAJOR.$MINOR.$PATCH"
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
