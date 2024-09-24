@@ -6,10 +6,10 @@ env:
 on:
   push:
     branches: 
-      - ${{ env.branch-name }}  
+      - 92-create-github-runner  
   pull_request:
     branches: 
-      - ${{ env.branch-name }} 
+      - 92-create-github-runner 
 
 jobs:
   prepare-version:
@@ -21,7 +21,7 @@ jobs:
       - name: Show version.txt content
         run: cat version.txt
       - name: Read Version
-        id: version  # Módosított ID a 'version'-re
+        id: version  
         run: |
           awk -F'.' '{print $1 "." ($2 + 1) "." $3}' version.txt > temp_version.txt && mv temp_version.txt version.txt
           MAJOR=$(awk -F'.' '{print $1}' version.txt)
