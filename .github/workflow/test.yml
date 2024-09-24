@@ -1,7 +1,7 @@
 name: Test
 
 on:
-  push:
+  commit:
     branches:
       - 92-create-github-runner
 
