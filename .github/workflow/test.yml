@@ -1,0 +1,86 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - 92-create-github-runner
+
+jobs:
+  prepare-version:
+    #runs-on: ubuntu-latest
+    runs-on: [self-hosted]
+    outputs:
+      new-version: ${{ steps.set_version.outputs.new-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set new version
+        id: set_version
+        run: |
+          echo "Reading current version from csproj file..."
+          CURRENT_VERSION=$(grep '<ApplicationDisplayVersion>' KoOrderRegister/KoOrderRegister.csproj | sed -n 's|.*<ApplicationDisplayVersion>\(.*\)</ApplicationDisplayVersion>.*|\1|p')
+          echo "Current version: $CURRENT_VERSION"
+          
+          IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
+          MAJOR=${ADDR[0]}
+          MINOR=${ADDR[1]}
+          BUILD=${ADDR[2]}
+          
+          # Increment the build number
+          NEW_BUILD=$((BUILD + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_BUILD"
+          
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+
+  build-android:
+    needs: prepare-version
+    runs-on: [self-hosted, ko-order-register-vbblj-d85kh]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
+      - name: List Files in Project Directory
+        run: ls -la KoOrderRegister/
+
+      - name: Display .csproj File
+        run: cat KoOrderRegister/KoOrderRegister.csproj
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: Install MAUI Workloads
+        run: dotnet workload install maui-android
+
+      - name: Decode Keystore File
+        run: |
+          echo "${{ secrets.KEYSTORE_B64 }}" | base64 --decode > KoOrderRegister/kor.keystore
+
+      - name: Update version in project file
+        run: |
+          xmlstarlet ed -L -u "//ApplicationDisplayVersion" -v "${{ needs.prepare-version.outputs.new-version }}" KoOrderRegister/KoOrderRegister.csproj
+
+      - name: Restore dependencies
+        run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
+
+      - name: Build APK
+        run: |
+          dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release \
+          -p:AndroidKeyStore=true \
+          -p:AndroidSigningKeyStore=kor.keystore \
+          -p:AndroidSigningKeyAlias=kor_pub \
+          -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
+          -p:AndroidSigningStorePass=${{ secrets.KEYPASS }} \
+          -o output
+        env:
+          KEYPASS: ${{ secrets.KEYPASS }}
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: output/*.apk
+
