@@ -16,6 +16,7 @@ jobs:
     runs-on: self-hosted
     outputs:
       new-version: ${{ steps.version.outputs.new-version }} 
+      versionCode: ${{ steps.version.outputs.versionCode }}
     steps:
       - uses: actions/checkout@v3
       - name: Show version.txt content
@@ -27,8 +28,11 @@ jobs:
           MAJOR=$(awk -F'.' '{print $1}' version.txt)
           MINOR=$(awk -F'.' '{print $2}' version.txt)
           PATCH=$(awk -F'.' '{print $3}' version.txt)
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
           echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"
+          echo "::set-output name=versionCode::$VERSION_CODE"
           echo "Current version: $MAJOR.$MINOR.$PATCH"
+          echo "Version Code: $VERSION_CODE"
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
@@ -113,7 +117,8 @@ jobs:
           -p:AndroidSigningKeyAlias=kor_pub \
           -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
           -p:AndroidSigningStorePass=${{ secrets.KEYPASS }} \
-          -p:ApplicationVersion=${{ needs.prepare-version.outputs.new-version }} \
+          -p:AndroidVersionCode=${{ needs.prepare-version.outputs.versionCode }} \
+          -p:AndroidVersionName=${{ needs.prepare-version.outputs.new-version }} \
           -o output
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
