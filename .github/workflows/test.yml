@@ -61,15 +61,12 @@ jobs:
       - name: Install MAUI ANDOIRD Workloads
         run: dotnet workload install maui-android
         
-      - name: Install MAUI IOS Workloads
-        run: dotnet workload install maui-ios
-
       - name: Decode Keystore File
         run: |
           echo "${{ secrets.KEYSTORE_B64 }}" | base64 --decode > KoOrderRegister/kor.keystore
 
       - name: Restore dependencies
-        run: dotnet restore KoOrderRegister/KoOrderRegister.csproj
+        run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -f net8.0-android
 
       - name: Build APK
         run: |
