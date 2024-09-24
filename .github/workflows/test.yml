@@ -25,8 +25,6 @@ jobs:
            MAJOR_VERSION=${{ vars.MAJOR_VERSION }}
            MINOR_VERSION=${{ vars.MINOR_VERSION }}
            PATCH_VERSION=${{ vars.PATCH_VERSION }}
-           MINOR_VERSION = MINOR_VERSION + 1
-           PATCH_VERSION = PATCH_VERSION + 1
            echo "Building major version $MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
            ${{ vars.PATCH_VERSION }} = PATCH_VERSION
            ${{ vars.MINOR_VERSION }} = MINOR_VERSION
