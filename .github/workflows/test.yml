@@ -122,24 +122,24 @@ jobs:
         with:
           name: apk
           path: output/*.apk
-    - name: Rename APK File
-      run: |
-        # Find the generated APK file
-        APK_PATH=$(find output -type f -name "*.apk")
-        echo "Generated APK path: $APK_PATH"
+      - name: Rename APK File
+        run: |
+          # Find the generated APK file
+          APK_PATH=$(find output -type f -name "*.apk")
+          echo "Generated APK path: $APK_PATH"
 
-        # Define the new filename
-        NEW_APK_NAME="KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk"
-        echo "New APK name: $NEW_APK_NAME"
+          # Define the new filename
+          NEW_APK_NAME="KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk"
+          echo "New APK name: $NEW_APK_NAME"
 
-        # Rename the APK file
-        mv "$APK_PATH" "output/$NEW_APK_NAME"
+          # Rename the APK file
+          mv "$APK_PATH" "output/$NEW_APK_NAME"
         
-        # Optional: List files in output directory
-        ls -la output/
+          # Optional: List files in output directory
+          ls -la output/
 
-    - name: Upload APK to GitHub Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: apk
-        path: output/KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: output/KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk
