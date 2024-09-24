@@ -27,7 +27,7 @@ jobs:
           MAJOR=$(awk -F'.' '{print $1}' version.txt)
           MINOR=$(awk -F'.' '{print $2}' version.txt)
           PATCH=$(awk -F'.' '{print $3}' version.txt)
-          echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"  # Megfelelő kimenet beállítása
+          echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"
           echo "Current version: $MAJOR.$MINOR.$PATCH"
       - name: Commit and Push
         run: |
@@ -58,8 +58,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       
-      - name: Install MAUI Workloads
+      - name: Install MAUI ANDOIRD Workloads
         run: dotnet workload install maui-android
+        
+      - name: Install MAUI IOS Workloads
+        run: dotnet workload install maui-ios
 
       - name: Decode Keystore File
         run: |
@@ -76,6 +79,7 @@ jobs:
           -p:AndroidSigningKeyAlias=kor_pub \
           -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
           -p:AndroidSigningStorePass=${{ secrets.KEYPASS }} \
+          -p:ApplicationVersion=${{ needs.prepare-version.outputs.new-version }} \
           -o output
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
