@@ -34,7 +34,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add version.txt
-          git commit -m "Update version to ${{ steps.version.outputs.new-version }}"  # Helyes változó használata
+          git commit -m "Update version to ${{ MAJOR }} ${{ MINOR }} ${{ PATCH }}" 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
