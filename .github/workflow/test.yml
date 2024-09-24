@@ -2,9 +2,13 @@ name: Test
 
 on:
   push:
-    branches: [ "92-test-barnch" ]
+    branches: 
+       - 92-test-barnch 
+       - 92-create-github-runner
   pull_request:
-    branches: [ "92-test-barnch" ]
+    branches: 
+       - 92-test-barnch
+       - 92-create-github-runner
 
 jobs:
   prepare-version:
