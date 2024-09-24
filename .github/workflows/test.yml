@@ -12,7 +12,8 @@ on:
 
 jobs:
   prepare-version:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
