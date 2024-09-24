@@ -30,9 +30,9 @@ jobs:
           PATCH=$(awk -F'.' '{print $3}' version.txt)
           VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
           echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"
-          echo "::set-output name=versionCode::$VERSION_CODE"
+          echo "::set-output name=versionCode::$MAJOR"
           echo "Current version: $MAJOR.$MINOR.$PATCH"
-          echo "Version Code: $VERSION_CODE"
+          echo "Version Code: $MAJOR"
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
@@ -113,7 +113,7 @@ jobs:
         run: |
           dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
-          -p:AndroidSigningKeyStore=kor.keystore \
+          -p:AndroidSigningKeyStore=KoOrderRegister/kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
           -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
           -p:AndroidSigningStorePass=${{ secrets.KEYPASS }} \
