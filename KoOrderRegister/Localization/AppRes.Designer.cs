@@ -160,6 +160,24 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close advanced details.
+        /// </summary>
+        internal static string CloseAdvancedDetails {
+            get {
+                return ResourceManager.GetString("CloseAdvancedDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         internal static string Copy {
@@ -304,6 +322,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hash code:.
+        /// </summary>
+        internal static string HashCodeLabel {
+            get {
+                return ResourceManager.GetString("HashCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         internal static string Loading {
@@ -399,6 +426,15 @@ namespace KoOrderRegister.Localization {
         internal static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open advanced details.
+        /// </summary>
+        internal static string OpenAdvancedDetails {
+            get {
+                return ResourceManager.GetString("OpenAdvancedDetails", resourceCulture);
             }
         }
         
@@ -502,6 +538,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Porperties.
+        /// </summary>
+        internal static string Porperties {
+            get {
+                return ResourceManager.GetString("Porperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price:.
         /// </summary>
         internal static string PriceLabel {
@@ -516,6 +561,15 @@ namespace KoOrderRegister.Localization {
         internal static string ProductIdLabel {
             get {
                 return ResourceManager.GetString("ProductIdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Porperties.
+        /// </summary>
+        internal static string Properties {
+            get {
+                return ResourceManager.GetString("Properties", resourceCulture);
             }
         }
         
@@ -552,6 +606,15 @@ namespace KoOrderRegister.Localization {
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save to device.
+        /// </summary>
+        internal static string SaveToDevice {
+            get {
+                return ResourceManager.GetString("SaveToDevice", resourceCulture);
             }
         }
         
@@ -606,6 +669,24 @@ namespace KoOrderRegister.Localization {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size:.
+        /// </summary>
+        internal static string SizeLabel {
+            get {
+                return ResourceManager.GetString("SizeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry something wrong.
+        /// </summary>
+        internal static string SorrySomethingWrong {
+            get {
+                return ResourceManager.GetString("SorrySomethingWrong", resourceCulture);
             }
         }
         
