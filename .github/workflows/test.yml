@@ -16,15 +16,21 @@ jobs:
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set new version
-        id: set_version
+      - uses: actions/checkout@v3
+      - name: Read Version
+        id: version
         run: |
-           MAJOR_VERSION=${{ vars.MAJOR_VERSION }}
-           MINOR_VERSION=${{ vars.MINOR_VERSION+1 }}
-           PATCH_VERSION=${{ vars.PATCH_VERSION+1 }}
-           echo "Building major version $MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
-           vars.PATCH_VERSION=PATCH_VERSION
+          IFS='.' read MAJOR MINOR PATCH < version.txt
+          echo "Current version: $MAJOR.$MINOR.$PATCH"
+          MINOR=$((MINOR+1))
+          PATCH=$((PATCH+1))
+          echo "New version: $MAJOR.$MINOR.$PATCH"
+          echo "$MAJOR.$MINOR.$PATCH" > version.txt
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add version.txt
+          git commit -m "Update version to $MAJOR.$MINOR.$PATCH"
+          git push
           
