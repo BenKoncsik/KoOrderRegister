@@ -66,11 +66,11 @@ jobs:
           echo "${{ secrets.KEYSTORE_B64 }}" | base64 --decode > KoOrderRegister/kor.keystore
 
       - name: Restore dependencies
-        run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -p:TargetFramework=net8.0-android
+        run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -p:TargetFrameworks=net8.0-android
 
       - name: Build APK
         run: |
-          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -p:TargetFrameworks=net8.0-android -c Release \
+          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
           -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
