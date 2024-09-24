@@ -24,8 +24,8 @@ jobs:
         run: |
           IFS='.' read MAJOR MINOR PATCH < version.txt
           echo "Current version: $MAJOR.$MINOR.$PATCH"
-          MINOR=$((MINOR+1))
-          PATCH=$((PATCH+1))
+          MINOR=$((MINOR))
+          PATCH=$((PATCH))
           echo "New version: $MAJOR.$MINOR.$PATCH"
           echo "$MAJOR.$MINOR.$PATCH" > version.txt
       - name: Commit and Push
