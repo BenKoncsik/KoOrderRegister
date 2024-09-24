@@ -91,7 +91,15 @@ jobs:
             # Accept licenses
             yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
             # Install required SDK packages
-            $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+            $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-33" \
+            "build-tools;33.0.2" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      - name: List Installed SDK Platforms
+        run: ls -la $ANDROID_SDK_ROOT/platforms/
 
       - name: Restore dependencies
         run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -p:TargetFrameworks=net8.0-android
