@@ -7,7 +7,8 @@ on:
 
 jobs:
   prepare-version:
-    runs-on: ubuntu-latest
+   # runs-on: ubuntu-latest
+    run-on: [self-hosted, ko-order-register-vbblj-d85kh]
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
