@@ -113,7 +113,7 @@ jobs:
         run: |
           dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
-          -p:AndroidSigningKeyStore=KoOrderRegister/kor.keystore \
+          -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
           -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
           -p:AndroidSigningStorePass=${{ secrets.KEYPASS }} \
