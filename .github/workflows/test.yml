@@ -70,7 +70,7 @@ jobs:
 
       - name: Build APK
         run: |
-          dotnet publish "KoOrderRegister.csproj" -f net8.0-android -c Release \
+          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
           -p:AndroidKeyStore=true \
           -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
