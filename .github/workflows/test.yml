@@ -24,10 +24,6 @@ jobs:
         run: |
           IFS='.' read MAJOR MINOR PATCH < version.txt
           echo "Current version: $MAJOR.$MINOR.$PATCH"
-          MINOR=$((MINOR))
-          PATCH=$((PATCH))
-          echo "New version: $MAJOR.$MINOR.$PATCH"
-          echo "$MAJOR.$MINOR.$PATCH" > version.txt
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
