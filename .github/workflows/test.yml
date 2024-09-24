@@ -109,19 +109,23 @@ jobs:
       - name: Restore dependencies
         run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -p:TargetFrameworks=net8.0-android
 
-      - name: Build APK
+      - name: Build APK Without Signing
         run: |
           dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
-          -p:AndroidKeyStore=true \
-          -p:AndroidSigningKeyStore=kor.keystore \
-          -p:AndroidSigningKeyAlias=kor_pub \
-          -p:AndroidSigningKeyPass=Benikeakiraj2001 \
-          -p:AndroidSigningStorePass=Benikeakiraj2001 \
+          -v:detailed \
+          -p:AndroidKeyStore=false \
           -p:AndroidVersionCode=${{ needs.prepare-version.outputs.versionCode }} \
           -p:AndroidVersionName=${{ needs.prepare-version.outputs.new-version }} \
           -o output
+
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
+
+        - name: Sign APK Manually
+      run: |
+          APK_PATH=$(find output -type f -name "*.apk")
+          echo "Unsigned APK path: $APK_PATH"
+          apksigner sign --ks KoOrderRegister/KoOrderRegister/kor.keystore --ks-key-alias kor_pub --ks-pass pass:${{ secrets.KEYPASS }} --key-pass pass:${{ secrets.KEYPASS }} "$APK_PATH"
 
       - name: Upload APK to GitHub Artifacts
         uses: actions/upload-artifact@v3
