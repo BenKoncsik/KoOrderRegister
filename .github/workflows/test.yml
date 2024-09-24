@@ -1,12 +1,14 @@
 name: Test
 
+env:
+ barnch-name: 92-create-github-runner
 on:
   push:
     branches: 
-       - 92-create-github-runner
+       - barnch-name
   pull_request:
     branches: 
-       - 92-create-github-runner
+       - barnch-name
 
 jobs:
   prepare-version:
@@ -27,9 +29,13 @@ jobs:
             echo "Current version: $MAJOR.$MINOR.$PATCH"
       - name: Commit and Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add version.txt
-          git commit -m "Update version to $MAJOR.$MINOR.$PATCH"
-          git push
-          
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add version.txt
+            git commit -m "Update version to $MAJOR.$MINOR.$PATCH"
+      - name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.TOKEN }}
+            branch: 'barnch-name'
+
