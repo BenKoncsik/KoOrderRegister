@@ -8,7 +8,7 @@ on:
 
 jobs:
   prepare-version:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     outputs:
       new-version: ${{ steps.set_version.outputs.new-version }}
     steps:
