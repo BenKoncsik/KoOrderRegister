@@ -66,9 +66,6 @@ jobs:
       - name: Install MAUI ANDOIRD Workloads
         run: dotnet workload install maui-android
         
-      - name: Decode Keystore File
-        run: |
-          echo "${{ secrets.KEYSTORE_B64 }}" | base64 --decode > KoOrderRegister/kor.keystore
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
@@ -112,20 +109,16 @@ jobs:
       - name: Build APK Without Signing
         run: |
           dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
-          -v:detailed \
-          -p:AndroidKeyStore=false \
+          -p:AndroidKeyStore=true \
+          -p:AndroidSigningKeyStore=kor.keystore \
+          -p:AndroidSigningKeyAlias=kor_pub \
+          -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
           -p:AndroidVersionCode=${{ needs.prepare-version.outputs.versionCode }} \
           -p:AndroidVersionName=${{ needs.prepare-version.outputs.new-version }} \
           -o output
 
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
-
-        - name: Sign APK Manually
-      run: |
-          APK_PATH=$(find output -type f -name "*.apk")
-          echo "Unsigned APK path: $APK_PATH"
-          apksigner sign --ks KoOrderRegister/KoOrderRegister/kor.keystore --ks-key-alias kor_pub --ks-pass pass:${{ secrets.KEYPASS }} --key-pass pass:${{ secrets.KEYPASS }} "$APK_PATH"
 
       - name: Upload APK to GitHub Artifacts
         uses: actions/upload-artifact@v3
