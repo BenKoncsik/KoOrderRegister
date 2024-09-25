@@ -10,11 +10,10 @@ on:
   pull_request:
     branches: 
       - 92-create-github-runner 
-      
+
+jobs:      
  build-android:
     runs-on: [self-hosted, Windows]
-  build:
-    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
     - name: Set up .NET Core

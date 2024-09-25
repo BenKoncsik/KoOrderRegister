@@ -6,10 +6,10 @@ env:
 on:
   push:
     branches: 
-      - 92-create-github-runner  
+     # - 92-create-github-runner  
   pull_request:
     branches: 
-      - 92-create-github-runner 
+     # - 92-create-github-runner 
 
 jobs:
   prepare-version:
