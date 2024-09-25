@@ -45,7 +45,7 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           branch: ${{ env.branch-name }}    
  build:
-    runs-on: [self-hosted, Windows]ű
+    runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
     - uses: actions/checkout@v2
