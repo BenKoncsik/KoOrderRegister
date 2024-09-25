@@ -81,9 +81,9 @@ jobs:
       # Option 2: Manually install GitHub CLI (uncomment if you prefer this method)
       - name: Install GitHub CLI
         run: |
-          $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
-          $cliPath = "$env:TEMP\gh_installer.msi"
-          Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
+          $cliUri = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/212613049/eefacfe2-9a1f-406e-9899-0690ebbe7659?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240925%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240925T150314Z&X-Amz-Expires=300&X-Amz-Signature=f410e2ebeb7f1766e0e9b307f04f418c4445a04a735dafa2ddd166bd451d8d56&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dgh_2.57.0_windows_amd64.msi&response-content-type=application%2Foctet-stream"
+          $cliPath = "$env:TEMP\gh_2.57.0_windows_amd64.msi"
+          curl -L $cliUri -o $cliPath
           Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
         shell: powershell
 
