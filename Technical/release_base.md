@@ -44,14 +44,6 @@ This is a Customer Order Management application developed during my free time. I
 
 ## Certificate password: kor
 
-
-### What is new?
-**New future:**
-
-
-**Bug fixes:**
-
-
 ## Magyar Verzió
 
 ### Áttekintés
@@ -96,13 +88,6 @@ Ez egy Ügyfél-rendelés nyilvántartó alkalmazás, amit szabadidőmben fejles
    - Egy megerősítő üzenet jelenik meg, amely jelzi, hogy a telepítés sikeres volt.
 
 ## Tanúsítvány jelszó: kor
-
-
-### Mi változott?
-**Új funkció:**
-
-
-**Hiba javítások:**
 
 
 ## Auto generated:

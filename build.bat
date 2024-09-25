@@ -46,7 +46,7 @@ echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Building MSIX package for Windows x64...
 REM dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
-dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:Version=%WINDOWS_NEW_VERSION% -p:AppxPackageVersion=%WINDOWS_NEW_VERSION% -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/app/"
+dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:Version=%WINDOWS_NEW_VERSION% -p:AppxPackageVersion=%WINDOWS_NEW_VERSION% -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
 
 REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
 echo Copying MSIX package to general output directory...
