@@ -87,11 +87,11 @@ jobs:
         id: create_release
         run: |
           # Define the version tag
-          VERSION="${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}"
+          $VERSION="${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}"
 
           # Check if the release already exists
           if (gh release view "$VERSION" --json url --jq .url) {
-            echo "Updating existing release $VERSION"
+            Write-Host "Updating existing release $VERSION"
 
             # Update the release notes and include auto-generated notes
             gh release edit "$VERSION" `
@@ -101,7 +101,7 @@ jobs:
             # Upload the artifacts to the existing release
             gh release upload "$VERSION" output/*.apk output/*.msix --clobber
           } else {
-            echo "Creating new release $VERSION"
+            Write-Host "Creating new release $VERSION"
 
             # Create a new release with the specified notes and auto-generated notes
             gh release create "$VERSION" `
