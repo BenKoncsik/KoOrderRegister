@@ -48,7 +48,6 @@
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<Configurations>Debug;Release</Configurations>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
-		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<Platforms>x64</Platforms>
 	
 		

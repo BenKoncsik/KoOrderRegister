@@ -76,8 +76,8 @@ jobs:
         run: |
           $cliUri = "https://github.com/cli/cli/releases/download/v2.57.0/gh_2.57.0_windows_amd64.msi"
           $cliPath = "$env:TEMP\gh_2.57.0_windows_amd64.msi"
-          curl -L $cliUri -o $cliPath
-          Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
+          Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
+          Start-Process msiexec.exe -ArgumentList "/i $cliPath /quiet" -Wait
         shell: powershell
 
       - name: Verify GitHub CLI Installation
