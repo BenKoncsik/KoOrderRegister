@@ -34,7 +34,7 @@ set "NEW_VERSION=%major%.%minor%.%build%"
 echo Updated version to %NEW_VERSION%
 
 echo Publishing the application...
-dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=${{ %major% }} -p:AndroidVersionName=${{ %NEW_VERSION% }}  -o "%OUTPUT_DIR_BUILD%"
+dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%major% -p:AndroidVersionName=%NEW_VERSION%  -o "%OUTPUT_DIR_BUILD%"
 
 set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
 set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android.apk"
