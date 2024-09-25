@@ -112,4 +112,4 @@ jobs:
           }
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        shell: pwsh
+        shell: powershell
