@@ -70,3 +70,16 @@ jobs:
         KEYPASS: ${{ secrets.KEYPASS }}
         NEW_VERSION: ${{ needs.prepare-version.outputs.new-version }} 
         NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }} 
+    - name: Manage Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        VERSION="${{ needs.prepare-version.outputs.new-version }}"
+        EXISTING_TAG=$(gh release list | grep -E "^v$VERSION" | awk '{print $1}')
+        if [ -z "$EXISTING_TAG" ]; then
+          # Create new release
+          gh release create "v$VERSION" ./output/*.apk ./output/*.msix --notes-file /Technical/release_base.md --title "Release v$VERSION"
+        else
+          # Update existing release (this may involve deleting and recreating or updating the description)
+          gh release upload "v$VERSION" ./output/*.apk ./output/*.msix --clobber
+        fi
