@@ -22,8 +22,8 @@ jobs:
         dotnet-version: '8.0.x'  
     - name: Install Certificate
        run: |
-         $CertPassword = ConvertTo-SecureString -String kor -Force -AsPlainText
-         Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $CertPassword
+        $CertPassword = ConvertTo-SecureString -String kor -Force -AsPlainText
+        Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $CertPassword
   shell: powershell
     - name: Install .NET MAUI workloads
       run: dotnet workload install maui-android
