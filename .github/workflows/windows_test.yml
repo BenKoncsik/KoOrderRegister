@@ -48,8 +48,7 @@ jobs:
           branch: ${{ env.branch-name }}
 
   build:
-    #runs-on: [self-hosted, Windows]
-    runs-on: windows-latest
+    runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
@@ -73,15 +72,25 @@ jobs:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.new-version }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
+      # Use one of the following options for installing GitHub CLI:
+
+      # Option 1: Use an action to install GitHub CLI
       - name: Install GitHub CLI
-        uses: actions/setup-gh-cli@v1
-      - name: Install GitHub CLI
-        run: |
-         $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
-         $cliPath = "$env:TEMP\gh_installer.msi"
-         Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
-         Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
+        uses: dawidd6/action-install-gh-cli@v1
+
+      # Option 2: Manually install GitHub CLI (uncomment if you prefer this method)
+      #- name: Install GitHub CLI
+      #  run: |
+      #    $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
+      #    $cliPath = "$env:TEMP\gh_installer.msi"
+      #    Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
+      #    Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
+      #  shell: powershell
+
+      - name: Verify GitHub CLI Installation
+        run: gh --version
         shell: powershell
+
       - name: Create or Update Release
         id: create_release
         run: |
@@ -89,24 +98,26 @@ jobs:
           VERSION="v${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}"
 
           # Check if the release already exists
-          if gh release view "$VERSION" --json url --jq .url; then
+          if (gh release view "$VERSION" --json url --jq .url) {
             echo "Updating existing release $VERSION"
 
             # Update the release notes and include auto-generated notes
-            gh release edit "$VERSION" \
-              --notes-file Technical/release-base.md \
+            gh release edit "$VERSION" `
+              --notes-file Technical/release-base.md `
               --generate-notes
 
             # Upload the artifacts to the existing release
             gh release upload "$VERSION" output/*.apk output/*.msix --clobber
-          else
+          } else {
             echo "Creating new release $VERSION"
 
             # Create a new release with the specified notes and auto-generated notes
-            gh release create "$VERSION" \
-              --title "$VERSION" \
-              --notes-file Technical/release-base.md \
-              --generate-notes \
+            gh release create "$VERSION" `
+              --title "$VERSION" `
+              --notes-file Technical/release-base.md `
+              --generate-notes `
               output/*.apk output/*.msix
+          }
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        shell: pwsh
