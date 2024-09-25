@@ -1,0 +1,27 @@
+name: Test
+
+env:
+  branch-name: '92-create-github-runner'  
+
+on:
+  push:
+    branches: 
+      - 92-create-github-runner  
+  pull_request:
+    branches: 
+      - 92-create-github-runner 
+      
+ build-android:
+    runs-on: [self-hosted, Windows]
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'  
+    - name: Run build script
+      run: .KoOrderRegister\Technical\build.bat
+      env:
+        KEYPASS: ${{ secrets.KEYPASS }}
