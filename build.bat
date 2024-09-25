@@ -44,10 +44,10 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Building MSIX package for Windows x64...
-REM dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
+dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
 REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
 echo Copying MSIX package to general output directory...
-REM xcopy "%OUTPUT_DIR_BUILD%\*.msix" "%OUTPUT_DIR%" /Y /I
+xcopy "%OUTPUT_DIR_BUILD%\*.msix" "%OUTPUT_DIR%" /Y /I
 echo Copy completed.
 echo MSIX build process completed.
 
