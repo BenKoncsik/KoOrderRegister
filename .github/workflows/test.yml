@@ -113,6 +113,7 @@ jobs:
           -p:AndroidSigningKeyStore=kor.keystore \
           -p:AndroidSigningKeyAlias=kor_pub \
           -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
+          -p:AndroidSigningStorePass==${{ secrets.KEYPASS }} \
           -p:AndroidVersionCode=${{ needs.prepare-version.outputs.versionCode }} \
           -p:AndroidVersionName=${{ needs.prepare-version.outputs.new-version }} \
           -o output
