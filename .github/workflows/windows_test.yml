@@ -1,4 +1,4 @@
-name: Test
+name: Windows-test
 
 env:
   branch-name: '92-create-github-runner'  
@@ -21,6 +21,6 @@ jobs:
       with:
         dotnet-version: '8.0.x'  
     - name: Run build script
-      run: cmd /c ".build.bat"
+      run: cmd /c ".\build.bat"
       env:
         KEYPASS: ${{ secrets.KEYPASS }}
