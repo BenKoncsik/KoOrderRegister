@@ -53,6 +53,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '8.0.x'  
+    - name: Debug Output Values
+      run: |
+       echo "New Version: ${{ needs.prepare-version.outputs.new-version }}"
+       echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
     - name: Install Certificate with Admin Privileges
       run: |
         Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
