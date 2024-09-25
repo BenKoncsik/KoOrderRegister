@@ -90,7 +90,7 @@ jobs:
           #files: output/*.apk,output/*.msix
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
           release_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
-          body_path: Technical/release-base.md
+          body_path: Technical/release_base.md
           draft: true
           prerelease: true
         env:
