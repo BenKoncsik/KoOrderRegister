@@ -12,7 +12,7 @@ on:
       - 92-create-github-runner 
 
 jobs:   
-  prepare-version:
+ prepare-version:
     runs-on: [self-hosted, Linux]
     outputs:
       new-version: ${{ steps.version.outputs.new-version }} 
