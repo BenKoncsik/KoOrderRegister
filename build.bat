@@ -7,8 +7,10 @@ if not exist "KoOrderRegister\KoOrderRegister.csproj" (
 )
 
 set "CS_PROJECT=KoOrderRegister\KoOrderRegister.csproj"
-set "OUTPUT_DIR_BUILD=\output\build"
-set "OUTPUT_DIR=\output"
+REM set "OUTPUT_DIR_BUILD=\output\build"
+set "OUTPUT_DIR_BUILD=bin\Release\net8.0-android"
+REM set "OUTPUT_DIR=\output"
+set "OUTPUT_DIR=bin\Release"
 
 echo Create dictonary %OUTPUT_DIR_BUILD%
 mkdir %OUTPUT_DIR_BUILD%
