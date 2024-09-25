@@ -13,9 +13,11 @@ if not exist "KoOrderRegister\KoOrderRegister.csproj" (
 )
 
 set "CS_PROJECT=KoOrderRegister\KoOrderRegister.csproj"
-set "OUTPUT_DIR=KoOrderRegister\bin\Release"
+set "OUTPUT_DIR_BUILD=output\build"
+set "OUTPUT_DIR=output"
 
 echo KEYPASS from environment: %KEYPASS%
+set "OUTPUT_DIR=/output"
 
 echo Reading current version from version.txt...
 set /p CURRENT_VERSION=<version.txt
@@ -32,10 +34,10 @@ set "NEW_VERSION=%major%.%minor%.%build%"
 echo Updated version to %NEW_VERSION%
 
 echo Publishing the application...
-dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
+dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=${{ %major% }} -p:AndroidVersionName=${{ %NEW_VERSION% }}  -o "%OUTPUT_DIR_BUILD%"
 
-set "ORIGINAL_APK=KoOrderRegister\bin\Release\net8.0-android\hu.kncsk.koorderregister-Signed.apk"
-set "NEW_APK_NAME=KoOrderRegister\bin\Release\net8.0-android\KoOrderRegister_%NEW_VERSION%_android.apk"
+set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
+set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android.apk"
 
 echo Renaming the APK file...
 if exist "%ORIGINAL_APK%" (
@@ -50,7 +52,7 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Building MSIX package for Windows x64...
-dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR%\net8.0-windows-x64" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
+dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR%\net8.0-windows-x64" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix -o "%OUTPUT_DIR_BUILD%"
 
 echo MSIX build process completed.
 
