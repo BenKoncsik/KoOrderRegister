@@ -2,7 +2,7 @@
 setlocal
 
 REM Elérési útvonalak ellenőrzése
-if not exist "..\..\version.txt" (
+if not exist "version.txt" (
     echo version.txt file not found
     exit /b 1
 )
