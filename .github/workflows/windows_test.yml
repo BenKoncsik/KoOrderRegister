@@ -68,8 +68,7 @@ jobs:
       - name: Install .NET MAUI workloads
         run: dotnet workload install maui-android
       - name: Run build script
-        # run: cmd /c ".\build.bat"
-        run: ls
+        run: cmd /c ".\build.bat"
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.new-version }}
@@ -87,11 +86,12 @@ jobs:
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
-          #files: output/*.apk,output/*.msix
+          files: output/*.apk,output/*.msix
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
-          release_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
+          release_name: ${{ needs.prepare-version.outputs.new-version }}
           body_path: Technical/release_base.md
           draft: true
-          prerelease: true
+          prerelease: false
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
