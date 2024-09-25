@@ -1,20 +1,18 @@
 @echo off
 setlocal
 
-REM Elérési útvonalak ellenőrzése
-if not exist "version.txt" (
-    echo version.txt file not found
-    exit /b 1
-)
-
 if not exist "KoOrderRegister\KoOrderRegister.csproj" (
     echo KoOrderRegister.csproj file not found
     exit /b 1
 )
 
 set "CS_PROJECT=KoOrderRegister\KoOrderRegister.csproj"
-set "OUTPUT_DIR_BUILD=\output\build"
-set "OUTPUT_DIR=\output"
+set "OUTPUT_DIR_BUILD=\output\build\"
+set "OUTPUT_DIR=\output\"
+
+echo Create dictonary %OUTPUT_DIR_BUILD%
+mkdir %OUTPUT_DIR_BUILD%
+mkdir %OUTPUT_DIR%
 
 echo KEYPASS from environment: %KEYPASS%
 
@@ -44,10 +42,10 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Building MSIX package for Windows x64...
-dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
+REM dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
 REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
 echo Copying MSIX package to general output directory...
-xcopy "%OUTPUT_DIR_BUILD%\*.msix" "%OUTPUT_DIR%" /Y /I
+REM xcopy "%OUTPUT_DIR_BUILD%\*.msix" "%OUTPUT_DIR%" /Y /I
 echo Copy completed.
 echo MSIX build process completed.
 
