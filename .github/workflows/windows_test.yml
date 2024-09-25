@@ -75,17 +75,17 @@ jobs:
       # Use one of the following options for installing GitHub CLI:
 
       # Option 1: Use an action to install GitHub CLI
-      - name: Install GitHub CLI
-        uses: dawidd6/action-install-gh-cli@v1
+      #- name: Install GitHub CLI
+      #  uses: dawidd6/action-install-gh-cli@v1
 
       # Option 2: Manually install GitHub CLI (uncomment if you prefer this method)
-      #- name: Install GitHub CLI
-      #  run: |
-      #    $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
-      #    $cliPath = "$env:TEMP\gh_installer.msi"
-      #    Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
-      #    Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
-      #  shell: powershell
+      - name: Install GitHub CLI
+        run: |
+          $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
+          $cliPath = "$env:TEMP\gh_installer.msi"
+          Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
+          Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
+        shell: powershell
 
       - name: Verify GitHub CLI Installation
         run: gh --version
