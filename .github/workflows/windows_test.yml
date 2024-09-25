@@ -68,5 +68,5 @@ jobs:
       run: cmd /c ".\build.bat"
       env:
         KEYPASS: ${{ secrets.KEYPASS }}
-        NEW_VERSION: ${{ steps.version.outputs.new-version }} 
-        NEW_VERSION_CODE: ${{ steps.version.outputs.versionCode }} 
+        NEW_VERSION: ${{ needs.prepare-version.outputs.new-version }} 
+        NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }} 
