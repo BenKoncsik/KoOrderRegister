@@ -69,7 +69,7 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release 
 
 REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
 echo Copying MSIX package to general output directory...
-REM xcopy "%OUTPUT_DIR_BUILD%\*.msix" "%OUTPUT_DIR%" /Y /I
+xcopy "%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_Test\*.msix" "%OUTPUT_DIR%" /Y /I
 echo Copy completed.
 echo MSIX build process completed.
 

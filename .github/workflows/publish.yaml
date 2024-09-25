@@ -86,7 +86,7 @@ jobs:
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
           release_name: ${{ needs.prepare-version.outputs.new-version }}
           body_path: Technical/release_base.md
-          draft: true
+          draft: false
           prerelease: false
           generate_release_notes: true
         env:
