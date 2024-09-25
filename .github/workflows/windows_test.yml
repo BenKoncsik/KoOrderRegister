@@ -72,6 +72,27 @@ jobs:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.new-version }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
+      - name: Update manifest version
+        run: |
+          [xml]$manifest = get-content ".\$env:Wap_Project_Directory\Package.appxmanifest"
+          $manifest.Package.Identity.Version = "$env:NBGV_SimpleVersion.0"
+          $manifest.Package.Identity.Name = "${{ matrix.MsixPackageId }}"
+          $manifest.Package.Identity.Publisher = "${{ matrix.MsixPublisherId }}"
+          $manifest.Package.Properties.DisplayName = "${{ matrix.MsixPackageDisplayName }}"
+          $manifest.Package.Applications.Application.VisualElements.DisplayName = "${{ matrix.MsixPackageDisplayName }}"
+          $manifest.save(".\$env:Wap_Project_Directory\Package.appxmanifest")
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.0
+        strategy:
+          matrix:
+            targetplatform: [x64]
+        runs-on: windows-latest
+        env:
+          SigningCertificate: KoOrderRegister\Technical\kor.pfx
+          Solution_Path: KoOrderRegister\KoOrderRegister.sln
+          Wpf_Project_Path: KoOrderRegister\KoOrderRegister.csproj
+
+
       - name: Install GitHub CLI
         run: |
           $cliUri = "https://github.com/cli/cli/releases/download/v2.57.0/gh_2.57.0_windows_amd64.msi"
