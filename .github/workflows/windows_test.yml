@@ -75,12 +75,12 @@ jobs:
       - name: Install GitHub CLI
         uses: actions/setup-gh-cli@v1
       - name: Install GitHub CLI
-       run: |
+        run: |
          $cliUri = "https://github.com/cli/cli/releases/latest/download/gh_${{ runner.os }}_amd64.msi"
          $cliPath = "$env:TEMP\gh_installer.msi"
          Invoke-WebRequest -Uri $cliUri -OutFile $cliPath
          Start-Process msiexec.exe -Wait -ArgumentList "/i $cliPath /quiet"
-       shell: powershell
+        shell: powershell
       - name: Create or Update Release
         id: create_release
         run: |
