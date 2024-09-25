@@ -48,7 +48,8 @@ jobs:
           branch: ${{ env.branch-name }}
 
   build:
-    runs-on: [self-hosted, Windows]
+    #runs-on: [self-hosted, Windows]
+    runs-on: windows-latest
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
