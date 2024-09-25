@@ -23,13 +23,10 @@ for /f "tokens=1-3 delims=." %%a in ("%CURRENT_VERSION%") do (
     REM set "revision=%%d"
 )
 
-REM Növelje a harmadik verziószámot
-set /a "build+=1"
-
 echo Updated version to %NEW_VERSION%
 
 echo Updating the project file with new version...
-powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
+powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 echo Create dictonary %OUTPUT_DIR_BUILD%
 mkdir %OUTPUT_DIR_BUILD%
