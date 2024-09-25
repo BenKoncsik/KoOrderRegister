@@ -29,7 +29,7 @@ jobs:
           MAJOR=$(awk -F'.' '{print $1}' version.txt)
           MINOR=$(awk -F'.' '{print $2}' version.txt)
           PATCH=$(awk -F'.' '{print $3}' version.txt)
-          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          VERSION_CODE=$MAJOR
           echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"
           echo "::set-output name=versionCode::$VERSION_CODE"
           echo "::set-output name=minor-version::$MINOR"
@@ -87,7 +87,7 @@ jobs:
         id: create_release
         run: |
           # Define the version tag
-          VERSION="v${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}"
+          VERSION="${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}"
 
           # Check if the release already exists
           if (gh release view "$VERSION" --json url --jq .url) {
