@@ -21,6 +21,6 @@ jobs:
       with:
         dotnet-version: '8.0.x'  
     - name: Run build script
-      run: cmd /c ".\KoOrderRegister\Technical\build.bat"
+      run: cmd /c ".build.bat"
       env:
         KEYPASS: ${{ secrets.KEYPASS }}
