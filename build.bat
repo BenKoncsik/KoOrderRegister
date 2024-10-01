@@ -83,19 +83,17 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -r win-x64 -c Release -f net8.0-windows10.0.19041.0 ^
   --output "output/build/" ^
   -p:PackageType=Msix ^
-  REM -p:PackageCertificateKeyFile="KoOrderRegister/Technical/kor.pfx" ^
-  REM -p:PackageCertificatePassword="kor" ^
   -p:PackageCertificateStoreLocation="LocalMachine" ^
   -p:PackageCertificateStoreName="My" ^
   -v diag ^
   -p:AppxPackageDir="../output/"
 
-
+  REM -p:PackageCertificateKeyFile="KoOrderRegister/Technical/kor.pfx" ^
+  REM -p:PackageCertificatePassword="kor" ^
 echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 
 REM Find the first .msix file
-REM set "msixFile=Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1"
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
     set "msixFile=%%f"
     goto :FoundMsix
