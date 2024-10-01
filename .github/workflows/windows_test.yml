@@ -67,12 +67,8 @@ jobs:
         shell: powershell
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
-      - name: Install .NET SDK WorkloadAutoImportPropsLocator
-        run: dotnet workload install microsoft-net-sdk-workloadautoimportpropslocator
-      - name: Install .NET SDK WorkloadManifestTargetsLocator
-        run: dotnet workload install microsoft-net-sdk-workloadmanifesttargets
-      - name: Install .NET Runtime MonoAOTCompiler Task
-        run: dotnet workload install microsoft-net-runtime-monoaotcompiler-task
+      - name: Install .NET SDK maui
+        run: dotnet workload install maui
       - name: Run build script
         run: cmd /c ".\build.bat"
         env:
