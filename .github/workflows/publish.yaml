@@ -42,6 +42,7 @@ jobs:
         run: |
           git checkout -b version-update/$MAJOR-$MINOR-$PATCH
 
+
       - name: Commit changes
         run: |
           git add version.txt
