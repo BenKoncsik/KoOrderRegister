@@ -32,10 +32,10 @@ echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Updating the project file with new version...
 REM android
-powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
+powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>[^"]+</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 REM windows
-powershell -Command "(gc '%APPX_MANIFEST%') -replace '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version="%WINDOWS_CURRENT_VERSION%" />', '<ApplicationDisplayVersion>%WINDOWS_NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
+powershell -Command "(gc '%APPX_MANIFEST%') -replace '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version="[^"]+" />', '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version="%WINDOWS_CURRENT_VERSION%" /><Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version="%WINDOWS_NEW_VERSION%" />' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
 
 
 
