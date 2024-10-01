@@ -40,7 +40,7 @@ jobs:
 
       - name: Create and switch to new branch
         run: |
-          git checkout -b version-update/$MAJOR.$MINOR.$PATCH
+          git checkout -b version-update/$MAJOR-$MINOR-$PATCH
 
       - name: Commit changes
         run: |
