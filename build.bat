@@ -36,7 +36,7 @@ REM android
 powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 REM windows
-powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version="%WINDOWS_CURRENT_VERSION%"', 'Version="%WINDOWS_NEW_VERSION%"' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
+powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version=`"%WINDOWS_CURRENT_VERSION%.0`"', 'Version=`"%WINDOWS_NEW_VERSION%.0`"' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
 
 
 
