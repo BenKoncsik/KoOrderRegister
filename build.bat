@@ -29,7 +29,6 @@ for /f "tokens=1-3 delims=." %%a in ("%CURRENT_VERSION%") do (
     set "major=%%a"
     set "minor=%%b"
     set "build=%%c"
-    REM set "revision=%%d"
 )
 
 echo Updated version to %NEW_VERSION%
@@ -83,7 +82,7 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release 
 
 REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
 echo Copying MSIX package to general output directory...
-$msixFile = Get-ChildItem -Path $OUTPUT_DIR -Filter "*.msix" | Select-Object -First 1
+$msixFile = Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1
 
 if ($msixFile) {
     # Új fájlnév létrehozása
