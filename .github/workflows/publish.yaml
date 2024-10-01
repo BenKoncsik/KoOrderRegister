@@ -52,7 +52,7 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: version-update/$MAJOR.$MINOR.$PATCH
+          branch: version-update/$MAJOR-$MINOR-$PATCH
 
       - name: Merge branch into main
         env:
@@ -70,9 +70,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Delete the branch locally
-          git branch -D version-update/$MAJOR.$MINOR.$PATCH
+          git branch -D version-update/$MAJOR-$MINOR-$PATCH
           # Delete the branch remotely
-          git push origin --delete version-update/$MAJOR.$MINOR.$PATCH
+          git push origin --delete version-update/$MAJOR-$MINOR-$PATCH
 
   build:
     runs-on: [self-hosted, Windows]
