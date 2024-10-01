@@ -53,47 +53,40 @@ jobs:
 
       - name: Create and switch to new branch
         run: |
-          git checkout -b version-update/$MAJOR-$MINOR-$PATCH
+          BRANCH_NAME="version-update/${{ env.MAJOR }}-${{ env.MINOR }}-${{ env.PATCH }}-$(date +%s)"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          git checkout -b "$BRANCH_NAME"
 
       - name: Commit changes
         run: |
           git add version.txt
-          git commit -m "Update version to $MAJOR-$MINOR-$PATCH"
+          git commit -m "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
 
       - name: Push new branch to repository
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: version-update/$MAJOR-$MINOR-$PATCH
+          branch: ${{ env.BRANCH_NAME }}
 
       - name: Merge branch into main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
         run: |
-          # Fetch the main branch
           git fetch origin main
-
-          # Checkout the main branch
           git checkout main
-
-          # Pull the latest changes
           git pull origin main
-
-          # Merge the new branch into main
-          git merge --no-ff version-update/$MAJOR-$MINOR-$PATCH -m "Merge version-update/$MAJOR-$MINOR-$PATCH into main"
-
-          # Push the updated main branch
+          git merge --no-ff $BRANCH_NAME -m "Merge $BRANCH_NAME into main"
           git push origin main
 
       - name: Delete the new branch locally and remotely
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
         run: |
-          # Delete the branch locally
-          git branch -D version-update/$MAJOR-$MINOR-$PATCH
+          git branch -D $BRANCH_NAME
+          git push origin --delete $BRANCH_NAME
 
-          # Delete the branch remotely
-          git push origin --delete version-update/$MAJOR-$MINOR-$PATCH
 
 
   build:
