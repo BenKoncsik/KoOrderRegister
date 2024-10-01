@@ -91,7 +91,7 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -p:AppxPackageDir="../output/"
 
 
-echo msix file $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
+echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 $msixFile = Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1
 
