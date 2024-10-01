@@ -1,22 +1,28 @@
 @echo off
 setlocal
 
-if not exist "KoOrderRegister\KoOrderRegister.csproj" (
-    echo KoOrderRegister.csproj file not found
-    exit /b 1
-)
+
 
 set "CS_PROJECT=KoOrderRegister\KoOrderRegister.csproj"
 set "APPX_MANIFEST=KoOrderRegister\Platforms\Windows\Package.appxmanifest"
 set "OUTPUT_DIR_BUILD=output\build"
 set "OUTPUT_DIR=output"
 
+if not exist %CS_PROJECT% (
+    echo %CS_PROJECT% file not found
+    exit /b 1
+)
+
+if not exist %APPX_MANIFEST% (
+    echo %APPX_MANIFEST% file not found
+    exit /b 1
+)
 
 echo Reading current version...
 for /f "tokens=3 delims=<>" %%a in ('findstr "ApplicationDisplayVersion" %CS_PROJECT%') do set "CURRENT_VERSION=%%a"
 set "WINDOWS_CURRENT_VERSION=%CURRENT_VERSION%.0"
 echo Current version is %CURRENT_VERSION%
-echo Current version is %WINDOWS_CURRENT_VERSION%
+echo Current windows version is %WINDOWS_CURRENT_VERSION%
 
 REM Bontsa szét a verziót pontok mentén
 for /f "tokens=1-3 delims=." %%a in ("%CURRENT_VERSION%") do (
@@ -36,8 +42,7 @@ REM android
 powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 REM windows
-powershell -Command "(gc '%APPX_MANIFEST%') -replace '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_CURRENT_VERSION%`" />', '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_NEW_VERSION%.0`" />' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
-
+powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version=\"%WINDOWS_CURRENT_VERSION%\"', 'Version=\"%WINDOWS_NEW_VERSION%\"' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
 
 
 
