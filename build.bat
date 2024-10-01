@@ -36,7 +36,7 @@ REM android
 powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 REM windows
-powershell -Command "(gc '%APPX_MANIFEST%') -replace '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_CURRENT_VERSION%.0`" />', '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_NEW_VERSION%.0`" />' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
+powershell -Command "(gc '%APPX_MANIFEST%') -replace '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_CURRENT_VERSION%`" />', '<Identity Name="maui-package-name-placeholder" Publisher="CN=koncs" Version=`"%WINDOWS_NEW_VERSION%.0`" />' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
 
 
 
