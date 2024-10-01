@@ -65,8 +65,18 @@ jobs:
         run: |
           Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
         shell: powershell
-      - name: Install .NET MAUI workloads
+      - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+      - name: Install .NET MAUI Android full workloads
+        run: dotnet workload install microsoft-android-sdk-full
+      - name: Install .NET MAUI Android full workloads
+        run: dotnet workload install microsoft-maui-sdk-full
+      - name: Install .NET SDK WorkloadAutoImportPropsLocator
+        run: dotnet workload install microsoft-net-sdk-workloadautoimportpropslocator
+      - name: Install .NET SDK WorkloadManifestTargetsLocator
+        run: dotnet workload install microsoft-net-sdk-workloadmanifesttargets
+      - name: Install .NET Runtime MonoAOTCompiler Task
+        run: dotnet workload install microsoft-net-runtime-monoaotcompiler-task
       - name: Run build script
         run: cmd /c ".\build.bat"
         env:
