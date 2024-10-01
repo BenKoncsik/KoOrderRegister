@@ -77,12 +77,24 @@ echo Build and rename process completed. New APK: %NEW_APK_NAME%
 
 
 echo Building MSIX package for Windows x64...
-REM dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "%OUTPUT_DIR_BUILD%" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
-dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:Version=%WINDOWS_NEW_VERSION% -p:AppxPackageVersion=%WINDOWS_NEW_VERSION% -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
+REM dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
+REM Import-PfxCertificate -FilePath Technical\kor.pfx -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String kor -AsPlainText -Force) -Exportable
 
-REM Másolja az MSIX csomagot az általános kimeneti könyvtárba
+dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
+  -r win-x64 -c Release -f net8.0-windows10.0.19041.0 ^
+  --output "output/build/" ^
+  -p:PackageType=Msix ^
+  -p:PackageCertificateKeyFile="KoOrderRegister\Technical\kor.pfx" ^
+  -p:PackageCertificatePassword="kor" ^
+  -v diag ^
+  -p:AppxPackageDir="../output/"
+
+
+echo msix file $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 $msixFile = Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1
+
+
 
 if ($msixFile) {
     # Új fájlnév létrehozása
