@@ -87,8 +87,6 @@ jobs:
           git branch -D $BRANCH_NAME
           git push origin --delete $BRANCH_NAME
 
-
-
   build:
     runs-on: [self-hosted, Windows]
     needs: prepare-version
