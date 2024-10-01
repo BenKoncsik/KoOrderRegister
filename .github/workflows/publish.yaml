@@ -61,7 +61,7 @@ jobs:
           # Merge the new branch into main
           git checkout main
           git pull origin main
-          git merge --no-ff version-update/$MAJOR.$MINOR.$PATCH -m "Merge version-update/$MAJOR.$MINOR.$PATCH into main"
+          git merge --no-ff version-update/$MAJOR-$MINOR-$PATCH -m "Merge version-update/$MAJOR-$MINOR-$PATCH into main"
           # Push the updated main branch
           git push origin main
 
