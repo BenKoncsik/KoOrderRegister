@@ -7,7 +7,7 @@ if not exist "KoOrderRegister\KoOrderRegister.csproj" (
 )
 
 set "CS_PROJECT=KoOrderRegister\KoOrderRegister.csproj"
-set "APPX_MANIFEST=Platforms/windows/Package.appxmanifest"
+set "APPX_MANIFEST=KoOrderRegister\Platforms\Windows\Package.appxmanifest"
 set "OUTPUT_DIR_BUILD=output\build"
 set "OUTPUT_DIR=output"
 
@@ -89,7 +89,7 @@ if ($msixFile) {
 } else {
     Write-Host "No msix file $OUTPUT_DIR"
 }
-xcopy "%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_X64\*.msix" "%OUTPUT_DIR%" /Y /I
+xcopy "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix" "%OUTPUT_DIR%" /Y /I
 echo Copy completed.
 echo MSIX build process completed.
 
