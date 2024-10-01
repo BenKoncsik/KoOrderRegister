@@ -46,7 +46,7 @@ jobs:
       - name: Commit changes
         run: |
           git add version.txt
-          git commit -m "Update version to $MAJOR.$MINOR.$PATCH"
+          git commit -m "Update version to $MAJOR-$MINOR-$PATCH"
 
       - name: Push new branch to repository
         uses: ad-m/github-push-action@v0.6.0
