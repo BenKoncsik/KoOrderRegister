@@ -54,11 +54,8 @@
 	<!-- Windows publish -->
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 		<PublishSingleFile>false</PublishSingleFile>
-		<Version>2.1.0</Version>
-		
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 		<Platform>x64</Platform>
 		<Configuration>Release</Configuration>
@@ -73,6 +70,7 @@
 	
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
+		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
