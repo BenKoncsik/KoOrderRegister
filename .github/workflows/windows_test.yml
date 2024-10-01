@@ -68,8 +68,6 @@ jobs:
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
       - name: Install .NET MAUI Android full workloads
-        run: dotnet workload install microsoft-android-sdk-full
-      - name: Install .NET MAUI Android full workloads
         run: dotnet workload install microsoft-maui-sdk-full
       - name: Install .NET SDK WorkloadAutoImportPropsLocator
         run: dotnet workload install microsoft-net-sdk-workloadautoimportpropslocator
