@@ -83,8 +83,10 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -r win-x64 -c Release -f net8.0-windows10.0.19041.0 ^
   --output "output/build/" ^
   -p:PackageType=Msix ^
-  -p:PackageCertificateKeyFile="KoOrderRegister/Technical/kor.pfx" ^
-  -p:PackageCertificatePassword="kor" ^
+  REM -p:PackageCertificateKeyFile="KoOrderRegister/Technical/kor.pfx" ^
+  REM -p:PackageCertificatePassword="kor" ^
+  -p:PackageCertificateStoreLocation="LocalMachine" ^
+  -p:PackageCertificateStoreName="My" ^
   -v diag ^
   -p:AppxPackageDir="../output/"
 
