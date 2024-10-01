@@ -78,13 +78,12 @@ echo Build and rename process completed. New APK: %NEW_APK_NAME%
 
 echo Building MSIX package for Windows x64...
 REM dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
-REM Import-PfxCertificate -FilePath Technical\kor.pfx -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String kor -AsPlainText -Force) -Exportable
 
 dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -r win-x64 -c Release -f net8.0-windows10.0.19041.0 ^
   --output "output/build/" ^
   -p:PackageType=Msix ^
-  -p:PackageCertificateKeyFile="KoOrderRegister\Technical\kor.pfx" ^
+  -p:PackageCertificateKeyFile="Technical/kor.pfx" ^
   -p:PackageCertificatePassword="kor" ^
   -v diag ^
   -p:AppxPackageDir="../output/"
