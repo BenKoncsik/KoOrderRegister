@@ -93,22 +93,23 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
 
 echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
-$msixFile = Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1
 
+REM Find the first .msix file
+REM set "msixFile=Get-ChildItem -Path $OUTPUT_DIR\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test -Filter "*.msix" | Select-Object -First 1"
+for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
+    set "msixFile=%%f"
+    goto :FoundMsix
+)
+:FoundMsix
 
+if defined msixFile (
+    set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64.msix"
+    move "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
+    echo File renamed: %OUTPUT_DIR%\%newFileName%
+) else (
+    echo No msix file in %OUTPUT_DIR%
+)
 
-if ($msixFile) {
-    # Új fájlnév létrehozása
-    $newFileName = "KoOrderRegister_$NEW_VERSION_X64.msix"
-    $newFilePath = Join-Path $OUTPUT_DIR $newFileName
-
-    # Fájl átnevezése
-    Rename-Item -Path $msixFile.FullName -NewName $newFileName
-    Write-Host "File renamed: $newFilePath"
-} else {
-    Write-Host "No msix file $OUTPUT_DIR"
-}
-xcopy "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix" "%OUTPUT_DIR%" /Y /I
 echo Copy completed.
 echo MSIX build process completed.
 
