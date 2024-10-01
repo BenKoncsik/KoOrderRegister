@@ -58,11 +58,11 @@
 
 
             </Grid>
-                <Grid IsVisible="{Binding IsLoading}"
+            <Grid IsVisible="{Binding IsRefreshing}"
                       BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
                       Opacity="0.4">
                 <VerticalStackLayout>
-                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                    <ActivityIndicator IsRunning="{Binding IsRefreshing}"
                                        HorizontalOptions="Center"
                                        HeightRequest="250"
                                        WidthRequest="250"

@@ -16,103 +16,86 @@
                      ToolTipProperties.Text="{x:Static res:AppRes.AddNewOrder}"/>
        
     </ContentPage.ToolbarItems>
- 
-    <ScrollView>
-        <VerticalStackLayout Spacing="10">
-            <StackLayout  Padding="3, 10, 3, 20">
+    <Grid RowDefinitions="Auto, Auto, *"
+          Padding="3,10,3,20">
+        <StackLayout  Padding="3, 10, 3, 20"
+                      Grid.Row="0">
             <SearchBar x:Name="searchBar"
                        Placeholder="{x:Static res:AppRes.Search}"
                        TextChanged="OnTextChanged"
                        SearchCommand="{Binding SearchCommand}"
-                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
-            </StackLayout>
-            <Grid RowDefinitions="*,*">
-            <Grid Padding="3, 0, 0, 3"
-                      RowDefinitions="Auto"
-                      ColumnDefinitions="*,*,*"
-                  Grid.Row="0">
-                    <Label Text="{x:Static res:AppRes.OrderNumber}"
-                           Grid.Column="0"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
-                    <Label Text="{x:Static res:AppRes.Date}"
-                           Grid.Column="1"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                    <Label Text="{x:Static res:AppRes.Name}"
-                           Grid.Column="2"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                </Grid>
+                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" /> 
+        </StackLayout>
+        <Grid Padding="3, 0, 0, 3"
+              RowDefinitions="Auto"
+              ColumnDefinitions="*,*,*"
+              Grid.Row="1">
+            <Label Text="{x:Static res:AppRes.OrderNumber}"
+                   Grid.Column="0"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+            <Label Text="{x:Static res:AppRes.Date}"
+                   Grid.Column="1"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Label Text="{x:Static res:AppRes.Name}"
+                   Grid.Column="2"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+        </Grid>
 
-                <ListView x:Name="ordersListView"
-                          ItemsSource="{Binding Orders}"
-                          SeparatorVisibility="Default"
-                          SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
-                          ItemAppearing="ListView_ItemAppearing"
-                          RowHeight="150"
-                          Grid.Row="1">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <!-- Context menu -->
-                                <ViewCell.ContextActions>
-                                    <MenuItem Text="{x:Static res:AppRes.Edit}"
-                                              Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
-                                              CommandParameter="{Binding .}" />
+        <RefreshView Command="{Binding UpdateOrderCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Grid.Row="2">
+            <ListView x:Name="ordersListView"
+                      ItemsSource="{Binding Orders}"
+                      SeparatorVisibility="Default"
+                      SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                      ItemAppearing="ListView_ItemAppearing"
+                      RowHeight="150">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!-- Context menu -->
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="{x:Static res:AppRes.Edit}"
+                                          Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                          CommandParameter="{Binding .}" />
 
-                                    <MenuItem Text="{x:Static res:AppRes.Delete}"
-                                              IsDestructive="True"
-                                              Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=ordersListView}}"
-                                              CommandParameter="{Binding .}" />
-                                </ViewCell.ContextActions>
-                                <Grid RowDefinitions="*"
-                                      ColumnDefinitions="*,*,*"
-                                      Padding="5,10">
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                              Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
-                                                              CommandParameter="{Binding .}" />
-                                    </Grid.GestureRecognizers>
-                                    <Label Text="{Binding OrderNumber}"
-                                           Grid.Column="0"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                          />
-                                    <Label Text="{Binding OrderDate}"
-                                           Grid.Column="1"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                          />
-                                    <Label Text="{Binding Customer.Name}"
-                                           Grid.Column="2"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                            />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Grid IsVisible="{Binding IsLoading}"
-                      BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-                      Opacity="0.4">
-                    <VerticalStackLayout>
-                        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                                           HorizontalOptions="Center"
-                                           HeightRequest="250"
-                                           WidthRequest="250"
-                                           VerticalOptions="Center"
-                                           Margin="25" />
-                        <Label Text="{x:Static res:AppRes.Loading}"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"
-                               Margin="20" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
-
-    </ContentPage>
+                                <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                          CommandParameter="{Binding .}" />
+                            </ViewCell.ContextActions>
+                            <Grid RowDefinitions="*"
+                                  ColumnDefinitions="*,*,*"
+                                  Padding="5,10">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.EditOrderCommand, Source={x:Reference Name=ordersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                                <Label Text="{Binding OrderNumber}"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding OrderDate}"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Customer.Name}"
+                                       Grid.Column="2"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+    </Grid>
+            
+        
+        
+</ContentPage>

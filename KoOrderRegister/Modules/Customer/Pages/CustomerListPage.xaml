@@ -17,108 +17,100 @@
     </ContentPage.ToolbarItems>
 
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="10">
-            <StackLayout Padding="3, 10, 3, 20">
+    <Grid RowDefinitions="Auto, Auto, *"
+          Padding="3,10,3,20">
+        <StackLayout Padding="3, 10, 3, 20"
+                             Grid.Row="0">
             <SearchBar x:Name="searchBar"
                        Placeholder="{x:Static res:AppRes.Search}"
                        SearchCommand="{Binding SearchCommand}"
                        TextChanged="OnTextChanged"
                        SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
-            </StackLayout>
-            <Grid RowDefinitions="*,*">
-                <Grid Padding="3, 0, 0, 3"
-                      RowDefinitions="Auto"
-                      ColumnDefinitions="*,*,*"
-                      Grid.Row="0">
-                    <Label Text="{x:Static res:AppRes.Name}"
-                           Grid.Column="0"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                    <Label Text="{x:Static res:AppRes.NHI}"
-                           Grid.Column="1"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                    <Label Text="{x:Static res:AppRes.Phone}"
-                           Grid.Column="2"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                </Grid>
-                <ListView x:Name="customersListView"
-                          ItemsSource="{Binding Customers}"
-                          SeparatorVisibility="Default"
-                          SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
-                          ItemAppearing="ListView_ItemAppearing"
-                          RowHeight="150"
-                          Grid.Row="1">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <!-- Context menu -->
-                                <ViewCell.ContextActions>
-                                    <MenuItem Text="{x:Static res:AppRes.Edit}"
-                                              Command="{Binding Path=BindingContext.EditCustomerCommand, Source={x:Reference Name=customersListView}}"
-                                              CommandParameter="{Binding .}" />
+        </StackLayout>
 
-                                    <MenuItem Text="{x:Static res:AppRes.Delete}"
-                                              IsDestructive="True"
-                                              Command="{Binding Path=BindingContext.DeleteCustomerCommand, Source={x:Reference Name=customersListView}}"
-                                              CommandParameter="{Binding .}" />
-                                </ViewCell.ContextActions>
-                                <Grid  Padding="5,10">
-                                    <Grid.ColumnDefinitions >
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+        <Grid Padding="3, 0, 0, 3"
+              RowDefinitions="Auto"
+              ColumnDefinitions="*,*,*"
+              Grid.Row="1">
+            <Label Text="{x:Static res:AppRes.Name}"
+                   Grid.Column="0"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Label Text="{x:Static res:AppRes.NHI}"
+                   Grid.Column="1"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Label Text="{x:Static res:AppRes.Phone}"
+                   Grid.Column="2"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+        </Grid>
 
-                                    <Grid.RowDefinitions >
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                              Command="{Binding Path=BindingContext.EditCustomerCommand, Source={x:Reference Name=customersListView}}"
-                                                              CommandParameter="{Binding .}" />
-                                    </Grid.GestureRecognizers>
+        <RefreshView Command="{Binding UpdateCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Grid.Row="2">
+            <ListView x:Name="customersListView"
+                      ItemsSource="{Binding Customers}"
+                      SeparatorVisibility="Default"
+                      SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                      ItemAppearing="ListView_ItemAppearing"
+                      RowHeight="150"
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
 
-                                    <Label Text="{Binding Name}"
-                                           Grid.Column="0"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25" />
-                                    <Label Text="{Binding NationalHealthInsurance}"
-                                           Grid.Column="1"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25" />
-                                    <Label Text="{Binding Phone}"
-                                           Grid.Column="2"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                           Margin="2, 25, 0, 25" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Grid IsVisible="{Binding IsLoading}"
-                      BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-                      Opacity="0.4">
-                    <VerticalStackLayout>
-                        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                                           HorizontalOptions="Center"
-                                           HeightRequest="250"
-                                           WidthRequest="250"
-                                           VerticalOptions="Center"
-                                           Margin="25" />
-                        <Label Text="{x:Static res:AppRes.Loading}"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"
-                               Margin="20" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="{x:Static res:AppRes.Edit}"
+                                          Command="{Binding Path=BindingContext.EditCustomerCommand, Source={x:Reference Name=customersListView}}"
+                                          CommandParameter="{Binding .}" />
+
+                                <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DeleteCustomerCommand, Source={x:Reference Name=customersListView}}"
+                                          CommandParameter="{Binding .}" />
+                            </ViewCell.ContextActions>
+                            <Grid  Padding="5,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.EditCustomerCommand, Source={x:Reference Name=customersListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+
+                                <Label Text="{Binding Name}"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Margin="2, 25, 0, 25" />
+                                <Label Text="{Binding NationalHealthInsurance}"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Margin="2, 25, 0, 25" />
+                                <Label Text="{Binding Phone}"
+                                       Grid.Column="2"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Margin="2, 25, 0, 25" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+
+
+    </Grid>
+
+
 </ContentPage>
