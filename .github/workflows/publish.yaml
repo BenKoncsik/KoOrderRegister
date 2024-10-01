@@ -8,6 +8,7 @@ on:
     branches:
       - main
 
+
 jobs:
   prepare-version:
     runs-on: ubuntu-latest
@@ -61,8 +62,10 @@ jobs:
         run: |
           Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
         shell: powershell
-      - name: Install .NET MAUI workloads
+      - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+      - name: Install .NET SDK maui
+        run: dotnet workload install maui
       - name: Run build script
         run: cmd /c ".\build.bat"
         env:
@@ -86,7 +89,7 @@ jobs:
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minor-version }}
           release_name: ${{ needs.prepare-version.outputs.new-version }}
           body_path: Technical/release_base.md
-          draft: false
+          draft: true
           prerelease: false
           generate_release_notes: true
         env:

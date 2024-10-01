@@ -1,15 +1,15 @@
-name: Windows-test
+#name: Windows-test
 
-env:
-  branch-name: '92-create-github-runner'
+#env:
+ # branch-name: '92-create-github-runner'
 
-on:
-  push:
-    branches:
-      - 92-create-github-runner
-  pull_request:
-    branches:
-      - 92-create-github-runner
+#on:
+  #push:
+   # branches:
+#      - 92-create-github-runner
+  #pull_request:
+  #  branches:
+ #     - 92-create-github-runner
 
 jobs:
   prepare-version:
