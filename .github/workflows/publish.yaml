@@ -83,6 +83,7 @@ jobs:
         run: git remote update
 
       - name: Create pull request
+        id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -91,6 +92,7 @@ jobs:
           base: main
           title: "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
           body: "This pull request updates the version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}."
+
 
       - name: Auto-merge pull request
         uses: actions/github-script@v6
