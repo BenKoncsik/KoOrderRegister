@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -65,16 +66,25 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         public async void BackUp()
         {
-            var result = await FolderPicker.PickAsync(new CancellationToken());
-            if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
+            CancellationTokenSource cancellationToken = new CancellationTokenSource();
+            try
             {
-                IsRefreshing = true;
-                string jsonContent = await _databaseModel.ExportDatabaseToJson();
-                var fileName = "koBackup.kncsk";
-                var fullPath = Path.Combine(result.Folder.Path, fileName);
-                //File.WriteAllText(fullPath, jsonContent);
-                IsRefreshing = false;
+                var result = await FolderPicker.PickAsync(new CancellationToken());
+                if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
+                {
+                    IsRefreshing = true;
+                    var fileName = "koBackup.kncsk";
+                    var fullPath = Path.Combine(result.Folder.Path, fileName);
+                    await _databaseModel.ExportDatabaseToJson(fullPath, cancellationToken.Token, ProgressCallback);
+                    IsRefreshing = false;
+                }
             }
+            finally
+            {
+                cancellationToken.Cancel();
+                cancellationToken.Dispose();
+            }
+            
         }   
         
         public async void Restore()
@@ -98,10 +108,10 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                     if (pickResult != null)
                     {
                         IsRefreshing = true;
-                        var jsonData = await File.ReadAllTextAsync(pickResult.FullPath);
-                        if (!string.IsNullOrEmpty(jsonData))
+                        Stream streamResult = await pickResult.OpenReadAsync();
+                        if (streamResult != null)
                         {
-                            await _databaseModel.ImportDatabaseFromJson(jsonData);
+                            await _databaseModel.ImportDatabaseFromJson(streamResult, ProgressCallback);
                             IsRefreshing = false;
                             await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.DatabaseRestoredSuccessfully, AppRes.Ok);
                         }
@@ -121,6 +131,11 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 IsRefreshing = false;
 
             }
+        }
+
+        public void ProgressCallback(float precent)
+        {
+            LoadingTXT = $"{AppRes.Loading}: {precent}%";
         }
 
         public void ChangeLanguage(ILanguageSettings languageSettings)

@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
 using System.Collections.Concurrent;
+using System.Text;
 using System.Threading;
 
 namespace KoOrderRegister.Modules.Database.Services
@@ -234,6 +235,12 @@ namespace KoOrderRegister.Modules.Database.Services
             }
         }
 
+        public async Task<int> CountCustomers()
+        {
+            var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {CUSTOMER_TABLE}");
+            return count;
+        }
+
         #endregion
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
@@ -443,11 +450,13 @@ namespace KoOrderRegister.Modules.Database.Services
                 }
                 yield return order;
             }
-            
-   
-
         }
 
+        public async Task<int> CountOrders()
+        {
+            var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {ORDER_TABLE}");
+            return count;
+        }
         #endregion
         #region FileModel CRUD Implementation
         public async Task<int> CreateFile(FileModel file)
@@ -564,50 +573,154 @@ namespace KoOrderRegister.Modules.Database.Services
             long length = await Database.ExecuteScalarAsync<long>(query, id.ToString());
             return length.ToStringSize();
         }
+        public async Task<int> CountFiles()
+        {
+            var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {FILES_TABLE}");
+            return count;
+        }
         #endregion
 
         #region export/import
-        public async Task<string> ExportDatabaseToJson()
+        public async Task ExportDatabaseToJson(string filePath, CancellationToken cancellationToken, Action<float> progressCallback = null)
         {
-            var customers = await GetAllCustomers();
-            var orders = await GetAllOrders();
-            var files = await GetAllFiles();
-            var databaseExport = new
+            int totalItems = await CountCustomers() + await CountOrders() + await CountFiles();
+            int processedItems = 0;
+
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+            using (StreamWriter streamWriter = new StreamWriter(fileStream, new UTF8Encoding(false)))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(streamWriter))
             {
-                Customers = customers,
-                Orders = orders,
-                Files = files
-            };
-            return JsonConvert.SerializeObject(databaseExport);
+                JsonSerializer serializer = new JsonSerializer();
+
+                jsonWriter.WriteStartObject();
+                // Serialize Customers
+                jsonWriter.WritePropertyName("Customers");
+                jsonWriter.WriteStartArray();
+                await foreach (var customer in GetAllCustomersAsStream(cancellationToken))
+                {
+                    serializer.Serialize(jsonWriter, customer);
+                    processedItems++;
+                    progressCallback?.Invoke(100 * processedItems / totalItems);
+                }
+                jsonWriter.WriteEndArray();
+
+                // Serialize Orders
+                jsonWriter.WritePropertyName("Orders");
+                jsonWriter.WriteStartArray();
+                await foreach (var order in GetAllOrdersAsStream(cancellationToken))
+                {
+                    serializer.Serialize(jsonWriter, order);
+                    processedItems++;
+                    progressCallback?.Invoke(100 * processedItems / totalItems);
+                }
+                jsonWriter.WriteEndArray();
+
+                // Serialize Files
+                jsonWriter.WritePropertyName("Files");
+                jsonWriter.WriteStartArray();
+                await foreach (var file in GetAllFilesAsStream(cancellationToken))
+                {
+                    serializer.Serialize(jsonWriter, file);
+                    processedItems++;
+                    progressCallback?.Invoke(100 * processedItems / totalItems);
+                }
+                jsonWriter.WriteEndArray();
+
+                jsonWriter.WriteEndObject();
+                await jsonWriter.FlushAsync();
+            }
         }
 
-        public async Task ImportDatabaseFromJson(string jsonData)
+        public async Task ImportDatabaseFromJson(Stream jsonStream, Action<float> progressCallback = null)
         {
-            DatabaseImportModel? databaseImport = JsonConvert.DeserializeObject<DatabaseImportModel>(jsonData);
-            if(databaseImport == null)
+            int totalCount = 0;
+            int processedCount = 0;
+            ProgressState state = new ProgressState();
+            using (StreamReader streamReader = new StreamReader(jsonStream))
+            using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
             {
-                return;
-            }
-            await Database.DropTableAsync<CustomerModel>();
-            await Database.DropTableAsync<OrderModel>();
-            await Database.DropTableAsync<FileModel>();
+                JsonSerializer serializer = new JsonSerializer();
 
-            await Init(force: true); 
-            foreach (var customer in databaseImport.Customers)
-            {
-                await CreateCustomer(customer);
+                if (!jsonReader.Read() || jsonReader.TokenType != JsonToken.StartObject)
+                {
+                    throw new JsonSerializationException("Expected start of JSON object.");
+                }
+
+                await Database.DropTableAsync<CustomerModel>();
+                await Database.DropTableAsync<OrderModel>();
+                await Database.DropTableAsync<FileModel>();
+
+                await Init(force: true);
+
+                while (jsonReader.Read())
+                {
+                    if (jsonReader.TokenType == JsonToken.PropertyName)
+                    {
+                        string propertyName = jsonReader.Value.ToString();
+                        jsonReader.Read();
+
+                        if (jsonReader.TokenType == JsonToken.StartArray)
+                        {
+                            while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
+                            {
+                                totalCount++;
+                            }
+                        }
+                    }
+                }
             }
-            foreach (var order in databaseImport.Orders)
+            state.TotalCount = totalCount;
+            using (StreamReader streamReader = new StreamReader(jsonStream))
+            using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
             {
-                await CreateOrder(order);
+                JsonSerializer serializer = new JsonSerializer();
+
+                if (!jsonReader.Read() || jsonReader.TokenType != JsonToken.StartObject)
+                {
+                    throw new JsonSerializationException("Expected start of JSON object.");
+                }
+                jsonStream.Position = 0;
+                streamReader.DiscardBufferedData();
+
+                jsonReader.Read(); 
+
+                while (jsonReader.Read())
+                {
+                    if (jsonReader.TokenType == JsonToken.PropertyName)
+                    {
+                        string propertyName = jsonReader.Value.ToString();
+                        if (propertyName == CUSTOMER_TABLE)
+                        {
+                            await ProcessItems<CustomerModel>(jsonReader, serializer, CreateCustomer, state, totalCount, progressCallback);
+                        }
+                        else if (propertyName == ORDER_TABLE)
+                        {
+                            await ProcessItems<OrderModel>(jsonReader, serializer, CreateOrder, state, totalCount, progressCallback);
+                        }
+                        else if (propertyName == FILES_TABLE)
+                        {
+                            await ProcessItems<FileModel>(jsonReader, serializer, CreateFile, state, totalCount, progressCallback);
+                        }
+                    }
+                }
             }
-            foreach (var file in databaseImport.Files)
+
+        }
+
+        private async Task ProcessItems<T>(JsonTextReader jsonReader, JsonSerializer serializer, Func<T, Task> createFunc, ProgressState state, int totalCount, Action<float> progressCallback)
+        {
+            if (jsonReader.Read() && jsonReader.TokenType == JsonToken.StartArray)
             {
-                await CreateFile(file);
+                while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
+                {
+                    T item = serializer.Deserialize<T>(jsonReader);
+                    await createFunc(item);
+                    state.ProcessedCount++;
+                    state.UpdateProgress(progressCallback);
+                }
             }
         }
 
- 
         public class DatabaseImportModel
         {
             public List<CustomerModel> Customers { get; set; }
@@ -619,7 +732,7 @@ namespace KoOrderRegister.Modules.Database.Services
     }
 
 
-    public static class Constants
+    internal static class Constants
     {
 #if DEBUG
         public const string DatabaseFilename = "order_debug.db";
@@ -635,4 +748,19 @@ namespace KoOrderRegister.Modules.Database.Services
         public static string basePath =>
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),  DatabaseFilename);
     }
+
+    internal class ProgressState
+    {
+        public int ProcessedCount { get; set; }
+        public int TotalCount { get; set; }
+        public void UpdateProgress(Action<float> progressCallback)
+        {
+            if (progressCallback != null)
+            {
+                float progressPercentage = (float)ProcessedCount / TotalCount * 100;
+                progressCallback?.Invoke(progressPercentage);
+            }
+        }
+    }
+
 }
