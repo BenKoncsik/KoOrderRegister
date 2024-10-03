@@ -69,6 +69,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
+          force: true 
+      
+      - name: Update git remote references
+        run: git remote update
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
