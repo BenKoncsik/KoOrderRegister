@@ -87,23 +87,36 @@ jobs:
       - name: Auto-merge pull request
         uses: actions/github-script@v6
         with:
-          script: |
-            const pr = await github.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              head: '${{ env.BRANCH_NAME }}',
-            });
-            
-            if (pr.data.length > 0) {
-              const prNumber = pr.data[0].number;
-              await github.pulls.merge({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-                merge_method: 'squash',
-              });
-            }
+        script: |
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          const branchName = '${{ env.BRANCH_NAME }}';
+
+        const { data: pullRequests } = await github.pulls.list({
+          owner: owner,
+          repo: repo,
+          state: 'open',
+          head: `${owner}:${branchName}`,
+        });
+
+
+        if (pullRequests.length > 0) {
+          const prNumber = pullRequests[0].number;
+
+    
+          await github.pulls.merge({
+            owner: owner,
+            repo: repo,
+            pull_number: prNumber,
+            merge_method: 'squash',
+          });
+
+          console.log(`Pull request #${prNumber} has been merged.`);
+        } else {
+          console.log(`No pull request found for branch ${branchName}`);
+        }
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+ 
 
 
   build:
