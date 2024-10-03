@@ -92,7 +92,7 @@ jobs:
             const repo = context.repo.repo;
             const branchName = '${{ env.BRANCH_NAME }}';
 
-            const { data: pullRequests } = await github.pulls.list({
+            const { data: pullRequests } = await github.rest.pulls.list({
               owner: owner,
               repo: repo,
               state: 'open',
@@ -102,7 +102,7 @@ jobs:
             if (pullRequests.length > 0) {
               const prNumber = pullRequests[0].number;
 
-              await github.pulls.merge({
+              await github.rest.pulls.merge({
                 owner: owner,
                 repo: repo,
                 pull_number: prNumber,
@@ -114,6 +114,7 @@ jobs:
               console.log(`No pull request found for branch ${branchName}`);
             }
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
 
  
 
