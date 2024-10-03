@@ -82,16 +82,10 @@ jobs:
       - name: Update git remote references
         run: git remote update
 
-      - name: Create pull request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
-          branch: ${{ env.BRANCH_NAME }}
-          base: main
-          title: "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
-          body: "This pull request updates the version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}."
+      - name: create pull request
+        run: gh pr create -B main -H ${{ env.BRANCH_NAME }} --title 'Merge ${{ env.BRANCH_NAME }} into main' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Auto-merge pull request
