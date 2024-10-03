@@ -111,6 +111,11 @@ jobs:
             }
           github-token: ${{ secrets.GITHUB_TOKEN }}
           
+      - name: Delete the new branch locally
+        run: git branch -D ${{ env.BRANCH_NAME }}
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
           
   build:
     runs-on: [self-hosted, Windows]
