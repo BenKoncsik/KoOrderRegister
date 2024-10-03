@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch all history so we can access other branches
+          fetch-depth: 0 
 
       - name: Show version.txt content
         run: cat version.txt
@@ -68,24 +68,24 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
 
-      - name: Merge branch into main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
-        run: |
-          git fetch origin main
-          git checkout main
-          git pull origin main
-          git merge --no-ff $BRANCH_NAME -m "Merge $BRANCH_NAME into main"
-          git push origin main
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
+          branch: ${{ env.BRANCH_NAME }}
+          base: main
+          title: "Update version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
+          body: "This pull request updates the version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}."
 
-      - name: Delete the new branch locally and remotely
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: ${{ env.BRANCH_NAME }}
-        run: |
-          git branch -D $BRANCH_NAME
-          git push origin --delete $BRANCH_NAME
+      - name: Auto-approve and merge pull request
+        if: ${{ github.event_name == 'push' }}
+        uses: ahmadnassri/action-auto-merge@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pull_request: "{{ steps.version.outputs.new-version }}"
+          merge_method: squash
+
 
   build:
     runs-on: [self-hosted, Windows]
