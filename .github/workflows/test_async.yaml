@@ -143,10 +143,7 @@ jobs:
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            output/*.apk
-            output/*.msix
-            KoOrderRegister/Technical/kor.pfx
+          files: apk-artifact/*.apk,apk-artifact/*.msix,KoOrderRegister/Technical/kor.pfx
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
           release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
