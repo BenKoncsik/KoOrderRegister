@@ -134,7 +134,7 @@ jobs:
     needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Delete output
-        run: if (-Not (Test-Path -Path output)) { rmdir /q/s output }
+        run: if (-Not (Test-Path -Path output)) {  Remove-Item -Recurse -Force output }
       - name: Download APK Artifact
         uses: actions/download-artifact@v3
         with:
