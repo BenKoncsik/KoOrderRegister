@@ -71,8 +71,7 @@ dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidK
 
 if "%publish_version%"=="Debug" (
 	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
-)
-else(
+) else (
 	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
 )
 echo Apk path: %ORIGINAL_APK%
