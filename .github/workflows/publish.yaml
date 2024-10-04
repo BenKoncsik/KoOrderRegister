@@ -76,6 +76,9 @@ jobs:
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
           echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT
+          echo "::set-output name=new-version::$NEW_VERSION"
+          echo "::set-output name=versionCode::$VERSION_CODE"
+          echo "::set-output name=minor-version::$NEW_MINOR"
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
     
