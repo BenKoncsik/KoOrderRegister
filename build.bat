@@ -101,8 +101,9 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -p:AppxPackageDir="../output/" ^
   -p:PackageCertificateStoreLocation="CurrentUser" ^
   -p:PackageCertificateStoreName="My" ^
-  -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8
-  -v diag ^
+  -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8 ^
+  -p:PackageCertificatePassword=kor ^
+  -v diag
 
   REM -p:PackageCertificateKeyFile="KoOrderRegister\Technical\kor.pfx" ^
   REM -p:PackageCertificatePassword=kor
