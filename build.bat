@@ -101,8 +101,9 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -p:AppxPackageDir="../output/" ^
   -p:PackageCertificateStoreLocation="CurrentUser" ^
   -p:PackageCertificateStoreName="My" ^
-  -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8
-  -v diag ^
+  -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8 ^
+  -p:PackageCertificatePassword=kor ^
+  -v diag
 
   REM -p:PackageCertificateKeyFile="KoOrderRegister\Technical\kor.pfx" ^
   REM -p:PackageCertificatePassword=kor
@@ -125,7 +126,6 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
     set "msixFile=%%f"
     goto :FoundMsix
 )
-:FoundMsix
 ) else (
 
 set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test"
@@ -135,16 +135,19 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
     set "msixFile=%%f"
     goto :FoundMsix
 )
-:FoundMsix
 )
 
+echo Msix folder: %msix_folder%
+echo No msix file found in %msix_folder%
+exit /b 1
 
+:FoundMsix
 echo Msix folder: %msix_folder%
 
+set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
+echo New File name: %newFileName%
 
 if defined msixFile (
-    set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
-	echo New File name: %newFileName%
     move "%msix_folder%\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
