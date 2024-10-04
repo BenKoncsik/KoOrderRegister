@@ -33,6 +33,10 @@ jobs:
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
             --jq '.value')
           echo "Current version: $VERSION"
+          if [[ -z "$VERSION" ]]; then
+            echo "Error: VERSION is empty"
+            exit 1
+          fi
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
           echo "MAJOR=$MAJOR" >> $GITHUB_ENV
           echo "MINOR=$MINOR" >> $GITHUB_ENV
@@ -52,6 +56,7 @@ jobs:
       - name: Update the version using GitHub CLI
         run: |
           NEW_VERSION="$MAJOR.$NEW_MINOR.$PATCH"
+          echo "Updating version to: $NEW_VERSION"
           gh api \
             --method PATCH \
             -H "Accept: application/vnd.github+json" \
@@ -60,16 +65,18 @@ jobs:
             -f "name=STABIL_VERSION" -f "value=$NEW_VERSION"
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
-          
+          NEW_MINOR: ${{ env.new-minor }}
+
       - name: Set outputs for the new version
         id: version
         run: |
           VERSION_CODE="$MAJOR"
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
-          echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT  
+          echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ secrets.TOKEN }}          
+          GH_TOKEN: ${{ secrets.TOKEN }}
+    
         
   build:
     runs-on: [self-hosted, Windows]
