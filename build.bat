@@ -18,6 +18,8 @@ if not exist %APPX_MANIFEST% (
     exit /b 1
 )
 
+echo Build version: %BUILD_VERSION%
+
 echo Reading current version...
 for /f "tokens=3 delims=<>" %%a in ('findstr "ApplicationDisplayVersion" %CS_PROJECT%') do set "CURRENT_VERSION=%%a"
 set "WINDOWS_CURRENT_VERSION=%CURRENT_VERSION%.0"
@@ -62,7 +64,7 @@ echo Publishing the application...
 dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
 
 set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
-set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android.apk"
+set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
 
 echo Renaming the APK file...
 if exist "%ORIGINAL_APK%" (
@@ -101,7 +103,7 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
 :FoundMsix
 
 if defined msixFile (
-    set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64.msix"
+    set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
     move "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
