@@ -5,9 +5,6 @@ env:
   varrible: 'DEV_VERSION'
 
 on:
-  push:
-    branches:
-      - 145-add-dev-and-stabil-version-checker
   pull_request:
     branches:
      - 145-add-dev-and-stabil-version-checker
