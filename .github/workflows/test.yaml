@@ -1,7 +1,7 @@
 name: Publish_DEV_TEST
 
 env:
-  branch-name: '145-add-dev-and-stabil-version-checker'
+  branch-name: '145-add-dev-and-stabil-version-checker_1'
   varrible: 'DEV_VERSION'
 
 on:
