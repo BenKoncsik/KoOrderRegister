@@ -5,13 +5,15 @@ env:
   varrible: 'DEV_VERSION'
 
 on:
+  push:
+    branches:
+      - 145-add-dev-and-stabil-version-checker
   pull_request:
     branches:
      - 145-add-dev-and-stabil-version-checker
 permissions:
   contents: write
   pull-requests: write
-
 
 jobs:
   prepare-version:
@@ -65,8 +67,7 @@ jobs:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_PATCH: ${{ env.new-minor }}    
         
-        
-  build:
+  build-apk:
     runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
@@ -79,28 +80,76 @@ jobs:
         run: |
           echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
-          echo "Minor Code: ${{ needs.prepare-version.outputs.minorVersion }}"
+      - name: Install .NET MAUI Android workloads
+        run: dotnet workload install maui-android
+      - name: Install .NET SDK maui
+        run: dotnet workload install maui
+      - name: Run APK build script
+        run: cmd /c ".\build_apk.bat"
+        env:
+          KEYPASS: ${{ secrets.KEYPASS }}
+          NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
+          NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
+          BUILD_VERSION: ${{ env.varrible }}
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-artifact
+          path: output/*.apk
+
+  build-msix:
+    runs-on: [self-hosted, Windows]
+    needs: prepare-version
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Debug Output Values
+        run: |
+          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
       - name: Install Certificate
         run: |
           Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
           -CertStoreLocation Cert:\CurrentUser\My `
           -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
         shell: powershell
-      - name: Install .NET MAUI Android workloads
-        run: dotnet workload install maui-android
-      - name: Install .NET SDK maui
-        run: dotnet workload install maui
-      - name: Run build script
-        run: cmd /c ".\build.bat"
+      - name: Run MSIX build script
+        run: cmd /c ".\build_msix.bat"
         env:
-          KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
-          NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+      - name: Upload MSIX
+        uses: actions/upload-artifact@v2
+        with:
+          name: msix-artifact
+          path: output/*.msix
 
-
-
-
-
-
- 
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-apk, build-msix]
+    steps:
+      - name: Download APK Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: apk-artifact
+      - name: Download MSIX Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: msix-artifact
+      - name: Create or Update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            output/*.apk
+            output/*.msix
+            KoOrderRegister/Technical/kor.pfx
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+          release_name: ${{ needs.prepare-version.outputs.newVersion }}
+          body_path: Technical/release_base.md
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
