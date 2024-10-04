@@ -7,9 +7,14 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 permissions:
   contents: write
   pull-requests: write
+  workflows: write
+
 
 jobs:
   prepare-version:
