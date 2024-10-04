@@ -126,7 +126,6 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
     set "msixFile=%%f"
     goto :FoundMsix
 )
-:FoundMsix
 ) else (
 
 set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test"
@@ -136,10 +135,13 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
     set "msixFile=%%f"
     goto :FoundMsix
 )
-:FoundMsix
 )
 
 
+echo Msix folder: %msix_folder%
+echo No msix file found in %msix_folder%
+exit /b 1
+:FoundMsix
 echo Msix folder: %msix_folder%
 
 
