@@ -68,7 +68,7 @@ jobs:
           NEW_PATCH: ${{ env.new-minor }}    
         
   build-apk:
-    runs-on: [self-hosted, Windows]
+    runs-on: [self-hosted, A36Szerver, Windows]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
@@ -95,7 +95,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: apk-artifact
-          path: output/*.apk
+          path: output\*.apk
 
   build-msix:
     runs-on: [self-hosted, Windows]
@@ -126,7 +126,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: msix-artifact
-          path: output/*.msix
+          path: output\*.msix
 
   release:
     runs-on: ubuntu-latest
@@ -155,3 +155,4 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          
