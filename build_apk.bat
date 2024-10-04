@@ -45,10 +45,8 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Updating the project file with new version...
-
-REM windows
-powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version=\"%WINDOWS_CURRENT_VERSION%\"', 'Version=\"%WINDOWS_NEW_VERSION%\"' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
-
+REM android
+powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 
 echo Create dictonary %OUTPUT_DIR_BUILD%
@@ -64,64 +62,26 @@ echo Version code is %NEW_VERSION_CODE%
 
 
 
-
-
-echo Building MSIX package for Windows x64...
-REM dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
-
-dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
-  -r win-x64 -c %publish_version% -f net8.0-windows10.0.19041.0 ^
-  --output "output/build/" ^
-  -p:PackageType=Msix ^
-  -p:AppxPackageDir="../output/" ^
-  -p:PackageCertificateStoreLocation="CurrentUser" ^
-  -p:PackageCertificateStoreName="My" ^
-  -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8 ^
-  -p:PackageCertificatePassword=kor ^
-  -v diag
-  
-echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
-echo Copying MSIX package to general output directory...
-
-
+echo Publishing the application...
+dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
 
 if "%BUILD_VERSION%"=="DEV_VERSION" (
-set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test"
-    REM Find the first .msix file
-for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test\*.msix"') do (
-    set "msixFile=%%f"
-    goto :FoundMsix
-)
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
 ) else (
-
-set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test"
-
-    REM Find the first .msix file
-for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
-    set "msixFile=%%f"
-    goto :FoundMsix
-)
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
 )
 
-echo Msix folder: %msix_folder%
-echo No msix file found in %msix_folder%
-exit /b 1
+echo Apk path: %ORIGINAL_APK%
 
-:FoundMsix
-echo Msix folder: %msix_folder%
+set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
 
-set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
-echo New File name: %newFileName%
-
-if defined msixFile (
-    move "%msix_folder%\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
-    echo File renamed: %OUTPUT_DIR%\%newFileName%
+echo Renaming the APK file...
+if exist "%ORIGINAL_APK%" (
+    move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
 ) else (
-    echo No msix file in %OUTPUT_DIR%
-	echo New File name: %newFileName%
+    echo Original APK file not found
 )
 
-echo Copy completed.
-echo MSIX build process completed.
+echo Build and rename process completed. New APK: %NEW_APK_NAME%
 
 endlocal

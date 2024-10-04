@@ -68,7 +68,7 @@ jobs:
           NEW_PATCH: ${{ env.new-minor }}    
         
   build-apk:
-    runs-on: [self-hosted, A36Szerver, Windows]
+    runs-on: [windows-latest]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
