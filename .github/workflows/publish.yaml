@@ -20,9 +20,9 @@ jobs:
   prepare-version:
     runs-on: ubuntu-latest
     outputs:
-      new-version: ${{ steps.version.outputs.new-version }}
+      newVersion: ${{ steps.version.outputs.newVersion }}
       versionCode: ${{ steps.version.outputs.versionCode }}
-      minor-version: ${{ steps.version.outputs.minor-version }}
+      minorVersion: ${{ steps.version.outputs.minorVersion }}
     steps:
       - name: Get the current version using GitHub CLI
         id: get-version
@@ -63,19 +63,12 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
             -f "name=STABIL_VERSION" -f "value=$NEW_VERSION"
-        env:
-          GH_TOKEN: ${{ secrets.TOKEN }}
-          NEW_MINOR: ${{ env.new-minor }}
-
-      - name: Set outputs for the new version
-        id: version
-        run: |
-          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT
+          echo "minorVersion=$NEW_MINOR" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
-    
+          NEW_MINOR: ${{ env.new-minor }}    
         
   build:
     runs-on: [self-hosted, Windows]
@@ -88,9 +81,9 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.new-version }}"
+          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
-          echo "Minor Code: ${{ needs.prepare-version.outputs.minor-version }}"
+          echo "Minor Code: ${{ needs.prepare-version.outputs.minorVersion }}"
       - name: Install Certificate with Admin Privileges
         run: |
           Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
