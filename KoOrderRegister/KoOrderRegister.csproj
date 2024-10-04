@@ -47,23 +47,15 @@
 		<AppInstallerUri>https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<DefaultLanguage>en</DefaultLanguage>
-
 	</PropertyGroup>
 
 
-	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+	<PropertyGroup  Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
 		<PackageCertificateKeyFile>Technical/kor.pfx</PackageCertificateKeyFile>
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageCertificatePassword>kor</PackageCertificatePassword>
-	</PropertyGroup>
-
-
-
-	</PropertyGroup>
-	<!-- Windows publish -->
-	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
+		
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 		<PublishSingleFile>false</PublishSingleFile>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 		<Platform>x64</Platform>
@@ -75,22 +67,14 @@
 		<Configurations>Debug;Release</Configurations>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
 		<Platforms>x64</Platforms>
+	</PropertyGroup>
+	<!-- Windows publish -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
+		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
-		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PublishSingleFile>false</PublishSingleFile>
-		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-		<Platform>x64</Platform>
-		<Configuration>Release</Configuration>
-		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-		<PublishReadyToRun>false</PublishReadyToRun>
-		<SelfContained>True</SelfContained>
-		<PublishAppxPackage>true</PublishAppxPackage>
-		<Configurations>Debug;Release</Configurations>
-		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
-		<Platforms>x64</Platforms>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
