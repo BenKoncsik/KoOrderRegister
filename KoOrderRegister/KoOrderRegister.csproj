@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
@@ -52,7 +52,7 @@
 
 
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
-		<PackageCertificateKeyFile>/Technical/kor.pfx</PackageCertificateKeyFile>
+		<PackageCertificateKeyFile>Technical/kor.pfx</PackageCertificateKeyFile>
 		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
 		<PackageCertificatePassword>kor</PackageCertificatePassword>
 		
