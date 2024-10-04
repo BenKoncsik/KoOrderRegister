@@ -131,7 +131,7 @@ jobs:
   release:
    # runs-on: ubuntu-latest
     runs-on: [self-hosted, Windows]
-    needs: [build-apk, build-msix]
+    needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Download APK Artifact
         uses: actions/download-artifact@v3
@@ -144,7 +144,7 @@ jobs:
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: apk-artifact/*.apk,apk-artifact/*.msix,KoOrderRegister/Technical/kor.pfx
+          files: *.apk,*.msix,KoOrderRegister/Technical/kor.pfx
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
           release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
