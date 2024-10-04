@@ -94,9 +94,11 @@ jobs:
           echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
           echo "Minor Code: ${{ needs.prepare-version.outputs.minorVersion }}"
-      - name: Install Certificate with Admin Privileges
+      - name: Install Certificate
         run: |
-          Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
+          Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
+          -CertStoreLocation Cert:\CurrentUser\My `
+          -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
         shell: powershell
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android

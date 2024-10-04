@@ -92,7 +92,7 @@ jobs:
           Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
           -CertStoreLocation Cert:\CurrentUser\My `
           -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
-        shell: pwsh
+        shell: powershell
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
       - name: Install .NET SDK maui

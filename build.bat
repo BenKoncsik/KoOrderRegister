@@ -137,10 +137,10 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
 )
 )
 
-
 echo Msix folder: %msix_folder%
 echo No msix file found in %msix_folder%
 exit /b 1
+
 :FoundMsix
 echo Msix folder: %msix_folder%
 
