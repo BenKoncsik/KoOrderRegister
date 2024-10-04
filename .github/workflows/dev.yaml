@@ -116,11 +116,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}.dev
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
           release_name: ${{ needs.prepare-version.outputs.newVersion }} dev version
           body_path: Technical/release_base.md
           draft: false
-          prerelease: true
+          prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
