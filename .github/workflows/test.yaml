@@ -1,4 +1,4 @@
-name: Publish_DEV
+name: Publish_DEV_TEST
 
 env:
   branch-name: '145-add-dev-and-stabil-version-checker'
