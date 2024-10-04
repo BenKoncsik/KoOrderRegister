@@ -133,13 +133,15 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk, build-msix]
     steps:
+      - name: Delete output
+        run: if (-Not (Test-Path -Path output)) { rm output }
       - name: Download APK Artifact
         uses: actions/download-artifact@v3
         with:
           name: apk-artifact
       - name: Move APK Artifact
         run: |
-          mkdir -p output
+          if (-Not (Test-Path -Path output)) { mkdir output }
           mv *.apk output/
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v3
@@ -147,7 +149,7 @@ jobs:
           name: msix-artifact
       - name: Move MSIX Artifact
         run: |
-          mkdir -p output
+          if (-Not (Test-Path -Path output)) { mkdir output }
           mv *.msix output/
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
