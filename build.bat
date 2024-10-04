@@ -104,6 +104,7 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
 
 if defined msixFile (
     set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
+	echo New File name: %newFileName%
     move "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
