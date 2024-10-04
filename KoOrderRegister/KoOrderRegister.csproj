@@ -71,7 +71,6 @@
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 		<PublishSingleFile>false</PublishSingleFile>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 		<Platform>x64</Platform>
