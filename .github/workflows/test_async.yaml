@@ -1,17 +1,19 @@
-name: Publish_DEV
+name: Publish_ASYNC_DEV_TEST
 
 env:
-  branch-name: 'develop'
+  branch-name: '145-add-dev-and-stabil-version-checker'
   varrible: 'DEV_VERSION'
 
 on:
+  push:
+    branches:
+      - 145-add-dev-and-stabil-version-checker
   pull_request:
     branches:
-      - develop
+     - 145-add-dev-and-stabil-version-checker
 permissions:
   contents: write
   pull-requests: write
-
 
 jobs:
   prepare-version:
@@ -60,18 +62,10 @@ jobs:
           echo "minorVersion=$MINOR" >> $GITHUB_OUTPUT
           echo newVersion: $NEW_VERSION
           echo versionCode: $MAJOR
-          echo minorVersion: $MINOR
-          gh api \
-            --method PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
-            -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
-            
+          echo minorVersion: $MINOR            
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_PATCH: ${{ env.new-minor }}    
-        
         
   build-apk:
     runs-on: [windows-latest]
@@ -135,7 +129,8 @@ jobs:
           path: output\*.msix
 
   release:
-    runs-on: [windows-latest]
+   # runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Delete output
@@ -161,17 +156,12 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}.dev
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
           release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
-          draft: false
+          draft: true
           prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
-
-
-
-
- 
+          

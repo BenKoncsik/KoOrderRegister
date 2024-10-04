@@ -45,8 +45,6 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Updating the project file with new version...
-REM android
-powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 REM windows
 powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version=\"%WINDOWS_CURRENT_VERSION%\"', 'Version=\"%WINDOWS_NEW_VERSION%\"' | Out-File -encoding UTF8 '%APPX_MANIFEST%'"
@@ -66,29 +64,6 @@ echo Version code is %NEW_VERSION_CODE%
 
 
 
-echo Publishing the application...
-dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
-
-if "%BUILD_VERSION%"=="DEV_VERSION" (
-	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
-) else (
-	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
-)
-
-echo Apk path: %ORIGINAL_APK%
-
-set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
-
-echo Renaming the APK file...
-if exist "%ORIGINAL_APK%" (
-    move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
-) else (
-    echo Original APK file not found
-)
-
-echo Build and rename process completed. New APK: %NEW_APK_NAME%
-
-
 
 
 echo Building MSIX package for Windows x64...
@@ -104,16 +79,7 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
   -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8 ^
   -p:PackageCertificatePassword=kor ^
   -v diag
-
-  REM -p:PackageCertificateKeyFile="KoOrderRegister\Technical\kor.pfx" ^
-  REM -p:PackageCertificatePassword=kor
-  REM -p:PackageCertificateThumbprint=52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8
-  REM -p:PackageCertificateStoreLocation="LocalMachine" ^
-  REM -p:PackageCertificateStoreName="My" ^
-  REM -v diag ^
-
-  REM -p:PackageCertificateKeyFile="KoOrderRegister/Technical/kor.pfx" ^
-  REM -p:PackageCertificatePassword="kor" ^
+  
 echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 
