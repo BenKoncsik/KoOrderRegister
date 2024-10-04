@@ -117,7 +117,7 @@ jobs:
         with:
           files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}.dev
-          release_name: ${{ needs.prepare-version.outputs.newVersion }} dev version
+          release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
           draft: false
           prerelease: false
