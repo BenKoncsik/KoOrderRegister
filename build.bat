@@ -75,7 +75,9 @@ if "%publish_version%"=="Debug" (
 else(
 	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
 )
+
 echo Apk path: %ORIGINAL_APK%
+
 set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
 
 echo Renaming the APK file...
@@ -109,7 +111,9 @@ echo Copying MSIX package to general output directory...
 
 
 if "%publish_version%"=="Debug" (
+
 set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test"
+
     REM Find the first .msix file
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test\*.msix"') do (
     set "msixFile=%%f"
@@ -117,7 +121,9 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
 )
 :FoundMsix
 ) else (
+
 set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test"
+
     REM Find the first .msix file
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
     set "msixFile=%%f"
@@ -126,7 +132,9 @@ for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERS
 :FoundMsix
 )
 
+
 echo Msix folder: %msix_folder%
+
 
 if defined msixFile (
     set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
