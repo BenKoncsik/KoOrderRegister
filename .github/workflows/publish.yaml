@@ -118,7 +118,7 @@ jobs:
       - name: Delete remote branch after merge
         run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${{ env.BRANCH_NAME }}"
         env:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
           
   build:
