@@ -134,14 +134,16 @@ jobs:
     needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Delete output
-        run: if (-Not (Test-Path -Path output)) {  Remove-Item -Recurse -Force output }
+        run: |
+          if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
+          if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
+          mkdir output
       - name: Download APK Artifact
         uses: actions/download-artifact@v3
         with:
           name: apk-artifact
       - name: Move APK Artifact
         run: |
-          if (-Not (Test-Path -Path output)) { mkdir output }
           mv *.apk output/
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v3
@@ -149,7 +151,6 @@ jobs:
           name: msix-artifact
       - name: Move MSIX Artifact
         run: |
-          if (-Not (Test-Path -Path output)) { mkdir output }
           mv *.msix output/
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
