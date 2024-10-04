@@ -118,7 +118,9 @@ jobs:
       - name: Run MSIX build script
         run: cmd /c ".\build_msix.bat"
         env:
+          KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
+          NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
       - name: Upload MSIX
         uses: actions/upload-artifact@v3
