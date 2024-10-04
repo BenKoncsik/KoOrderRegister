@@ -71,9 +71,8 @@ jobs:
         id: version
         run: |
           VERSION_CODE="$MAJOR"
-          MINOR-VERSION="$NEW_MINOR"
-          NEW-VERSION="$NEW_VERSION"
-          VERSIONCODE="$NEW_MINOR"
+          NEW_VERSION="$MAJOR.$NEW_MINOR.$PATCH"
+          MINOR_VERSION="$NEW_MINOR"
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
           echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT
