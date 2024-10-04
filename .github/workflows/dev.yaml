@@ -73,7 +73,7 @@ jobs:
           NEW_PATCH: ${{ env.new-minor }}    
         
         
- build-apk:
+  build-apk:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
