@@ -144,10 +144,10 @@ exit /b 1
 :FoundMsix
 echo Msix folder: %msix_folder%
 
+set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
+echo New File name: %newFileName%
 
 if defined msixFile (
-    set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
-	echo New File name: %newFileName%
     move "%msix_folder%\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
