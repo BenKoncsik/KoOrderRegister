@@ -19,6 +19,12 @@ if not exist %APPX_MANIFEST% (
 )
 
 echo Build version: %BUILD_VERSION%
+if "%BUILD_VERSION%"=="DEV_VERSION" (
+    set publish_version=Debug
+) else (
+    set publish_version=Release
+)
+echo publish_version: %publish_version%
 
 echo Reading current version...
 for /f "tokens=3 delims=<>" %%a in ('findstr "ApplicationDisplayVersion" %CS_PROJECT%') do set "CURRENT_VERSION=%%a"
@@ -61,9 +67,16 @@ echo Version code is %NEW_VERSION_CODE%
 
 
 echo Publishing the application...
-dotnet publish "%CS_PROJECT%" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
+dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
 
-set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
+if "%BUILD_VERSION%"=="DEV_VERSION" (
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
+) else (
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
+)
+
+echo Apk path: %ORIGINAL_APK%
+
 set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
 
 echo Renaming the APK file...
@@ -82,7 +95,7 @@ echo Building MSIX package for Windows x64...
 REM dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 --output "output/build/" -p:PackageType=Msix -p:PackageCertificateKeyFile="Technical\kor.pfx" -p:PackageCertificatePassword="kor" -p:PackageCertificateThumbprint="52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8" -v diag -p:AppxPackageDir="../output/"
 
 dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
-  -r win-x64 -c Release -f net8.0-windows10.0.19041.0 ^
+  -r win-x64 -c %publish_version% -f net8.0-windows10.0.19041.0 ^
   --output "output/build/" ^
   -p:PackageType=Msix ^
   -p:PackageCertificateStoreLocation="LocalMachine" ^
@@ -95,19 +108,40 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
 echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 
-REM Find the first .msix file
+
+
+if "%BUILD_VERSION%"=="DEV_VERSION" (
+set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test"
+    REM Find the first .msix file
+for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test\*.msix"') do (
+    set "msixFile=%%f"
+    goto :FoundMsix
+)
+:FoundMsix
+) else (
+
+set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test"
+
+    REM Find the first .msix file
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
     set "msixFile=%%f"
     goto :FoundMsix
 )
 :FoundMsix
+)
+
+
+echo Msix folder: %msix_folder%
+
 
 if defined msixFile (
     set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
-    move "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
+	echo New File name: %newFileName%
+    move "%msix_folder%\%msixFile%" "%OUTPUT_DIR%\%newFileName%"
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
     echo No msix file in %OUTPUT_DIR%
+	echo New File name: %newFileName%
 )
 
 echo Copy completed.

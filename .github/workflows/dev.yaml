@@ -1,4 +1,4 @@
-name: Publish
+name: Publish_DEV
 
 env:
   branch-name: 'develop'
@@ -6,9 +6,6 @@ env:
 
 on:
   pull_request:
-    branches:
-      - develop
-  push:
     branches:
       - develop
 permissions:
@@ -68,7 +65,7 @@ jobs:
             --method PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
+            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
             -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
             
         env:
@@ -119,7 +116,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}.dev
           release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
           draft: false
