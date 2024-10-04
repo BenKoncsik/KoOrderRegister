@@ -1,4 +1,4 @@
-name: Publish_DEV_TEST
+name: Publish_ASYNC_DEV_TEST
 
 env:
   branch-name: '145-add-dev-and-stabil-version-checker'
@@ -92,7 +92,7 @@ jobs:
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: apk-artifact
           path: output/*.apk
@@ -121,7 +121,7 @@ jobs:
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           BUILD_VERSION: ${{ env.varrible }}
       - name: Upload MSIX
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: msix-artifact
           path: output/*.msix
@@ -131,11 +131,11 @@ jobs:
     needs: [build-apk, build-msix]
     steps:
       - name: Download APK Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: apk-artifact
       - name: Download MSIX Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: msix-artifact
       - name: Create or Update Release
