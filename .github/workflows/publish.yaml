@@ -57,15 +57,18 @@ jobs:
         run: |
           NEW_VERSION="$MAJOR.$NEW_MINOR.$PATCH"
           echo "Updating version to: $NEW_VERSION"
+          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minorVersion=$NEW_MINOR" >> $GITHUB_OUTPUT
+          echo newVersion: $NEW_VERSION
+          echo versionCode: $MAJOR
+          echo minorVersion: $NEW_MINOR
           gh api \
             --method PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
             -f "name=STABIL_VERSION" -f "value=$NEW_VERSION"
-          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minorVersion=$NEW_MINOR" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_MINOR: ${{ env.new-minor }}    
