@@ -70,15 +70,9 @@ jobs:
       - name: Set outputs for the new version
         id: version
         run: |
-          VERSION_CODE="$MAJOR"
-          NEW_VERSION="$MAJOR.$NEW_MINOR.$PATCH"
-          MINOR_VERSION="$NEW_MINOR"
           echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "versionCode=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
           echo "minor-version=$NEW_MINOR" >> $GITHUB_OUTPUT
-          echo "::set-output name=new-version::$NEW_VERSION"
-          echo "::set-output name=versionCode::$VERSION_CODE"
-          echo "::set-output name=minor-version::$NEW_MINOR"
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
     
@@ -96,6 +90,7 @@ jobs:
         run: |
           echo "New Version: ${{ needs.prepare-version.outputs.new-version }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+          echo "Minor Code: ${{ needs.prepare-version.outputs.minor-version }}"
       - name: Install Certificate with Admin Privileges
         run: |
           Start-Process powershell -ArgumentList "Import-PfxCertificate -FilePath KoOrderRegister\Technical\kor.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)" -Verb RunAs
