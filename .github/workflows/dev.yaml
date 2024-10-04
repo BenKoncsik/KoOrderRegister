@@ -8,9 +8,6 @@ on:
   pull_request:
     branches:
       - develop
-  push:
-    branches:
-      - develop
 permissions:
   contents: write
   pull-requests: write
@@ -119,7 +116,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}.dev
           release_name: ${{ needs.prepare-version.outputs.newVersion }} dev version
           body_path: Technical/release_base.md
           draft: false
