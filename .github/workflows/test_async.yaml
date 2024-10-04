@@ -137,14 +137,22 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: apk-artifact
+      - name: Move APK Artifact
+        run: |
+          mkdir -p output
+          mv *.apk output/
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v3
         with:
           name: msix-artifact
+      - name: Move MSIX Artifact
+        run: |
+          mkdir -p output
+          mv *.msix output/
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
-          files: *.apk,*.msix,KoOrderRegister/Technical/kor.pfx
+          files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
           tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
           release_name: ${{ needs.prepare-version.outputs.newVersion }}
           body_path: Technical/release_base.md
