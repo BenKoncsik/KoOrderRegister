@@ -109,10 +109,9 @@ echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 
 
+
 if "%BUILD_VERSION%"=="DEV_VERSION" (
-
 set "msix_folder=%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test"
-
     REM Find the first .msix file
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test\*.msix"') do (
     set "msixFile=%%f"
