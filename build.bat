@@ -69,7 +69,12 @@ echo Version code is %NEW_VERSION_CODE%
 echo Publishing the application...
 dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
 
-set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
+if "%publish_version%"=="Debug" (
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
+)
+else(
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
+)
 set "NEW_APK_NAME=%OUTPUT_DIR%\KoOrderRegister_%NEW_VERSION%_android_%BUILD_VERSION%.apk"
 
 echo Renaming the APK file...
@@ -101,12 +106,23 @@ dotnet publish ".\KoOrderRegister\KoOrderRegister.csproj" ^
 echo msix file %OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test
 echo Copying MSIX package to general output directory...
 
-REM Find the first .msix file
+
+if "%publish_version%"=="Debug" (
+    REM Find the first .msix file
+for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Debug_Test\*.msix"') do (
+    set "msixFile=%%f"
+    goto :FoundMsix
+)
+:FoundMsix
+) else (
+    REM Find the first .msix file
 for /f "delims=" %%f in ('dir /b "%OUTPUT_DIR%\KoOrderRegister_%WINDOWS_NEW_VERSION%_Test\*.msix"') do (
     set "msixFile=%%f"
     goto :FoundMsix
 )
 :FoundMsix
+)
+
 
 if defined msixFile (
     set "newFileName=KoOrderRegister_%WINDOWS_NEW_VERSION%_X64_%BUILD_VERSION%.msix"
@@ -115,6 +131,7 @@ if defined msixFile (
     echo File renamed: %OUTPUT_DIR%\%newFileName%
 ) else (
     echo No msix file in %OUTPUT_DIR%
+	echo New File name: %newFileName%
 )
 
 echo Copy completed.
