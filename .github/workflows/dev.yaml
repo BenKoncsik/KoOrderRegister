@@ -135,7 +135,7 @@ jobs:
           path: output\*.msix
 
   release:
-    runs-on: [windows-latest]
+    runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Delete output
