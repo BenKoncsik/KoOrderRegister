@@ -15,6 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+
+
 namespace KoOrderRegister.Modules.Settings.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
@@ -22,7 +24,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         private readonly IDatabaseModel _databaseModel;
         private readonly IAppUpdateService _updateService;
 
-       
+
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
         private ILanguageSettings _selectedItem;
         public ILanguageSettings SelectedItem
@@ -46,17 +48,32 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 }
             }
         }
+
+        private bool _isAutomaticTheme = Preferences.Get("IsThemeAutomatic", true);
+        public bool IsAutoUserTheme
+        {
+            get => _isAutomaticTheme;
+            set
+            {
+                if (value != _isAutomaticTheme)
+                {
+                    _isAutomaticTheme = value;
+                    SettAutomaticUserTheme(value);
+                    OnPropertyChanged(nameof(IsAutoUserTheme));
+                }
+            }
+        }
+
+
         #region Commands
         public ICommand BackUpDatabaseCommand => new Command(BackUp);
         public ICommand RestoreDatabaseCommand => new Command(Restore);
         public ICommand AppUpdateCommand => new Command(UpdateApp);
+        public ICommand AppThemeSwitchCommand => new Command(SwitchUserTheme);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
         
         public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService) : base(updateService)
         {
@@ -141,6 +158,30 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         public void ChangeLanguage(ILanguageSettings languageSettings)
         {
             LanguageManager.SetLanguage(languageSettings);
+        }
+
+        public void SwitchUserTheme()
+        {
+            IsAutoUserTheme = false;
+            if (Application.Current.UserAppTheme == AppTheme.Light)
+            {
+                Application.Current.UserAppTheme = AppTheme.Dark;
+                Preferences.Set("UserTheme", AppTheme.Dark.ToString());
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+                Preferences.Set("UserTheme", AppTheme.Light.ToString());
+            }
+        }
+
+        public void SettAutomaticUserTheme(bool isAutomatic)
+        {
+            Preferences.Set("IsThemeAutomatic", isAutomatic);
+            if (isAutomatic)
+            {
+                Application.Current.UserAppTheme = Application.Current.PlatformAppTheme;
+            }
         }
 
         public async void UpdateApp()

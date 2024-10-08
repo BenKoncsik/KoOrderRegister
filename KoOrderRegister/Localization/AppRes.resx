@@ -424,4 +424,15 @@
     <value>Size:</value>
     <comment>SizeLabel</comment>
   </data>
+  <data name="ChangeAppThemeLabel" xml:space="preserve">
+    <value>Switch app theme:</value>
+    <comment>Change app theme:</comment>
+  </data>
+  <data name="ChangeAppTheme" xml:space="preserve">
+    <value>Switch app theme</value>
+    <comment>ChangeAppTheme</comment>
+  </data>
+  <data name="ChangeAppThemeAutomaticLabel" xml:space="preserve">
+    <value>Switch automatic app theme:</value>
+  </data>
 </root>
