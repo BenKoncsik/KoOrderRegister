@@ -6,6 +6,7 @@ using SQLite;
 using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
+using Windows.UI.StartScreen;
 
 namespace KoOrderRegister.Modules.Database.Services
 {
@@ -633,9 +634,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task ImportDatabaseFromJson(Stream jsonStream, Action<float> progressCallback = null)
         {
-            int totalCount = 0;
-            int processedCount = 0;
-            ProgressState state = new ProgressState();
+            ProgressState state = new ProgressState(jsonStream.Length);
             using (StreamReader streamReader = new StreamReader(jsonStream))
             using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
             {
@@ -645,44 +644,10 @@ namespace KoOrderRegister.Modules.Database.Services
                 {
                     throw new JsonSerializationException("Expected start of JSON object.");
                 }
-
                 await Database.DropTableAsync<CustomerModel>();
                 await Database.DropTableAsync<OrderModel>();
                 await Database.DropTableAsync<FileModel>();
-
                 await Init(force: true);
-
-                while (jsonReader.Read())
-                {
-                    if (jsonReader.TokenType == JsonToken.PropertyName)
-                    {
-                        string propertyName = jsonReader.Value.ToString();
-                        jsonReader.Read();
-
-                        if (jsonReader.TokenType == JsonToken.StartArray)
-                        {
-                            while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
-                            {
-                                totalCount++;
-                            }
-                        }
-                    }
-                }
-            }
-            state.TotalCount = totalCount;
-            using (StreamReader streamReader = new StreamReader(jsonStream))
-            using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-
-                if (!jsonReader.Read() || jsonReader.TokenType != JsonToken.StartObject)
-                {
-                    throw new JsonSerializationException("Expected start of JSON object.");
-                }
-                jsonStream.Position = 0;
-                streamReader.DiscardBufferedData();
-
-                jsonReader.Read(); 
 
                 while (jsonReader.Read())
                 {
@@ -691,15 +656,21 @@ namespace KoOrderRegister.Modules.Database.Services
                         string propertyName = jsonReader.Value.ToString();
                         if (propertyName == CUSTOMER_TABLE)
                         {
-                            await ProcessItems<CustomerModel>(jsonReader, serializer, CreateCustomer, state, totalCount, progressCallback);
+                            state.StreamPosition = 10;
+                            await ProcessItems<CustomerModel>(jsonReader, serializer, CreateCustomer, state, progressCallback);
+                            state.StreamPosition = 33;
                         }
                         else if (propertyName == ORDER_TABLE)
                         {
-                            await ProcessItems<OrderModel>(jsonReader, serializer, CreateOrder, state, totalCount, progressCallback);
+                            state.StreamPosition = 40;
+                            await ProcessItems<OrderModel>(jsonReader, serializer, CreateOrder, state, progressCallback);
+                            state.StreamPosition = 66;
                         }
                         else if (propertyName == FILES_TABLE)
                         {
-                            await ProcessItems<FileModel>(jsonReader, serializer, CreateFile, state, totalCount, progressCallback);
+                            state.StreamPosition = 70;
+                            await ProcessItems<FileModel>(jsonReader, serializer, CreateFile, state, progressCallback);
+                            state.StreamPosition = 100;
                         }
                     }
                 }
@@ -707,16 +678,16 @@ namespace KoOrderRegister.Modules.Database.Services
 
         }
 
-        private async Task ProcessItems<T>(JsonTextReader jsonReader, JsonSerializer serializer, Func<T, Task> createFunc, ProgressState state, int totalCount, Action<float> progressCallback)
+        private async Task ProcessItems<T>(JsonTextReader jsonReader, JsonSerializer serializer, Func<T, Task> createFunc, ProgressState state, Action<float> progressCallback)
         {
             if (jsonReader.Read() && jsonReader.TokenType == JsonToken.StartArray)
             {
+                
                 while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
                 {
-                    T item = serializer.Deserialize<T>(jsonReader);
-                    await createFunc(item);
-                    state.ProcessedCount++;
-                    state.UpdateProgress(progressCallback);
+                   T item = serializer.Deserialize<T>(jsonReader);
+                   await createFunc(item);
+                   state.UpdateProgress(progressCallback);
                 }
             }
         }
@@ -751,15 +722,22 @@ namespace KoOrderRegister.Modules.Database.Services
 
     internal class ProgressState
     {
-        public int ProcessedCount { get; set; }
-        public int TotalCount { get; set; }
+        //TODO: Implement ProgressState
+        public long StreamPosition { get; set; }
+        public long FileSize { get; }
+        internal ProgressState(long fileSize)
+        {
+            FileSize = fileSize;
+        }
         public void UpdateProgress(Action<float> progressCallback)
         {
             if (progressCallback != null)
             {
-                float progressPercentage = (float)ProcessedCount / TotalCount * 100;
-                progressCallback?.Invoke(progressPercentage);
+                /*    float progressPercentage = (float)StreamPosition / FileSize * 100;
+                    progressCallback?.Invoke((float)Math.Round(progressPercentage, 2));*/
+                progressCallback?.Invoke((float)StreamPosition);
             }
+
         }
     }
 
