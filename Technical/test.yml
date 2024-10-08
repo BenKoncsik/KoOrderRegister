@@ -1,0 +1,149 @@
+name: Test
+
+env:
+  branch-name: '92-create-github-runner'  
+
+on:
+  push:
+    branches: 
+     
+  pull_request:
+    branches: 
+    
+
+jobs:
+  prepare-version:
+    runs-on: [self-hosted, Linux]
+    outputs:
+      new-version: ${{ steps.version.outputs.new-version }} 
+      versionCode: ${{ steps.version.outputs.versionCode }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Show version.txt content
+        run: cat version.txt
+      - name: Read Version
+        id: version  
+        run: |
+          awk -F'.' '{print $1 "." ($2 + 1) "." $3}' version.txt > temp_version.txt && mv temp_version.txt version.txt
+          MAJOR=$(awk -F'.' '{print $1}' version.txt)
+          MINOR=$(awk -F'.' '{print $2}' version.txt)
+          PATCH=$(awk -F'.' '{print $3}' version.txt)
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "::set-output name=new-version::$MAJOR.$MINOR.$PATCH"
+          echo "::set-output name=versionCode::$MAJOR"
+          echo "Current version: $MAJOR.$MINOR.$PATCH"
+          echo "Version Code: $MAJOR"
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add version.txt
+          git commit -m "Update version to $MAJOR.$MINOR.$PATCH" 
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: ${{ env.branch-name }} 
+          
+  build-android:
+    needs: prepare-version
+    #runs-on: [self-hosted, X64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
+      - name: List Files in Project Directory
+        run: ls -la KoOrderRegister/
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: Install MAUI ANDOIRD Workloads
+        run: dotnet workload install maui-android
+        
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Install Android SDK
+        run: |
+            # Create directories
+            mkdir -p $HOME/android-sdk/cmdline-tools
+            # Download command line tools
+            curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip
+            # Unzip
+            unzip -q commandlinetools.zip -d $HOME/android-sdk/cmdline-tools
+            # Rename the folder
+            mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
+            # Set environment variables
+            echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+            echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+            echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
+            echo "$HOME/android-sdk/emulator" >> $GITHUB_PATH
+            echo "$HOME/android-sdk/tools" >> $GITHUB_PATH
+            echo "$HOME/android-sdk/tools/bin" >> $GITHUB_PATH
+            echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+            # Accept licenses
+            yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+            # Install required SDK packages
+            $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-33" \
+            "build-tools;33.0.2" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      - name: List Installed SDK Platforms
+        run: ls -la $ANDROID_SDK_ROOT/platforms/
+
+      - name: Restore dependencies
+        run:  dotnet restore KoOrderRegister/KoOrderRegister.csproj -p:TargetFrameworks=net8.0-android
+
+      - name: Build APK Without Signing
+        run: |
+          dotnet publish "KoOrderRegister/KoOrderRegister.csproj" -f net8.0-android -c Release \
+          -p:AndroidKeyStore=true \
+          -p:AndroidSigningKeyStore=kor.keystore \
+          -p:AndroidSigningKeyAlias=kor_pub \
+          -p:AndroidSigningKeyPass=${{ secrets.KEYPASS }} \
+          -p:AndroidSigningStorePass==${{ secrets.KEYPASS }} \
+          -p:AndroidVersionCode=${{ needs.prepare-version.outputs.versionCode }} \
+          -p:AndroidVersionName=${{ needs.prepare-version.outputs.new-version }} \
+          -o output
+
+        env:
+          KEYPASS: ${{ secrets.KEYPASS }}
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: output/*.apk
+      - name: Rename APK File
+        run: |
+          # Find the generated APK file
+          APK_PATH=$(find output -type f -name "*.apk")
+          echo "Generated APK path: $APK_PATH"
+
+          # Define the new filename
+          NEW_APK_NAME="KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk"
+          echo "New APK name: $NEW_APK_NAME"
+
+          # Rename the APK file
+          mv "$APK_PATH" "output/$NEW_APK_NAME"
+        
+          # Optional: List files in output directory
+          ls -la output/
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: output/KoOrderRegister_${{ needs.prepare-version.outputs.new-version }}_android.apk
