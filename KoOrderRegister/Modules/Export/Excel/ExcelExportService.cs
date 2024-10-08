@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Gaming.Input.Custom;
-using Windows.Storage;
 
 namespace KoOrderRegister.Modules.Export.Excel
 {
