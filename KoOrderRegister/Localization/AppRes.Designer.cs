@@ -133,6 +133,33 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch app theme.
+        /// </summary>
+        internal static string ChangeAppTheme {
+            get {
+                return ResourceManager.GetString("ChangeAppTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch automatic app theme:.
+        /// </summary>
+        internal static string ChangeAppThemeAutomaticLabel {
+            get {
+                return ResourceManager.GetString("ChangeAppThemeAutomaticLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch app theme:.
+        /// </summary>
+        internal static string ChangeAppThemeLabel {
+            get {
+                return ResourceManager.GetString("ChangeAppThemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check app update.
         /// </summary>
         internal static string CheckAppUpdate {

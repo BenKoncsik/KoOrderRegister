@@ -98,6 +98,7 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
+
             return builder.Build();
         }
     }

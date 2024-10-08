@@ -402,4 +402,13 @@
   <data name="SizeLabel" xml:space="preserve">
     <value>Méret:</value>
   </data>
+  <data name="ChangeAppThemeLabel" xml:space="preserve">
+    <value>Alkmazás témájának megválatóztatása:</value>
+  </data>
+  <data name="ChangeAppTheme" xml:space="preserve">
+    <value>Alkmazás téma váltás</value>
+  </data>
+  <data name="ChangeAppThemeAutomaticLabel" xml:space="preserve">
+    <value>Automatikus alkmazás téma váltás:</value>
+  </data>
 </root>

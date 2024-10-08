@@ -58,7 +58,7 @@ namespace KoOrderRegister.ViewModel
 
         }
 
-        public BaseViewModel(IAppUpdateService updateService)
+        public BaseViewModel(IAppUpdateService updateService) : this()
         {
             _updateService = updateService;
             if (!_isRun)
@@ -69,9 +69,9 @@ namespace KoOrderRegister.ViewModel
         }
         public BaseViewModel()
         {
-
+            settUserTheme();
         }
-        
+        #region AppUpdate method
         private async void OnStart()
         {
             if(_updateService == null)
@@ -135,5 +135,29 @@ namespace KoOrderRegister.ViewModel
                 }
             }
         }
+        #endregion
+
+        #region App user theme
+        private static bool _isThemeSet = false;
+        private void settUserTheme()
+        {
+            if(_isThemeSet)
+            {
+                return;
+            }
+            _isThemeSet = true;
+            bool AutomaticUserTheme = Preferences.Get("IsThemeAutomatic", true);
+            if (!AutomaticUserTheme)
+            {
+                string UserTheme = Preferences.Get("UserTheme", "Light");
+                App.Current.UserAppTheme = UserTheme switch
+                {
+                    "Light" => AppTheme.Light,
+                    "Dark" => AppTheme.Dark,
+                    _ => AppTheme.Light
+                };
+            }
+        }
+         #endregion
     }
 }
