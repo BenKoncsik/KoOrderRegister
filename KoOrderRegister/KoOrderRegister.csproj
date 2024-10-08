@@ -218,6 +218,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.104.1" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
@@ -284,6 +285,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Modules\Export\Html\" />
+		<Folder Include="Modules\Export\Pdf\" />
 		<Folder Include="Modules\Settings\Services\" />
 		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>

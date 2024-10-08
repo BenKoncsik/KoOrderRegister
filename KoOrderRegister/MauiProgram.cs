@@ -16,6 +16,8 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
+using KoOrderRegister.Modules.Export.Services;
+using KoOrderRegister.Modules.Export.Excel;
 
 namespace KoOrderRegister
 {
@@ -87,6 +89,9 @@ namespace KoOrderRegister
             builder.Services.AddTransient<FilePropertiesViewModel>();
             #endregion
 
+            #region DatabaseFile Export to File
+            builder.Services.AddTransient<IExportService, ExcelExportService>();
+            #endregion
 
 #if DEBUG
             builder.Logging.AddDebug();

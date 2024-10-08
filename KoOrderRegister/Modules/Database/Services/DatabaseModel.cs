@@ -523,6 +523,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 file.IsDatabaseContent = true;
+                file.Order = await GetOrderById(Guid.Parse(file.OrderId));
                 yield return file;
             }
         }
