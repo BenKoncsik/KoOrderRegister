@@ -1,4 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<!-- Definie devBuild constans-->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DevBuild|AnyCPU'">
+		<OutputPath>bin\DevBuild\</OutputPath>
+		<DefineConstants>RELEASE;TRACE;DEVBUILD</DefineConstants>
+		<Optimize>true</Optimize>
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
@@ -21,18 +27,23 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Configurations>Debug;Release;DEV;DevBuild</Configurations>
+
 
 		<!-- Display name -->
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)'=='DevBuild'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)'=='DEV'">hu.kncsk.koorderregister</ApplicationId>
 		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.debug.koorderregister</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.1.1</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
-		
+
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
@@ -52,10 +63,6 @@
 
 
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
-		<!--<PackageCertificateKeyFile>Technical/kor.pfx</PackageCertificateKeyFile>
-		<PackageCertificateThumbprint>52E6E26AD745DE7F7EB2CDC031509D57F78CEBF8</PackageCertificateThumbprint>
-		<PackageCertificatePassword>kor</PackageCertificatePassword>-->
-		
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
 		<PublishSingleFile>false</PublishSingleFile>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
@@ -65,7 +72,6 @@
 		<PublishReadyToRun>false</PublishReadyToRun>
 		<SelfContained>True</SelfContained>
 		<PublishAppxPackage>true</PublishAppxPackage>
-		<Configurations>Debug;Release</Configurations>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
 		<Platforms>x64</Platforms>
 	</PropertyGroup>
@@ -73,13 +79,16 @@
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
 		<PackageIdentityName>hu.kncsk.koorderregister</PackageIdentityName>
 	</PropertyGroup>
-	
+
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Debug'">
+		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
+	</PropertyGroup>
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'DevBuild'">
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
-		
+
 	</PropertyGroup>
 	<!-- Andoird publish-->
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
@@ -109,103 +118,103 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Platforms\Android\AndroidManifest.xml" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-400.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-lightunplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-unplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-lightunplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-unplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-lightunplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-unplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-lightunplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-unplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-lightunplated.png" />
-	  <None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-unplated.png" />
-	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-100.png" />
-	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-125.png" />
-	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
-	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
-	  <None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
-	  <None Remove="Resources\Images\add_dark.svg" />
-	  <None Remove="Resources\Images\add_light.svg" />
-	  <None Remove="Resources\Images\ai_dark.svg" />
-	  <None Remove="Resources\Images\ai_light.svg" />
-	  <None Remove="Resources\Images\ai_off_dark.svg" />
-	  <None Remove="Resources\Images\ai_off_light.svg" />
-	  <None Remove="Resources\Images\cloud_dark.svg" />
-	  <None Remove="Resources\Images\cloud_light.svg" />
-	  <None Remove="Resources\Images\cloud_off_dark.svg" />
-	  <None Remove="Resources\Images\cloud_off_light.svg" />
-	  <None Remove="Resources\Images\copy_dark.svg" />
-	  <None Remove="Resources\Images\copy_light.svg" />
-	  <None Remove="Resources\Images\key_dark.svg" />
-	  <None Remove="Resources\Images\key_light.svg" />
-	  <None Remove="Resources\Images\notification_dark.svg" />
-	  <None Remove="Resources\Images\notification_light.svg" />
-	  <None Remove="Resources\Images\not_shared_icon_dark.svg" />
-	  <None Remove="Resources\Images\not_shared_icon_light.svg" />
-	  <None Remove="Resources\Images\open_dark.svg" />
-	  <None Remove="Resources\Images\open_light.svg" />
-	  <None Remove="Resources\Images\pause_dark.svg" />
-	  <None Remove="Resources\Images\pause_light.svg" />
-	  <None Remove="Resources\Images\play_dark.svg" />
-	  <None Remove="Resources\Images\play_light.svg" />
-	  <None Remove="Resources\Images\qr_code_dark.svg" />
-	  <None Remove="Resources\Images\qr_code_light.svg" />
-	  <None Remove="Resources\Images\return_dark.svg" />
-	  <None Remove="Resources\Images\return_light.svg" />
-	  <None Remove="Resources\Images\save_dark.svg" />
-	  <None Remove="Resources\Images\save_light.svg" />
-	  <None Remove="Resources\Images\shared_icon_dark.svg" />
-	  <None Remove="Resources\Images\shared_icon_light.svg" />
-	  <None Remove="Resources\Images\sync_dark.svg" />
-	  <None Remove="Resources\Images\sync_light.svg" />
-	  <None Remove="Resources\Images\update_dark.svg" />
-	  <None Remove="Resources\Images\update_light.svg" />
-	  <None Remove="Resources\Images\upload_dark.svg" />
-	  <None Remove="Resources\Images\upload_light.svg" />
-	  <None Remove="Resources\Images\x_dark.svg" />
-	  <None Remove="Resources\Images\x_light.svg" />
+		<None Remove="Platforms\Android\AndroidManifest.xml" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-200.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-400.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-lightunplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-16_altform-unplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-lightunplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-24_altform-unplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-lightunplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-256_altform-unplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-lightunplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-32_altform-unplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-lightunplated.png" />
+		<None Remove="Platforms\Windows\Icon\%24placeholder%24.targetsize-48_altform-unplated.png" />
+		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-100.png" />
+		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-125.png" />
+		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
+		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
+		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
+		<None Remove="Resources\Images\add_dark.svg" />
+		<None Remove="Resources\Images\add_light.svg" />
+		<None Remove="Resources\Images\ai_dark.svg" />
+		<None Remove="Resources\Images\ai_light.svg" />
+		<None Remove="Resources\Images\ai_off_dark.svg" />
+		<None Remove="Resources\Images\ai_off_light.svg" />
+		<None Remove="Resources\Images\cloud_dark.svg" />
+		<None Remove="Resources\Images\cloud_light.svg" />
+		<None Remove="Resources\Images\cloud_off_dark.svg" />
+		<None Remove="Resources\Images\cloud_off_light.svg" />
+		<None Remove="Resources\Images\copy_dark.svg" />
+		<None Remove="Resources\Images\copy_light.svg" />
+		<None Remove="Resources\Images\key_dark.svg" />
+		<None Remove="Resources\Images\key_light.svg" />
+		<None Remove="Resources\Images\notification_dark.svg" />
+		<None Remove="Resources\Images\notification_light.svg" />
+		<None Remove="Resources\Images\not_shared_icon_dark.svg" />
+		<None Remove="Resources\Images\not_shared_icon_light.svg" />
+		<None Remove="Resources\Images\open_dark.svg" />
+		<None Remove="Resources\Images\open_light.svg" />
+		<None Remove="Resources\Images\pause_dark.svg" />
+		<None Remove="Resources\Images\pause_light.svg" />
+		<None Remove="Resources\Images\play_dark.svg" />
+		<None Remove="Resources\Images\play_light.svg" />
+		<None Remove="Resources\Images\qr_code_dark.svg" />
+		<None Remove="Resources\Images\qr_code_light.svg" />
+		<None Remove="Resources\Images\return_dark.svg" />
+		<None Remove="Resources\Images\return_light.svg" />
+		<None Remove="Resources\Images\save_dark.svg" />
+		<None Remove="Resources\Images\save_light.svg" />
+		<None Remove="Resources\Images\shared_icon_dark.svg" />
+		<None Remove="Resources\Images\shared_icon_light.svg" />
+		<None Remove="Resources\Images\sync_dark.svg" />
+		<None Remove="Resources\Images\sync_light.svg" />
+		<None Remove="Resources\Images\update_dark.svg" />
+		<None Remove="Resources\Images\update_light.svg" />
+		<None Remove="Resources\Images\upload_dark.svg" />
+		<None Remove="Resources\Images\upload_light.svg" />
+		<None Remove="Resources\Images\x_dark.svg" />
+		<None Remove="Resources\Images\x_light.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidManifestOverlay Include="Platforms\Android\AndroidManifest.xml" />
+		<AndroidManifestOverlay Include="Platforms\Android\AndroidManifest.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-100.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-125.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-150.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-200.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.scale-400.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-lightunplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-unplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-lightunplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-unplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-lightunplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-unplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-lightunplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-unplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-lightunplated.png" />
-	  <Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-unplated.png" />
-	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-100.png" />
-	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-125.png" />
-	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-150.png" />
-	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-200.png" />
-	  <Content Include="Platforms\Windows\Splash\$placeholder$.scale-400.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.scale-100.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.scale-125.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.scale-150.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.scale-200.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.scale-400.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-lightunplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-16_altform-unplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-lightunplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-24_altform-unplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-lightunplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-256_altform-unplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-lightunplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-32_altform-unplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-lightunplated.png" />
+		<Content Include="Platforms\Windows\Icon\$placeholder$.targetsize-48_altform-unplated.png" />
+		<Content Include="Platforms\Windows\Splash\$placeholder$.scale-100.png" />
+		<Content Include="Platforms\Windows\Splash\$placeholder$.scale-125.png" />
+		<Content Include="Platforms\Windows\Splash\$placeholder$.scale-150.png" />
+		<Content Include="Platforms\Windows\Splash\$placeholder$.scale-200.png" />
+		<Content Include="Platforms\Windows\Splash\$placeholder$.scale-400.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -220,70 +229,70 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Localization\AppRes.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>AppRes.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
-	    <DependentUpon>PersonDetailsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml.cs">
-	    <DependentUpon>FilePropertiesPopup.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Platforms\Android\Services\UpdateService.cs">
-	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
-	  </Compile>
-	  <Compile Update="Platforms\iOS\Services\UpdateService.cs">
-	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
-	  </Compile>
-	  <Compile Update="Platforms\iOS\Utils\DownloadManager.cs">
-	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
-	  </Compile>
+		<Compile Update="Localization\AppRes.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>AppRes.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Modules\Customer\Pages\PersonDetailsPage.xaml.cs">
+			<DependentUpon>PersonDetailsPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml.cs">
+			<DependentUpon>FilePropertiesPopup.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Platforms\Android\Services\UpdateService.cs">
+			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+		</Compile>
+		<Compile Update="Platforms\iOS\Services\UpdateService.cs">
+			<ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+		</Compile>
+		<Compile Update="Platforms\iOS\Utils\DownloadManager.cs">
+			<ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Localization\AppRes.de-DE.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>AppRes.deu-DEU.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Localization\AppRes.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>AppRes.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Localization\AppRes.de-DE.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>AppRes.deu-DEU.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Localization\AppRes.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>AppRes.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Modules\Customer\Pages\CustomerListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Customer\Pages\CustomerListPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Modules\Settings\Services\" />
-	  <Folder Include="Properties\PublishProfiles\" />
+		<Folder Include="Modules\Settings\Services\" />
+		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Platforms\Windows\Icon\%24placeholder%24.scale-125.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Update="Platforms\Windows\Icon\%24placeholder%24.scale-125.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

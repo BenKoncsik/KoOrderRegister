@@ -80,6 +80,7 @@ namespace KoOrderRegister.ViewModel
             }
             try
             {
+                await CheckUpdateInBackground();
                 // Check for update every 1 hour
                 System.Timers.Timer timer = new System.Timers.Timer(3600000);
                 timer.Enabled = true;
@@ -96,7 +97,7 @@ namespace KoOrderRegister.ViewModel
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
             Version oldVersion = new Version(info.OldVersion);
             Version newVersion = new Version(info.NewVersion);
-            if ((string.IsNullOrEmpty(info.NewVersion) || string.IsNullOrEmpty(info.DownloadUrl)) &&
+            if (!string.IsNullOrEmpty(info.NewVersion) && !string.IsNullOrEmpty(info.DownloadUrl) &&
                 newVersion > oldVersion)
             {
                 await ShowUpdateDialog();
