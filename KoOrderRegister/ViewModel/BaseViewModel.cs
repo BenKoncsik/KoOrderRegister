@@ -42,6 +42,16 @@ namespace KoOrderRegister.ViewModel
             }
         }
         private static bool _isRun = false;
+
+#if DEBUG
+        public bool IsBetaFunctions { get; set; } = true;
+#elif DEVBUILD
+        public bool IsBetaFunctions { get; set; } = true;
+#else
+        public bool IsBetaFunctions { get; set; } = false;
+#endif
+
+
         #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;

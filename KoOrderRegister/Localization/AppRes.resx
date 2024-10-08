@@ -435,4 +435,52 @@
   <data name="ChangeAppThemeAutomaticLabel" xml:space="preserve">
     <value>Switch automatic app theme:</value>
   </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+    <comment>Address</comment>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Email</comment>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+    <comment>Note</comment>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
+    <comment>EndDate</comment>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+    <comment>Price</comment>
+  </data>
+  <data name="FilesName" xml:space="preserve">
+    <value>Files name</value>
+    <comment>FileNames</comment>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+    <comment>Customers</comment>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Files</value>
+    <comment>Files</comment>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>File path</value>
+    <comment>FilesPath</comment>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File name</value>
+    <comment>FileName</comment>
+  </data>
+  <data name="ExportDatabaseToExcel" xml:space="preserve">
+    <value>Export database to excel</value>
+    <comment>ExportDatabaseToExcel</comment>
+  </data>
+  <data name="FileError" xml:space="preserve">
+    <value>File error</value>
+    <comment>FileError</comment>
+  </data>
 </root>
