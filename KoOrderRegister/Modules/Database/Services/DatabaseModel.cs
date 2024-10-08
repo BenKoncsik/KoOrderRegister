@@ -5,8 +5,6 @@ using Newtonsoft.Json;
 using SQLite;
 using System.Collections.Concurrent;
 using System.Text;
-using System.Threading;
-using Windows.UI.StartScreen;
 
 namespace KoOrderRegister.Modules.Database.Services
 {
