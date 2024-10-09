@@ -402,4 +402,70 @@
   <data name="SizeLabel" xml:space="preserve">
     <value>Méret:</value>
   </data>
+  <data name="ChangeAppThemeLabel" xml:space="preserve">
+    <value>Alkmazás témájának megválatóztatása:</value>
+  </data>
+  <data name="ChangeAppTheme" xml:space="preserve">
+    <value>Alkmazás téma váltás</value>
+  </data>
+  <data name="ChangeAppThemeAutomaticLabel" xml:space="preserve">
+    <value>Automatikus alkmazás téma váltás:</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Cím</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Jegyzet</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Rendelés végének dátuma</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Ár</value>
+  </data>
+  <data name="FilesName" xml:space="preserve">
+    <value>Fájlok nevei</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Ügyfelek</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>Fájlok</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>Fájl elérési útja</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Fájl neve</value>
+  </data>
+  <data name="ExportDatabaseToExcel" xml:space="preserve">
+    <value>Adatbázis Exel-be exportálása</value>
+  </data>
+  <data name="FileError" xml:space="preserve">
+    <value>Hibás a fájl</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Sor</value>
+  </data>
+  <data name="ExcelError" xml:space="preserve">
+    <value>Excel hiba</value>
+  </data>
+  <data name="ExcelNotInstalled" xml:space="preserve">
+    <value>Az Excel nincs feltetepítver erre az eszközre!</value>
+  </data>
+  <data name="Exporter" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="SelectExportType" xml:space="preserve">
+    <value>Export típús választás</value>
+  </data>
+  <data name="CreateZipLabel" xml:space="preserve">
+    <value>Zip fájl készítése:</value>
+  </data>
+  <data name="BetaFuctions" xml:space="preserve">
+    <value>Béta funkciók</value>
+  </data>
 </root>

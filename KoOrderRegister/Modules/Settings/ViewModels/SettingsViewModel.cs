@@ -2,6 +2,7 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System;
@@ -11,8 +12,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
+
 
 namespace KoOrderRegister.Modules.Settings.ViewModels
 {
@@ -21,7 +25,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         private readonly IDatabaseModel _databaseModel;
         private readonly IAppUpdateService _updateService;
 
-       
+
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
         private ILanguageSettings _selectedItem;
         public ILanguageSettings SelectedItem
@@ -45,17 +49,32 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 }
             }
         }
+
+        private bool _isAutomaticTheme = Preferences.Get("IsThemeAutomatic", true);
+        public bool IsAutoUserTheme
+        {
+            get => _isAutomaticTheme;
+            set
+            {
+                if (value != _isAutomaticTheme)
+                {
+                    _isAutomaticTheme = value;
+                    SettAutomaticUserTheme(value);
+                    OnPropertyChanged(nameof(IsAutoUserTheme));
+                }
+            }
+        }
+
+
         #region Commands
         public ICommand BackUpDatabaseCommand => new Command(BackUp);
         public ICommand RestoreDatabaseCommand => new Command(Restore);
         public ICommand AppUpdateCommand => new Command(UpdateApp);
+        public ICommand AppThemeSwitchCommand => new Command(SwitchUserTheme);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
         
         public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService) : base(updateService)
         {
@@ -65,16 +84,25 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         public async void BackUp()
         {
-            var result = await FolderPicker.PickAsync(new CancellationToken());
-            if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
+            CancellationTokenSource cancellationToken = new CancellationTokenSource();
+            try
             {
-                IsRefreshing = true;
-                string jsonContent = await _databaseModel.ExportDatabaseToJson();
-                var fileName = "koBackup.kncsk";
-                var fullPath = Path.Combine(result.Folder.Path, fileName);
-                //File.WriteAllText(fullPath, jsonContent);
-                IsRefreshing = false;
+                var result = await FolderPicker.PickAsync(new CancellationToken());
+                if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
+                {
+                    IsRefreshing = true;
+                    var fileName = "koBackup.kncsk";
+                    var fullPath = Path.Combine(result.Folder.Path, fileName);
+                    await _databaseModel.ExportDatabaseToJson(fullPath, cancellationToken.Token, ProgressCallback);
+                    IsRefreshing = false;
+                }
             }
+            finally
+            {
+                cancellationToken.Cancel();
+                cancellationToken.Dispose();
+            }
+            
         }   
         
         public async void Restore()
@@ -98,10 +126,10 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                     if (pickResult != null)
                     {
                         IsRefreshing = true;
-                        var jsonData = await File.ReadAllTextAsync(pickResult.FullPath);
-                        if (!string.IsNullOrEmpty(jsonData))
+                        Stream streamResult = await pickResult.OpenReadAsync();
+                        if (streamResult != null)
                         {
-                            await _databaseModel.ImportDatabaseFromJson(jsonData);
+                            await _databaseModel.ImportDatabaseFromJson(streamResult, ProgressCallback);
                             IsRefreshing = false;
                             await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.DatabaseRestoredSuccessfully, AppRes.Ok);
                         }
@@ -123,9 +151,38 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             }
         }
 
+        public void ProgressCallback(float precent)
+        {
+            LoadingTXT = $"{AppRes.Loading}: {precent}%";
+        }
+
         public void ChangeLanguage(ILanguageSettings languageSettings)
         {
             LanguageManager.SetLanguage(languageSettings);
+        }
+
+        public void SwitchUserTheme()
+        {
+            IsAutoUserTheme = false;
+            if (Application.Current.UserAppTheme == AppTheme.Light)
+            {
+                Application.Current.UserAppTheme = AppTheme.Dark;
+                Preferences.Set("UserTheme", AppTheme.Dark.ToString());
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+                Preferences.Set("UserTheme", AppTheme.Light.ToString());
+            }
+        }
+
+        public void SettAutomaticUserTheme(bool isAutomatic)
+        {
+            Preferences.Set("IsThemeAutomatic", isAutomatic);
+            if (isAutomatic)
+            {
+                Application.Current.UserAppTheme = Application.Current.PlatformAppTheme;
+            }
         }
 
         public async void UpdateApp()

@@ -18,6 +18,7 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<int> DeleteCustomer(Guid id);
         Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue);
         IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, CancellationToken cancellationToken);
+        Task<int> CountCustomers();
         #endregion
 
         #region OrderModel CRUD Operations
@@ -29,6 +30,7 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<int> DeleteOrder(Guid id);
         Task<List<OrderModel>> SearchOrders(string search, int page = int.MinValue);
         IAsyncEnumerable<OrderModel> SearchOrdersAsStream(string search, CancellationToken cancellationToken);
+        Task<int> CountOrders();
         #endregion
         #region FileModel CRUD Operations
         Task<int> CreateFile(FileModel file);
@@ -42,10 +44,11 @@ namespace KoOrderRegister.Modules.Database.Services
         Task<int> UpdateFile(FileModel file);
         Task<int> DeleteFile(Guid id);
         Task<string> GetFileContentSize(Guid id);
+        Task<int> CountFiles();
         #endregion
         #region Database Export/Import Operations
-        Task<string> ExportDatabaseToJson();
-        Task ImportDatabaseFromJson(string jsonData);
+        Task ExportDatabaseToJson(string filePath, CancellationToken cancellationToken, Action<float> progressCallback = null);
+        Task ImportDatabaseFromJson(Stream jsonStream, Action<float> progressCallback = null);
         #endregion
     }
 }

@@ -79,6 +79,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        internal static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address:.
         /// </summary>
         internal static string AddressLabel {
@@ -124,11 +133,47 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beta fuctions.
+        /// </summary>
+        internal static string BetaFuctions {
+            get {
+                return ResourceManager.GetString("BetaFuctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancle.
         /// </summary>
         internal static string Cancle {
             get {
                 return ResourceManager.GetString("Cancle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch app theme.
+        /// </summary>
+        internal static string ChangeAppTheme {
+            get {
+                return ResourceManager.GetString("ChangeAppTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch automatic app theme:.
+        /// </summary>
+        internal static string ChangeAppThemeAutomaticLabel {
+            get {
+                return ResourceManager.GetString("ChangeAppThemeAutomaticLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch app theme:.
+        /// </summary>
+        internal static string ChangeAppThemeLabel {
+            get {
+                return ResourceManager.GetString("ChangeAppThemeLabel", resourceCulture);
             }
         }
         
@@ -196,6 +241,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create zip:.
+        /// </summary>
+        internal static string CreateZipLabel {
+            get {
+                return ResourceManager.GetString("CreateZipLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer details.
         /// </summary>
         internal static string CustomerDetails {
@@ -210,6 +264,15 @@ namespace KoOrderRegister.Localization {
         internal static string CustomerList {
             get {
                 return ResourceManager.GetString("CustomerList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customers.
+        /// </summary>
+        internal static string Customers {
+            get {
+                return ResourceManager.GetString("Customers", resourceCulture);
             }
         }
         
@@ -277,11 +340,65 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email:.
         /// </summary>
         internal static string EmailLabel {
             get {
                 return ResourceManager.GetString("EmailLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End date.
+        /// </summary>
+        internal static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel error.
+        /// </summary>
+        internal static string ExcelError {
+            get {
+                return ResourceManager.GetString("ExcelError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel is not properly installed!.
+        /// </summary>
+        internal static string ExcelNotInstalled {
+            get {
+                return ResourceManager.GetString("ExcelNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export database to excel.
+        /// </summary>
+        internal static string ExportDatabaseToExcel {
+            get {
+                return ResourceManager.GetString("ExportDatabaseToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter.
+        /// </summary>
+        internal static string Exporter {
+            get {
+                return ResourceManager.GetString("Exporter", resourceCulture);
             }
         }
         
@@ -318,6 +435,51 @@ namespace KoOrderRegister.Localization {
         internal static string FaliedToRestore {
             get {
                 return ResourceManager.GetString("FaliedToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File error.
+        /// </summary>
+        internal static string FileError {
+            get {
+                return ResourceManager.GetString("FileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File name.
+        /// </summary>
+        internal static string FileName {
+            get {
+                return ResourceManager.GetString("FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File path.
+        /// </summary>
+        internal static string FilePath {
+            get {
+                return ResourceManager.GetString("FilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        internal static string Files {
+            get {
+                return ResourceManager.GetString("Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files name.
+        /// </summary>
+        internal static string FilesName {
+            get {
+                return ResourceManager.GetString("FilesName", resourceCulture);
             }
         }
         
@@ -399,6 +561,15 @@ namespace KoOrderRegister.Localization {
         internal static string NoNewVersion {
             get {
                 return ResourceManager.GetString("NoNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        internal static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
             }
         }
         
@@ -547,6 +718,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Price.
+        /// </summary>
+        internal static string Price {
+            get {
+                return ResourceManager.GetString("Price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price:.
         /// </summary>
         internal static string PriceLabel {
@@ -601,6 +781,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Row.
+        /// </summary>
+        internal static string Row {
+            get {
+                return ResourceManager.GetString("Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string Save {
@@ -633,6 +822,15 @@ namespace KoOrderRegister.Localization {
         internal static string SelectCustomer {
             get {
                 return ResourceManager.GetString("SelectCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select export type.
+        /// </summary>
+        internal static string SelectExportType {
+            get {
+                return ResourceManager.GetString("SelectExportType", resourceCulture);
             }
         }
         

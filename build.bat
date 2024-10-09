@@ -20,7 +20,7 @@ if not exist %APPX_MANIFEST% (
 
 echo Build version: %BUILD_VERSION%
 if "%BUILD_VERSION%"=="DEV_VERSION" (
-    set publish_version=Debug
+    set publish_version=DevBuild
 ) else (
     set publish_version=Release
 )

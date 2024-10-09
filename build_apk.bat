@@ -20,7 +20,7 @@ if not exist %APPX_MANIFEST% (
 
 echo Build version: %BUILD_VERSION%
 if "%BUILD_VERSION%"=="DEV_VERSION" (
-    set publish_version=Debug
+    set publish_version=DevBuild
 ) else (
     set publish_version=Release
 )
@@ -66,7 +66,7 @@ echo Publishing the application...
 dotnet publish "%CS_PROJECT%" -f net8.0-android -c %publish_version% -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS% -p:AndroidVersionCode=%NEW_VERSION_CODE% -p:AndroidVersionName=%NEW_VERSION%  --output "%OUTPUT_DIR_BUILD%"
 
 if "%BUILD_VERSION%"=="DEV_VERSION" (
-	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.debug.koorderregister-Signed.apk"
+	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.%publish_version%.koorderregister-Signed.apk"
 ) else (
 	set "ORIGINAL_APK=%OUTPUT_DIR_BUILD%\hu.kncsk.koorderregister-Signed.apk"
 )

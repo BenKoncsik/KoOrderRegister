@@ -8,6 +8,14 @@ on:
   pull_request:
     branches:
       - develop
+  push:
+    branches:
+      - develop
+  workflow_run:
+    workflows: ["Publish"] 
+    types:
+      - completed
+
 permissions:
   contents: write
   pull-requests: write
@@ -74,7 +82,8 @@ jobs:
         
         
   build-apk:
-    runs-on: [windows-latest]
+    #runs-on: [windows-latest]
+    runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
@@ -135,7 +144,7 @@ jobs:
           path: output\*.msix
 
   release:
-    runs-on: [windows-latest]
+    runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk, build-msix]
     steps:
       - name: Delete output

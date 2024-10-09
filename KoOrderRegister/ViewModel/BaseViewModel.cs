@@ -42,6 +42,16 @@ namespace KoOrderRegister.ViewModel
             }
         }
         private static bool _isRun = false;
+
+#if DEBUG
+        public bool IsBetaFunctions { get; set; } = true;
+#elif DEVBUILD
+        public bool IsBetaFunctions { get; set; } = true;
+#else
+        public bool IsBetaFunctions { get; set; } = false;
+#endif
+
+
         #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -58,7 +68,7 @@ namespace KoOrderRegister.ViewModel
 
         }
 
-        public BaseViewModel(IAppUpdateService updateService)
+        public BaseViewModel(IAppUpdateService updateService) : this()
         {
             _updateService = updateService;
             if (!_isRun)
@@ -69,9 +79,9 @@ namespace KoOrderRegister.ViewModel
         }
         public BaseViewModel()
         {
-
+            settUserTheme();
         }
-        
+        #region AppUpdate method
         private async void OnStart()
         {
             if(_updateService == null)
@@ -80,6 +90,7 @@ namespace KoOrderRegister.ViewModel
             }
             try
             {
+                await CheckUpdateInBackground();
                 // Check for update every 1 hour
                 System.Timers.Timer timer = new System.Timers.Timer(3600000);
                 timer.Enabled = true;
@@ -96,7 +107,7 @@ namespace KoOrderRegister.ViewModel
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
             Version oldVersion = new Version(info.OldVersion);
             Version newVersion = new Version(info.NewVersion);
-            if ((string.IsNullOrEmpty(info.NewVersion) || string.IsNullOrEmpty(info.DownloadUrl)) &&
+            if (!string.IsNullOrEmpty(info.NewVersion) && !string.IsNullOrEmpty(info.DownloadUrl) &&
                 newVersion > oldVersion)
             {
                 await ShowUpdateDialog();
@@ -135,5 +146,29 @@ namespace KoOrderRegister.ViewModel
                 }
             }
         }
+        #endregion
+
+        #region App user theme
+        private static bool _isThemeSet = false;
+        private void settUserTheme()
+        {
+            if(_isThemeSet)
+            {
+                return;
+            }
+            _isThemeSet = true;
+            bool AutomaticUserTheme = Preferences.Get("IsThemeAutomatic", true);
+            if (!AutomaticUserTheme)
+            {
+                string UserTheme = Preferences.Get("UserTheme", "Light");
+                App.Current.UserAppTheme = UserTheme switch
+                {
+                    "Light" => AppTheme.Light,
+                    "Dark" => AppTheme.Dark,
+                    _ => AppTheme.Light
+                };
+            }
+        }
+         #endregion
     }
 }

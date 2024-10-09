@@ -14,11 +14,12 @@ namespace KoOrderRegister.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
 #if DEBUG
+        private readonly string VERSION = "DEBUG_VERSION";
+#elif DEVBUILD
         private readonly string VERSION = "DEV_VERSION";
 #else
         private readonly string VERSION = "STABIL_VERSION";
 #endif
-
 
         public string AppVersion { get; }
         public AppUpdateService(IHttpClientFactory httpClientFactory, IVersionService versionService)
@@ -80,7 +81,7 @@ namespace KoOrderRegister.Services
                 var architecture = _versionService.DeviceType.ToLowerInvariant();
                 foreach (var asset in release.Assets)
                 {
-                    if (asset.name.ToLower().Contains(architecture.ToLower()) && asset.name.ToLower().Contains(VERSION))
+                    if (asset.name.ToLower().Contains(architecture.ToLower()) && asset.name.ToLower().Contains(VERSION.ToLower()))
                     {
                         string responseVersion = asset.browser_download_url.Split("/").Last().Split("_")[1];
                         if (string.IsNullOrEmpty(version))
