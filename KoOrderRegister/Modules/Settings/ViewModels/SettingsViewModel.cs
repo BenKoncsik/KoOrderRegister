@@ -2,6 +2,7 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
+using KoOrderRegister.Modules.Export.Excel.Services;
 using KoOrderRegister.Modules.Export.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
@@ -76,7 +77,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         
         
-        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService, IExportService exportService) : base(updateService)
+        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService, IExcelExportService exportService) : base(updateService)
         {
             _databaseModel = databaseModel;
             _updateService = updateService;
@@ -194,7 +195,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
 
         #region BetaFunctions
-        private readonly IExportService _exportService;
+        private readonly IExcelExportService _exportService;
         public ICommand ExportData => new Command(ExportDataToExcel);
 
         public async void ExportDataToExcel()
@@ -202,13 +203,13 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             try
             {
-                var result = await FolderPicker.PickAsync(new CancellationToken());
+                var result = await FolderPicker.PickAsync(cancellationToken.Token);
                 if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
                 {
                     IsRefreshing = true;
-                    var fileName = "KoOrderRegister.xlsx";
-                    var fullPath = Path.Combine(result.Folder.Path, fileName);
-                    await _exportService.Export(fullPath, new CancellationToken(), ProgressCallback);
+                    var fullPath = Path.Combine(result.Folder.Path);
+                    await _exportService.Export(fullPath, cancellationToken.Token, ProgressCallback);
+                    _exportService.CreateZip();
                     IsRefreshing = false;
                 }
             }

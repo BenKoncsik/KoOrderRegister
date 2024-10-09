@@ -14,7 +14,7 @@ namespace KoOrderRegister.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
 #if DEBUG
-        private readonly string VERSION = "DEV_VERSION";
+        private readonly string VERSION = "DEBUG_VERSION";
 #elif DEVBUILD
         private readonly string VERSION = "DEV_VERSION";
 #else
