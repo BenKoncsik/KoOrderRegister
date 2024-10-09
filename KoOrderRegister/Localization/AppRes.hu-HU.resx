@@ -447,4 +447,13 @@
   <data name="FileError" xml:space="preserve">
     <value>Hibás a fájl</value>
   </data>
+  <data name="Row" xml:space="preserve">
+    <value>Sor</value>
+  </data>
+  <data name="ExcelError" xml:space="preserve">
+    <value>Excel hiba</value>
+  </data>
+  <data name="ExcelNotInstalled" xml:space="preserve">
+    <value>Az Excel nincs feltetepítver erre az eszközre!</value>
+  </data>
 </root>

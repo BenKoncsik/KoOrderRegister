@@ -35,10 +35,9 @@
 
 		<!-- App Identifier -->
 		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
-		<ApplicationId Condition="'$(Configuration)'=='DevBuild'">hu.kncsk.koorderregister</ApplicationId>
-		<ApplicationId Condition="'$(Configuration)'=='DEV'">hu.kncsk.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)'=='DEV'">hu.kncsk.dev.koorderregister</ApplicationId>
 		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
-		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.debug.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.dev.koorderregister</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.1.1</ApplicationDisplayVersion>
@@ -84,7 +83,7 @@
 		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'DevBuild'">
-		<PackageIdentityName>hu.kncsk.debug.koorderregister</PackageIdentityName>
+		<PackageIdentityName>hu.kncsk.dev.koorderregister</PackageIdentityName>
 	</PropertyGroup>
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
 		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
@@ -224,6 +223,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
 		<PackageReference Include="Mopups" Version="1.3.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />

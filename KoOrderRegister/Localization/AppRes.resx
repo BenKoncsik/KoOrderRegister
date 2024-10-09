@@ -483,4 +483,14 @@
     <value>File error</value>
     <comment>FileError</comment>
   </data>
+  <data name="Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="ExcelError" xml:space="preserve">
+    <value>Excel error</value>
+    <comment>ExcelError</comment>
+  </data>
+  <data name="ExcelNotInstalled" xml:space="preserve">
+    <value>Excel is not properly installed!</value>
+  </data>
 </root>

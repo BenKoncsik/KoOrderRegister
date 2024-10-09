@@ -736,6 +736,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Row.
+        /// </summary>
+        internal static string Row {
+            get {
+                return ResourceManager.GetString("Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string Save {

@@ -17,7 +17,7 @@ using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
 using KoOrderRegister.Modules.Export.Services;
-using KoOrderRegister.Modules.Export.Excel;
+using KoOrderRegister.Modules.Export.Excel.Services;
 
 namespace KoOrderRegister
 {
@@ -90,7 +90,7 @@ namespace KoOrderRegister
             #endregion
 
             #region DatabaseFile Export to File
-            builder.Services.AddTransient<IExportService, ExcelExportService>();
+            builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
             #endregion
 
 #if DEBUG
