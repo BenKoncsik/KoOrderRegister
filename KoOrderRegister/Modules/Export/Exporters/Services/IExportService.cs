@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Export.Services
+namespace KoOrderRegister.Modules.Export.Types.Services
 {
     public interface IExportService
     {

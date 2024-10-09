@@ -8,6 +8,8 @@
     xmlns:orderListViews="clr-namespace:KoOrderRegister.Modules.Order.Pages"
     xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
     xmlns:settings="clr-namespace:KoOrderRegister.Modules.Settings.Pages"
+    xmlns:exporters="clr-namespace:KoOrderRegister.Modules.Export.Pages"
+    xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
@@ -31,11 +33,29 @@
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
     </FlyoutItem>
 
+
+    <FlyoutItem Title="{x:Static res:AppRes.BetaFuctions}"
+            IsVisible="{x:Static local:AppShell.IsDevBuild}">
+        
+            <ShellContent Title="{x:Static res:AppRes.BetaFuctions}"
+                          Route="BetaFunctionsPages"
+                          ContentTemplate="{DataTemplate betaFuctions:BetaFunctionsPages}" />
+        
+            <ShellContent Title="{x:Static res:AppRes.Exporter}"
+                          Route="ExportersPage"
+                          ContentTemplate="{DataTemplate exporters:ExportersPage}" />
+        
+    </FlyoutItem>
+    
+    
+
     <FlyoutItem Title="{x:Static res:AppRes.Settings}">
         <ShellContent Title="{x:Static res:AppRes.Settings}"
                       Route="SettingsPage"
                       ContentTemplate="{DataTemplate settings:SettingsPage}" />
     </FlyoutItem>
+    
+    
 
 
 
