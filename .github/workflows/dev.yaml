@@ -8,7 +8,7 @@ on:
   pull_request:
     branches:
       - develop
-  merge_request:
+  push:
     branches:
       - develop
   workflow_run:
