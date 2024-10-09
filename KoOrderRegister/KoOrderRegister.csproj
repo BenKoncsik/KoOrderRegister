@@ -37,7 +37,7 @@
 		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
 		<ApplicationId Condition="'$(Configuration)'=='DEV'">hu.kncsk.dev.koorderregister</ApplicationId>
 		<ApplicationId Condition="'$(Configuration)' == 'Debug'">hu.kncsk.debug.koorderregister</ApplicationId>
-		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.dev.koorderregister</ApplicationId>
+		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.devbuild.koorderregister</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>2.1.1</ApplicationDisplayVersion>
