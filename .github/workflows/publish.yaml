@@ -81,7 +81,8 @@ jobs:
         
         
   build-apk:
-    runs-on: [windows-latest]
+    #runs-on: [windows-latest]
+    runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
