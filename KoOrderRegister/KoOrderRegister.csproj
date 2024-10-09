@@ -241,6 +241,9 @@
 		<Compile Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml.cs">
 			<DependentUpon>FilePropertiesPopup.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Modules\Export\Pages\ExportersPage.xaml.cs">
+		  <DependentUpon>ExportersPage.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Platforms\Android\Services\UpdateService.cs">
 			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 		</Compile>
@@ -264,6 +267,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Modules\BetaFunctions\Pages\BetaFuctionsPages.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -272,6 +278,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Export\Pages\ExportersPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -285,8 +294,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Modules\Export\Html\" />
-		<Folder Include="Modules\Export\Pdf\" />
+		<Folder Include="Modules\Export\Services\" />
+		<Folder Include="Modules\Export\Exporters\Html\" />
+		<Folder Include="Modules\Export\Exporters\Pages\" />
+		<Folder Include="Modules\Export\Exporters\Pdf\" />
 		<Folder Include="Modules\Settings\Services\" />
 		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>

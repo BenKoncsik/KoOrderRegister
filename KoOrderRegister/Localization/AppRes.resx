@@ -493,4 +493,19 @@
   <data name="ExcelNotInstalled" xml:space="preserve">
     <value>Excel is not properly installed!</value>
   </data>
+  <data name="Exporter" xml:space="preserve">
+    <value>Exporter</value>
+    <comment>Exporter</comment>
+  </data>
+  <data name="SelectExportType" xml:space="preserve">
+    <value>Select export type</value>
+    <comment>SelectExportType</comment>
+  </data>
+  <data name="CreateZipLabel" xml:space="preserve">
+    <value>Create zip:</value>
+    <comment>CreateZip</comment>
+  </data>
+  <data name="BetaFuctions" xml:space="preserve">
+    <value>Beta fuctions</value>
+  </data>
 </root>

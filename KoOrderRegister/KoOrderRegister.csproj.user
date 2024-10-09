@@ -37,6 +37,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <MauiXaml Update="Modules\BetaFunctions\Pages\BetaFuctionsPages.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Modules\Customer\Pages\PersonDetailsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -44,6 +47,9 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Export\Pages\ExportersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">

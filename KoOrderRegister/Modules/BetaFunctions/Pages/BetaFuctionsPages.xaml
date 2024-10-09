@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.BetaFunctions.Pages.BetaFunctionsPages"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.BetaFuctions}">
+
+    <StackLayout IsVisible="{Binding IsBetaFunctions}">
+        <Label Text="{x:Static res:AppRes.BetaFuctions}"
+               Grid.Row="0"
+               Grid.Column="0"
+               Margin="10, 0, 10,10"
+               FontSize="Large"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" 
+               TextColor="Red"/>
+        <VerticalStackLayout Grid.Row="6"
+                             Grid.Column="2">
+            <Label Text="{x:Static res:AppRes.ExportDatabaseToExcel}"
+                   Grid.Row="4"
+                   Grid.Column="0"
+                   Margin="10, 20, 10,10" />
+            <Button Text="{x:Static res:AppRes.ExportDatabaseToExcel}"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                        Command="{Binding ExportDataCommand}"
+                    Margin="10, 10, 10,10" />
+        </VerticalStackLayout>
+
+    </StackLayout>
+</ContentPage>

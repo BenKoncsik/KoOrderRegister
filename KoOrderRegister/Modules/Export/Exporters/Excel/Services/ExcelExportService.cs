@@ -3,7 +3,6 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Export.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace KoOrderRegister.Modules.Export.Excel.Services
+namespace KoOrderRegister.Modules.Export.Types.Excel.Services
 {
     public class ExcelExportService : IExcelExportService
     {
@@ -213,7 +212,7 @@ namespace KoOrderRegister.Modules.Export.Excel.Services
 
         public void CreateZip()
         {
-            if(!_isExporting) throw new InvalidOperationException("Export must be called before creating a zip file");
+            if (!_isExporting) throw new InvalidOperationException("Export must be called before creating a zip file");
             string parentDirectory = Directory.GetParent(_outputPath)?.FullName;
             string destinationZipFilePath = Path.Combine(parentDirectory, Path.GetFileName(_outputPath) + ".zip");
             ZipFile.CreateFromDirectory(_outputPath, destinationZipFilePath);

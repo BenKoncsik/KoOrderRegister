@@ -7,9 +7,8 @@ using MsExcel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Export.Services;
 
-namespace KoOrderRegister.Modules.Export.Excel.Services
+namespace KoOrderRegister.Modules.Export.Types.Excel.Services
 {
     public class MSExcelExportService : IExcelExportService
     {

@@ -16,8 +16,11 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
-using KoOrderRegister.Modules.Export.Services;
-using KoOrderRegister.Modules.Export.Excel.Services;
+using KoOrderRegister.Modules.Export.Types.Excel.Services;
+using KoOrderRegister.Modules.Export.ViewModel;
+using KoOrderRegister.Modules.Export.Pages;
+using KoOrderRegister.Modules.BetaFunctions.Pages;
+using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 
 namespace KoOrderRegister
 {
@@ -89,13 +92,19 @@ namespace KoOrderRegister
             builder.Services.AddTransient<FilePropertiesViewModel>();
             #endregion
 
-            #region DatabaseFile Export to File
+            #region Export Modul
             builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
+
+            builder.Services.AddTransient<ExportersPage>();
+            builder.Services.AddSingleton<ExportersViewModel>();
+
             #endregion
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
+            #region Beta function modul
+            builder.Services.AddTransient<BetaFunctionsPages>();
+            builder.Services.AddSingleton<BetaFunctionsViewModel>();
+            #endregion
+
             #region Language settings
             ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
             languageSettings.SetRegioSpecification();
@@ -104,6 +113,10 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
 
+
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
             return builder.Build();
         }
     }

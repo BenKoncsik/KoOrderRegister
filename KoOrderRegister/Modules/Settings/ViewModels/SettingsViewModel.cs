@@ -2,8 +2,7 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Export.Excel.Services;
-using KoOrderRegister.Modules.Export.Services;
+using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System;
@@ -77,11 +76,10 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         
         
-        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService, IExcelExportService exportService) : base(updateService)
+        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService) : base(updateService)
         {
             _databaseModel = databaseModel;
             _updateService = updateService;
-            _exportService = exportService;
         }
 
         public async void BackUp()
@@ -191,34 +189,5 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         {
             CheckUpdate();
         }
-
-
-
-        #region BetaFunctions
-        private readonly IExcelExportService _exportService;
-        public ICommand ExportData => new Command(ExportDataToExcel);
-
-        public async void ExportDataToExcel()
-        {
-            CancellationTokenSource cancellationToken = new CancellationTokenSource();
-            try
-            {
-                var result = await FolderPicker.PickAsync(cancellationToken.Token);
-                if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
-                {
-                    IsRefreshing = true;
-                    var fullPath = Path.Combine(result.Folder.Path);
-                    await _exportService.Export(fullPath, cancellationToken.Token, ProgressCallback);
-                    _exportService.CreateZip();
-                    IsRefreshing = false;
-                }
-            }
-            finally
-            {
-                cancellationToken.Cancel();
-                cancellationToken.Dispose();
-            }
-        }
-        #endregion
-        }
+    }
 }

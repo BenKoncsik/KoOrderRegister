@@ -133,6 +133,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beta fuctions.
+        /// </summary>
+        internal static string BetaFuctions {
+            get {
+                return ResourceManager.GetString("BetaFuctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancle.
         /// </summary>
         internal static string Cancle {
@@ -228,6 +237,15 @@ namespace KoOrderRegister.Localization {
         internal static string Copyd {
             get {
                 return ResourceManager.GetString("Copyd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create zip:.
+        /// </summary>
+        internal static string CreateZipLabel {
+            get {
+                return ResourceManager.GetString("CreateZipLabel", resourceCulture);
             }
         }
         
@@ -349,11 +367,38 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excel error.
+        /// </summary>
+        internal static string ExcelError {
+            get {
+                return ResourceManager.GetString("ExcelError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel is not properly installed!.
+        /// </summary>
+        internal static string ExcelNotInstalled {
+            get {
+                return ResourceManager.GetString("ExcelNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export database to excel.
         /// </summary>
         internal static string ExportDatabaseToExcel {
             get {
                 return ResourceManager.GetString("ExportDatabaseToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter.
+        /// </summary>
+        internal static string Exporter {
+            get {
+                return ResourceManager.GetString("Exporter", resourceCulture);
             }
         }
         
@@ -777,6 +822,15 @@ namespace KoOrderRegister.Localization {
         internal static string SelectCustomer {
             get {
                 return ResourceManager.GetString("SelectCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select export type.
+        /// </summary>
+        internal static string SelectExportType {
+            get {
+                return ResourceManager.GetString("SelectExportType", resourceCulture);
             }
         }
         

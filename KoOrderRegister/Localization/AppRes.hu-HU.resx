@@ -456,4 +456,16 @@
   <data name="ExcelNotInstalled" xml:space="preserve">
     <value>Az Excel nincs feltetepítver erre az eszközre!</value>
   </data>
+  <data name="Exporter" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="SelectExportType" xml:space="preserve">
+    <value>Export típús választás</value>
+  </data>
+  <data name="CreateZipLabel" xml:space="preserve">
+    <value>Zip fájl készítése:</value>
+  </data>
+  <data name="BetaFuctions" xml:space="preserve">
+    <value>Béta funkciók</value>
+  </data>
 </root>
