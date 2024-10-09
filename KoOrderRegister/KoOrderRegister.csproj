@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<!-- Definie devBuild constans-->
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DevBuild|AnyCPU'">
-		<OutputPath>bin\DevBuild\</OutputPath>
-		<DefineConstants>RELEASE;TRACE;DEVBUILD</DefineConstants>
-		<Optimize>true</Optimize>
-	</PropertyGroup>
-
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('maccatalyst'))">net8.0-maccatalyst</TargetFrameworks>
