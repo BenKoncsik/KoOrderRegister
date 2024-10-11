@@ -23,7 +23,6 @@
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;DEV;DevBuild</Configurations>
 
-
 		<!-- Display name -->
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
