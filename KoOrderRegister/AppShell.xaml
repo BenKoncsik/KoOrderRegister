@@ -8,7 +8,9 @@
     xmlns:orderListViews="clr-namespace:KoOrderRegister.Modules.Order.Pages"
     xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
     xmlns:settings="clr-namespace:KoOrderRegister.Modules.Settings.Pages"
-    xmlns:exporters="clr-namespace:KoOrderRegister.Modules.Export.Pages"
+    xmlns:excelExporter="clr-namespace:KoOrderRegister.Modules.Export.Excel.Pages"
+    xmlns:pdfExporter="clr-namespace:KoOrderRegister.Modules.Export.Pdf.Pages"
+    xmlns:htmlExporter="clr-namespace:KoOrderRegister.Modules.Export.Html.Pages"
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
@@ -21,36 +23,58 @@
                Padding="0, 10" />
     </Shell.FlyoutFooter>
 
-    <FlyoutItem Title="{x:Static res:AppRes.OrderList}">
+    <FlyoutItem Title="{x:Static res:AppRes.OrderList}"
+                Icon="{AppThemeBinding Light='orders_light.png', Dark='orders_dark.png'}">
         <ShellContent Title="{x:Static res:AppRes.OrderList}"
+                      Icon="{AppThemeBinding Light='orders_light.png', Dark='orders_dark.png'}"
                       Route="OrderListPage"
                       ContentTemplate="{DataTemplate orderListViews:OrderListPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="{x:Static res:AppRes.CustomerList}">
+    <FlyoutItem Title="{x:Static res:AppRes.CustomerList}"
+                Icon="{AppThemeBinding Light='group_light.png', Dark='group_dark.png'}">
         <ShellContent Title="{x:Static res:AppRes.CustomerList}"
+                      Icon="{AppThemeBinding Light='group_light.png', Dark='group_dark.png'}"
                       Route="CustomerListPage"
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="{x:Static res:AppRes.Exporter}"
+                Icon="{AppThemeBinding Light='csv_light.png', Dark='csv_dark.png'}">
+        <ShellContent Title="{x:Static res:AppRes.ExcelExporter}"
+                      Icon="{AppThemeBinding Light='csv_light.png', Dark='csv_dark.png'}"
+                      Route="ExportersPage"
+                      ContentTemplate="{DataTemplate excelExporter:ExcelExportersPage}" />
+    </FlyoutItem>
 
     <FlyoutItem Title="{x:Static res:AppRes.BetaFuctions}"
-            IsVisible="{x:Static local:AppShell.IsDevBuild}">
+                Icon="{AppThemeBinding Light='labs_light.png', Dark='labs_dark.png'}"
+                IsVisible="{x:Static local:AppShell.IsDevBuild}">
+
+        <ShellContent Title="{x:Static res:AppRes.BetaFuctions}"
+                      Icon="{AppThemeBinding Light='labs_light.png', Dark='labs_dark.png'}"
+                      Route="BetaFunctionsPages"
+                      ContentTemplate="{DataTemplate betaFuctions:BetaFunctionsPages}" />
+
         
-            <ShellContent Title="{x:Static res:AppRes.BetaFuctions}"
-                          Route="BetaFunctionsPages"
-                          ContentTemplate="{DataTemplate betaFuctions:BetaFunctionsPages}" />
         
-            <ShellContent Title="{x:Static res:AppRes.Exporter}"
-                          Route="ExportersPage"
-                          ContentTemplate="{DataTemplate exporters:ExportersPage}" />
+        <ShellContent Title="{x:Static res:AppRes.PdfExporter}"
+                      Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
+                      Route="ExportersPage"
+                      ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
         
+        <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
+                      Icon="{AppThemeBinding Light='html_light.png', Dark='html_dark.png'}"
+                      Route="ExportersPage"
+                      ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
     </FlyoutItem>
     
     
 
-    <FlyoutItem Title="{x:Static res:AppRes.Settings}">
+    <FlyoutItem Title="{x:Static res:AppRes.Settings}"
+                Icon="{AppThemeBinding Light='settings_light.png', Dark='settings_dark.png'}">
         <ShellContent Title="{x:Static res:AppRes.Settings}"
+                      Icon="{AppThemeBinding Light='settings_light.png', Dark='settings_dark.png'}"
                       Route="SettingsPage"
                       ContentTemplate="{DataTemplate settings:SettingsPage}" />
     </FlyoutItem>

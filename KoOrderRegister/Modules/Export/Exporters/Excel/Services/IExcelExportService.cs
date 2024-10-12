@@ -9,6 +9,6 @@ namespace KoOrderRegister.Modules.Export.Types.Excel.Services
 {
     public interface IExcelExportService : IExportService
     {
-        void CreateZip();
+        
     }
 }

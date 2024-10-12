@@ -22,6 +22,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|ARM64'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='DevBuild|net8.0-android|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Update="Localization\AppRes.de-DE.resx">
       <SubType>Designer</SubType>
@@ -49,7 +52,13 @@
     <MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Modules\Export\Pages\ExportersPage.xaml">
+    <MauiXaml Update="Modules\Export\Exporters\Excel\View\Pages\ExcelExportersPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Export\Exporters\Html\View\Pages\HtmlExportersPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">

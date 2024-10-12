@@ -28,7 +28,7 @@ set "NEW_VERSION=%major%.%minor%.%build%"
 echo Updated version to %NEW_VERSION%
 
 echo Updating the project file with new version...
-powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
+REM powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
 echo Please enter your keystore password:
 set /p KEYPASS=""
@@ -36,7 +36,7 @@ set /p KEYPASS=""
 
 
 echo Publishing the application...
-dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
+dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c DevBuild -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
 
 REM echo Delete key store password
 REM set "KeystorePassword="
@@ -58,7 +58,7 @@ set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
 echo Windows version to: %WINDOWS_NEW_VERSION%
 
 echo Building MSIX package for Windows x64...
-dotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR%\net8.0-windows-x64" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
+REM sdotnet publish "%CS_PROJECT%" -r win-x64 -c Release -f net8.0-windows10.0.19041.0 -o "%OUTPUT_DIR%\net8.0-windows-x64" -p:Version=%WINDOWS_NEW_VERSION% -p:PackageType=Msix
 
 
 
