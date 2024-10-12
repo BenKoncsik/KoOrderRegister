@@ -10,5 +10,6 @@ namespace KoOrderRegister.Modules.Export.Types.Services
     public interface IExportService
     {
         Task Export(string outputPath, CancellationToken cancellationToken, Action<float> progressCallback = null);
+        void CreateZip();
     }
 }

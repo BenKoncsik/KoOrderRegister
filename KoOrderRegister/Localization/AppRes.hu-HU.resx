@@ -468,4 +468,13 @@
   <data name="BetaFuctions" xml:space="preserve">
     <value>Béta funkciók</value>
   </data>
+  <data name="ExcelExporter" xml:space="preserve">
+    <value>Excel készítés</value>
+  </data>
+  <data name="HtmlExporter" xml:space="preserve">
+    <value>Html oldal készítés</value>
+  </data>
+  <data name="PdfExporter" xml:space="preserve">
+    <value>Pdf készítés</value>
+  </data>
 </root>

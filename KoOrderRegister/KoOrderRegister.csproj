@@ -114,6 +114,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Modules\Export\Services\**" />
+	  <Compile Remove="Modules\Export\Services\**" />
+	  <EmbeddedResource Remove="Modules\Export\Services\**" />
+	  <MauiCss Remove="Modules\Export\Services\**" />
+	  <MauiXaml Remove="Modules\Export\Services\**" />
+	  <None Remove="Modules\Export\Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Platforms\Android\AndroidManifest.xml" />
 		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
 		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
@@ -165,6 +174,8 @@
 		<None Remove="Resources\Images\orders_light.svg" />
 		<None Remove="Resources\Images\pause_dark.svg" />
 		<None Remove="Resources\Images\pause_light.svg" />
+		<None Remove="Resources\Images\pdf_dark.svg" />
+		<None Remove="Resources\Images\pdf_light.svg" />
 		<None Remove="Resources\Images\play_dark.svg" />
 		<None Remove="Resources\Images\play_light.svg" />
 		<None Remove="Resources\Images\qr_code_dark.svg" />
@@ -183,6 +194,8 @@
 		<None Remove="Resources\Images\update_light.svg" />
 		<None Remove="Resources\Images\upload_dark.svg" />
 		<None Remove="Resources\Images\upload_light.svg" />
+		<None Remove="Resources\Images\web_dark.svg" />
+		<None Remove="Resources\Images\web_light.svg" />
 		<None Remove="Resources\Images\x_dark.svg" />
 		<None Remove="Resources\Images\x_light.svg" />
 	</ItemGroup>
@@ -243,8 +256,14 @@
 		<Compile Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml.cs">
 			<DependentUpon>FilePropertiesPopup.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Modules\Export\Pages\ExportersPage.xaml.cs">
-		  <DependentUpon>ExportersPage.xaml</DependentUpon>
+		<Compile Update="Modules\Export\Exporters\Excel\View\Pages\ExcelExportersPage.xaml.cs">
+		  <DependentUpon>ExcelExportersPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Modules\Export\Exporters\Html\View\Pages\HtmlExportersPage.xaml.cs">
+		  <DependentUpon>HtmlExportersPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml.cs">
+		  <DependentUpon>PdfExportersPage.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Platforms\Android\Services\UpdateService.cs">
 			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
@@ -281,7 +300,13 @@
 		<MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Modules\Export\Pages\ExportersPage.xaml">
+		<MauiXaml Update="Modules\Export\Exporters\Excel\View\Pages\ExcelExportersPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Export\Exporters\Html\View\Pages\HtmlExportersPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
@@ -296,10 +321,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Modules\Export\Services\" />
-		<Folder Include="Modules\Export\Exporters\Html\" />
 		<Folder Include="Modules\Export\Exporters\Pages\" />
-		<Folder Include="Modules\Export\Exporters\Pdf\" />
 		<Folder Include="Modules\Settings\Services\" />
 		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>

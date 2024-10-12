@@ -2,8 +2,8 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugFramework>net8.0-android</ActiveDebugFramework>
-    <ActiveDebugProfile>Xiaomi M2004J19C (Android 12.0 - API 31)</ActiveDebugProfile>
+    <ActiveDebugFramework>net8.0-windows10.0.19041.0</ActiveDebugFramework>
+    <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
     <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
     <AppxShowAllApps>False</AppxShowAllApps>
@@ -52,7 +52,13 @@
     <MauiXaml Update="Modules\DatabaseFile\Page\FilePropertiesPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Modules\Export\Pages\ExportersPage.xaml">
+    <MauiXaml Update="Modules\Export\Exporters\Excel\View\Pages\ExcelExportersPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Export\Exporters\Html\View\Pages\HtmlExportersPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\Order\Pages\OrderDetailsPage.xaml">
