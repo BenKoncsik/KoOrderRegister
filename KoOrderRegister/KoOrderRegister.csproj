@@ -23,7 +23,6 @@
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;DEV;DevBuild</Configurations>
 
-
 		<!-- Display name -->
 		<ApplicationTitle>Ko Order Register</ApplicationTitle>
 
@@ -88,6 +87,10 @@
 		<AndroidApiLevel>34</AndroidApiLevel>
 		<UseMaui>true</UseMaui>
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+
+
+		<Optimize>true</Optimize>
+		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -148,14 +151,24 @@
 		<None Remove="Resources\Images\cloud_off_light.svg" />
 		<None Remove="Resources\Images\copy_dark.svg" />
 		<None Remove="Resources\Images\copy_light.svg" />
+		<None Remove="Resources\Images\csv_dark.svg" />
+		<None Remove="Resources\Images\csv_light.svg" />
+		<None Remove="Resources\Images\data_dark.svg" />
+		<None Remove="Resources\Images\data_light.svg" />
+		<None Remove="Resources\Images\group_dark.svg" />
+		<None Remove="Resources\Images\group_light.svg" />
 		<None Remove="Resources\Images\key_dark.svg" />
 		<None Remove="Resources\Images\key_light.svg" />
+		<None Remove="Resources\Images\labs_dark.svg" />
+		<None Remove="Resources\Images\labs_light.svg" />
 		<None Remove="Resources\Images\notification_dark.svg" />
 		<None Remove="Resources\Images\notification_light.svg" />
 		<None Remove="Resources\Images\not_shared_icon_dark.svg" />
 		<None Remove="Resources\Images\not_shared_icon_light.svg" />
 		<None Remove="Resources\Images\open_dark.svg" />
 		<None Remove="Resources\Images\open_light.svg" />
+		<None Remove="Resources\Images\orders_dark.svg" />
+		<None Remove="Resources\Images\orders_light.svg" />
 		<None Remove="Resources\Images\pause_dark.svg" />
 		<None Remove="Resources\Images\pause_light.svg" />
 		<None Remove="Resources\Images\play_dark.svg" />
@@ -166,6 +179,8 @@
 		<None Remove="Resources\Images\return_light.svg" />
 		<None Remove="Resources\Images\save_dark.svg" />
 		<None Remove="Resources\Images\save_light.svg" />
+		<None Remove="Resources\Images\settings_dark.svg" />
+		<None Remove="Resources\Images\settings_light.svg" />
 		<None Remove="Resources\Images\shared_icon_dark.svg" />
 		<None Remove="Resources\Images\shared_icon_light.svg" />
 		<None Remove="Resources\Images\sync_dark.svg" />
