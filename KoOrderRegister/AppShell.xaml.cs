@@ -42,9 +42,8 @@ namespace KoOrderRegister
             Routing.RegisterRoute(nameof(PersonDetailsPage), typeof(PersonDetailsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(ExportersPage), typeof(ExportersPage));
-#if DEBUG || DEVBUILD
             Routing.RegisterRoute(nameof(BetaFunctionsPages), typeof(BetaFunctionsPages));
-#endif
+
 
 
             _AppVersionLabel = AppVersionLabel;            
