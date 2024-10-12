@@ -87,6 +87,10 @@
 		<AndroidApiLevel>34</AndroidApiLevel>
 		<UseMaui>true</UseMaui>
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+
+
+		<Optimize>true</Optimize>
+		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 	</PropertyGroup>
 
 	<ItemGroup>
