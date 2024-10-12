@@ -33,7 +33,7 @@
 		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.devbuild.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>2.1.1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>999.999.999</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -139,12 +139,6 @@
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
-		<None Remove="Resources\Images\add_dark.svg" />
-		<None Remove="Resources\Images\add_light.svg" />
-		<None Remove="Resources\Images\ai_dark.svg" />
-		<None Remove="Resources\Images\ai_light.svg" />
-		<None Remove="Resources\Images\ai_off_dark.svg" />
-		<None Remove="Resources\Images\ai_off_light.svg" />
 		<None Remove="Resources\Images\cloud_dark.svg" />
 		<None Remove="Resources\Images\cloud_light.svg" />
 		<None Remove="Resources\Images\cloud_off_dark.svg" />
@@ -228,11 +222,11 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.104.1" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Mopups" Version="1.3.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+		<PackageReference Include="Mopups" Version="1.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
