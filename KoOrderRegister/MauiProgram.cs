@@ -17,8 +17,6 @@ using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
 using KoOrderRegister.Modules.Export.Types.Excel.Services;
-using KoOrderRegister.Modules.Export.ViewModel;
-using KoOrderRegister.Modules.Export.Pages;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 
@@ -94,10 +92,15 @@ namespace KoOrderRegister
 
             #region Export Modul
             builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
-
-            builder.Services.AddTransient<ExportersPage>();
-            builder.Services.AddSingleton<ExportersViewModel>();
-
+            //excel
+            builder.Services.AddTransient<Modules.Export.Excel.Pages.ExcelExportersPage>();
+            builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
+            //pdf
+            builder.Services.AddTransient<Modules.Export.Pdf.Pages.PdfExportersPage>();
+            builder.Services.AddSingleton<Modules.Export.Pdf.ViewModel.ExportersViewModel>();
+            //html
+            builder.Services.AddTransient<Modules.Export.Html.Pages.HtmlExportersPage>();
+            builder.Services.AddSingleton<Modules.Export.Html.ViewModel.ExportersViewModel>();
             #endregion
 
             #region Beta function modul

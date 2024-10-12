@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.Export.Excel.Pages.ExcelExportersPage"
+             xmlns:vm="clr-namespace:KoOrderRegister.Modules.Export.Excel.ViewModel"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.Exporter}">
+
+    <ScrollView>
+        <Grid>
+            <VerticalStackLayout>
+                
+                <Label Text="{x:Static res:AppRes.ExcelExporter}"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="10, 0, 10,10" 
+                       FontSize="Large"
+                       HorizontalOptions="Center"/>
+                <HorizontalStackLayout>
+                    <Label Text="{x:Static res:AppRes.CreateZipLabel}"
+                           Grid.Row="5"
+                           Grid.Column="0"
+                           Margin="10, 20, 10,10" />
+                    <Switch  IsToggled="{Binding IsCreateZip}"
+                             Grid.Row="5"
+                             Grid.Column="0"
+                             Margin="10, 0, 10,10"/>
+                </HorizontalStackLayout>
+                <Button Text="{x:Static res:AppRes.ExportDatabaseToExcel}"
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Command="{Binding ExportDataCommand}"
+                        Margin="10, 10, 10,10" />
+            </VerticalStackLayout>
+
+            <Grid IsVisible="{Binding IsRefreshing}"
+                  BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
+                  Opacity="0.4">
+                <VerticalStackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsRefreshing}"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="250"
+                                       WidthRequest="250"
+                                       VerticalOptions="Center"
+                                       Margin="25" />
+                    <Label Text="{Binding LoadingTXT}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           Margin="20" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </ScrollView>
+    
+</ContentPage>

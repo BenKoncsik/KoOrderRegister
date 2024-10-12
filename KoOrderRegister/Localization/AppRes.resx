@@ -508,4 +508,14 @@
   <data name="BetaFuctions" xml:space="preserve">
     <value>Beta fuctions</value>
   </data>
+  <data name="ExcelExporter" xml:space="preserve">
+    <value>Excel exporter</value>
+    <comment>ExcelExporter</comment>
+  </data>
+  <data name="HtmlExporter" xml:space="preserve">
+    <value>Html exporter</value>
+  </data>
+  <data name="PdfExporter" xml:space="preserve">
+    <value>Pdf exporter</value>
+  </data>
 </root>

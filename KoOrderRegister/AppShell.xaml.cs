@@ -1,7 +1,5 @@
-﻿
-using KoOrderRegister.Modules.BetaFunctions.Pages;
+﻿using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
-using KoOrderRegister.Modules.Export.Pages;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Services;
@@ -41,7 +39,10 @@ namespace KoOrderRegister
             Routing.RegisterRoute(nameof(CustomerListPage), typeof(CustomerListPage));
             Routing.RegisterRoute(nameof(PersonDetailsPage), typeof(PersonDetailsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
-            Routing.RegisterRoute(nameof(ExportersPage), typeof(ExportersPage));
+            Routing.RegisterRoute(nameof(Modules.Export.Excel.Pages.ExcelExportersPage), typeof(Modules.Export.Excel.Pages.ExcelExportersPage));
+            Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
+            Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+
             Routing.RegisterRoute(nameof(BetaFunctionsPages), typeof(BetaFunctionsPages));
 
 

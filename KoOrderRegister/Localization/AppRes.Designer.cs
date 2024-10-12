@@ -376,6 +376,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excel exporter.
+        /// </summary>
+        internal static string ExcelExporter {
+            get {
+                return ResourceManager.GetString("ExcelExporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excel is not properly installed!.
         /// </summary>
         internal static string ExcelNotInstalled {
@@ -489,6 +498,15 @@ namespace KoOrderRegister.Localization {
         internal static string HashCodeLabel {
             get {
                 return ResourceManager.GetString("HashCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Html exporter.
+        /// </summary>
+        internal static string HtmlExporter {
+            get {
+                return ResourceManager.GetString("HtmlExporter", resourceCulture);
             }
         }
         
@@ -660,6 +678,15 @@ namespace KoOrderRegister.Localization {
         internal static string OutDateLabel {
             get {
                 return ResourceManager.GetString("OutDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pdf exporter.
+        /// </summary>
+        internal static string PdfExporter {
+            get {
+                return ResourceManager.GetString("PdfExporter", resourceCulture);
             }
         }
         
