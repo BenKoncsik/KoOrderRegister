@@ -100,9 +100,11 @@
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicont.png" BaseSize="512,512" />
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicontr.png" BaseSize="512,512" />
-
+	
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
+		<MauiSplashScreen Condition="'$(Configuration)' == 'Release'" Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" />
+		<MauiSplashScreen Condition="'$(Configuration)' == 'DevBuild' or '$(Configuration)' == 'Debug'" Include="Resources\Splash\splash_dev.svg" Color="#B0E0E6" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -200,6 +202,8 @@
 		<None Remove="Resources\Images\web_light.svg" />
 		<None Remove="Resources\Images\x_dark.svg" />
 		<None Remove="Resources\Images\x_light.svg" />
+		<None Remove="Resources\Splash\splash.svg" />
+		<None Remove="Resources\Splash\splash_dev.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

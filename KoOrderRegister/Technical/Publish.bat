@@ -55,7 +55,7 @@ set "NEW_APK_NAME=..\bin\Release\net8.0-android\KoOrderRegister_%NEW_VERSION%_an
 
 
 echo Renaming the APK file...
-move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
+REM move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
 
 echo Build and rename process completed. New APK: %NEW_APK_NAME%
 
