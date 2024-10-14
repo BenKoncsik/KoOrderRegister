@@ -64,7 +64,7 @@
                       ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
         
         <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
-                      Icon="{AppThemeBinding Light='html_light.png', Dark='html_dark.png'}"
+                      Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
     </FlyoutItem>
