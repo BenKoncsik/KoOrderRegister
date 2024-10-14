@@ -51,6 +51,17 @@ powershell -Command "(gc '%APPX_MANIFEST%') -replace 'Version=\"%WINDOWS_CURRENT
 
 
 
+echo sett icons
+set "ICON_SOURCE_DIR=Technical\images\%publish_version%\icons"
+set "ICON_TARGET_DIR=KoOrderRegister\Resources\Appicon"
+
+set "SPLASH_SOURCE_DIR=Technical\images\%publish_version%\splash"
+set "SPLASH_TARGET_DIR=KoOrderRegister\Resources\Splash"
+
+REM Copy to source path
+xcopy /Y "%ICON_SOURCE_DIR%\*.*" "%ICON_TARGET_DIR%"
+xcopy /Y "%SPLASH_SOURCE_DIR%\*.*" "%SPLASH_TARGET_DIR%"
+
 echo Create dictonary %OUTPUT_DIR_BUILD%
 mkdir %OUTPUT_DIR_BUILD%
 mkdir %OUTPUT_DIR%

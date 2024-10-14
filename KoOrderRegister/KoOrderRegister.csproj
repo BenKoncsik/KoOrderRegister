@@ -24,7 +24,9 @@
 		<Configurations>Debug;Release;DEV;DevBuild</Configurations>
 
 		<!-- Display name -->
-		<ApplicationTitle>Ko Order Register</ApplicationTitle>
+		<ApplicationTitle Condition="'$(Configuration)' == 'Release'">Ko Order Register</ApplicationTitle>
+		<ApplicationTitle Condition="'$(Configuration)' == 'DevBuild'">KOR Developer Build</ApplicationTitle>
+		<ApplicationTitle Condition="'$(Configuration)' == 'Debug'">KOR Debug Build</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId Condition="'$(Configuration)' == 'Release'">hu.kncsk.koorderregister</ApplicationId>
@@ -33,7 +35,7 @@
 		<ApplicationId Condition="'$(Configuration)' == 'DevBuild'">hu.kncsk.devbuild.koorderregister</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>999.999.999</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>99.99.99</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
@@ -98,7 +100,7 @@
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicont.png" BaseSize="512,512" />
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicontr.png" BaseSize="512,512" />
-
+	
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#B0E0E6" BaseSize="128,128" />
 
@@ -198,6 +200,8 @@
 		<None Remove="Resources\Images\web_light.svg" />
 		<None Remove="Resources\Images\x_dark.svg" />
 		<None Remove="Resources\Images\x_light.svg" />
+		<None Remove="Resources\Splash\splash.svg" />
+		<None Remove="Resources\Splash\splash_dev.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

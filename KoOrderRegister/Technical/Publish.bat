@@ -33,7 +33,16 @@ REM powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersio
 echo Please enter your keystore password:
 set /p KEYPASS=""
 
+echo sett icons
+set "ICON_SOURCE_DIR=images\Dev\icons"
+set "ICON_TARGET_DIR=..\Resources\Appicon"
 
+set "SPLASH_SOURCE_DIR=images\Dev\splash"
+set "SPLASH_TARGET_DIR=..\Resources\Splash"
+
+REM Másolja a fejlesztői ikonokat a célmappába
+xcopy /Y "%ICON_SOURCE_DIR%\*.*" "%ICON_TARGET_DIR%"
+xcopy /Y "%SPLASH_SOURCE_DIR%\*.*" "%SPLASH_TARGET_DIR%"
 
 echo Publishing the application...
 dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c DevBuild -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
@@ -50,7 +59,7 @@ set "NEW_APK_NAME=..\bin\Release\net8.0-android\KoOrderRegister_%NEW_VERSION%_an
 
 
 echo Renaming the APK file...
-move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
+REM move "%ORIGINAL_APK%" "%NEW_APK_NAME%"
 
 echo Build and rename process completed. New APK: %NEW_APK_NAME%
 
