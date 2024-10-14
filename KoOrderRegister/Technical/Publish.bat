@@ -33,6 +33,7 @@ REM powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersio
 echo Please enter your keystore password:
 set /p KEYPASS=""
 
+echo sett icons
 
 
 echo Publishing the application...
