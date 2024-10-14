@@ -34,11 +34,7 @@ echo Please enter your keystore password:
 set /p KEYPASS=""
 
 echo sett icons
-set "ICON_SOURCE_DIR=icons\Dev"
-set "ICON_TARGET_DIR=..\Resources\Appicon"
 
-REM Másolja a fejlesztői ikonokat a célmappába
-xcopy /Y "%ICON_SOURCE_DIR%\*.*" "%ICON_TARGET_DIR%"
 
 echo Publishing the application...
 dotnet publish "..\KoOrderRegister.csproj" -f net8.0-android -c DevBuild -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=kor.keystore -p:AndroidSigningKeyAlias=kor_pub -p:AndroidSigningKeyPass=%KEYPASS% -p:AndroidSigningStorePass=%KEYPASS%
