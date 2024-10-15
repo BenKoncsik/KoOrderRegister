@@ -34,7 +34,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService) : base(updateService)
+        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;

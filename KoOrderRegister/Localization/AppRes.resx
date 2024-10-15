@@ -311,7 +311,7 @@
     <comment>Select language:</comment>
   </data>
   <data name="BackupDatabase" xml:space="preserve">
-    <value>Backup database</value>
+    <value>Backing up database</value>
     <comment>BackupDatabase</comment>
   </data>
   <data name="RestoreDatabase" xml:space="preserve">
@@ -323,7 +323,7 @@
     <comment>RestoreDatabase:</comment>
   </data>
   <data name="BackupDatabaseLabel" xml:space="preserve">
-    <value>Backup database:</value>
+    <value>Backing up database:</value>
     <comment>BackupDatabase</comment>
   </data>
   <data name="PriceLabel" xml:space="preserve">
@@ -369,10 +369,6 @@
   <data name="CheckAppUpdateLabel" xml:space="preserve">
     <value>Check app update:</value>
     <comment>CheckAppUpdateLabel</comment>
-  </data>
-  <data name="Cancle" xml:space="preserve">
-    <value>Cancle</value>
-    <comment>Cancle</comment>
   </data>
   <data name="UpdateDownloaded" xml:space="preserve">
     <value>Update downloaded</value>
@@ -517,5 +513,16 @@
   </data>
   <data name="PdfExporter" xml:space="preserve">
     <value>Pdf exporter</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+    <comment>Notification</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Cancel</comment>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Done</value>
   </data>
 </root>

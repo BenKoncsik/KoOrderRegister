@@ -146,7 +146,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> EditFileCommand => new Command<FileModel>(EditFile);
         public ICommand UpdateFilesCommand => new Command(UpdateFiles);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, IAppUpdateService updateService, FilePropertiesPopup filePropertiesPopup) : base(updateService)
+        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _fileService = fileService;

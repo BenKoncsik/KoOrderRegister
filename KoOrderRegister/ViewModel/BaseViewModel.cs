@@ -1,5 +1,8 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Services;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
+using Plugin.LocalNotification.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,6 +17,7 @@ namespace KoOrderRegister.ViewModel
     public class BaseViewModel : INotifyPropertyChanged
     {
         private readonly IAppUpdateService _updateService;
+        private readonly ILocalNotificationService _notifyService;
         #region Binding varrible
         private bool _isRefreshing = false;
         public bool IsRefreshing
@@ -68,21 +72,24 @@ namespace KoOrderRegister.ViewModel
 
         }
 
-        public BaseViewModel(IAppUpdateService updateService) : this()
+        public BaseViewModel(IAppUpdateService updateService, ILocalNotificationService notificationService) : this()
         {
             _updateService = updateService;
+            _notifyService = notificationService;
+            _notifyService.NotificationReceived += Current_NotificationActionTapped;
             if (!_isRun)
             {
                 _isRun = true;
                 OnStart();
             }
         }
+
         public BaseViewModel()
         {
             settUserTheme();
         }
         #region AppUpdate method
-        private async void OnStart()
+        private async Task OnStart()
         {
             if(_updateService == null)
             {
@@ -114,11 +121,28 @@ namespace KoOrderRegister.ViewModel
             }
         }
 
-        protected async void CheckUpdate()
+        protected async Task CheckUpdate()
         {
             await ShowUpdateDialog();
         }
-
+        private int notificationId = -1;
+        private string filePath = string.Empty;
+        private bool isStart = false;
+        private AndroidOptions android = new AndroidOptions
+        {
+            ChannelId = "kor_general",
+            IconSmallName =
+            {
+                ResourceName = "appicon.png",
+            },
+            Ongoing = true,
+            ProgressBar = new AndroidProgressBar
+            {
+                IsIndeterminate = false,
+                Max = 100,
+                Progress = 0,
+            }
+        };
         private async Task ShowUpdateDialog()
         {
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
@@ -127,25 +151,49 @@ namespace KoOrderRegister.ViewModel
                 await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.NoNewVersion, AppRes.Ok);
                 return;
             }
-            if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
+            bool result = false;
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                result = await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
                 $"{AppRes.NewVersionAvailable}: {info.OldVersion} --> {info.NewVersion}",
-                AppRes.Ok, AppRes.No))
+                AppRes.Ok, AppRes.No);
+                isStart = true;
+                if (result)
+                {
+                    Task.Run(async () => await startDownload());
+                }
+            });
+
+            async Task startDownload()
             {
                 LoadingTXT = AppRes.Downloading;
-                IsRefreshing = true;
-                string filePath = await _updateService.DownloadFileAsync(info.DownloadUrl, new Progress<double>(progress =>
+                notificationId = _notifyService.SendNotification(AppRes.UpdateApp, AppRes.Update);
+                filePath = await _updateService.DownloadFileAsync(info.DownloadUrl, new Progress<double>(progress =>
                 {
                     Console.WriteLine($"Downloaded {progress}%");
                     LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
+                    android.ProgressBar.Progress = (int)progress;
+                    _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android);
+                    if (progress >= 100)
+                    {
+                        _notifyService.DeleteNotification(notificationId);
+                        _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
+                    }
                 }));
-                IsRefreshing = false;
-                LoadingTXT = AppRes.Loading;
-                if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancle))
+                isStart = false;
+            }
+        }
+        private async void Current_NotificationActionTapped(NotificationActionArgs e)
+        {
+            if (e.Id == notificationId && !string.IsNullOrEmpty(filePath))
+            {
+                if (await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancel))
                 {
-                    await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(filePath) });
+                    Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(filePath) });
                 }
             }
         }
+
         #endregion
 
         #region App user theme

@@ -38,7 +38,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand SearchCommand { get; }
         #endregion
 
-        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService) : base(updateService)
+        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _orderDetailsPage = orderDetailsPage;
