@@ -125,6 +125,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\appicon.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Platforms\Android\AndroidManifest.xml" />
 		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-100.png" />
 		<None Remove="Platforms\Windows\Icon\%24placeholder%24.scale-150.png" />
@@ -150,6 +154,7 @@
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-150.png" />
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-200.png" />
 		<None Remove="Platforms\Windows\Splash\%24placeholder%24.scale-400.png" />
+		<None Remove="Resources\Images\app_icon.svg" />
 		<None Remove="Resources\Images\cloud_dark.svg" />
 		<None Remove="Resources\Images\cloud_light.svg" />
 		<None Remove="Resources\Images\cloud_off_dark.svg" />
@@ -166,8 +171,8 @@
 		<None Remove="Resources\Images\key_light.svg" />
 		<None Remove="Resources\Images\labs_dark.svg" />
 		<None Remove="Resources\Images\labs_light.svg" />
-		<None Remove="Resources\Images\notification_dark.svg" />
-		<None Remove="Resources\Images\notification_light.svg" />
+		<None Remove="Resources\Images\notifications_dark.svg" />
+		<None Remove="Resources\Images\notifications_light.svg" />
 		<None Remove="Resources\Images\not_shared_icon_dark.svg" />
 		<None Remove="Resources\Images\not_shared_icon_light.svg" />
 		<None Remove="Resources\Images\open_dark.svg" />
@@ -245,7 +250,23 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Plugin.LocalNotification" Version="11.1.4" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		
+	</ItemGroup>
+
+	<!-- Plugin.LocalNotification -->
+	<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+		<PackageReference Include="Xamarin.AndroidX.Fragment.Ktx" Version="1.8.4" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Process" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime.Ktx" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel.Ktx" Version="2.8.6" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState" Version="2.8.6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -322,11 +343,16 @@
 		<MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Modules\Windows\Notification\Pages\NotificationPages.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Modules\Export\Exporters\Pages\" />
 		<Folder Include="Modules\Settings\Services\" />
+		<Folder Include="Modules\Windows\Notification\Services\" />
+		<Folder Include="Platforms\Windows\Modules\" />
 		<Folder Include="Properties\PublishProfiles\" />
 	</ItemGroup>
 

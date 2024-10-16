@@ -5,6 +5,7 @@ using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -237,7 +238,7 @@ namespace KoOrderRegister.Modules.Export.Types.Excel.Services
             if (progressCallback == null) return;
             _currentRunner++;
             float precent = _currentRunner / TotalRunner * 100;
-            Console.WriteLine($"Excel precent: {precent}");
+            Debug.WriteLine($"Excel precent: {precent}");
             progressCallback?.Invoke((float)Math.Round(precent, 2));
         }
     }

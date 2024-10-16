@@ -25,6 +25,16 @@
                     Grid.Column="2"
                         Command="{Binding ExportDataCommand}"
                     Margin="10, 10, 10,10" />
+
+            <Label Text="Notification"
+                   Grid.Row="4"
+                   Grid.Column="0"
+                   Margin="10, 20, 10,10" />
+            <Button Text="Notification"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    Command="{Binding NotificationCommand}"
+                    Margin="10, 10, 10,10" />
         </VerticalStackLayout>
 
     </StackLayout>

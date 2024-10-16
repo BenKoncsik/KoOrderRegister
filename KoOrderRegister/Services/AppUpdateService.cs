@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using KoOrderRegister.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -14,7 +16,7 @@ namespace KoOrderRegister.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
 #if DEBUG
-        private readonly string VERSION = "DEBUG_VERSION";
+        private readonly string VERSION = "DEV_VERSION";
 #elif DEVBUILD
         private readonly string VERSION = "DEV_VERSION";
 #else
@@ -63,7 +65,7 @@ namespace KoOrderRegister.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return new AppUpdateInfo();
             }
         }
@@ -120,6 +122,7 @@ namespace KoOrderRegister.Services
         {
             DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
             return await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
+            
         }
 
 

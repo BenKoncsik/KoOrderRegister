@@ -1,14 +1,19 @@
 ﻿using CommunityToolkit.Maui.Storage;
+using DocumentFormat.OpenXml.Presentation;
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
+using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -24,6 +29,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
     {
         private readonly IDatabaseModel _databaseModel;
         private readonly IAppUpdateService _updateService;
+        private readonly ILocalNotificationService _notificationService;
 
 
         public ObservableCollection<ILanguageSettings> LanguageSettings => new ObservableCollection<ILanguageSettings>(LanguageManager.LanguageSettingsInstances);
@@ -67,21 +73,38 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
 
         #region Commands
-        public ICommand BackUpDatabaseCommand => new Command(BackUp);
-        public ICommand RestoreDatabaseCommand => new Command(Restore);
-        public ICommand AppUpdateCommand => new Command(UpdateApp);
-        public ICommand AppThemeSwitchCommand => new Command(SwitchUserTheme);
+        public ICommand BackUpDatabaseCommand => new Microsoft.Maui.Controls.Command(BackUp);
+        public ICommand RestoreDatabaseCommand => new Microsoft.Maui.Controls.Command(Restore);
+        public ICommand AppUpdateCommand => new Microsoft.Maui.Controls.Command(UpdateApp);
+        public ICommand AppThemeSwitchCommand => new Microsoft.Maui.Controls.Command(SwitchUserTheme);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
 
         
         
-        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService) : base(updateService)
+        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _databaseModel = databaseModel;
             _updateService = updateService;
+            _notificationService = notificationService;
         }
 
+        private AndroidOptions android = new AndroidOptions
+        {
+            ChannelId = "kor_general",
+            IconSmallName =
+            {
+                ResourceName = "appicon.png",
+            },
+            Ongoing = true,
+            ProgressBar = new AndroidProgressBar
+            {
+                IsIndeterminate = false,
+                Max = 100,
+                Progress = 0,
+            }
+        };
+        private int notificationId = -1;
         public async void BackUp()
         {
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
@@ -90,11 +113,10 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 var result = await FolderPicker.PickAsync(new CancellationToken());
                 if (result != null && result.IsSuccessful && !string.IsNullOrEmpty(result.Folder.Path))
                 {
-                    IsRefreshing = true;
                     var fileName = "koBackup.kncsk";
                     var fullPath = Path.Combine(result.Folder.Path, fileName);
+                    notificationId = _notificationService.SendNotification(AppRes.BackupDatabase, AppRes.BackupDatabase, NotificationCategoryType.None, android);
                     await _databaseModel.ExportDatabaseToJson(fullPath, cancellationToken.Token, ProgressCallback);
-                    IsRefreshing = false;
                 }
             }
             finally
@@ -142,7 +164,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error picking file: {ex.Message}");
+                    Debug.WriteLine($"Error picking file: {ex.Message}");
                     IsRefreshing = false;
                     await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.FaliedToRestore, AppRes.Ok);
                 }
@@ -154,6 +176,12 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
         public void ProgressCallback(float precent)
         {
             LoadingTXT = $"{AppRes.Loading}: {precent}%";
+            android.ProgressBar.Progress = (int)precent;
+            _notificationService.UpdateNotification(notificationId, AppRes.BackupDatabase, LoadingTXT, NotificationCategoryType.None, android);
+            if(precent >= 100)
+            {
+                _notificationService.UpdateNotification(notificationId, AppRes.BackupDatabase, AppRes.Done);
+            }
         }
 
         public void ChangeLanguage(ILanguageSettings languageSettings)
@@ -187,7 +215,8 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         public async void UpdateApp()
         {
-            CheckUpdate();
+            await ThreadManager.Run(async () => { await CheckUpdate(); }, ThreadManager.Priority.Low);
+            
         }
     }
 }

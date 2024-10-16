@@ -14,7 +14,7 @@ namespace KoOrderRegister.Platforms.Android.Utils
             }
             catch (PackageManager.NameNotFoundException e)
             {
-                Console.WriteLine(e.Message);
+                Debug.WriteLine(e.Message);
                 return string.Empty;
             }
         }

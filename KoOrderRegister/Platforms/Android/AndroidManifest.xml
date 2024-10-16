@@ -6,4 +6,15 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+	<!-- Notification -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+	<!--Required so that the plugin can reschedule notifications upon a reboot-->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<!--Optional (only for Calendar and alarm clock apps)-->
+	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32" />
 </manifest>

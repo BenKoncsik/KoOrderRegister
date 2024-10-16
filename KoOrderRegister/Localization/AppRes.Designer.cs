@@ -115,7 +115,7 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup database.
+        ///   Looks up a localized string similar to Backing up database.
         /// </summary>
         internal static string BackupDatabase {
             get {
@@ -124,7 +124,7 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup database:.
+        ///   Looks up a localized string similar to Backing up database:.
         /// </summary>
         internal static string BackupDatabaseLabel {
             get {
@@ -142,11 +142,11 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancle.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancle {
+        internal static string Cancel {
             get {
-                return ResourceManager.GetString("Cancle", resourceCulture);
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
@@ -309,6 +309,15 @@ namespace KoOrderRegister.Localization {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string Done {
+            get {
+                return ResourceManager.GetString("Done", resourceCulture);
             }
         }
         
@@ -597,6 +606,15 @@ namespace KoOrderRegister.Localization {
         internal static string NoteLabel {
             get {
                 return ResourceManager.GetString("NoteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notification.
+        /// </summary>
+        internal static string Notification {
+            get {
+                return ResourceManager.GetString("Notification", resourceCulture);
             }
         }
         

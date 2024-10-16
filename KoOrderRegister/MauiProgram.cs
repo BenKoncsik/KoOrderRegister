@@ -19,6 +19,8 @@ using KoOrderRegister.Modules.DatabaseFile.ViewModel;
 using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace KoOrderRegister
 {
@@ -31,6 +33,24 @@ namespace KoOrderRegister
                 .UseMauiApp<App>()
                 .ConfigureMopups()
                 .UseMauiCommunityToolkit()
+                .UseLocalNotification(config =>
+                {
+                    config.AddAndroid(android =>
+                    {
+                        android.AddChannel(new NotificationChannelRequest
+                        {
+                            Id = $"kor_general",
+                            Name = "General",
+                            Description = "General",
+                        });
+                        android.AddChannel(new NotificationChannelRequest
+                        {
+                            Id = $"kor_special",
+                            Name = "Special",
+                            Description = "Special",
+                        });
+                    });
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -116,6 +136,13 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
 
+            #region Notification
+            builder.Services.AddSingleton<ILocalNotificationService, LocalNotification>();
+#if WINDOWS
+            builder.Services.AddTransient<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
+            builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.ViewModel.NotificationViewModel>();            
+#endif
+            #endregion
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -2,6 +2,7 @@
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
+using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
 using System.ComponentModel;
 
@@ -15,7 +16,12 @@ namespace KoOrderRegister
 #if DEBUG || DEVBUILD
         public static readonly bool IsDevBuild = true;
 #else
-  public static readonly bool IsDevBuild = false;
+        public static readonly bool IsDevBuild = false;
+#endif
+#if WINDOWS
+        public static readonly bool IsWindows = true;
+#else
+        public static readonly bool IsWindows = false;
 #endif
         public static string AppVersion 
         {
@@ -35,15 +41,29 @@ namespace KoOrderRegister
         public AppShell()
         {
             InitializeComponent();
+            #region Stabil fuctions
             Routing.RegisterRoute(nameof(OrderListPage), typeof(OrderListPage));
             Routing.RegisterRoute(nameof(CustomerListPage), typeof(CustomerListPage));
             Routing.RegisterRoute(nameof(PersonDetailsPage), typeof(PersonDetailsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+
+            #endregion
+            #region Beta fuctions
+            Routing.RegisterRoute(nameof(BetaFunctionsPages), typeof(BetaFunctionsPages));
             Routing.RegisterRoute(nameof(Modules.Export.Excel.Pages.ExcelExportersPage), typeof(Modules.Export.Excel.Pages.ExcelExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+            #endregion
+            #region Windows fuctions
+            Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));
+            #endregion
+            #region Android fuctions
+            #endregion
+            #region IOS fuctions
+            #endregion
+            #region MacOs fuctions
+            #endregion
 
-            Routing.RegisterRoute(nameof(BetaFunctionsPages), typeof(BetaFunctionsPages));
 
 
 

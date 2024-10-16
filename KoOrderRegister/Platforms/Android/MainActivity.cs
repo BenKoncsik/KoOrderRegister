@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using KoOrderRegister.Platforms.Android.Utils;
@@ -15,6 +16,17 @@ namespace KoOrderRegister
         {
             AppVersion = VersionUtils.GetAppVersion(this);
             base.OnCreate(savedInstanceState);
+            const int requestNotification = 0;
+            string[] notiPermission =
+            {
+              Manifest.Permission.PostNotifications
+            };
+
+            if ((int)Build.VERSION.SdkInt < 33) return;
+            if (CheckSelfPermission(Manifest.Permission.PostNotifications) != Permission.Granted)
+            {
+                RequestPermissions(notiPermission, requestNotification);
+            }
         }
     }
 }

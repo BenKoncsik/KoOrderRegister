@@ -146,7 +146,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> EditFileCommand => new Command<FileModel>(EditFile);
         public ICommand UpdateFilesCommand => new Command(UpdateFiles);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, IAppUpdateService updateService, FilePropertiesPopup filePropertiesPopup) : base(updateService)
+        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _fileService = fileService;
@@ -162,10 +162,10 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedStartDate = Order.StartDate;
             SelectedStartTime = Order.StartDate.TimeOfDay;
 #if DEBUG
-            Console.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
-            Console.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
-            Console.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
-            Console.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
+            Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
+            Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
+            Debug.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
+            Debug.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
 #endif
         }
         public async void SaveOrder()
@@ -364,7 +364,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
             catch (FileSaveException ex)
             {
-                Console.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
+                Debug.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
             }
         }
 
