@@ -9,6 +9,7 @@ using KoOrderRegister.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -60,7 +61,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
             catch (TargetInvocationException ex)
             {
-                Console.WriteLine($"Inner Exception: {ex.InnerException}");
+                Debug.WriteLine($"Inner Exception: {ex.InnerException}");
             }
         }
 

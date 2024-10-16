@@ -75,7 +75,7 @@ namespace KoOrderRegister.Services
             };
             NotificationChanged?.Invoke(noty);
             LocalNotificationCenter.Current.Show(notificationRequest);
-            LocalNotification_NotificationChanged(noty);
+            ThreadManager.Run(() => LocalNotification_NotificationChanged(noty), ThreadManager.Priority.Low);
         }
         private void ClearNotification(int id)
         {

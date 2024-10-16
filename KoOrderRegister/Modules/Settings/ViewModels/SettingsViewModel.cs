@@ -5,6 +5,7 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
+using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -162,7 +164,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error picking file: {ex.Message}");
+                    Debug.WriteLine($"Error picking file: {ex.Message}");
                     IsRefreshing = false;
                     await Application.Current.MainPage.DisplayAlert(AppRes.RestoreDatabase, AppRes.FaliedToRestore, AppRes.Ok);
                 }
@@ -213,7 +215,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         public async void UpdateApp()
         {
-            await Task.Run(async () => await CheckUpdate());
+            await ThreadManager.Run(async () => { await CheckUpdate(); }, ThreadManager.Priority.Low);
             
         }
     }

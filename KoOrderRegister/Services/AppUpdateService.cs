@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using KoOrderRegister.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -63,7 +65,7 @@ namespace KoOrderRegister.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return new AppUpdateInfo();
             }
         }
@@ -120,6 +122,7 @@ namespace KoOrderRegister.Services
         {
             DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
             return await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
+            
         }
 
 

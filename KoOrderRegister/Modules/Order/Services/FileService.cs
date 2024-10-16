@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,7 +42,7 @@ namespace KoOrderRegister.Modules.Database.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while picking the folder: {ex.Message}");
+                Debug.WriteLine($"An error occurred while picking the folder: {ex.Message}");
                 return false;
             }
         }
@@ -75,11 +76,14 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<string> CalculateHashAsync(byte[] content)
         {
-            using (var sha256 = SHA256.Create())
+            return await ThreadManager.Run<string>(() =>
             {
-                byte[] hashBytes = await Task.Run(() => sha256.ComputeHash(content));
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-            }
+                using (var sha256 = SHA256.Create())
+                {
+                    byte[] hashBytes = sha256.ComputeHash(content);
+                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }, ThreadManager.Priority.High);
         }
 
 
@@ -108,7 +112,7 @@ namespace KoOrderRegister.Modules.Database.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while picking the folder: {ex.Message}");
+                Debug.WriteLine($"An error occurred while picking the folder: {ex.Message}");
                 return string.Empty;
             }
         }

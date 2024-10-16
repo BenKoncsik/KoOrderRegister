@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -71,7 +72,7 @@ namespace KoOrderRegister.ViewModel
             }
             catch (TargetInvocationException ex)
             {
-                Console.WriteLine($"Inner Exception: {ex.InnerException}");
+                Debug.WriteLine($"Inner Exception: {ex.InnerException}");
             }
 
         }
@@ -109,7 +110,7 @@ namespace KoOrderRegister.ViewModel
                 timer.AutoReset = true;
             }catch(Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Debug.WriteLine($"Error: {ex.Message}");
             }
 
         }
@@ -169,7 +170,7 @@ namespace KoOrderRegister.ViewModel
                 _isDownloading = true;
                 if (result)
                 {
-                    ThreadManager.Run(async () => await startDownload());
+                    ThreadManager.Run(async () => await startDownload(), ThreadManager.Priority.Low);
                 }
             });
 
@@ -179,7 +180,7 @@ namespace KoOrderRegister.ViewModel
                 notificationId = _notifyService.SendNotification(AppRes.UpdateApp, AppRes.Update);
                 filePath = await _updateService.DownloadFileAsync(info.DownloadUrl, new Progress<double>(progress =>
                 {
-                    Console.WriteLine($"Downloaded {progress}%");
+                    Debug.WriteLine($"Downloaded {progress}%");
                     LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
                     android.ProgressBar.Progress = (int)progress;
                     _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android);

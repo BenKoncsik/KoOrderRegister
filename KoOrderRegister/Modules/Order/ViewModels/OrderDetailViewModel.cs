@@ -162,10 +162,10 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedStartDate = Order.StartDate;
             SelectedStartTime = Order.StartDate.TimeOfDay;
 #if DEBUG
-            Console.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
-            Console.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
-            Console.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
-            Console.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
+            Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
+            Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
+            Debug.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
+            Debug.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
 #endif
         }
         public async void SaveOrder()
@@ -364,7 +364,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
             catch (FileSaveException ex)
             {
-                Console.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
+                Debug.WriteLine($"Cancel folder picker! | Ex msg: {ex.Message}");
             }
         }
 
