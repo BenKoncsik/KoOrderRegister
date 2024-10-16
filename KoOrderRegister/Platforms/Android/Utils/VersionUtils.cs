@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Content.PM;
 using Java.Lang;
+using System.Diagnostics;
 
 namespace KoOrderRegister.Platforms.Android.Utils
 {
