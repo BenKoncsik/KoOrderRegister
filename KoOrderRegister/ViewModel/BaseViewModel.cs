@@ -1,5 +1,6 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Services;
+using KoOrderRegister.Utility;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using Plugin.LocalNotification.EventArgs;
@@ -46,6 +47,9 @@ namespace KoOrderRegister.ViewModel
             }
         }
         private static bool _isRun = false;
+        private static bool _isDownloading = false;
+        private int notificationId = -1;
+        private string filePath = string.Empty;
 
 #if DEBUG
         public bool IsBetaFunctions { get; set; } = true;
@@ -111,23 +115,28 @@ namespace KoOrderRegister.ViewModel
         }
         private async Task CheckUpdateInBackground()
         {
-            AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
-            Version oldVersion = new Version(info.OldVersion);
-            Version newVersion = new Version(info.NewVersion);
-            if (!string.IsNullOrEmpty(info.NewVersion) && !string.IsNullOrEmpty(info.DownloadUrl) &&
-                newVersion > oldVersion)
+            if (!_isDownloading)
             {
-                await ShowUpdateDialog();
+                AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
+                Version oldVersion = new Version(info.OldVersion);
+                Version newVersion = new Version(info.NewVersion);
+                if (!string.IsNullOrEmpty(info.NewVersion) && !string.IsNullOrEmpty(info.DownloadUrl) &&
+                    newVersion > oldVersion)
+                {
+                    await ShowUpdateDialog();
+                }
             }
         }
 
         protected async Task CheckUpdate()
         {
-            await ShowUpdateDialog();
+            if (!_isDownloading)
+            {
+                await ShowUpdateDialog();
+            }
+            
         }
-        private int notificationId = -1;
-        private string filePath = string.Empty;
-        private bool isStart = false;
+        
         private AndroidOptions android = new AndroidOptions
         {
             ChannelId = "kor_general",
@@ -157,10 +166,10 @@ namespace KoOrderRegister.ViewModel
                 result = await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
                 $"{AppRes.NewVersionAvailable}: {info.OldVersion} --> {info.NewVersion}",
                 AppRes.Ok, AppRes.No);
-                isStart = true;
+                _isDownloading = true;
                 if (result)
                 {
-                    Task.Run(async () => await startDownload());
+                    ThreadManager.Run(async () => await startDownload());
                 }
             });
 
@@ -174,13 +183,13 @@ namespace KoOrderRegister.ViewModel
                     LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
                     android.ProgressBar.Progress = (int)progress;
                     _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android);
-                    if (progress >= 100)
+                    if (progress >= 99.99)
                     {
                         _notifyService.DeleteNotification(notificationId);
-                        _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
+                        notificationId = _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
                     }
                 }));
-                isStart = false;
+                _isDownloading = false;
             }
         }
         private async void Current_NotificationActionTapped(NotificationActionArgs e)

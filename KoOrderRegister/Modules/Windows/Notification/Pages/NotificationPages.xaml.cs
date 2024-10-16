@@ -17,16 +17,15 @@ public partial class NotificationPages : ContentPage
     {
        
     }
-
     protected override void OnAppearing()
     {
+        _notificationViewModel.Appering();
         base.OnAppearing();
-       
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-       // _notificationViewModel.Disappearing();
+       _notificationViewModel.Disappearing();
     }
 }

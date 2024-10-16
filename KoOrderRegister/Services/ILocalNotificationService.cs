@@ -10,6 +10,7 @@ using Plugin.LocalNotification.EventArgs;
 using KoOrderRegister.Modules.Windows.Notification.Utils;
 using System.Collections.ObjectModel;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 
 
 
@@ -34,14 +35,87 @@ namespace KoOrderRegister.Services
         public string Title { get; set; }
     }
 
-    public class NotificationChangedArgs
+    public class NotificationChangedArgs : INotifyPropertyChanged
     {
-        public NotificationRequest NotificationRequest { get; set; }
-        public AndroidOptions AndroidOption { get; set; }
-        public iOSOptions IosOption { get; set; }
-        public WindowsOptions WindowsOption { get; set; }
-        public bool IsProgressBar { get; set; }
+        private NotificationRequest _notificationRequest;
+        private AndroidOptions _androidOption;
+        private iOSOptions _iosOption;
+        private WindowsOptions _windowsOption;
+        private bool _isProgressBar;
+
+        public NotificationRequest NotificationRequest
+        {
+            get => _notificationRequest;
+            set
+            {
+                if (_notificationRequest != value)
+                {
+                    _notificationRequest = value;
+                    OnPropertyChanged(nameof(NotificationRequest));
+                }
+            }
+        }
+
+        public AndroidOptions AndroidOption
+        {
+            get => _androidOption;
+            set
+            {
+                if (_androidOption != value)
+                {
+                    _androidOption = value;
+                    OnPropertyChanged(nameof(AndroidOption));
+                }
+            }
+        }
+
+        public iOSOptions IosOption
+        {
+            get => _iosOption;
+            set
+            {
+                if (_iosOption != value)
+                {
+                    _iosOption = value;
+                    OnPropertyChanged(nameof(IosOption));
+                }
+            }
+        }
+
+        public WindowsOptions WindowsOption
+        {
+            get => _windowsOption;
+            set
+            {
+                if (_windowsOption != value)
+                {
+                    _windowsOption = value;
+                    OnPropertyChanged(nameof(WindowsOption));
+                }
+            }
+        }
+
+        public bool IsProgressBar
+        {
+            get => _isProgressBar;
+            set
+            {
+                if (_isProgressBar != value)
+                {
+                    _isProgressBar = value;
+                    OnPropertyChanged(nameof(IsProgressBar));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
+
 
     public struct NotificationClearedArgs
     {

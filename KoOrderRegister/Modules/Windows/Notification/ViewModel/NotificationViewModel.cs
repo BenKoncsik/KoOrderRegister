@@ -32,6 +32,7 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
         public void LocalNotificationService_NotificationChanged(NotificationChangedArgs notificationChangedArgs)
         {
             Device.BeginInvokeOnMainThread(() => {
+             
                 NotificationChangedArgs? notification = Notifications?.FirstOrDefault(n => n.NotificationRequest.NotificationId.Equals(notificationChangedArgs.NotificationRequest.NotificationId));
                 if (notification != null)
                 {
@@ -45,12 +46,16 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
                 {
                     Notifications.Add(notificationChangedArgs);
                 }
+
+                
             });
 
         }
         public void LocalNotificationService_NotificationCleared(NotificationClearedArgs notificationClearedArgs)
         {
-            Notifications.Remove(Notifications.FirstOrDefault(x => x.NotificationRequest.NotificationId == notificationClearedArgs.Id));
+            Device.BeginInvokeOnMainThread(() => {
+                Notifications.Remove(Notifications.FirstOrDefault(x => x.NotificationRequest.NotificationId == notificationClearedArgs.Id));
+            });
         }
         public void ClickNotification(NotificationChangedArgs notificationChangedArgs)
         {
@@ -66,15 +71,16 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
             _localNotificationService.DeleteNotification(notificationClearedArgs.NotificationRequest.NotificationId);
         }
 
-        internal void Init()
+        internal void Appering()
         {
-            
+            _localNotificationService.NotificationChanged += LocalNotificationService_NotificationChanged;
+            _localNotificationService.NotificationCleared += LocalNotificationService_NotificationCleared;
         }
 
         internal void Disappearing()
-        {
-            //_localNotificationService.NotificationChanged -= LocalNotificationService_NotificationChanged;
-            //_localNotificationService.NotificationCleared -= LocalNotificationService_NotificationCleared;
+        { 
+            _localNotificationService.NotificationChanged -= LocalNotificationService_NotificationChanged;
+            _localNotificationService.NotificationCleared -= LocalNotificationService_NotificationCleared;
         }
     }
 }
