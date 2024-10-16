@@ -136,14 +136,13 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
 
-            #region notification
+            #region Notification
+            builder.Services.AddSingleton<ILocalNotificationService, LocalNotification>();
 #if WINDOWS
-            builder.Services.AddSingleton<ILocalNotificationService, LocalNotificationWindows>();
-#else
-            builder.Services.AddSingleton<ILocalNotificationService, LocalNotificationAndroidIOS>();
+            builder.Services.AddTransient<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
+            builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.ViewModel.NotificationViewModel>();            
 #endif
             #endregion
-
 
 #if DEBUG
             builder.Logging.AddDebug();

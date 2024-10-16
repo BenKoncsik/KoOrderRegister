@@ -27,6 +27,22 @@ namespace KoOrderRegister.Utility
             });
         }
 
+        public static Task Run(Action action)
+        {
+            return Task.Run(async() =>
+            {
+                await SEMAPHORE.WaitAsync();
+                try
+                {
+                    action();
+                }
+                finally
+                {
+                    SEMAPHORE.Release();
+                }
+            });
+        }
+
         public static Task<TResult> Run<TResult>(Func<Task<TResult>> action)
         {
             return Task.Run(async () =>

@@ -79,7 +79,7 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
         {
             if (e.Id == id)
             {
-                await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancel);
+                await Application.Current.MainPage.DisplayAlert(AppRes.BetaFuctions, AppRes.UpdateDownloaded, AppRes.Open, AppRes.Cancel);
             }
         }
 

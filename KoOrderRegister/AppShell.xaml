@@ -12,10 +12,14 @@
     xmlns:pdfExporter="clr-namespace:KoOrderRegister.Modules.Export.Pdf.Pages"
     xmlns:htmlExporter="clr-namespace:KoOrderRegister.Modules.Export.Html.Pages"
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
+    xmlns:notification="clr-namespace:KoOrderRegister.Modules.Windows.Notification.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
 
+   
+    
+    
     <Shell.FlyoutFooter>
         <Label Text="KOR V0.0.0"
                x:Name="AppVersionLabel"
@@ -56,8 +60,6 @@
                       Route="BetaFunctionsPages"
                       ContentTemplate="{DataTemplate betaFuctions:BetaFunctionsPages}" />
 
-        
-        
         <ShellContent Title="{x:Static res:AppRes.PdfExporter}"
                       Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
                       Route="ExportersPage"
@@ -67,6 +69,13 @@
                       Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
+
+        <ShellContent Title="{x:Static res:AppRes.Notification}"
+                      Icon="{AppThemeBinding Light='notifications_light.png', Dark='notifications_dark.png'}"
+                      Route="NotificationPages"
+                      ContentTemplate="{DataTemplate notification:NotificationPages}"
+                      IsVisible="{x:Static local:AppShell.IsWindows}"/>
+                
     </FlyoutItem>
     
     
