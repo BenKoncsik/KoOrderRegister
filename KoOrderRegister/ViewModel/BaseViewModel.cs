@@ -184,7 +184,7 @@ namespace KoOrderRegister.ViewModel
                     LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
                     android.ProgressBar.Progress = (int)progress;
                     _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android);
-                    if (progress >= 99.99)
+                    if (progress >= 99.90)
                     {
                         _notifyService.DeleteNotification(notificationId);
                         notificationId = _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
