@@ -11,11 +11,15 @@ namespace KoOrderRegister
         {
             InitializeComponent();
             MainPage = new AppShell();
+  
         }
 
+      
         public static void RestartApp()
         {
             Application.Current.MainPage = new AppShell();
         }
+
+        
     }
 }

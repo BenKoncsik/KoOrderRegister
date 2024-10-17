@@ -66,7 +66,7 @@ namespace KoOrderRegister
             #region MacOs fuctions
             #endregion
 
-            _AppVersionLabel = AppVersionLabel;            
+            _AppVersionLabel = AppVersionLabel;
         }
 
         protected override void OnNavigated(ShellNavigatedEventArgs args)
@@ -77,5 +77,7 @@ namespace KoOrderRegister
                 base.OnNavigated(args);
             }
         }
+
+     
     }
 }
