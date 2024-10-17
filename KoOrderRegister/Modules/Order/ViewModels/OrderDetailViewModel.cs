@@ -135,6 +135,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         }
         #endregion
         public ObservableCollection<FileModel> Files { get; set; } = new ObservableCollection<FileModel>();
+        private CancellationToken cancellationToken = new CancellationToken();
         #region Commands
         public ICommand ReturnCommand => new Command(Return);
         public ICommand SaveCommand => new Command(SaveOrder);
@@ -170,50 +171,53 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         }
         public async void SaveOrder()
         {
-            IsRefreshing = true;
-            if (Files != null)
+            using (new LowPriorityTaskManager())
             {
-                List<Task> tasks = new List<Task>();
-                foreach (FileModel file in Files)
+                IsRefreshing = true;
+                if (Files != null)
                 {
-                    if (file.IsDatabaseContent)
+                    List<Task> tasks = new List<Task>();
+                    foreach (FileModel file in Files)
                     {
-                        continue;
-                    }
-                    tasks.Add(ThreadManager.Run(async () =>
-                    {
-                        if (!file.IsDatabaseContent && file.FileResult != null)
+                        if (file.IsDatabaseContent)
                         {
-                            List<byte> contentList = new List<byte>();
-                            using (var stream = await file.FileResult.OpenReadAsync())
-                            {
-                                byte[] buffer = new byte[1048576]; 
-                                int bytesRead;
-                                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                                {
-                                    contentList.AddRange(buffer.Take(bytesRead)); 
-                                }
-                            }
-                            file.Content = contentList.ToArray();
-                            file.HashCode = await _fileService.CalculateHashAsync(file.Content);
+                            continue;
                         }
-                        await _database.CreateFile(file);
-                    }));
-                }
+                        tasks.Add(ThreadManager.Run(async () =>
+                        {
+                            if (!file.IsDatabaseContent && file.FileResult != null)
+                            {
+                                List<byte> contentList = new List<byte>();
+                                using (var stream = await file.FileResult.OpenReadAsync())
+                                {
+                                    byte[] buffer = new byte[1048576];
+                                    int bytesRead;
+                                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                    {
+                                        contentList.AddRange(buffer.Take(bytesRead));
+                                    }
+                                }
+                                file.Content = contentList.ToArray();
+                                file.HashCode = await _fileService.CalculateHashAsync(file.Content);
+                            }
+                            await _database.CreateFile(file);
+                        }));
+                    }
 
-                await Task.WhenAll(tasks);
-            }
-            Order.StartDate = _SelectedStartDate.Date + _SelectedStartTime;
-            Order.EndDate = _SelectedEndDate.Date + _SelectedEndTime;
-            if (await _database.CreateOrder(Order) > 0)
-            {
-                IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
-            }
-            else
-            {
-                IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + Order.OrderNumber, AppRes.Ok);
+                    await Task.WhenAll(tasks);
+                }
+                Order.StartDate = _SelectedStartDate.Date + _SelectedStartTime;
+                Order.EndDate = _SelectedEndDate.Date + _SelectedEndTime;
+                if (await _database.CreateOrder(Order) > 0)
+                {
+                    IsRefreshing = false;
+                    await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + Order.OrderNumber, AppRes.Ok);
+                }
+                else
+                {
+                    IsRefreshing = false;
+                    await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.FailedToSave + " " + Order.OrderNumber, AppRes.Ok);
+                }
             }
         }
 
@@ -242,48 +246,50 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
 
         public async void Update()
         {
-            if (Customers != null)
+            using (new LowPriorityTaskManager())
             {
-                Customers.Clear();
-            }
-
-            foreach (var customer in await _database.GetAllCustomers())
-            {
-                Customers.Add(customer);
-            }
-            if (Customers.Count > 0)
-            {
-                SelectedItem = Customers.First();
-            }
-            if (IsEdit)
-            {
-                await ThreadManager.Run(async () =>
+                if (Customers != null)
                 {
-                    var orderFiles = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
-                    Order.Files = orderFiles;
+                    Customers.Clear();
+                }
 
-                    var filesToAdd = orderFiles
-                        .Where(of => !Files.Any(f => f.Guid.Equals(of.Guid)))
-                        .ToList();
-
-                    var filesToRemove = Files
-                        .Where(f => !orderFiles.Any(of => of.Guid.Equals(f.Guid)))
-                        .ToList();
-
-                    await MainThread.InvokeOnMainThreadAsync(() =>
+                await foreach(var customer in  _database.GetAllCustomersAsStream(cancellationToken))
+                {
+                    Customers.Add(customer);
+                }
+                if (Customers.Count > 0)
+                {
+                    SelectedItem = Customers.First();
+                }
+                if (IsEdit)
+                {
+                    await ThreadManager.Run(async () =>
                     {
-                        foreach (var file in filesToAdd)
-                        {
-                            Files.Add(file);
-                        }
+                        var orderFiles = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
+                        Order.Files = orderFiles;
 
-                        foreach (var file in filesToRemove)
+                        var filesToAdd = orderFiles
+                            .Where(of => !Files.Any(f => f.Guid.Equals(of.Guid)))
+                            .ToList();
+
+                        var filesToRemove = Files
+                            .Where(f => !orderFiles.Any(of => of.Guid.Equals(f.Guid)))
+                            .ToList();
+
+                        await MainThread.InvokeOnMainThreadAsync(() =>
                         {
-                            Files.Remove(file);
-                        }
+                            foreach (var file in filesToAdd)
+                            {
+                                Files.Add(file);
+                            }
+
+                            foreach (var file in filesToRemove)
+                            {
+                                Files.Remove(file);
+                            }
+                        });
                     });
-                });
-
+                }
             }
         }
 

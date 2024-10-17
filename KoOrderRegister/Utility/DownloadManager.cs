@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KoOrderRegister.Utility;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -117,6 +118,7 @@ namespace DownloadManager
 
                     do
                     {
+                        await LowPriorityTaskManager.WaitAsyncRunLowPriority();
                         token.ThrowIfCancellationRequested();
 
                         var read = await streamToReadFrom.ReadAsync(buffer, 0, buffer.Length, token).ConfigureAwait(false);
@@ -133,7 +135,7 @@ namespace DownloadManager
                                 progress.Report((totalRead * 1d) / (total * 1d) * 100);
                             }
                         }
-
+                        
                     } while (isMoreToRead);
 
                     return Path.Combine(path, file);

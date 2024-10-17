@@ -3,6 +3,7 @@ using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
+using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -48,22 +49,25 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public async void Update()
         {
-            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            using (new LowPriorityTaskManager())
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
-            }
+                if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Dispose();
+                }
 
-            _cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSource = new CancellationTokenSource();
 
-            Customers.Clear();
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-               await _update();
-            }
-            else
-            {
-                await _search(SearchTXT);
+                Customers.Clear();
+                if (string.IsNullOrEmpty(SearchTXT))
+                {
+                    await _update();
+                }
+                else
+                {
+                    await _search(SearchTXT);
+                }
             }
            
         }

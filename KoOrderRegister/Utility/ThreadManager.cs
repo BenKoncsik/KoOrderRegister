@@ -15,6 +15,7 @@ namespace KoOrderRegister.Utility
         private static SemaphoreSlim HighPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
         private static SemaphoreSlim NormalPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
         private static SemaphoreSlim LowPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
+        private static bool isPaused = false;
 
         public enum Priority { Low, Normal, High }
         private static readonly SortedDictionary<Priority, Queue<Func<Task>>> TaskQueues = new SortedDictionary<Priority, Queue<Func<Task>>>
@@ -30,6 +31,7 @@ namespace KoOrderRegister.Utility
             var tcs = new TaskCompletionSource<bool>();
             lock (QueueLock)
             {
+                Debug.WriteLine($"Add Task: {priority} --> {TaskQueues[priority].Count}");
                 TaskQueues[priority].Enqueue(async () =>
                 {
                     try
@@ -52,6 +54,7 @@ namespace KoOrderRegister.Utility
             var tcs = new TaskCompletionSource<bool>();
             lock (QueueLock)
             {
+                Debug.WriteLine($"Add Task: {priority} --> {TaskQueues[priority].Count}");
                 TaskQueues[priority].Enqueue(async () =>
                 {
                     try
@@ -74,6 +77,7 @@ namespace KoOrderRegister.Utility
             var tcs = new TaskCompletionSource<TResult>();
             lock (QueueLock)
             {
+                Debug.WriteLine($"Add Task: {priority} --> {TaskQueues[priority].Count}");
                 TaskQueues[priority].Enqueue(async () =>
                 {
                     try
@@ -96,6 +100,7 @@ namespace KoOrderRegister.Utility
             var tcs = new TaskCompletionSource<TResult>();
             lock (QueueLock)
             {
+                Debug.WriteLine($"Add Task: {priority} --> {TaskQueues[priority].Count}");
                 TaskQueues[priority].Enqueue(() =>
                 {
                     try
@@ -116,41 +121,20 @@ namespace KoOrderRegister.Utility
         }
         #endregion
 
-        public static void PausePriorityTasks()
+        public static void ReleaseLowPriorityTasks()
         {
-            NormalPrioritySemaphore = new SemaphoreSlim(0);
-            LowPrioritySemaphore = new SemaphoreSlim(0);
-        }
-
-        public static void ResumePriorityTasks()
-        {
-            NormalPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM - TaskQueues[Priority.High].Count);
-            LowPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM - TaskQueues[Priority.High].Count - TaskQueues[Priority.Normal].Count);
-            ProcessQueue();
+            Debug.WriteLine($"Call ReleaseLowPriorityTasks. Low priority thread: {LowPrioritySemaphore.CurrentCount}");
+            LowPrioritySemaphore.Release();
         }
         private static void ProcessQueue()
         {
             Task.Run(async () =>
             {
-                
-              //  Debug.WriteLine($"Semaphore wait: {MAX_DEGREE_OF_PARALLELISM - SEMAPHORE.CurrentCount}");
-               // await SEMAPHORE.WaitAsync();
                 SemaphoreSlim semaphoreToUse = null;
                 Func<Task> taskToRun = null;
 
                 lock (QueueLock)
                 {
-                    /*  foreach (var priority in new[] { Priority.High, Priority.Normal, Priority.Low })
-                      {
-                          if (TaskQueues[priority].Count > 0)
-                          {
-                              taskToRun = TaskQueues[priority].Dequeue();
-                              break;
-                          }
-                      }*/
-
-                    NormalPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM - TaskQueues[Priority.High].Count);
-                    LowPrioritySemaphore = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM - TaskQueues[Priority.High].Count - TaskQueues[Priority.Normal].Count);
                     Debug.WriteLine($"Hight wait: {MAX_DEGREE_OF_PARALLELISM - HighPrioritySemaphore.CurrentCount} Normal: {MAX_DEGREE_OF_PARALLELISM - NormalPrioritySemaphore.CurrentCount} Low: {MAX_DEGREE_OF_PARALLELISM - LowPrioritySemaphore.CurrentCount}");
                     if (TaskQueues[Priority.High].Count > 0)
                     {
@@ -182,25 +166,6 @@ namespace KoOrderRegister.Utility
                         Debug.WriteLine($"Hight Release: {MAX_DEGREE_OF_PARALLELISM - HighPrioritySemaphore.CurrentCount} Normal: {MAX_DEGREE_OF_PARALLELISM - NormalPrioritySemaphore.CurrentCount} Low: {MAX_DEGREE_OF_PARALLELISM - LowPrioritySemaphore.CurrentCount}");
                     }
                 }
-                /* if (taskToRun != null)
-                 {
-                     try
-                     {
-                         await taskToRun();
-                     }
-                     finally
-                     {
-                         SEMAPHORE.Release();
-                         ProcessQueue();
-                     }
-                 }
-                 else
-                 {
-                     SEMAPHORE.Release();
-                     Debug.WriteLine($"Semaphore release: {MAX_DEGREE_OF_PARALLELISM - SEMAPHORE.CurrentCount}");
-                 }*/
-
-
             });
         }
     }
