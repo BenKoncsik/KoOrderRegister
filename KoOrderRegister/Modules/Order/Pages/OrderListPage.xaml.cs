@@ -16,8 +16,11 @@ public partial class OrderListPage : ContentPage
 
     protected override void OnAppearing()
     {
-        base.OnAppearing();
-        _viewModel.UpdateOrders();
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+            _viewModel.UpdateOrders();
+        }
     }
 
     protected void OnTextChanged(object sender, EventArgs e)

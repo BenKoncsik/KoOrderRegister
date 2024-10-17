@@ -1,4 +1,6 @@
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
+using KoOrderRegister.Utility;
+using System.Diagnostics;
 
 namespace KoOrderRegister.Modules.BetaFunctions.Pages;
 
@@ -11,4 +13,13 @@ public partial class BetaFunctionsPages : ContentPage
         BindingContext = _viewModel;
         InitializeComponent();
 	}
+
+    protected override void OnAppearing()
+    {
+        using (new LowPriorityTaskManager())
+        {
+            Debug.WriteLine($"Navigate to: BetaFunctionsPages");
+            base.OnAppearing();
+        }
+    }
 }

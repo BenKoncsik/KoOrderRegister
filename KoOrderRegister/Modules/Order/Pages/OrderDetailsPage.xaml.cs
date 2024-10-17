@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Order.List.ViewModels;
+using KoOrderRegister.Utility;
 using System.Collections.ObjectModel;
 
 namespace KoOrderRegister.Modules.Order.Pages;
@@ -34,8 +35,11 @@ public partial class OrderDetailsPage : ContentPage
 
     protected override void OnAppearing()
     {
-        base.OnAppearing();
-        _viewModel.Update();
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+            _viewModel.Update();
+        }
     }
 
     protected override void OnDisappearing()
