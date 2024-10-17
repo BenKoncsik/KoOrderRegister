@@ -4,7 +4,9 @@ using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
+using KoOrderRegister.Utility;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace KoOrderRegister
 {
@@ -64,11 +66,18 @@ namespace KoOrderRegister
             #region MacOs fuctions
             #endregion
 
-
-
-
-            _AppVersionLabel = AppVersionLabel;            
+            _AppVersionLabel = AppVersionLabel;
         }
 
+        protected override void OnNavigated(ShellNavigatedEventArgs args)
+        {
+            using (new LowPriorityTaskManager())
+            {
+                Debug.WriteLine($"Navigated: {args.Source}");
+                base.OnNavigated(args);
+            }
+        }
+
+     
     }
 }

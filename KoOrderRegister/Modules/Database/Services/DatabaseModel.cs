@@ -122,27 +122,27 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream(CancellationToken cancellationToken)
         {
-                var customers = await Database.Table<CustomerModel>().ToListAsync();
-                foreach (var customer in customers)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var orders = await Database.Table<OrderModel>()
-                                .Where(o => o.CustomerId == customer.Id)
-                                .ToListAsync();
+            var customers = await Database.Table<CustomerModel>().ToListAsync();
+            foreach (var customer in customers)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var orders = await Database.Table<OrderModel>()
+                            .Where(o => o.CustomerId == customer.Id)
+                            .ToListAsync();
 
-                            foreach (var order in orders)
-                            {
-                                await foreach (FileModel file in GetFilesByOrderIdWithOutContentAsStream(order.Guid, cancellationToken))
-                                {
-                                    if (file != null)
-                                    {
-                                        order.Files.Add(file);
-                                    }
-                                }
-                            }
-                            customer.Orders = orders;
-                            yield return customer;
+                foreach (var order in orders)
+                {
+                    await foreach (FileModel file in GetFilesByOrderIdWithOutContentAsStream(order.Guid, cancellationToken))
+                    {
+                        if (file != null)
+                        {
+                            order.Files.Add(file);
+                        }
+                    }
                 }
+                customer.Orders = orders;
+                yield return customer;
+            }            
         }
 
 
@@ -733,8 +733,6 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             if (progressCallback != null)
             {
-                /*    float progressPercentage = (float)StreamPosition / FileSize * 100;
-                    progressCallback?.Invoke((float)Math.Round(progressPercentage, 2));*/
                 progressCallback?.Invoke((float)StreamPosition);
             }
 

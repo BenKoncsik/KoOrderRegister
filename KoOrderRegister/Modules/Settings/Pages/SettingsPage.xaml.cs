@@ -1,4 +1,5 @@
 using KoOrderRegister.Modules.Settings.ViewModels;
+using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Settings.Pages;
 
@@ -10,5 +11,13 @@ public partial class SettingsPage : ContentPage
 		InitializeComponent();
         _viewModel = viewModel;
         BindingContext = _viewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+        }
     }
 }

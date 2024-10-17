@@ -41,6 +41,7 @@
                       Icon="{AppThemeBinding Light='group_light.png', Dark='group_dark.png'}"
                       Route="CustomerListPage"
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
+
     </FlyoutItem>
 
     <FlyoutItem Title="{x:Static res:AppRes.Exporter}"

@@ -78,22 +78,25 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
-            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            using (new LowPriorityTaskManager())
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
-            }
+                if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Dispose();
+                }
 
-            _cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSource = new CancellationTokenSource();
 
-            Orders.Clear();
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-                await _updateOrders();
-            }
-            else
-            {
-                await _search(SearchTXT);
+                Orders.Clear();
+                if (string.IsNullOrEmpty(SearchTXT))
+                {
+                    await _updateOrders();
+                }
+                else
+                {
+                    await _search(SearchTXT);
+                }
             }
         }
         private async Task _updateOrders()

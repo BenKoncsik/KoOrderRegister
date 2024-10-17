@@ -1,4 +1,5 @@
 using KoOrderRegister.Modules.Customer.ViewModels;
+using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Customer.Pages;
 
@@ -22,8 +23,11 @@ public partial class CustomerListPage : ContentPage
     }
     protected override void OnAppearing()
     {
-        base.OnAppearing();
-        _viewModel.Update();
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+            _viewModel.Update();
+        }
     }
 
     protected void OnTextChanged(object sender, EventArgs e)

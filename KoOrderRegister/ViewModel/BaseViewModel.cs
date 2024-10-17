@@ -153,6 +153,7 @@ namespace KoOrderRegister.ViewModel
                 Progress = 0,
             }
         };
+        private CancellationToken updateCancellationToken = new CancellationToken();
         private async Task ShowUpdateDialog()
         {
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
@@ -189,7 +190,7 @@ namespace KoOrderRegister.ViewModel
                         _notifyService.DeleteNotification(notificationId);
                         notificationId = _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
                     }
-                }));
+                }), updateCancellationToken);
                 _isDownloading = false;
             }
         }

@@ -1,4 +1,6 @@
-﻿using KoOrderRegister.Utility;
+﻿using DocumentFormat.OpenXml.Presentation;
+using KoOrderRegister.Utility;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KoOrderRegister.Services
 {
-    public class AppUpdateService : IAppUpdateService
+    public class AppUpdateService : BackgroundService, IAppUpdateService
     {
         private readonly IVersionService _versionService;
         private readonly HttpClient _httpClient;
@@ -118,13 +120,22 @@ namespace KoOrderRegister.Services
             }
         }
 
-        public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
+        public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress, CancellationToken stoppingToken)
+        {
+
+            this.fileUrl = fileUrl;
+            this.progress = progress;
+            await ExecuteAsync(stoppingToken);
+            return downloadedFileUrl;
+        }
+        private string fileUrl;
+        private IProgress<double> progress;
+        private string downloadedFileUrl = string.Empty;
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
-            return await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
-            
+            downloadedFileUrl = await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
         }
-
-
     }
 }
