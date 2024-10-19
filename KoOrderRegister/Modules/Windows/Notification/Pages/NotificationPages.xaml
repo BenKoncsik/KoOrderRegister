@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.Notification}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{x:Static res:AppRes.ClearAll}"
+                     IconImageSource="{AppThemeBinding Light='x_light.png', Dark='x_dark.png'}"
+                     Command="{Binding ClearAllNotificationsCommand}"
+                     ToolTipProperties.Text="{x:Static res:AppRes.ClearAll}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView Command="{Binding UpdateNotificationCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Grid.Row="2">
+            <ListView x:Name="notificationListView"
+                  ItemsSource="{Binding Notifications}"
+                      SeparatorVisibility="Default"
+                      SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                      ItemAppearing="ListView_ItemAppearing"
+                      RowHeight="150">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <!-- Context menu -->
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="{x:Static res:AppRes.Open}"
+                                      Command="{Binding Path=BindingContext.ClickNotificationCommand, Source={x:Reference Name=notificationListView}}"
+                                      CommandParameter="{Binding .}" />
+
+                            <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                      IsDestructive="True"
+                                      Command="{Binding Path=BindingContext.DeleteOrderCommand, Source={x:Reference Name=notificationListView}}"
+                                      CommandParameter="{Binding .}" />
+                        </ViewCell.ContextActions>
+                        <VerticalStackLayout>
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                      Command="{Binding Path=BindingContext.ClickNotificationCommand, Source={x:Reference Name=notificationListView}}"
+                                                      CommandParameter="{Binding .}" />
+                            </VerticalStackLayout.GestureRecognizers>
+                            
+                                <HorizontalStackLayout
+                                    HorizontalOptions="Center"
+                                    Margin="10, 10, 10, 25">
+                                    <!--<Label Text="{Binding NotificationRequest.Title}"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" 
+                                           Padding="10,0,10,0"/>-->
+                                    <Label Text="{Binding NotificationRequest.Description}"
+                                  
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                            <StackLayout IsVisible="{Binding IsProgressBar}"
+                                         Margin="10,10,10,10">
+                                <ProgressBar Progress="{Binding WindowsOption.ProgressBar.Progress}"/>
+                            </StackLayout>
+                        </VerticalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+            
+        </RefreshView>
+    
+
+</ContentPage>

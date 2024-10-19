@@ -3,6 +3,7 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Export.Exporters.Services;
 using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Modules.Export.Types.Services;
+using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,7 @@ namespace KoOrderRegister.Modules.Export.Excel.ViewModel
             IsRefreshing = true;
             await new ExportService().ExportData(_exportService, IsCreateZip, ProgressCallback);
             IsRefreshing = false;
+        
         }
 
     }

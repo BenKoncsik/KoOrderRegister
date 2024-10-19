@@ -1,5 +1,6 @@
 
 using KoOrderRegister.Modules.Export.Pdf.ViewModel;
+using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Export.Pdf.Pages;
 
@@ -11,5 +12,13 @@ public partial class PdfExportersPage: ContentPage
         _viewModel = exportersViewModel;
         BindingContext = _viewModel;
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+        }
     }
 }

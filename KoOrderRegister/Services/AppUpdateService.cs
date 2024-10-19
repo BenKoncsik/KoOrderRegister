@@ -1,6 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Presentation;
+using KoOrderRegister.Utility;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace KoOrderRegister.Services
 {
-    public class AppUpdateService : IAppUpdateService
+    public class AppUpdateService : BackgroundService, IAppUpdateService
     {
         private readonly IVersionService _versionService;
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://api.github.com/repos/BenKoncsik/KoOrderRegister/releases/latest";
 #if DEBUG
-        private readonly string VERSION = "DEBUG_VERSION";
+        private readonly string VERSION = "DEV_VERSION";
 #elif DEVBUILD
         private readonly string VERSION = "DEV_VERSION";
 #else
@@ -63,7 +67,7 @@ namespace KoOrderRegister.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return new AppUpdateInfo();
             }
         }
@@ -116,12 +120,22 @@ namespace KoOrderRegister.Services
             }
         }
 
-        public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress)
+        public async Task<string> DownloadFileAsync(string fileUrl, IProgress<double> progress, CancellationToken stoppingToken)
+        {
+
+            this.fileUrl = fileUrl;
+            this.progress = progress;
+            await ExecuteAsync(stoppingToken);
+            return downloadedFileUrl;
+        }
+        private string fileUrl;
+        private IProgress<double> progress;
+        private string downloadedFileUrl = string.Empty;
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             DownloadManager.DownloadManager.UseCustomHttpClient(_httpClient);
-            return await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
+            downloadedFileUrl = await DownloadManager.DownloadManager.DownloadAsync(_versionService.UpdatePackageName, fileUrl, progress);
         }
-
-
     }
 }

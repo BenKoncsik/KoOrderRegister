@@ -9,6 +9,7 @@ using KoOrderRegister.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -38,7 +39,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand SearchCommand { get; }
         #endregion
 
-        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService) : base(updateService)
+        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _orderDetailsPage = orderDetailsPage;
@@ -60,7 +61,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
             catch (TargetInvocationException ex)
             {
-                Console.WriteLine($"Inner Exception: {ex.InnerException}");
+                Debug.WriteLine($"Inner Exception: {ex.InnerException}");
             }
         }
 
@@ -77,22 +78,25 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void UpdateOrders()
         {
-            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            using (new LowPriorityTaskManager())
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
-            }
+                if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Dispose();
+                }
 
-            _cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSource = new CancellationTokenSource();
 
-            Orders.Clear();
-            if (string.IsNullOrEmpty(SearchTXT))
-            {
-                await _updateOrders();
-            }
-            else
-            {
-                await _search(SearchTXT);
+                Orders.Clear();
+                if (string.IsNullOrEmpty(SearchTXT))
+                {
+                    await _updateOrders();
+                }
+                else
+                {
+                    await _search(SearchTXT);
+                }
             }
         }
         private async Task _updateOrders()

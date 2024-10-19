@@ -12,10 +12,11 @@
     xmlns:pdfExporter="clr-namespace:KoOrderRegister.Modules.Export.Pdf.Pages"
     xmlns:htmlExporter="clr-namespace:KoOrderRegister.Modules.Export.Html.Pages"
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
+    xmlns:notification="clr-namespace:KoOrderRegister.Modules.Windows.Notification.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
-
+  
     <Shell.FlyoutFooter>
         <Label Text="KOR V0.0.0"
                x:Name="AppVersionLabel"
@@ -37,6 +38,7 @@
                       Icon="{AppThemeBinding Light='group_light.png', Dark='group_dark.png'}"
                       Route="CustomerListPage"
                       ContentTemplate="{DataTemplate customerListViews:CustomerListPage}" />
+
     </FlyoutItem>
 
     <FlyoutItem Title="{x:Static res:AppRes.Exporter}"
@@ -45,6 +47,18 @@
                       Icon="{AppThemeBinding Light='csv_light.png', Dark='csv_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate excelExporter:ExcelExportersPage}" />
+    </FlyoutItem>
+
+
+    <FlyoutItem Title="{Binding NotificationString}"
+                Icon="{Binding NotificationIcon}"
+                IsVisible="{x:Static local:AppShell.IsWindows}">
+        <ShellContent Title="{Binding NotificationString}"
+                      Icon="{Binding NotificationIcon}"
+                      Route="NotificationPages"
+                      ContentTemplate="{DataTemplate notification:NotificationPages}"
+                      x:Name="NotificationShell"
+                      IsVisible="{x:Static local:AppShell.IsWindows}" />
     </FlyoutItem>
 
     <FlyoutItem Title="{x:Static res:AppRes.BetaFuctions}"
@@ -56,15 +70,13 @@
                       Route="BetaFunctionsPages"
                       ContentTemplate="{DataTemplate betaFuctions:BetaFunctionsPages}" />
 
-        
-        
         <ShellContent Title="{x:Static res:AppRes.PdfExporter}"
                       Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
-        
+
         <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
-                      Icon="{AppThemeBinding Light='html_light.png', Dark='html_dark.png'}"
+                      Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
     </FlyoutItem>

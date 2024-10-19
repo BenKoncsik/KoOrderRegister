@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Text;
 
 namespace KoOrderRegister.Modules.Database.Services
@@ -22,7 +23,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public DatabaseModel()
         {
-            Task.Run(async () => await Init()).Wait();
+            ThreadManager.Run(async () => await Init(), ThreadManager.Priority.High).Wait();
         }
         private async Task Init(bool force = false)
         {
@@ -40,7 +41,7 @@ namespace KoOrderRegister.Modules.Database.Services
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
             
 
@@ -121,27 +122,27 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream(CancellationToken cancellationToken)
         {
-                var customers = await Database.Table<CustomerModel>().ToListAsync();
-                foreach (var customer in customers)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var orders = await Database.Table<OrderModel>()
-                                .Where(o => o.CustomerId == customer.Id)
-                                .ToListAsync();
+            var customers = await Database.Table<CustomerModel>().ToListAsync();
+            foreach (var customer in customers)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var orders = await Database.Table<OrderModel>()
+                            .Where(o => o.CustomerId == customer.Id)
+                            .ToListAsync();
 
-                            foreach (var order in orders)
-                            {
-                                await foreach (FileModel file in GetFilesByOrderIdWithOutContentAsStream(order.Guid, cancellationToken))
-                                {
-                                    if (file != null)
-                                    {
-                                        order.Files.Add(file);
-                                    }
-                                }
-                            }
-                            customer.Orders = orders;
-                            yield return customer;
+                foreach (var order in orders)
+                {
+                    await foreach (FileModel file in GetFilesByOrderIdWithOutContentAsStream(order.Guid, cancellationToken))
+                    {
+                        if (file != null)
+                        {
+                            order.Files.Add(file);
+                        }
+                    }
                 }
+                customer.Orders = orders;
+                yield return customer;
+            }            
         }
 
 
@@ -296,7 +297,7 @@ namespace KoOrderRegister.Modules.Database.Services
                         {
                             order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                         }
-                    }));
+                    }, ThreadManager.Priority.High));
 
             await Task.WhenAll(tasks);
             return orders;
@@ -408,7 +409,7 @@ namespace KoOrderRegister.Modules.Database.Services
                         order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                         order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                     }
-                }));
+                }, ThreadManager.Priority.High));
             }
 
             orders.AsParallel().ForAll(order => RunBackgroundTask(order));
@@ -732,8 +733,6 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             if (progressCallback != null)
             {
-                /*    float progressPercentage = (float)StreamPosition / FileSize * 100;
-                    progressCallback?.Invoke((float)Math.Round(progressPercentage, 2));*/
                 progressCallback?.Invoke((float)StreamPosition);
             }
 

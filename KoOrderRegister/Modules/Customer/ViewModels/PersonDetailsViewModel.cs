@@ -40,7 +40,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
       
         #endregion
      
-        public PersonDetailsViewModel(IDatabaseModel database, IAppUpdateService updateService) : base(updateService)
+        public PersonDetailsViewModel(IDatabaseModel database, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
         }

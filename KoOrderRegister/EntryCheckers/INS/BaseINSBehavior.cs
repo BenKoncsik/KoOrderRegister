@@ -67,7 +67,7 @@ namespace KoOrderRegister.EntryCheckers.INS
                  catch (Exception ex)
                  {
                      // Log the exception or handle it as appropriate for your application
-                     Console.WriteLine($"Error in OnEntryTextChanged: {ex.Message}");
+                     Debug.WriteLine($"Error in OnEntryTextChanged: {ex.Message}");
                      // Fallback: just set the text without formatting
                      entry.Text = newText;
                      entry.CursorPosition = Math.Min(cursorPosition, newText.Length);

@@ -360,9 +360,6 @@
   <data name="CheckAppUpdateLabel" xml:space="preserve">
     <value>Alkalmazás frissítés keresése:</value>
   </data>
-  <data name="Cancle" xml:space="preserve">
-    <value>Mégsem</value>
-  </data>
   <data name="UpdateDownloaded" xml:space="preserve">
     <value>A frissítés letöltödött</value>
   </data>
@@ -476,5 +473,17 @@
   </data>
   <data name="PdfExporter" xml:space="preserve">
     <value>Pdf készítés</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Értesítés</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Kész</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Összes törlése</value>
   </data>
 </root>

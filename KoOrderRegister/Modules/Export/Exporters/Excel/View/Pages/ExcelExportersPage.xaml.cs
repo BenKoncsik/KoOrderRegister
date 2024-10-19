@@ -1,4 +1,5 @@
 using KoOrderRegister.Modules.Export.Excel.ViewModel;
+using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Export.Excel.Pages;
 
@@ -10,5 +11,13 @@ public partial class ExcelExportersPage: ContentPage
         _viewModel = exportersViewModel;
         BindingContext = _viewModel;
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        using (new LowPriorityTaskManager())
+        {
+            base.OnAppearing();
+        }
     }
 }

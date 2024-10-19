@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Content.PM;
 using Java.Lang;
+using System.Diagnostics;
 
 namespace KoOrderRegister.Platforms.Android.Utils
 {
@@ -14,7 +15,7 @@ namespace KoOrderRegister.Platforms.Android.Utils
             }
             catch (PackageManager.NameNotFoundException e)
             {
-                Console.WriteLine(e.Message);
+                Debug.WriteLine(e.Message);
                 return string.Empty;
             }
         }

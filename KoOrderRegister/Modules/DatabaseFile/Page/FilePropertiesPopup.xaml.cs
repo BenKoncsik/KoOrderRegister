@@ -1,6 +1,7 @@
 using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
+using KoOrderRegister.Utility;
 using Mopups.Pages;
 
 namespace KoOrderRegister.Modules.DatabaseFile.Page;
@@ -20,13 +21,16 @@ public partial class FilePropertiesPopup : PopupPage
     }
     protected override void OnAppearing()
     {
-        if(_viewModel.File == null)
+        using (new LowPriorityTaskManager())
         {
-            Error();
-        }
-        else
-        {
-            base.OnAppearing();
+            if (_viewModel.File == null)
+            {
+                Error();
+            }
+            else
+            {
+                base.OnAppearing();
+            }
         }
         
     }

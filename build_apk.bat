@@ -41,13 +41,22 @@ for /f "tokens=1-3 delims=." %%a in ("%CURRENT_VERSION%") do (
 
 echo Updated version to %NEW_VERSION%
 
-set "WINDOWS_NEW_VERSION=%NEW_VERSION%.0"
-echo Windows version to: %WINDOWS_NEW_VERSION%
-
 echo Updating the project file with new version...
 REM android
 powershell -Command "(gc '%CS_PROJECT%') -replace '<ApplicationDisplayVersion>%CURRENT_VERSION%</ApplicationDisplayVersion>', '<ApplicationDisplayVersion>%NEW_VERSION%</ApplicationDisplayVersion>' | Out-File -encoding UTF8 '%CS_PROJECT%'"
 
+
+
+echo sett icons
+set "ICON_SOURCE_DIR=Technical\images\%publish_version%\icons"
+set "ICON_TARGET_DIR=KoOrderRegister\Resources\Appicon"
+
+set "SPLASH_SOURCE_DIR=Technical\images\%publish_version%\splash"
+set "SPLASH_TARGET_DIR=KoOrderRegister\Resources\Splash"
+
+REM Copy to source path
+xcopy /Y "%ICON_SOURCE_DIR%\*.*" "%ICON_TARGET_DIR%"
+xcopy /Y "%SPLASH_SOURCE_DIR%\*.*" "%SPLASH_TARGET_DIR%"
 
 echo Create dictonary %OUTPUT_DIR_BUILD%
 mkdir %OUTPUT_DIR_BUILD%
