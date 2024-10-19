@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Windows.Notification.Utils;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
@@ -199,7 +199,6 @@ namespace KoOrderRegister.ViewModel
                     _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android, null, windows);
                     if (progress >= 99.99)
                     {
-                        //_notifyService.DeleteNotification(notificationId);
                         _notifyService.UpdateNotification(notificationId, AppRes.Downloading, AppRes.Done);
                     }
                 }), updateCancellationToken);

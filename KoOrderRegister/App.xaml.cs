@@ -12,8 +12,7 @@ namespace KoOrderRegister
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
-            MainPage = new AppShell(_serviceProvider);
-  
+            MainPage = new AppShell(_serviceProvider);  
         }
 
       

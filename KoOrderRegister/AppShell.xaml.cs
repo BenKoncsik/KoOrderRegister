@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
