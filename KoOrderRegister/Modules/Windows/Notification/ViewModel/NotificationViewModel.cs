@@ -21,6 +21,7 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
         #region Commands
         public ICommand ClickNotificationCommand => new Command<NotificationChangedArgs>(ClickNotification);
         public ICommand DeleteOrderCommand => new Command<NotificationChangedArgs>(RemoveNotification);
+        public ICommand ClearAllNotificationsCommand => new Command(ClearAllNotifications);
         #endregion
 
         public NotificationViewModel(ILocalNotificationService localNotificationService)
@@ -46,8 +47,6 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
                 {
                     Notifications.Add(notificationChangedArgs);
                 }
-
-                
             });
 
         }
@@ -69,6 +68,14 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
         public void RemoveNotification(NotificationChangedArgs notificationClearedArgs)
         {
             _localNotificationService.DeleteNotification(notificationClearedArgs.NotificationRequest.NotificationId);
+        }
+
+        public void ClearAllNotifications()
+        {
+            foreach(var notifcation in Notifications)
+            {
+                RemoveNotification(notifcation);
+            }
         }
 
         internal void Appering()

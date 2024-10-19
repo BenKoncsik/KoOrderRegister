@@ -483,4 +483,7 @@
   <data name="Done" xml:space="preserve">
     <value>Kész</value>
   </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Összes törlése</value>
+  </data>
 </root>

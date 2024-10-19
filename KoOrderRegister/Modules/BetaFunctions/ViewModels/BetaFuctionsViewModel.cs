@@ -63,6 +63,7 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
         }
         #region Notification
         private int id = -1;
+        private int counter = 0;
         public async void NotificationTest()
         {
             if(id == -1)
@@ -72,7 +73,10 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
             else
             {
                 _notifyService.UpdateNotification(id, $"Test: {id}", "Test");
+                _notifyService.SendNotification("Test", $"Test: {counter}");
+                counter++;
             }
+
            
         }
         private async void OnNotificationReceived(NotificationActionArgs e)

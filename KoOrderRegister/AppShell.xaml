@@ -16,10 +16,7 @@
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
-
-   
-    
-    
+  
     <Shell.FlyoutFooter>
         <Label Text="KOR V0.0.0"
                x:Name="AppVersionLabel"
@@ -52,6 +49,18 @@
                       ContentTemplate="{DataTemplate excelExporter:ExcelExportersPage}" />
     </FlyoutItem>
 
+
+    <FlyoutItem Title="{Binding NotificationString}"
+                Icon="{Binding NotificationIcon}"
+                IsVisible="{x:Static local:AppShell.IsWindows}">
+        <ShellContent Title="{Binding NotificationString}"
+                      Icon="{Binding NotificationIcon}"
+                      Route="NotificationPages"
+                      ContentTemplate="{DataTemplate notification:NotificationPages}"
+                      x:Name="NotificationShell"
+                      IsVisible="{x:Static local:AppShell.IsWindows}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="{x:Static res:AppRes.BetaFuctions}"
                 Icon="{AppThemeBinding Light='labs_light.png', Dark='labs_dark.png'}"
                 IsVisible="{x:Static local:AppShell.IsDevBuild}">
@@ -65,18 +74,11 @@
                       Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
-        
+
         <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
                       Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
-
-        <ShellContent Title="{x:Static res:AppRes.Notification}"
-                      Icon="{AppThemeBinding Light='notifications_light.png', Dark='notifications_dark.png'}"
-                      Route="NotificationPages"
-                      ContentTemplate="{DataTemplate notification:NotificationPages}"
-                      IsVisible="{x:Static local:AppShell.IsWindows}"/>
-                
     </FlyoutItem>
     
     

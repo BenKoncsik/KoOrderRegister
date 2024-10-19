@@ -15,7 +15,7 @@ namespace KoOrderRegister.Modules.Windows.Notification.Utils
         public bool LaunchAppWhenTapped { get; set; } = true;
         public int? LedColor { get; set; }
         public WindowsPriority Priority { get; set; } = WindowsPriority.Default;
-        public WindowsProgressBar? ProgressBar { get; set; }
+        public WindowsProgressBar ProgressBar { get; set; } = new WindowsProgressBar();
         public TimeSpan? TimeoutAfter { get; set; }
         public long[] VibrationPattern { get; set; } = [];
         public DateTime? When { get; set; }

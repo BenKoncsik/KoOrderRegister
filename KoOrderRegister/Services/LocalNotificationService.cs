@@ -12,32 +12,35 @@ using System.Collections.ObjectModel;
 
 namespace KoOrderRegister.Services
 {
-    public class LocalNotification : ILocalNotificationService
+    public class LocalNotificationService : ILocalNotificationService
     {
         public event Action<NotificationActionArgs> NotificationReceived;
         public event Action<NotificationChangedArgs> NotificationChanged;
         public event Action<NotificationClearedArgs> NotificationCleared;
 
-        public ConcurrentDictionary<int, NotificationChangedArgs> Notifications { get; private set; } = new ConcurrentDictionary<int, NotificationChangedArgs>();
-        public LocalNotification()
+        public static event Action NotificationChangedStaic;
+
+        private static ConcurrentDictionary<int, NotificationChangedArgs> Notifications = new ConcurrentDictionary<int, NotificationChangedArgs>();
+        public LocalNotificationService()
         {
             LocalNotificationCenter.Current.NotificationActionTapped += Current_NotificationActionTapped;
             NotificationCleared += LocalNotification_NotificationCleared;
         }
 
+
         private async void LocalNotification_NotificationCleared(NotificationClearedArgs obj)
         {
-            Notifications.TryRemove(obj.Id, out _);
+            LocalNotificationService.Notifications.TryRemove(obj.Id, out _);
         }
         private void LocalNotification_NotificationChanged(NotificationChangedArgs obj)
         {
-            Notifications.AddOrUpdate(
+            LocalNotificationService.Notifications.AddOrUpdate(
             obj.NotificationRequest.NotificationId,
             obj,
             (key, existingVal) => obj);
-
-                NotificationChanged?.Invoke(obj);
-            }
+            NotificationChanged?.Invoke(obj);
+            NotificationChangedStaic.Invoke();
+        }
 
         private void Current_NotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs e)
         {
@@ -80,6 +83,7 @@ namespace KoOrderRegister.Services
         private void ClearNotification(int id)
         {
             NotificationCleared?.Invoke(new NotificationClearedArgs { Id = id });
+            NotificationChangedStaic.Invoke();
             LocalNotificationCenter.Current.Clear(id);
         }
 
@@ -154,6 +158,14 @@ namespace KoOrderRegister.Services
             ClearNotification(id);
         }
 
+        public static int GetNotificationCount()
+        {
+            if(LocalNotificationService.Notifications != null)
+            {
+                return LocalNotificationService.Notifications.Count;
+            }
+            return 0;
+        }
 
     }
 }

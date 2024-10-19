@@ -7,17 +7,22 @@ namespace KoOrderRegister
     public partial class App : Application
     {
         private readonly AppShell _appShell;
-        public App()
+        private static IServiceProvider _serviceProvider;
+        public App(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            MainPage = new AppShell();
-  
+            _serviceProvider = serviceProvider;
+            MainPage = new AppShell(_serviceProvider);  
         }
 
       
         public static void RestartApp()
         {
-            Application.Current.MainPage = new AppShell();
+            if(_serviceProvider == null)
+            {
+                return;
+            }
+            Application.Current.MainPage = new AppShell(_serviceProvider);
         }
 
         

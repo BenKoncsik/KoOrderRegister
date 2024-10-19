@@ -17,6 +17,11 @@ public partial class NotificationPages : ContentPage
     {
        
     }
+
+    public void LoadData()
+    {
+        _notificationViewModel.Appering();
+    }
     protected override void OnAppearing()
     {
         _notificationViewModel.Appering();

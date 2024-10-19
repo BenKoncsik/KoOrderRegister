@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.Windows.Notification.Utils;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using Plugin.LocalNotification;
@@ -153,6 +154,16 @@ namespace KoOrderRegister.ViewModel
                 Progress = 0,
             }
         };
+        private WindowsOptions windows = new WindowsOptions
+        {
+            Ongoing = true,
+            ProgressBar = new WindowsProgressBar
+            {
+                IsIndeterminate = false,
+                Max = 100,
+                Progress = 0,
+            }
+        };
         private CancellationToken updateCancellationToken = new CancellationToken();
         private async Task ShowUpdateDialog()
         {
@@ -184,11 +195,11 @@ namespace KoOrderRegister.ViewModel
                     Debug.WriteLine($"Downloaded {progress}%");
                     LoadingTXT = $"{AppRes.Downloading}: {Math.Round(progress, 2)}%";
                     android.ProgressBar.Progress = (int)progress;
-                    _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android);
-                    if (progress >= 99.90)
+                    windows.ProgressBar.Progress = progress;
+                    _notifyService.UpdateNotification(notificationId, AppRes.Downloading, LoadingTXT, NotificationCategoryType.None, android, null, windows);
+                    if (progress >= 99.99)
                     {
-                        _notifyService.DeleteNotification(notificationId);
-                        notificationId = _notifyService.SendNotification(AppRes.Downloading, AppRes.Done);
+                        _notifyService.UpdateNotification(notificationId, AppRes.Downloading, AppRes.Done);
                     }
                 }), updateCancellationToken);
                 _isDownloading = false;

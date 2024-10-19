@@ -171,6 +171,8 @@
 		<None Remove="Resources\Images\key_light.svg" />
 		<None Remove="Resources\Images\labs_dark.svg" />
 		<None Remove="Resources\Images\labs_light.svg" />
+		<None Remove="Resources\Images\notifications_active_dark.svg" />
+		<None Remove="Resources\Images\notifications_active_light.svg" />
 		<None Remove="Resources\Images\notifications_dark.svg" />
 		<None Remove="Resources\Images\notifications_light.svg" />
 		<None Remove="Resources\Images\not_shared_icon_dark.svg" />
@@ -246,8 +248,8 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.92" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
