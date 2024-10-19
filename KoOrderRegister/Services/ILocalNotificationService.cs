@@ -11,6 +11,7 @@ using KoOrderRegister.Modules.Windows.Notification.Utils;
 using System.Collections.ObjectModel;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using DocumentFormat.OpenXml.Presentation;
 
 
 
@@ -21,7 +22,6 @@ namespace KoOrderRegister.Services
         event Action<NotificationActionArgs> NotificationReceived;
         event Action<NotificationChangedArgs> NotificationChanged;
         event Action<NotificationClearedArgs> NotificationCleared;
-        ConcurrentDictionary<int, NotificationChangedArgs> Notifications { get; }
         int SendNotification(string title, string message, NotificationCategoryType categoryType = NotificationCategoryType.None, AndroidOptions androidOptions = null, iOSOptions iosOption = null, WindowsOptions windowsOptions = null);
         void UpdateNotification(int id, string title, string message, NotificationCategoryType categoryType = NotificationCategoryType.None, AndroidOptions androidOptions = null, iOSOptions iosOption = null, WindowsOptions windowsOptions = null);
         void DeleteNotification(int id);
@@ -84,7 +84,14 @@ namespace KoOrderRegister.Services
 
         public WindowsOptions WindowsOption
         {
-            get => _windowsOption;
+            get
+            {
+                if(_windowsOption == null)
+                {
+                    _windowsOption = new WindowsOptions();
+                }
+                return _windowsOption;
+            }
             set
             {
                 if (_windowsOption != value)

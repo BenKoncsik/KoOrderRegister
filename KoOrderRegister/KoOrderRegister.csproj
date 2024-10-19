@@ -171,6 +171,8 @@
 		<None Remove="Resources\Images\key_light.svg" />
 		<None Remove="Resources\Images\labs_dark.svg" />
 		<None Remove="Resources\Images\labs_light.svg" />
+		<None Remove="Resources\Images\notifications_active_dark.svg" />
+		<None Remove="Resources\Images\notifications_active_light.svg" />
 		<None Remove="Resources\Images\notifications_dark.svg" />
 		<None Remove="Resources\Images\notifications_light.svg" />
 		<None Remove="Resources\Images\not_shared_icon_dark.svg" />

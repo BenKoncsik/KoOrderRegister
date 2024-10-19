@@ -525,4 +525,7 @@
   <data name="Done" xml:space="preserve">
     <value>Done</value>
   </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
 </root>

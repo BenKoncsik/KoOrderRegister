@@ -1,12 +1,17 @@
-﻿using KoOrderRegister.Modules.BetaFunctions.Pages;
+﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
+using KoOrderRegister.ViewModel;
+using Microsoft.VisualBasic;
+using Plugin.LocalNotification;
 using System.ComponentModel;
 using System.Diagnostics;
+using Windows.UI.Notifications;
 
 namespace KoOrderRegister
 {
@@ -14,7 +19,6 @@ namespace KoOrderRegister
     {
        private static string _appversion = $"Ko Order-Register";
        public static Label _AppVersionLabel { get; set; } = new Label();
-
 #if DEBUG || DEVBUILD
         public static readonly bool IsDevBuild = true;
 #else
@@ -36,13 +40,17 @@ namespace KoOrderRegister
                     {
                         _AppVersionLabel.Text = $"KOR V{value}";
                     }
-                        
                 }
             }
         }
-        public AppShell()
+        private readonly AppShellViewModel _appShellViewModel;
+        private readonly IServiceProvider _serviceProvider;
+        public AppShell(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
+            _appShellViewModel = new AppShellViewModel();
+            BindingContext = _appShellViewModel;
             #region Stabil fuctions
             Routing.RegisterRoute(nameof(OrderListPage), typeof(OrderListPage));
             Routing.RegisterRoute(nameof(CustomerListPage), typeof(CustomerListPage));
@@ -58,6 +66,10 @@ namespace KoOrderRegister
             #endregion
             #region Windows fuctions
             Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));
+#if WINDOWS
+            var notificationPage = serviceProvider.GetService<NotificationPages>();
+            notificationPage.LoadData();
+#endif
             #endregion
             #region Android fuctions
             #endregion
@@ -67,14 +79,23 @@ namespace KoOrderRegister
             #endregion
 
             _AppVersionLabel = AppVersionLabel;
+
+            
         }
 
         protected override void OnNavigated(ShellNavigatedEventArgs args)
         {
             using (new LowPriorityTaskManager())
             {
+                _appShellViewModel.IsRefreshing = true;
                 Debug.WriteLine($"Navigated: {args.Source}");
                 base.OnNavigated(args);
+#if WINDOWS
+                var shellItem = Shell.Current?.CurrentItem;
+                string title = shellItem?.Title;
+
+                //titleLabel.Text = $"{title} {_appShellViewModel.NotificationString}";
+#endif
             }
         }
 

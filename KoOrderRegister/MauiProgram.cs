@@ -21,6 +21,7 @@ using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
+using KoOrderRegister.ViewModel;
 
 namespace KoOrderRegister
 {
@@ -56,8 +57,15 @@ namespace KoOrderRegister
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
+            #region database
             builder.Services.AddTransient<IDatabaseModel, DatabaseModel>();
+            #endregion
+
+            #region AppShell
+            /*builder.Services.AddSingleton<AppShellViewModel>();
+            builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddSingleton<App>();*/
+            #endregion
 
             #region Order Modul
 
@@ -137,9 +145,9 @@ namespace KoOrderRegister
             #endregion
 
             #region Notification
-            builder.Services.AddSingleton<ILocalNotificationService, LocalNotification>();
+            builder.Services.AddSingleton<ILocalNotificationService, LocalNotificationService>();
 #if WINDOWS
-            builder.Services.AddTransient<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
+            builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
             builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.ViewModel.NotificationViewModel>();            
 #endif
             #endregion
