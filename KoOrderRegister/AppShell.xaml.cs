@@ -11,7 +11,6 @@ using Microsoft.VisualBasic;
 using Plugin.LocalNotification;
 using System.ComponentModel;
 using System.Diagnostics;
-using Windows.UI.Notifications;
 
 namespace KoOrderRegister
 {
