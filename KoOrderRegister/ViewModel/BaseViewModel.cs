@@ -170,7 +170,10 @@ namespace KoOrderRegister.ViewModel
             AppUpdateInfo info = await _updateService.CheckForAppInstallerUpdatesAndLaunchAsync();
             if (string.IsNullOrEmpty(info.NewVersion) || string.IsNullOrEmpty(info.DownloadUrl))
             {
-                await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.NoNewVersion, AppRes.Ok);
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp, AppRes.NoNewVersion, AppRes.Ok);
+                });
                 return;
             }
             bool result = false;
