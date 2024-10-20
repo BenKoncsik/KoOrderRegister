@@ -182,7 +182,6 @@ namespace KoOrderRegister.ViewModel
                 result = await Application.Current.MainPage.DisplayAlert(AppRes.UpdateApp,
                 $"{AppRes.NewVersionAvailable}: {info.OldVersion} --> {info.NewVersion}",
                 AppRes.Ok, AppRes.No);
-                _isDownloading = true;
                 if (result)
                 {
                     ThreadManager.Run(async () => await startDownload(), ThreadManager.Priority.Low);
@@ -191,6 +190,7 @@ namespace KoOrderRegister.ViewModel
 
             async Task startDownload()
             {
+                _isDownloading = true;
                 LoadingTXT = AppRes.Downloading;
                 notificationId = _notifyService.SendNotification(AppRes.UpdateApp, AppRes.Update);
                 filePath = await _updateService.DownloadFileAsync(info.DownloadUrl, new Progress<double>(progress =>
