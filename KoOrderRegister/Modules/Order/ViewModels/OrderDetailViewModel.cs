@@ -161,9 +161,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedEndDate = Order.EndDate;
             SelectedEndTime = Order.EndDate.TimeOfDay;
             SelectedStartDate = Order.StartDate;
-            SelectedStartTime = Order.StartDate.TimeOfDay;
-            Files = new ObservableCollection<FileModel>(Order.Files);
-            
+            SelectedStartTime = Order.StartDate.TimeOfDay;            
 #if DEBUG
             Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
             Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
