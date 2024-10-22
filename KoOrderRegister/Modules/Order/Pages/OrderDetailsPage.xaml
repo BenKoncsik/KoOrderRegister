@@ -115,7 +115,9 @@
                         <!-- Files -->
                         <RefreshView Command="{Binding UpdateFilesCommand}"
                                      IsRefreshing="{Binding IsLoadingFiles}"
-                                     Grid.Row="2">
+                                     Grid.Row="1"
+                                     MinimumHeightRequest="100"
+                                     MaximumHeightRequest="500">
                             <ListView x:Name="ordersListView"
                                       Grid.Row="1"
                                       Grid.Column="0"

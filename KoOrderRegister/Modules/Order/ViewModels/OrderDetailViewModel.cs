@@ -162,11 +162,14 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedEndTime = Order.EndDate.TimeOfDay;
             SelectedStartDate = Order.StartDate;
             SelectedStartTime = Order.StartDate.TimeOfDay;
+            Files = new ObservableCollection<FileModel>(Order.Files);
+            
 #if DEBUG
             Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
             Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
             Debug.WriteLine("End date: " + SelectedEndDate.ToString("yyyy-MM-dd"));
             Debug.WriteLine("End time: " + SelectedEndTime.ToString(@"hh\:mm"));
+            Debug.WriteLine("Files: " + Order.Files.Count());
 #endif
         }
         public async void SaveOrder()
