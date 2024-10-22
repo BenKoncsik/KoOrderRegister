@@ -57,9 +57,22 @@ namespace KoOrderRegister
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            #region database
+            #region Database
             builder.Services.AddTransient<IDatabaseModel, DatabaseModel>();
-            #endregion
+            #region Database Socket
+#if WINDOWS
+            builder.Services.AddTransient<RealTimeDatabaseHub>();
+                builder.Services.AddTransient<RealTimeDatabaseClient>();
+                builder.Services.AddScoped<IDatabaseModel>(provider =>
+                new RealTimeDatabaseModel(
+                    provider.GetRequiredService<DatabaseModel>(),
+                    provider.GetRequiredService<IHubContext<RealTimeDatabaseHub>>(),
+                    provider.GetRequiredService<RealTimeDatabaseClient>()
+                ));
+#endif
+                builder.Services.AddSignalRCore();
+#endregion
+#endregion
 
             #region AppShell
             /*builder.Services.AddSingleton<AppShellViewModel>();

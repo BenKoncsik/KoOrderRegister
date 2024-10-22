@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Models
+namespace KORCore.Module.Database.Models
 {
     [Table("Files")]
     public class FileModel

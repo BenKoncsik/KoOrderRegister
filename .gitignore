@@ -8,3 +8,5 @@ KoOrderRegister/Technical/icon_creator/output
 
 KoOrderRegister/Technical/KoOrderRegister.csproj.bak
 KoOrderRegister/KoOrderRegister.csproj.user
+KORCore/obj
+SockerService/obj

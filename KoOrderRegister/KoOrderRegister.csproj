@@ -360,6 +360,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\KORCore\KORCore.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+		<ProjectReference Include="..\SockerService\SockerService.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Platforms\Windows\Icon\%24placeholder%24.scale-125.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

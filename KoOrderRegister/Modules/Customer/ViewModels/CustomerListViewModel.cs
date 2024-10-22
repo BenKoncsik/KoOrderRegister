@@ -14,7 +14,9 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
     public class CustomerListViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
+        private readonly RealTimeDatabaseClient _realTimeClient;
         private readonly PersonDetailsPage _personDetailsPage;
+        
         #region Binding varrible
 
 
@@ -34,18 +36,46 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         #endregion
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
-        
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+
+        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage,
+            RealTimeDatabaseClient realTimeClient,
+            IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _database = database;
             _personDetailsPage = personDetailsPage;
 
-        UpdateCommand = new Command(Update);
-        AddNewCustomerCommand = new Command(AddNewCustomer);
-        DeleteCustomerCommand = new Command<CustomerModel>(DeleteCustomer);
-        EditCustomerCommand = new Command<CustomerModel>(EditCustomer);
-        SearchCommand = new Command<string>(Search);
-    }
+            UpdateCommand = new Command(Update);
+            AddNewCustomerCommand = new Command(AddNewCustomer);
+            DeleteCustomerCommand = new Command<CustomerModel>(DeleteCustomer);
+            EditCustomerCommand = new Command<CustomerModel>(EditCustomer);
+            SearchCommand = new Command<string>(Search);
+            _realTimeClient.DatabaseChanged += InitializeRealTimeClient;
+        }
+
+        public async void InitializeRealTimeClient(string name, object value)
+        {
+            switch (name)
+            {
+                case DatabaseChangedType.CUSTOMER_CREATED:
+                    Customers.Add((CustomerModel)value);
+                    break;
+                case DatabaseChangedType.CUSTOMER_UPDATED:
+                    CustomerModel? old = Customers.FirstOrDefault(c => c.Id.Equals(((CustomerModel)value).Id));
+                    if(old != null)
+                    {
+                        Customers.Remove(old);
+                        Customers.Add((CustomerModel)value);
+                    }
+                    break;
+                case DatabaseChangedType.CUSTOMER_DELETED:
+                    Customers.Remove(Customers.FirstOrDefault(c => c.Id.Equals((Guid)value)));
+                    break;
+                case DatabaseChangedType.CUSTOMER_COUNT_CHANGED:
+
+                    break;
+            }
+                
+        }
 
         public async void Update()
         {
