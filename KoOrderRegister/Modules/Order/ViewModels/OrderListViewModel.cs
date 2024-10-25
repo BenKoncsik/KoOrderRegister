@@ -49,22 +49,18 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             DeleteOrderCommand = new Command<OrderModel>(DeleteOrder);
             UpdateOrderCommand = new Command(UpdateOrders);
             SearchCommand = new Command<string>(Search);
+
+#if DEBUG
+            _database.OnDatabaseChange += TestReliTimeDatabase;
+#endif
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
+#if DEBUG
+        private void TestReliTimeDatabase(string name, object data)
         {
-            try
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            catch (TargetInvocationException ex)
-            {
-                Debug.WriteLine($"Inner Exception: {ex.InnerException}");
-            }
+            Debug.WriteLine($"Name: {name} --> {data.GetType()}");
         }
-
+#endif
         public async void NewOrder()
         {
             await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);

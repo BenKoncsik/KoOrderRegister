@@ -9,6 +9,9 @@ namespace KoOrderRegister.Modules.Database.Services
 {
     public interface IDatabaseModel
     {
+        #region RealTime changes
+        event Action<string, object> OnDatabaseChange;
+        #endregion
         #region CustomerModel CRUD Operations
         Task<int> CreateCustomer(CustomerModel customer);
         Task<CustomerModel> GetCustomerById(Guid id);

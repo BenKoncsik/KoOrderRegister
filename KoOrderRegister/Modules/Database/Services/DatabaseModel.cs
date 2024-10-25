@@ -6,6 +6,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
 using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Utility;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System.IO;
 
 namespace KoOrderRegister.Modules.Database.Services
 {
@@ -20,11 +23,12 @@ namespace KoOrderRegister.Modules.Database.Services
 
         private static int PAGE_SIZE = 5;
 
-
         public DatabaseModel()
         {
             ThreadManager.Run(async () => await Init(), ThreadManager.Priority.High).Wait();
         }
+
+        public event Action<string, object> OnDatabaseChange;
         private async Task Init(bool force = false)
         {
             if (Database is not null && !force)
@@ -53,13 +57,14 @@ namespace KoOrderRegister.Modules.Database.Services
             CustomerModel? result = await GetCustomerById(customer.Guid);
             if(result == null)
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_CREATED, customer);
                 return await Database.InsertAsync(customer);
             }
             else
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_UPDATED, customer);
                 return await UpdateCustomer(customer);
             }
-            
         }
         public async Task<CustomerModel> GetCustomerById(Guid id)
         {
@@ -76,6 +81,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 }
                 customer.Orders = orders;
             }
+            OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
             return customer;
         }
 
@@ -96,6 +102,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     }
                     customer.Orders = orders;
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
             else
@@ -116,6 +123,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     }
                     customer.Orders = orders;
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
         }
@@ -141,6 +149,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     }
                 }
                 customer.Orders = orders;
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                 yield return customer;
             }            
         }
@@ -161,6 +170,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 {
                     await DeleteOrder(Guid.Parse(order.Id));
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_DELETED, customer);
                 return await Database.DeleteAsync(customer);
             }
             return 0;
@@ -201,10 +211,12 @@ namespace KoOrderRegister.Modules.Database.Services
                customers = await Database.QueryAsync<CustomerModel>(query, likeQuery, likeQuery, likeQuery, 
                     likeQuery, likeQuery, likeQuery, PAGE_SIZE,  (PAGE_SIZE * (page - 1)));
             }
-           return customers
+            List<CustomerModel> customersOrders = customers
                 .GroupBy(c => c.Id)
                 .Select(g => g.First())
                 .ToList();
+            OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMERS_RETRIEVED, customersOrders);
+            return customersOrders;
 
         }
 
@@ -231,6 +243,7 @@ namespace KoOrderRegister.Modules.Database.Services
             foreach (var customer in customers.GroupBy(c => c.Id).Select(g => g.First()).ToList())
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                 yield return customer;
             }
         }
@@ -238,6 +251,7 @@ namespace KoOrderRegister.Modules.Database.Services
         public async Task<int> CountCustomers()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {CUSTOMER_TABLE}");
+            OnDatabaseChange?.Invoke(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
             return count;
         }
 
@@ -248,10 +262,12 @@ namespace KoOrderRegister.Modules.Database.Services
             OrderModel? result = await GetOrderById(order.Guid);
             if(result == null)
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_CREATED, order);
                 return await Database.InsertAsync(order);
             }
             else
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_UPDATED, order);
                 return await UpdateOrder(order);
             }
         }
@@ -264,6 +280,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
             }
+            OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_RETRIEVED, order);
             return order;
         }
 
@@ -300,6 +317,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     }, ThreadManager.Priority.High));
 
             await Task.WhenAll(tasks);
+            OnDatabaseChange?.Invoke(DatabaseChangedType.ORDERS_RETRIEVED, orders);
             return orders;
         }
 
@@ -324,6 +342,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 {
                     order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                 yield return order;
             }
         }
@@ -343,6 +362,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 {
                     await DeleteFile(Guid.Parse(file.Id));
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_DELETED, order);
                 return await Database.DeleteAsync(order);
             }
             return 0;
@@ -392,7 +412,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, likeQuery, 
                     PAGE_SIZE, (PAGE_SIZE * (page - 1)));
             }
-            
+
             orders = orders
                 .GroupBy(c => c.Id)
                 .Select(g => g.First())
@@ -414,6 +434,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
             orders.AsParallel().ForAll(order => RunBackgroundTask(order));
             await Task.WhenAll(tasks);
+            OnDatabaseChange?.Invoke(DatabaseChangedType.ORDERS_RETRIEVED, orders);
             return orders;
         }
 
@@ -448,6 +469,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                     order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                 }
+                OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                 yield return order;
             }
         }
@@ -455,6 +477,7 @@ namespace KoOrderRegister.Modules.Database.Services
         public async Task<int> CountOrders()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {ORDER_TABLE}");
+            OnDatabaseChange?.Invoke(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
             return count;
         }
         #endregion
@@ -464,18 +487,22 @@ namespace KoOrderRegister.Modules.Database.Services
             FileModel? result = await GetFileById(file.Guid);
             if(result == null)
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_CREATED, file);
                 return await Database.InsertAsync(file);
             }
             else
             {
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_UPDATED, file);
                 return await UpdateFile(file);
             }
         }
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            string stringId = id.ToString();  
-            return await Database.FindAsync<FileModel>(stringId);
+            string stringId = id.ToString();
+            FileModel file = await Database.FindAsync<FileModel>(stringId);
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_RETRIEVED, file);
+            return file;
         }
 
         public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
@@ -486,10 +513,13 @@ namespace KoOrderRegister.Modules.Database.Services
                 .CountAsync();
             if (fileCount > 0)
             {
-                return await Database.Table<FileModel>()
+                List<FileModel> files = await Database.Table<FileModel>()
                     .Where(f => f.OrderId.Equals(stringId))
                     .ToListAsync();
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_RETRIEVED, files);
+                return files;
             }
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_RETRIEVED, new List<FileModel>());
             return new List<FileModel>();
         }
 
@@ -504,6 +534,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 foreach(var file in await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
+                    OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                     yield return file;  
                 }
             }
@@ -514,6 +545,7 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             List<FileModel> files = await Database.Table<FileModel>().ToListAsync();
             files.AsParallel().Where(f => f.IsDatabaseContent = true);
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILES_RETRIEVED, files);
             return files;
         }
 
@@ -525,6 +557,7 @@ namespace KoOrderRegister.Modules.Database.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 file.IsDatabaseContent = true;
                 file.Order = await GetOrderById(Guid.Parse(file.OrderId));
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_STREAM_RETRIEVED, files);
                 yield return file;
             }
         }
@@ -541,7 +574,9 @@ namespace KoOrderRegister.Modules.Database.Services
             var file = await GetFileById(id);
             if (file != null)
             {
-                return await Database.DeleteAsync(file);   
+                int reuslt = await Database.DeleteAsync(file);
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_DELETED, reuslt);
+                return reuslt;
             }
             return 0;
         }
@@ -554,6 +589,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 file.IsDatabaseContent = true;
             }
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILES_RETRIEVED, fileModels);
             return fileModels;
         }
 
@@ -564,6 +600,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 file.IsDatabaseContent = true;
+                OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                 yield return file;
             }
         }
@@ -572,11 +609,13 @@ namespace KoOrderRegister.Modules.Database.Services
         {
             var query = $"SELECT SUM(length(content)) FROM {FILES_TABLE} WHERE id = ?";
             long length = await Database.ExecuteScalarAsync<long>(query, id.ToString());
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_SIZE, length.ToStringSize());
             return length.ToStringSize();
         }
         public async Task<int> CountFiles()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {FILES_TABLE}");
+            OnDatabaseChange?.Invoke(DatabaseChangedType.FILE_COUNT, count);
             return count;
         }
         #endregion
