@@ -21,7 +21,6 @@ using Plugin.LocalNotification.AndroidOption;
 using KoOrderRegister.ViewModel;
 using KoOrderRegister.Modules.Order.Services;
 using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
-using KoOrderRegister.Platforms.Windows.Serivces;
 
 namespace KoOrderRegister
 {
@@ -98,11 +97,11 @@ namespace KoOrderRegister
             #region Update
             builder.Services.AddHttpClient("GitHubClient", client =>
             {
-                
+
             });
             builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #if WINDOWS
-                builder.Services.AddSingleton<IVersionService, VersionService>();
+                builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Windows.Services.VersionService>();
 #elif ANDROID
             builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Android.Services.VersionService>();
             builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
@@ -122,40 +121,13 @@ namespace KoOrderRegister
             builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
             //excel
             builder.Services.AddTransient<Modules.Export.Excel.Pages.ExcelExportersPage>();
-
-/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
-Before:
-            builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
-            //pdf
-After:
-            builder.Services.AddSingleton<ExportersViewModel>();
-            //pdf
-*/
             builder.Services.AddSingleton<Modules.Export.Exporters.Excel.View.ViewModel.ExportersViewModel>();
             //pdf
             builder.Services.AddTransient<Modules.Export.Pdf.Pages.PdfExportersPage>();
-
-/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
-Before:
-            builder.Services.AddSingleton<Modules.Export.Pdf.ViewModel.ExportersViewModel>();
-            //html
-After:
-            builder.Services.AddSingleton<ExportersViewModel>();
-            //html
-*/
-            builder.Services.AddSingleton<Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel>();
+            builder.Services.AddSingleton< Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel >();
             //html
             builder.Services.AddTransient<Modules.Export.Html.Pages.HtmlExportersPage>();
-
-/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
-Before:
-            builder.Services.AddSingleton<Modules.Export.Html.ViewModel.ExportersViewModel>();
-            #endregion
-After:
-            builder.Services.AddSingleton<ExportersViewModel>();
-            #endregion
-*/
-            builder.Services.AddSingleton<Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel>();
+            builder.Services.AddSingleton< Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel >();
             #endregion
 
             #region Beta function modul
