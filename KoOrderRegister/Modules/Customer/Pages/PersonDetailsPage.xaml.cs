@@ -1,5 +1,5 @@
 using KoOrderRegister.Modules.Customer.ViewModels;
-using KoOrderRegister.Modules.Database.Models;
+using KORCore.Module.Database.Models;
 using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Customer.Pages;

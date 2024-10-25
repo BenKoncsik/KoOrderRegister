@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KORCore.Modules.Database.Socket.Utility
+namespace KORCore.Module.Database.Utility
 {
     public static class DatabaseChangedType
     {

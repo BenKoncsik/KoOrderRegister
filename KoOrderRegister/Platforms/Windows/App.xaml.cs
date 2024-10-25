@@ -1,10 +1,9 @@
-﻿using KoOrderRegister.Platforms.Windows.Services;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace KoOrderRegister.WinUI
+namespace KoOrderRegister.Platforms.Windows
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -20,7 +19,7 @@ namespace KoOrderRegister.WinUI
             this.InitializeComponent();
         }
 
-        
+
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
 

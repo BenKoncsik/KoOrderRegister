@@ -1,6 +1,0 @@
-@SockerService_HostAddress = http://localhost:5064
-
-GET {{SockerService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

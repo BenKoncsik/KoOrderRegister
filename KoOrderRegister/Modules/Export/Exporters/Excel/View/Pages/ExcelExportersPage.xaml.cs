@@ -1,13 +1,13 @@
-using KoOrderRegister.Modules.Export.Excel.ViewModel;
+using KoOrderRegister.Modules.Export.Exporters.Excel.View.ViewModel;
 using KoOrderRegister.Utility;
 
-namespace KoOrderRegister.Modules.Export.Excel.Pages;
+namespace KoOrderRegister.Modules.Export.Exporters.Excel.View.Pages;
 
-public partial class ExcelExportersPage: ContentPage
+public partial class ExcelExportersPage : ContentPage
 {
-	private ExportersViewModel _viewModel;
+    private ExportersViewModel _viewModel;
     public ExcelExportersPage(ExportersViewModel exportersViewModel)
-	{
+    {
         _viewModel = exportersViewModel;
         BindingContext = _viewModel;
         InitializeComponent();

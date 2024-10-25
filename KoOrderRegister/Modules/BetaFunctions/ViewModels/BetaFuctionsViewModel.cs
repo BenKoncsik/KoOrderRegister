@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using Plugin.LocalNotification;

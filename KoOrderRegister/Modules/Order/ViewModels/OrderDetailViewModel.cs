@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
+using KORCore.Module.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
-using KoOrderRegister.Modules.Order.List.Services;
+using KoOrderRegister.Modules.Order.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KoOrderRegister.Modules.Order.List.ViewModels
+namespace KoOrderRegister.Modules.Order.ViewModels
 {
     public class OrderDetailViewModel : BaseViewModel
     {
@@ -64,7 +64,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         }
 
         private DateTime _SelectedStartDate = DateTime.Now;
-        public DateTime SelectedStartDate 
+        public DateTime SelectedStartDate
         {
             get => _SelectedStartDate;
             set
@@ -77,7 +77,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
         private TimeSpan _SelectedStartTime = DateTime.Now.TimeOfDay;
-        public TimeSpan SelectedStartTime 
+        public TimeSpan SelectedStartTime
         {
             get => _SelectedStartTime;
             set
@@ -90,7 +90,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
         private DateTime _SelectedEndDate = DateTime.Now;
-        public DateTime SelectedEndDate 
+        public DateTime SelectedEndDate
         {
             get => _SelectedEndDate;
             set
@@ -116,7 +116,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
 
-        public ObservableCollection<CustomerModel> Customers {get; set;} = new ObservableCollection<CustomerModel>();
+        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         private CustomerModel _selectedItem;
         public CustomerModel SelectedItem
         {
@@ -161,7 +161,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedEndDate = Order.EndDate;
             SelectedEndTime = Order.EndDate.TimeOfDay;
             SelectedStartDate = Order.StartDate;
-            SelectedStartTime = Order.StartDate.TimeOfDay;            
+            SelectedStartTime = Order.StartDate.TimeOfDay;
 #if DEBUG
             Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
             Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
@@ -254,7 +254,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                     Customers.Clear();
                 }
 
-                await foreach(var customer in  _database.GetAllCustomersAsStream(cancellationToken))
+                await foreach (var customer in _database.GetAllCustomersAsStream(cancellationToken))
                 {
                     Customers.Add(customer);
                 }
@@ -322,7 +322,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             IsRefreshing = true;
             if (file.FileResult == null)
             {
-              await _database.DeleteFile(file.Guid);
+                await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
             IsRefreshing = false;
@@ -332,7 +332,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             IsRefreshing = true;
             file = await _database.GetFileById(file.Guid);
-            
+
             if (file.Content == null)
             {
                 IsRefreshing = false;
@@ -379,7 +379,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             IsLoadingFiles = true;
             List<FileModel> files = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
-            if(files == null)
+            if (files == null)
             {
                 IsLoadingFiles = false;
                 return;

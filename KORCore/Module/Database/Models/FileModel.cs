@@ -27,7 +27,7 @@ namespace KORCore.Module.Database.Models
         }
         [Ignore]
         [JsonIgnore]
-        public FileResult FileResult { get; set; }
+        public object FileResult { get; set; }
         [JsonProperty("contentType")]
         public string ContentType { get; set; }
         [JsonProperty("note")]

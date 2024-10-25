@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KoOrderRegister.Modules.Export.Html.ViewModel
+namespace KoOrderRegister.Modules.Export.Exporters.Html.View.ViewModel
 {
     public class ExportersViewModel : BaseViewModel
     {
@@ -36,7 +36,7 @@ namespace KoOrderRegister.Modules.Export.Html.ViewModel
         #endregion
         public ExportersViewModel()
         {
-          //  _exportService = exportService;
+            //  _exportService = exportService;
         }
         public void ProgressCallback(float precent)
         {
@@ -44,7 +44,7 @@ namespace KoOrderRegister.Modules.Export.Html.ViewModel
         }
         public async void ExportData()
         {
-           
+
         }
 
     }

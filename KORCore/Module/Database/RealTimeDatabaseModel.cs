@@ -1,7 +1,7 @@
-﻿using KORCore.Modules.Database.Models;
-using KORCore.Modules.Database.Socket.Client;
+﻿using KoOrderRegister.Modules.Database.Socket.Client;
+using KORCore.Module.Database.Utility;
+using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Socket.Server;
-using KORCore.Modules.Database.Socket.Utility;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KORCore.Modules.Database.Services
+namespace KoOrderRegister.Modules.Database.Services
 {
-    public class RealTimeDatabaseModel : Hub, IDatabaseModel
+ /*   public class RealTimeDatabaseModel : Hub, IDatabaseModel
     {
         private readonly IDatabaseModel _innerDatabaseModel;
         private readonly IHubContext<RealTimeDatabaseHub> _hubContext;
@@ -58,7 +58,7 @@ namespace KORCore.Modules.Database.Services
                     break;
 
             }
-        }        
+        }
 
         #region CustomerModel CRUD Operations
         public async Task<int> CreateCustomer(CustomerModel customer)
@@ -318,6 +318,6 @@ namespace KORCore.Modules.Database.Services
             await _innerDatabaseModel.ImportDatabaseFromJson(jsonStream, progressCallback);
         }
         #endregion
-    }
+    }*/
 
 }

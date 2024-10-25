@@ -1,4 +1,4 @@
-﻿using KORCore.Utility;
+﻿using KORCore.Module.Database.Utility;
 using Newtonsoft.Json;
 using SQLite;
 using System;

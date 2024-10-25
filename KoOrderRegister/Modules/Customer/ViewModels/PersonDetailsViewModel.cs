@@ -1,5 +1,5 @@
 ﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
+using KORCore.Module.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;

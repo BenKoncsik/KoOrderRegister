@@ -1,14 +1,13 @@
-
-using KoOrderRegister.Modules.Export.Pdf.ViewModel;
+using KoOrderRegister.Modules.Export.Exporters.Pdf.View.ViewModel;
 using KoOrderRegister.Utility;
 
-namespace KoOrderRegister.Modules.Export.Pdf.Pages;
+namespace KoOrderRegister.Modules.Export.Exporters.Pdf.View.Pages;
 
-public partial class PdfExportersPage: ContentPage
+public partial class PdfExportersPage : ContentPage
 {
-	private ExportersViewModel _viewModel;
+    private ExportersViewModel _viewModel;
     public PdfExportersPage(ExportersViewModel exportersViewModel)
-	{
+    {
         _viewModel = exportersViewModel;
         BindingContext = _viewModel;
         InitializeComponent();

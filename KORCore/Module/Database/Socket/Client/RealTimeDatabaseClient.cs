@@ -1,7 +1,4 @@
-﻿using KORCore.Modules.Database.Models;
-using KORCore.Modules.Database.Socket.Server;
-using KORCore.Modules.Database.Socket.Utility;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using KORCore.Module.Database.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KORCore.Modules.Database.Socket.Client
+namespace KoOrderRegister.Modules.Database.Socket.Client
 {
-    public class RealTimeDatabaseClient
+   /* public class RealTimeDatabaseClient
     {
         private readonly HubConnection _connection;
 
@@ -235,5 +232,5 @@ namespace KORCore.Modules.Database.Socket.Client
             await _connection.StopAsync();
             Debug.WriteLine("Disconnected from the real-time database hub.");
         }
-    }
+    }*/
 }

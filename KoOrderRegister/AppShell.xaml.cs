@@ -59,9 +59,36 @@ namespace KoOrderRegister
             #endregion
             #region Beta fuctions
             Routing.RegisterRoute(nameof(BetaFunctionsPages), typeof(BetaFunctionsPages));
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             Routing.RegisterRoute(nameof(Modules.Export.Excel.Pages.ExcelExportersPage), typeof(Modules.Export.Excel.Pages.ExcelExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
+After:
+            Routing.RegisterRoute(nameof(ExcelExportersPage), typeof(ExcelExportersPage));
+            Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
+*/
+            Routing.RegisterRoute(nameof(Modules.Export.Exporters.Excel.View.Pages.ExcelExportersPage), typeof(Modules.Export.Exporters.Excel.View.Pages.ExcelExportersPage));
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
+            Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+After:
+            Routing.RegisterRoute(nameof(PdfExportersPage), typeof(PdfExportersPage));
+            Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+*/
+            Routing.RegisterRoute(nameof(Modules.Export.Exporters.Pdf.View.Pages.PdfExportersPage), typeof(Modules.Export.Exporters.Pdf.View.Pages.PdfExportersPage));
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
+            Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+            #endregion
+After:
+            Routing.RegisterRoute(nameof(HtmlExportersPage), typeof(HtmlExportersPage));
+            #endregion
+*/
+            Routing.RegisterRoute(nameof(Modules.Export.Exporters.Html.View.Pages.HtmlExportersPage), typeof(Modules.Export.Exporters.Html.View.Pages.HtmlExportersPage));
             #endregion
             #region Windows fuctions
             Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));

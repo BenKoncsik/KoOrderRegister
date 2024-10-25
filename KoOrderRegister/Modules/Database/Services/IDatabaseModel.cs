@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Modules.Database.Models;
+﻿using KORCore.Module.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

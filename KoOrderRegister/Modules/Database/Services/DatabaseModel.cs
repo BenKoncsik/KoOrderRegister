@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Modules.Database.Models;
+﻿using KORCore.Module.Database.Models;
 using KoOrderRegister.Utility;
 using Microsoft.Maui.Controls;
 using Newtonsoft.Json;

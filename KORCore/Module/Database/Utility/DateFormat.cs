@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KORCore.Utility
+namespace KORCore.Module.Database.Utility
 {
     public static class DateFormat
     {

@@ -1,5 +1,5 @@
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Order.List.ViewModels;
+using KORCore.Module.Database.Models;
+using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using System.Collections.ObjectModel;
 

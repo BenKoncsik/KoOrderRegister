@@ -3,8 +3,6 @@ using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Customer.ViewModels;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
-using KoOrderRegister.Modules.Order.List.Services;
-using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using Microsoft.Extensions.Logging;
@@ -16,12 +14,14 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using KoOrderRegister.ViewModel;
+using KoOrderRegister.Modules.Order.Services;
+using KoOrderRegister.Platforms.Windows.Serivces;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
 
 namespace KoOrderRegister
 {
@@ -60,8 +60,8 @@ namespace KoOrderRegister
             #region Database
             builder.Services.AddTransient<IDatabaseModel, DatabaseModel>();
             #region Database Socket
-#if WINDOWS
-            builder.Services.AddTransient<RealTimeDatabaseHub>();
+
+         /*   builder.Services.AddTransient<RealTimeDatabaseHub>();
                 builder.Services.AddTransient<RealTimeDatabaseClient>();
                 builder.Services.AddScoped<IDatabaseModel>(provider =>
                 new RealTimeDatabaseModel(
@@ -69,8 +69,8 @@ namespace KoOrderRegister
                     provider.GetRequiredService<IHubContext<RealTimeDatabaseHub>>(),
                     provider.GetRequiredService<RealTimeDatabaseClient>()
                 ));
-#endif
-                builder.Services.AddSignalRCore();
+
+                builder.Services.AddSignalRCore();*/
 #endregion
 #endregion
 
@@ -115,7 +115,7 @@ namespace KoOrderRegister
             });
             builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #if WINDOWS
-                builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Windows.Services.VersionService>();
+                builder.Services.AddSingleton<IVersionService, VersionService>();
 #elif ANDROID
             builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Android.Services.VersionService>();
             builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
@@ -134,14 +134,64 @@ namespace KoOrderRegister
             #region Export Modul
             builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
             //excel
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             builder.Services.AddTransient<Modules.Export.Excel.Pages.ExcelExportersPage>();
             builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
+After:
+            builder.Services.AddTransient<ExcelExportersPage>();
+            builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
+*/
+            builder.Services.AddTransient<Modules.Export.Exporters.Excel.View.Pages.ExcelExportersPage>();
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
+            builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
             //pdf
+After:
+            builder.Services.AddSingleton<ExportersViewModel>();
+            //pdf
+*/
+            builder.Services.AddSingleton<Modules.Export.Exporters.Excel.View.ViewModel.ExportersViewModel>();
+            //pdf
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             builder.Services.AddTransient<Modules.Export.Pdf.Pages.PdfExportersPage>();
+After:
+            builder.Services.AddTransient<PdfExportersPage>();
+*/
+            builder.Services.AddTransient<Modules.Export.Exporters.Pdf.View.Pages.PdfExportersPage>();
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             builder.Services.AddSingleton<Modules.Export.Pdf.ViewModel.ExportersViewModel>();
             //html
+After:
+            builder.Services.AddSingleton<ExportersViewModel>();
+            //html
+*/
+            builder.Services.AddSingleton<Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel>();
+            //html
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             builder.Services.AddTransient<Modules.Export.Html.Pages.HtmlExportersPage>();
+After:
+            builder.Services.AddTransient<HtmlExportersPage>();
+*/
+            builder.Services.AddTransient<Modules.Export.Exporters.Html.View.Pages.HtmlExportersPage>();
+
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Before:
             builder.Services.AddSingleton<Modules.Export.Html.ViewModel.ExportersViewModel>();
+            #endregion
+After:
+            builder.Services.AddSingleton<ExportersViewModel>();
+            #endregion
+*/
+            builder.Services.AddSingleton<Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel>();
             #endregion
 
             #region Beta function modul

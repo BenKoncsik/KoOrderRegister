@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Order.List.Services;
+using KORCore.Module.Database.Models;
 using KoOrderRegister.Utility;
 using System;
 using System.Collections.Generic;
@@ -11,15 +10,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Services
+namespace KoOrderRegister.Modules.Order.Services
 {
- 
+
     public class FileService : IFileService
     {
         private const string CANCLE_FOLDER = "CANCLE_FOLDER";
         public async Task<bool> SaveFileToLocal(FileModel file)
         {
-            if(file.Content == null)
+            if (file.Content == null)
             {
                 return false;
             }
@@ -32,7 +31,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     throw new FileSaveException(CANCLE_FOLDER);
                 }
                 string filePath = Path.Combine(folderPath, file.Name);
-                await File.WriteAllBytesAsync(filePath, file.Content); 
+                await File.WriteAllBytesAsync(filePath, file.Content);
                 return true;
 
             }
@@ -56,7 +55,7 @@ namespace KoOrderRegister.Modules.Database.Services
             {
                 var existingFileContent = await File.ReadAllBytesAsync(filePath);
                 var existingFileHash = await CalculateHashAsync(existingFileContent);
-                if(!string.IsNullOrEmpty(file.HashCode) && file.HashCode.Equals(existingFileHash))
+                if (!string.IsNullOrEmpty(file.HashCode) && file.HashCode.Equals(existingFileHash))
                 {
                     return filePath;
                 }
@@ -76,7 +75,7 @@ namespace KoOrderRegister.Modules.Database.Services
 
         public async Task<string> CalculateHashAsync(byte[] content)
         {
-            return await ThreadManager.Run<string>(() =>
+            return await ThreadManager.Run(() =>
             {
                 using (var sha256 = SHA256.Create())
                 {
@@ -92,10 +91,10 @@ namespace KoOrderRegister.Modules.Database.Services
             try
             {
                 var folderResult = await FolderPicker.PickAsync(cancellationToken);
-                
+
                 if (folderResult != null)
                 {
-                    if(folderResult.Folder == null || folderResult.Folder.Path == null)
+                    if (folderResult.Folder == null || folderResult.Folder.Path == null)
                     {
                         return CANCLE_FOLDER;
                     }
@@ -103,7 +102,7 @@ namespace KoOrderRegister.Modules.Database.Services
                     {
                         return folderResult.Folder.Path;
                     }
-                    
+
                 }
                 else
                 {

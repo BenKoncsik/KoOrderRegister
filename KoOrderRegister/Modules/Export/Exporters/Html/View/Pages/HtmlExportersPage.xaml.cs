@@ -1,14 +1,13 @@
-
-using KoOrderRegister.Modules.Export.Html.ViewModel;
+using KoOrderRegister.Modules.Export.Exporters.Html.View.ViewModel;
 using KoOrderRegister.Utility;
 
-namespace KoOrderRegister.Modules.Export.Html.Pages;
+namespace KoOrderRegister.Modules.Export.Exporters.Html.View.Pages;
 
-public partial class HtmlExportersPage: ContentPage
+public partial class HtmlExportersPage : ContentPage
 {
-	private ExportersViewModel _viewModel;
+    private ExportersViewModel _viewModel;
     public HtmlExportersPage(ExportersViewModel exportersViewModel)
-	{
+    {
         _viewModel = exportersViewModel;
         BindingContext = _viewModel;
         InitializeComponent();

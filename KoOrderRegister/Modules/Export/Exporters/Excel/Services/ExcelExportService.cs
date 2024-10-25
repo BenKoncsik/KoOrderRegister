@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
+using KORCore.Module.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace KoOrderRegister.Modules.Export.Types.Excel.Services
+namespace KoOrderRegister.Modules.Export.Exporters.Excel.Services
 {
     public class ExcelExportService : IExcelExportService
     {
