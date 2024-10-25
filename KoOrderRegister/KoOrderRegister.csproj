@@ -98,10 +98,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\KORCore\KORCore.csproj" />
 	</ItemGroup>
-	<ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
 		<ProjectReference Include="..\KORConnect\KORConnect.csproj" />
 	</ItemGroup>
-	
 	<!-- Icons -->
 	<ItemGroup>
 		<!-- App Icon -->

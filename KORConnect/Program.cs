@@ -1,3 +1,4 @@
+#if WINDOWS
 using System.Net.Sockets;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
@@ -6,21 +7,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
-
+#endif
 namespace KORConnect;
 public class Program
 {
-    private static IHost _webHost;
+    [STAThread]
     public static void Main(string[] args)
     {
-        /*var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
-
-        app.MapGet("/helloworld", () => "Hello World!");
-
-        app.Run();*/
-        //CreateAndRunWebHost(args, null);
     }
+#if WINDOWS
+    private static IHost _webHost;
+    
 
     public static int CreateAndRunWebHost(string[] args, int? port)
     {
@@ -93,4 +90,5 @@ public class Program
         }
         throw new Exception("No active Ethernet network adapters with an IPv4 address in the system!");
     }
+#endif
 }

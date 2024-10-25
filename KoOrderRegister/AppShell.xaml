@@ -84,7 +84,8 @@
         <ShellContent Title="{x:Static res:AppRes.RomteServerSettings}"
                       Icon="{AppThemeBinding Light='remote_server_light.png', Dark='remote_server_dark.png'}"
                       Route="RemoteServerPage"
-                      ContentTemplate="{DataTemplate remoteServer:RemoteServerPage}" />
+                      ContentTemplate="{DataTemplate remoteServer:RemoteServerPage}"
+                      IsVisible="{x:Static local:AppShell.IsWindows}" />
     </FlyoutItem>
     
     

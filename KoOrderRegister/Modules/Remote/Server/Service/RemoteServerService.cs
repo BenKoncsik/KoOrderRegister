@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,12 +13,13 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
     {
 
         private int _port = Preferences.Get("remoteServerPort", -1);
-        private readonly KORConnect.Program _server;
+        
         public bool IsEnable 
         { 
             get => Preferences.Get("remoteServer", false);
             set => Preferences.Set("remoteServer", value);
         }
+#if WINDOWS
         public async Task<bool> Start()
         {
             try
@@ -65,5 +67,48 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
                 await Start();
             }
         }
+#else
+        public async Task<bool> Start()
+        {
+            try
+            {
+                Preferences.Set("remoteServerPort", _port);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error start service: {ex}");
+                return false;
+            }
+
+        }
+
+        public async Task<bool> Stop()
+        {
+            try
+            {
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error stop service: {ex}");
+                return false;
+            }
+        }
+        public async Task<string> GetRemoteServerIP()
+        {
+            return $"localhost:{_port}";
+        }
+
+        public async Task<int> GetRemoteServerPort()
+        {
+            return _port;
+        }
+
+        public async void Init()
+        {
+            
+        }
+#endif
     }
 }
