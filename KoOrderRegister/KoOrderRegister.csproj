@@ -64,7 +64,7 @@
 		<Configuration>Release</Configuration>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 		<PublishReadyToRun>false</PublishReadyToRun>
-		<SelfContained>True</SelfContained>
+		<SelfContained>false</SelfContained>
 		<PublishAppxPackage>true</PublishAppxPackage>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
 		<Platforms>x64</Platforms>
@@ -94,7 +94,15 @@
 		<Optimize>true</Optimize>
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 	</PropertyGroup>
-
+	<!-- Projects -->
+	<ItemGroup>
+		<ProjectReference Include="..\KORCore\KORCore.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
+		<ProjectReference Include="..\KORConnect\KORConnect.csproj" />
+	</ItemGroup>
+	
+	<!-- Icons -->
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
@@ -365,10 +373,5 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\KORCore\KORCore.csproj" />
-	</ItemGroup>
-
 
 </Project>
