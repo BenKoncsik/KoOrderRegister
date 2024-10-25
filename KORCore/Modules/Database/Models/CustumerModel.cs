@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Models
+namespace KORCore.Modules.Database.Models
 {
     [Table("Customers")]
     public class CustomerModel
@@ -47,7 +47,7 @@ namespace KoOrderRegister.Modules.Database.Models
             Id = Guid.NewGuid().ToString();
         }
 
-        public CustomerModel(string name, string address, string phone, string email, string nhi): this()
+        public CustomerModel(string name, string address, string phone, string email, string nhi) : this()
         {
             Name = name;
             Address = address;
@@ -56,6 +56,6 @@ namespace KoOrderRegister.Modules.Database.Models
             NationalHealthInsurance = nhi;
         }
 
-        
+
     }
 }

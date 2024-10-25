@@ -1,5 +1,5 @@
 
-using KoOrderRegister.Modules.Export.Html.ViewModel;
+using KoOrderRegister.Modules.Export.Exporters.Html.View.ViewModel;
 using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Export.Html.Pages;

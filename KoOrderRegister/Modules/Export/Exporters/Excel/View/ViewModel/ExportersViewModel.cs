@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
 using KoOrderRegister.Modules.Export.Exporters.Services;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
-using KoOrderRegister.Modules.Export.Types.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System;
@@ -12,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KoOrderRegister.Modules.Export.Excel.ViewModel
+namespace KoOrderRegister.Modules.Export.Exporters.Excel.View.ViewModel
 {
     public class ExportersViewModel : BaseViewModel
     {
@@ -49,7 +48,7 @@ namespace KoOrderRegister.Modules.Export.Excel.ViewModel
             IsRefreshing = true;
             await new ExportService().ExportData(_exportService, IsCreateZip, ProgressCallback);
             IsRefreshing = false;
-        
+
         }
 
     }

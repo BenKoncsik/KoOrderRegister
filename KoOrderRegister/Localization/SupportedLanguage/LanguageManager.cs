@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Services;
+﻿using KoOrderRegister.Localization.SupportedLanguage.Language;
+using KoOrderRegister.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

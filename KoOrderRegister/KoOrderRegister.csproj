@@ -366,4 +366,9 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\KORCore\KORCore.csproj" />
+	</ItemGroup>
+
+
 </Project>

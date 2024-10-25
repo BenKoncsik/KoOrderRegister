@@ -3,7 +3,6 @@ using DocumentFormat.OpenXml.Presentation;
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;

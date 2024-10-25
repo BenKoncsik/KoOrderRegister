@@ -1,4 +1,4 @@
-﻿using KoOrderRegister.Utility;
+﻿using KORCore.Utility;
 using Newtonsoft.Json;
 using SQLite;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Models
+namespace KORCore.Modules.Database.Models
 {
     [Table("Orders")]
     public class OrderModel
@@ -34,7 +34,7 @@ namespace KoOrderRegister.Modules.Database.Models
         [Ignore]
         [JsonIgnore]
         public List<FileModel> Files { get; set; } = new List<FileModel>();
-      
+
         [JsonProperty("note")]
         public string Note { get; set; }
 
@@ -52,9 +52,9 @@ namespace KoOrderRegister.Modules.Database.Models
             Id = Guid.NewGuid().ToString();
         }
 
-        public OrderModel(string name): this()
+        public OrderModel(string name) : this()
         {
-          
+
         }
     }
 }

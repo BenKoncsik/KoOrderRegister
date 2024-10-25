@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
+using KORCore.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/* Unmerged change from project 'KoOrderRegister (net8.0-windows10.0.19041.0)'
+Added:
+using KoOrderRegister;
+using KoOrderRegister.Modules;
+using KoOrderRegister.Modules.Export;
+using KoOrderRegister.Modules.Export.Types;
+using KoOrderRegister.Modules.Export.Types.Excel;
+using KoOrderRegister.Modules.Export.Types.Excel.Services;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
+*/
 
-namespace KoOrderRegister.Modules.Export.Types.Excel.Services
+
+namespace KoOrderRegister.Modules.Export.Exporters.Excel.Services
 {
     public class ExcelExportService : IExcelExportService
     {

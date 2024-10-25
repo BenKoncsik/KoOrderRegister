@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 
-namespace KoOrderRegister.Platforms.Windows.Services
+namespace KoOrderRegister.Platforms.Windows.Serivces
 {
     public class VersionService : IVersionService
     {

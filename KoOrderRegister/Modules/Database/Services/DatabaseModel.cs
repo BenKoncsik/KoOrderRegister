@@ -1,11 +1,11 @@
-﻿using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Utility;
+﻿using KoOrderRegister.Utility;
 using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using SQLite;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
+using KORCore.Modules.Database.Models;
 
 namespace KoOrderRegister.Modules.Database.Services
 {

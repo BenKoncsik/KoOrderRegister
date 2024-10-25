@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
-using KoOrderRegister.Modules.Export.Types.Services;
 using KoOrderRegister.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KoOrderRegister.Modules.Export.Pdf.ViewModel
+namespace KoOrderRegister.Modules.Export.Exporters.Pdf.View.ViewModel
 {
     public class ExportersViewModel : BaseViewModel
     {

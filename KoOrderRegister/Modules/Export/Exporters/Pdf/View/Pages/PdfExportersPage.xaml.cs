@@ -1,5 +1,5 @@
 
-using KoOrderRegister.Modules.Export.Pdf.ViewModel;
+using KoOrderRegister.Modules.Export.Exporters.Pdf.View.ViewModel;
 using KoOrderRegister.Utility;
 
 namespace KoOrderRegister.Modules.Export.Pdf.Pages;

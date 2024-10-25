@@ -1,13 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <TargetFrameworks>net8.0;net8.0-android;net8.0-maccatalyst;net8.0-ios;net8.0-windows10.0.19041.0</TargetFrameworks>
     <!--<TargetFramework>net8.0</TargetFramework>-->
-	<TargetFrameworks>net8.0-android</TargetFrameworks>
+    <!--<TargetFrameworks>net8.0-android</TargetFrameworks>
 	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('maccatalyst'))">net8.0-maccatalyst</TargetFrameworks>
 	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('ios'))">net8.0-ios</TargetFrameworks>
-	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+  </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
-using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Services;
@@ -15,6 +14,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {

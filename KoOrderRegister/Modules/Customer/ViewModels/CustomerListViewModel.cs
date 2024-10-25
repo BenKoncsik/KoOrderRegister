@@ -1,6 +1,5 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Customer.Pages;
-using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
@@ -8,6 +7,7 @@ using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {

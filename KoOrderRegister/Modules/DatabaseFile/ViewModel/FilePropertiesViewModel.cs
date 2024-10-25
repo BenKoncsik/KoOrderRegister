@@ -1,5 +1,4 @@
 ﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.ViewModel;
 using Microsoft.Maui.Controls;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
 
 
 
