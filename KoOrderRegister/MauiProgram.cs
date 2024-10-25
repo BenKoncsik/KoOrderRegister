@@ -101,13 +101,10 @@ namespace KoOrderRegister
             });
             builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #if WINDOWS
-                builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Windows.Services.VersionService>();
+                builder.Services.AddSingleton<IVersionService, Platforms.Windows.Serivces.VersionService>();
 #elif ANDROID
-            builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Android.Services.VersionService>();
-            builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
-
-#else
-            builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
+            builder.Services.AddSingleton<IVersionService, Platforms.Android.Services.VersionService>();
+            builder.Services.AddSingleton<Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
 #endif
 
             #endregion
