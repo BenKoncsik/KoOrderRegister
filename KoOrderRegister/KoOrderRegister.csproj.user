@@ -67,7 +67,7 @@
     <MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Modules\Remote\Pages\RemotePage.xaml">
+    <MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">

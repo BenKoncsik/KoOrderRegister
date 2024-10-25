@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.Remote.Server.Pages.RemoteServerPage"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             Title="{x:Static res:AppRes.RomteServerSettings}">
+
+    <StackLayout>
+        <Label Text="{x:Static res:AppRes.RomteServerSettings}"
+               Margin="10, 0, 10,10"
+               FontSize="Large"
+               HorizontalOptions="Center" />
+        <VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label  Text="{x:Static res:AppRes.RemoteServerSwitchLabel}"
+                        Margin="10, 9, 10,10" />
+                <Switch IsToggled="{Binding IsRemoteServer}"
+                        Margin="10, 0, 10,10" />
+            </HorizontalStackLayout>
+            <StackLayout IsVisible="{Binding IsRemoteServer}">
+
+                <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                                 HorizontalOptions="Center">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="{x:Static res:AppRes.RemoteServerConnectionQrCodeLabel}" />
+                       <!-- <Image Source="{Binding RemoteServerQrCode}" />-->
+
+                        <cv:BarcodeImage Barcode="{Binding RemoteServerUrl}"
+                                         Aspect="AspectFit"
+                                         WidthRequest="400"
+                                         HeightRequest="400"
+                                         BarcodeWidth="390"
+                                         BarcodeHeight="390"
+                                         BarcodeMargin="5"
+                                         BarcodeBackground="White"
+                                         BarcodeForeground="Black"
+                                         BarcodeFormat="QR_CODE" />
+                    </VerticalStackLayout>
+                </RefreshView>
+            </StackLayout>
+        </VerticalStackLayout>
+    </StackLayout>
+</ContentPage>

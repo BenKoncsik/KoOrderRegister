@@ -486,4 +486,13 @@
   <data name="ClearAll" xml:space="preserve">
     <value>Összes törlése</value>
   </data>
+  <data name="RomteServerSettings" xml:space="preserve">
+    <value>Távoli hozzáférés beállítása</value>
+  </data>
+  <data name="RemoteServerSwitch" xml:space="preserve">
+    <value>Szerver be/ki kapcsolása:</value>
+  </data>
+  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
+    <value>Távoli hozzá férési kód:</value>
+  </data>
 </root>

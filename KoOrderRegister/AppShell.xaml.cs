@@ -2,6 +2,7 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
+using KoOrderRegister.Modules.Remote.Server.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
@@ -65,6 +66,7 @@ namespace KoOrderRegister
             #endregion
             #region Windows fuctions
             Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));
+            Routing.RegisterRoute(nameof(RemoteServerPage), typeof(RemoteServerPage));
 #if WINDOWS
             var notificationPage = serviceProvider.GetService<NotificationPages>();
             notificationPage.LoadData();

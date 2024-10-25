@@ -13,6 +13,7 @@
     xmlns:htmlExporter="clr-namespace:KoOrderRegister.Modules.Export.Html.Pages"
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
     xmlns:notification="clr-namespace:KoOrderRegister.Modules.Windows.Notification.Pages"
+    xmlns:remoteServer="clr-namespace:KoOrderRegister.Modules.Remote.Server.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
@@ -79,6 +80,11 @@
                       Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
                       Route="ExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
+
+        <ShellContent Title="{x:Static res:AppRes.RomteServerSettings}"
+                      Icon="{AppThemeBinding Light='remote_server_light.png', Dark='remote_server_dark.png'}"
+                      Route="RemoteServerPage"
+                      ContentTemplate="{DataTemplate remoteServer:RemoteServerPage}" />
     </FlyoutItem>
     
     

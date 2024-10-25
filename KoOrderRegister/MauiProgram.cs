@@ -21,6 +21,10 @@ using Plugin.LocalNotification.AndroidOption;
 using KoOrderRegister.ViewModel;
 using KoOrderRegister.Modules.Order.Services;
 using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
+using KoOrderRegister.Modules.Remote.Server.Service;
+using KoOrderRegister.Modules.Remote.Server.Pages;
+using KoOrderRegister.Modules.Remote.ViewModel;
+using Camera.MAUI;
 
 namespace KoOrderRegister
 {
@@ -33,6 +37,7 @@ namespace KoOrderRegister
                 .UseMauiApp<App>()
                 .ConfigureMopups()
                 .UseMauiCommunityToolkit()
+                .UseMauiCameraView()
                 .UseLocalNotification(config =>
                 {
                     config.AddAndroid(android =>
@@ -148,10 +153,29 @@ namespace KoOrderRegister
 #endif
             #endregion
 
+            #region Remote
+            #region Server
+#if WINDOWS
+           builder.Services.AddSingleton<IRemoteServerService, RemoteServerService>();
+           builder.Services.AddSingleton<RemoteServerViewModel>();
+           builder.Services.AddSingleton<RemoteServerPage>();
+           
+#endif
+            #endregion
+            #region Client
+
+            #endregion
+            #endregion
+            
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            return builder.Build();
+            var app = builder.Build();
+#if WINDOWS
+            var remoteService = app.Services.GetRequiredService<IRemoteServerService>();
+            remoteService.Init();
+#endif
+            return app;
         }
     }
 }

@@ -528,4 +528,13 @@
   <data name="ClearAll" xml:space="preserve">
     <value>Clear all</value>
   </data>
+  <data name="RomteServerSettings" xml:space="preserve">
+    <value>Romte Server Settings</value>
+  </data>
+  <data name="RemoteServerSwitchLabel" xml:space="preserve">
+    <value>Remote Server ON/OFF:</value>
+  </data>
+  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
+    <value>Remote server connection code:</value>
+  </data>
 </root>

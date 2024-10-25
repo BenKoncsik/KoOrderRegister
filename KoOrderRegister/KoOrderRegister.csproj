@@ -197,6 +197,10 @@
 		<None Remove="Resources\Images\play_light.svg" />
 		<None Remove="Resources\Images\qr_code_dark.svg" />
 		<None Remove="Resources\Images\qr_code_light.svg" />
+		<None Remove="Resources\Images\remote_client_dark.svg" />
+		<None Remove="Resources\Images\remote_client_light.svg" />
+		<None Remove="Resources\Images\remote_server_dark.svg" />
+		<None Remove="Resources\Images\remote_server_light.svg" />
 		<None Remove="Resources\Images\return_dark.svg" />
 		<None Remove="Resources\Images\return_light.svg" />
 		<None Remove="Resources\Images\save_dark.svg" />
@@ -252,6 +256,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CameraMaui" Version="1.4.9" />
 		<PackageReference Include="ClosedXML" Version="0.104.1" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
@@ -351,6 +356,9 @@
 		<MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -361,6 +369,9 @@
 
 	<ItemGroup>
 		<Folder Include="Modules\Export\Exporters\Pages\" />
+		<Folder Include="Modules\Remote\Client\Pages\" />
+		<Folder Include="Modules\Remote\Client\Service\" />
+		<Folder Include="Modules\Remote\Client\ViewModel\" />
 		<Folder Include="Modules\Settings\Services\" />
 		<Folder Include="Modules\Windows\Notification\Services\" />
 		<Folder Include="Platforms\Windows\Modules\" />
