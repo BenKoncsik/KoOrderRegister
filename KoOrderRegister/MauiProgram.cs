@@ -62,7 +62,7 @@ namespace KoOrderRegister
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             #region database
-            builder.Services.AddTransient<IDatabaseModel, DatabaseModel>();
+            builder.Services.AddSingleton<IDatabaseModel, DatabaseModel>();
             #endregion
 
             #region AppShell

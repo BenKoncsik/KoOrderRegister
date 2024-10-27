@@ -51,7 +51,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             SearchCommand = new Command<string>(Search);
 
 #if DEBUG
-            _database.OnDatabaseChange += TestReliTimeDatabase;
+            IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
 #endif
         }
 

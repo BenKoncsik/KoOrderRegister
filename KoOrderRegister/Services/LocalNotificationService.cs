@@ -39,7 +39,7 @@ namespace KoOrderRegister.Services
             obj,
             (key, existingVal) => obj);
             NotificationChanged?.Invoke(obj);
-            NotificationChangedStaic.Invoke();
+            NotificationChangedStaic?.Invoke();
         }
 
         private void Current_NotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs e)

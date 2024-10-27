@@ -28,7 +28,8 @@ namespace KoOrderRegister.Modules.Database.Services
             ThreadManager.Run(async () => await Init(), ThreadManager.Priority.High).Wait();
         }
 
-        public event Action<string, object> OnDatabaseChange;
+        public static event Action<string, object> OnDatabaseChange;
+       
         private async Task Init(bool force = false)
         {
             if (Database is not null && !force)

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoOrderRegister", "KoOrderRegister.csproj", "{08106511-96F4-4F23-B0FD-E32D5833FE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KORCore", "..\KORCore\KORCore.csproj", "{C4EC1E5C-F97D-4C61-8904-38FFCD0D0F82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KORCore", "..\KORCore\KORCore.csproj", "{C4EC1E5C-F97D-4C61-8904-38FFCD0D0F82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KORConnect", "..\KORConnect\KORConnect.csproj", "{8F620D0D-8284-4339-B735-910CF17ECDE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KORConnect", "..\KORConnect\KORConnect.csproj", "{8F620D0D-8284-4339-B735-910CF17ECDE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

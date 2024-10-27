@@ -1,4 +1,4 @@
-#if WINDOWS
+
 using System.Net.Sockets;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
-#endif
+using KORConnect.SinalR;
+
+
 namespace KORConnect;
 public class Program
 {
@@ -15,23 +17,25 @@ public class Program
     public static void Main(string[] args)
     {
     }
-#if WINDOWS
+
     private static IHost _webHost;
     
 
     public static int CreateAndRunWebHost(string[] args, int? port)
     {
+        
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddSignalR();
         string url = string.Empty;
 
         if (port.HasValue)
         {
-            url = $"http://{GetLocalIPAddress}:{port.Value}";
+            url = $"http://{GetLocalIPAddress()}:{port.Value}";
         }
         else
         {
             int freePort = GetFreePort();
-            url = $"http://{GetLocalIPAddress}:{freePort}";
+            url = $"http://{GetLocalIPAddress()}:{freePort}";
             port = freePort;
         }
         Debug.WriteLine($"URL: {url}");
@@ -39,9 +43,18 @@ public class Program
 
         WebApplication app = builder.Build();
 
-        app.MapGet("/helloworld", () => "Hello World!");
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            /*endpoints.MapControllers();
+            endpoints.MapRazorPages();*/
+            app.MapGet("/helloworld", () => "Hello World!");
+            app.MapGet("/", () => "King of Koncsik");
+            app.MapHub<DatabaseConnaction>("/databaseHub");
+        });
 
-        if(app != null)
+        if (app != null)
         {
             _webHost = app as IHost;
             _webHost.Start();
@@ -90,5 +103,5 @@ public class Program
         }
         throw new Exception("No active Ethernet network adapters with an IPv4 address in the system!");
     }
-#endif
+
 }
