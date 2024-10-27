@@ -1,6 +1,7 @@
 ﻿using Camera.MAUI;
 using KoOrderRegister.Modules.Remote.Server.Service;
 using KoOrderRegister.ViewModel;
+using KORCore.Modules.Remote.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +17,6 @@ namespace KoOrderRegister.Modules.Remote.ViewModel
         private readonly IRemoteServerService _remoteServerService;
         #endregion
         #region Binding varribles
-        //private bool _isRemoteServer => _remoteServerService.IsEnable;
         public bool IsRemoteServer
         {
             get => _remoteServerService.IsEnable;
@@ -31,20 +31,20 @@ namespace KoOrderRegister.Modules.Remote.ViewModel
                 }
             }
         }
-        public ImageSource RemoteServerQrCode => IsRemoteServer ? "remote_server_on" : "remote_server_off";
-        public string _remoteServerUrl { get; set; }
-        public string RemoteServerUrl
+        public string _connectionString { get; set; }
+        public string ConnectionString
         {
-            get => _remoteServerUrl;
+            get => _connectionString;
             set
             {
-                if (value != _remoteServerUrl)
+                if (value != _connectionString)
                 {
-                    _remoteServerUrl = value;
-                    OnPropertyChanged(nameof(RemoteServerUrl));
+                    _connectionString = value;
+                    OnPropertyChanged(nameof(ConnectionString));
                 }
             }
         }
+     
         #endregion
         #region Commands
 
@@ -84,10 +84,10 @@ namespace KoOrderRegister.Modules.Remote.ViewModel
         private async Task CreateImage()
         {
             IsRefreshing = true;
-            string url = await _remoteServerService.GetRemoteServerIP();
+            string url = _remoteServerService.ConnectionData().ToBase64();
             Debug.WriteLine($"Url: {url}");
             if (string.IsNullOrEmpty(url)) return;
-            RemoteServerUrl = url;
+            ConnectionString = url;
             IsRefreshing = false;
         }
 

@@ -159,7 +159,6 @@ namespace KoOrderRegister
            builder.Services.AddSingleton<IRemoteServerService, RemoteServerService>();
            builder.Services.AddSingleton<RemoteServerViewModel>();
            builder.Services.AddSingleton<RemoteServerPage>();
-           
 #endif
             #endregion
             #region Client

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KORCore.Modules.Remote.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,10 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
     {
         Task<bool> Start();
         Task<bool> Stop();
-        Task<int> GetRemoteServerPort();
-        Task<string> GetRemoteServerIP();
+        int GetRemoteServerPort();
+        string GetRemoteServerIP();
+        ConnectionData ConnectionData();
+        
         void Init();
         bool IsEnable { get; set; }
     }

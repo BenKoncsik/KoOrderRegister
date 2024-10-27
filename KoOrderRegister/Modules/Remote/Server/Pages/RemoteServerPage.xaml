@@ -24,9 +24,7 @@
                                  HorizontalOptions="Center">
                     <VerticalStackLayout HorizontalOptions="Center">
                         <Label Text="{x:Static res:AppRes.RemoteServerConnectionQrCodeLabel}" />
-                       <!-- <Image Source="{Binding RemoteServerQrCode}" />-->
-
-                        <cv:BarcodeImage Barcode="{Binding RemoteServerUrl}"
+                        <cv:BarcodeImage Barcode="{Binding ConnectionString}"
                                          Aspect="AspectFit"
                                          WidthRequest="400"
                                          HeightRequest="400"
@@ -36,6 +34,7 @@
                                          BarcodeBackground="White"
                                          BarcodeForeground="Black"
                                          BarcodeFormat="QR_CODE" />
+                        <Entry Text="{Binding ConnectionString}"/>
                     </VerticalStackLayout>
                 </RefreshView>
             </StackLayout>

@@ -1,4 +1,5 @@
 ﻿
+using KORCore.Modules.Remote.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,13 +14,14 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
     {
 
         private int _port = Preferences.Get("remoteServerPort", -1);
-        
+        private string _private_key = Preferences.Get("private_key", GenerateRandomString(10));
+
+
         public bool IsEnable 
         { 
             get => Preferences.Get("remoteServer", false);
             set => Preferences.Set("remoteServer", value);
         }
-#if WINDOWS
         public async Task<bool> Start()
         {
             try
@@ -50,12 +52,12 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
                 return false;
             }
         }
-        public async Task<string> GetRemoteServerIP()
+        public string GetRemoteServerIP()
         {
             return $"{KORConnect.Program.GetLocalIPAddress()}:{_port}";
         }
 
-        public async Task<int> GetRemoteServerPort()
+        public int GetRemoteServerPort()
         {
             return _port;
         }
@@ -67,48 +69,23 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
                 await Start();
             }
         }
-#else
-        public async Task<bool> Start()
+        public ConnectionData ConnectionData()
         {
-            try
+            return new ConnectionData()
             {
-                Preferences.Set("remoteServerPort", _port);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error start service: {ex}");
-                return false;
-            }
-
+                Url = GetRemoteServerIP(),
+                ServerKey = _private_key,
+                Version = AppShell.AppVersion
+            };
         }
 
-        public async Task<bool> Stop()
+        private static string GenerateRandomString(int length)
         {
-            try
-            {
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error stop service: {ex}");
-                return false;
-            }
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+                                        .Select(s => s[random.Next(s.Length)])
+                                        .ToArray());
         }
-        public async Task<string> GetRemoteServerIP()
-        {
-            return $"localhost:{_port}";
-        }
-
-        public async Task<int> GetRemoteServerPort()
-        {
-            return _port;
-        }
-
-        public async void Init()
-        {
-            
-        }
-#endif
     }
 }
