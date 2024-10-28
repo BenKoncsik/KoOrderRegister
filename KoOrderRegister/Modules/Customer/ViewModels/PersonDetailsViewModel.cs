@@ -1,9 +1,9 @@
 ﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System.Windows.Input;
 using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {

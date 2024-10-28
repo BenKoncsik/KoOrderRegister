@@ -8,6 +8,7 @@ using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
+using KORCore.Utility;
 using Microsoft.VisualBasic;
 using Plugin.LocalNotification;
 using System.ComponentModel;

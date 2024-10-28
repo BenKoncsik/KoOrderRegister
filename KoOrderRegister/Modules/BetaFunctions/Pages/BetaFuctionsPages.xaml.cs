@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 using System.Diagnostics;
 
 namespace KoOrderRegister.Modules.BetaFunctions.Pages;

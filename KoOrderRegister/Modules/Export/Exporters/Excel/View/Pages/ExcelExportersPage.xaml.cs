@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Export.Exporters.Excel.View.ViewModel;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Export.Excel.Pages;
 

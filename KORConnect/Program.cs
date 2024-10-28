@@ -1,4 +1,4 @@
-
+using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +8,8 @@ using Microsoft.AspNetCore;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using KORConnect.SinalR;
+using KORCore.Modules.Database.Services;
+using KORConnect.Controllers;
 
 
 namespace KORConnect;
@@ -23,9 +25,6 @@ public class Program
 
     public static int CreateAndRunWebHost(string[] args, int? port)
     {
-        
-        var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddSignalR();
         string url = string.Empty;
 
         if (port.HasValue)
@@ -39,23 +38,33 @@ public class Program
             port = freePort;
         }
         Debug.WriteLine($"URL: {url}");
+
+        var builder = WebApplication.CreateBuilder(args);
+        
+        builder.Services.AddScoped<IDatabaseModel, DatabaseModel>();
+        builder.Services.AddSignalR();
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        
         builder.WebHost.UseUrls(url);
 
-        WebApplication app = builder.Build();
+        var app = builder.Build();
 
-        app.UseStaticFiles();
-        app.UseRouting();
-        app.UseEndpoints(endpoints =>
+        if (app.Environment.IsDevelopment())
         {
-            /*endpoints.MapControllers();
-            endpoints.MapRazorPages();*/
-            app.MapGet("/helloworld", () => "Hello World!");
-            app.MapGet("/", () => "King of Koncsik");
-            app.MapHub<DatabaseConnaction>("/databaseHub");
-        });
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+        app.MapGet("/helloworld", () => "Hello World!");
+        app.MapGet("/", () => "King of Koncsik");
 
         if (app != null)
         {
+            
             _webHost = app as IHost;
             _webHost.Start();
             return port.Value;

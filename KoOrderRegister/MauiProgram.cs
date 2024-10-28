@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Customer.ViewModels;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
@@ -25,6 +24,7 @@ using KoOrderRegister.Modules.Remote.Server.Service;
 using KoOrderRegister.Modules.Remote.Server.Pages;
 using KoOrderRegister.Modules.Remote.ViewModel;
 using Camera.MAUI;
+using KORCore.Modules.Database.Services;
 
 namespace KoOrderRegister
 {

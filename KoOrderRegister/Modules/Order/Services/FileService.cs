@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using KORCore.Modules.Database.Models;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Order.Services
 {

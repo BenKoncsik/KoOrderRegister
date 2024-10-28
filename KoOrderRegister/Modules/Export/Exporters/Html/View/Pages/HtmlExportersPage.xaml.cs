@@ -1,6 +1,7 @@
 
 using KoOrderRegister.Modules.Export.Exporters.Html.View.ViewModel;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Export.Html.Pages;
 

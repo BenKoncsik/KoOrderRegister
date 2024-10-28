@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using KoOrderRegister.Modules.Database.Services;
 using KORCore.Modules.Remote.Model;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using KORCore.Modules.Database.Utility;
 using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
 
 
 namespace KoOrderRegister.Modules.Remote.Server.Service
@@ -42,10 +42,10 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
                 KORConnect.Program.Main(new string[0]);
                 _port = KORConnect.Program.CreateAndRunWebHost(new string[0], (_port == -1)? null : _port);
                 Preferences.Set("remoteServerPort", _port);
-                _hubConnection = new HubConnectionBuilder()
+              /*  _hubConnection = new HubConnectionBuilder()
                     .WithUrl(GetRemoteServerIP() + "/databaseHub")
                     .Build();
-                IDatabaseModel.OnDatabaseChange += OnDatabaseChange;
+                IDatabaseModel.OnDatabaseChange += OnDatabaseChange;*/
                 return true;
             }
             catch(Exception ex)

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
@@ -19,6 +18,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using KoOrderRegister.Modules.Order.Services;
 using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {

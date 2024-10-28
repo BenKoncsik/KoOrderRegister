@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Services
+namespace KORCore.Modules.Database.Services
 {
     public interface IDatabaseModel
     {
         #region RealTime changes
         static event Action<string, object> OnDatabaseChange;
+        static void InVokeOnDatabaseChange(string name, object data)
+        {
+            OnDatabaseChange?.Invoke(name, data);
+        }
         #endregion
         #region CustomerModel CRUD Operations
         Task<int> CreateCustomer(CustomerModel customer);

@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Settings.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Settings.Pages;
 
