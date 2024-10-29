@@ -14,6 +14,7 @@
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
     xmlns:notification="clr-namespace:KoOrderRegister.Modules.Windows.Notification.Pages"
     xmlns:remoteServer="clr-namespace:KoOrderRegister.Modules.Remote.Server.Pages"
+    xmlns:clientConnection="clr-namespace:KoOrderRegister.Modules.Remote.Client.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
@@ -73,12 +74,12 @@
 
         <ShellContent Title="{x:Static res:AppRes.PdfExporter}"
                       Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
-                      Route="ExportersPage"
+                      Route="PdfExportersPage"
                       ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
 
         <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
                       Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
-                      Route="ExportersPage"
+                      Route="HtmlExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
 
         <ShellContent Title="{x:Static res:AppRes.RomteServerSettings}"
@@ -86,6 +87,12 @@
                       Route="RemoteServerPage"
                       ContentTemplate="{DataTemplate remoteServer:RemoteServerPage}"
                       IsVisible="{x:Static local:AppShell.IsWindows}" />
+
+        <ShellContent Title="{x:Static res:AppRes.ClientConnectionSettings}"
+                      Icon="{AppThemeBinding Light='remote_client_light.png', Dark='remote_client_dark.png'}"
+                      Route="ClientConnectionPage"
+                      ContentTemplate="{DataTemplate clientConnection:ClientConnectionPage}"
+                       />
     </FlyoutItem>
     
     

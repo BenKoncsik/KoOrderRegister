@@ -25,6 +25,10 @@ using KoOrderRegister.Modules.Remote.Server.Pages;
 using KoOrderRegister.Modules.Remote.ViewModel;
 using Camera.MAUI;
 using KORCore.Modules.Database.Services;
+using KoOrderRegister.Modules.Remote.Client.ViewModel;
+using KoOrderRegister.Modules.Remote.Client.Pages;
+using KoOrderRegister.Modules.Remote.Client.Service;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister
 {
@@ -61,8 +65,17 @@ namespace KoOrderRegister
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+           
+
             #region database
-            builder.Services.AddSingleton<IDatabaseModel, DatabaseModel>();
+            builder.Services.AddTransient<DatabaseModel>();
+            builder.Services.AddHttpClient("kor_connection_client", client =>
+            {
+
+            });
+            builder.Services.AddTransient<RemoteDatabaseModel>();
+            builder.Services.AddSingleton<IDatabaseModelFactory, DatabaseModelFactory>();
             #endregion
 
             #region AppShell
@@ -79,7 +92,7 @@ namespace KoOrderRegister
             builder.Services.AddTransient<OrderDetailsPage>();
             builder.Services.AddTransient<OrderDetailViewModel>();
 
-            builder.Services.AddSingleton<IFileService, FileService>();
+            builder.Services.AddTransient<IFileService, FileService>();
 
             #endregion
 
@@ -96,10 +109,10 @@ namespace KoOrderRegister
 
             #region Settings Modul
             builder.Services.AddTransient<SettingsPage>();
-            builder.Services.AddSingleton<SettingsViewModel>();
+            builder.Services.AddTransient<SettingsViewModel>();
             #endregion
 
-            #region Update
+            #region Update Modul
             builder.Services.AddHttpClient("GitHubClient", client =>
             {
 
@@ -120,24 +133,24 @@ namespace KoOrderRegister
             #endregion
 
             #region Export Modul
-            builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
+            builder.Services.AddSingleton<IExcelExportService, ExcelExportService>();
             //excel
             builder.Services.AddTransient<Modules.Export.Excel.Pages.ExcelExportersPage>();
-            builder.Services.AddSingleton<Modules.Export.Exporters.Excel.View.ViewModel.ExportersViewModel>();
+            builder.Services.AddTransient<Modules.Export.Exporters.Excel.View.ViewModel.ExportersViewModel>();
             //pdf
             builder.Services.AddTransient<Modules.Export.Pdf.Pages.PdfExportersPage>();
-            builder.Services.AddSingleton< Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel >();
+            builder.Services.AddTransient< Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel >();
             //html
             builder.Services.AddTransient<Modules.Export.Html.Pages.HtmlExportersPage>();
-            builder.Services.AddSingleton< Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel >();
+            builder.Services.AddTransient< Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel >();
             #endregion
 
-            #region Beta function modul
+            #region Beta function Modul
             builder.Services.AddTransient<BetaFunctionsPages>();
-            builder.Services.AddSingleton<BetaFunctionsViewModel>();
+            builder.Services.AddTransient<BetaFunctionsViewModel>();
             #endregion
 
-            #region Language settings
+            #region Language settings Modul
             ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
             languageSettings.SetRegioSpecification();
             CultureInfo culture = new CultureInfo(languageSettings.GetCultureName());
@@ -145,27 +158,29 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
 
-            #region Notification
+            #region Notification Modul
             builder.Services.AddSingleton<ILocalNotificationService, LocalNotificationService>();
 #if WINDOWS
             builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
             builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.ViewModel.NotificationViewModel>();            
 #endif
-            #endregion
+            #endregion 
 
-            #region Remote
+            #region Remote Modul
             #region Server
 #if WINDOWS
            builder.Services.AddSingleton<IRemoteServerService, RemoteServerService>();
-           builder.Services.AddSingleton<RemoteServerViewModel>();
-           builder.Services.AddSingleton<RemoteServerPage>();
+           builder.Services.AddTransient<RemoteServerViewModel>();
+           builder.Services.AddTransient<RemoteServerPage>();
 #endif
             #endregion
             #region Client
+            builder.Services.AddSingleton<IRemoteClientService, RemoteClientService>();
+            builder.Services.AddTransient<ClientConnectionViewModel>();
+            builder.Services.AddTransient<ClientConnectionPage>();
+            #endregion
+            #endregion
 
-            #endregion
-            #endregion
-            
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

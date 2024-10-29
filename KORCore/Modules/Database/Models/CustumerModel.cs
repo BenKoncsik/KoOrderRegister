@@ -33,7 +33,7 @@ namespace KORCore.Modules.Database.Models
         [JsonProperty("note")]
         public string Note { get; set; } = string.Empty;
 
-        [JsonProperty("nationalHealthInsurance")]
+        [JsonProperty("national_health_insurance")]
         [DefaultValue("unknown")]
         public string NationalHealthInsurance { get; set; }
         [Ignore]

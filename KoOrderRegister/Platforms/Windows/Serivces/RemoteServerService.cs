@@ -25,7 +25,7 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
         private string _private_key = Preferences.Get("private_key", GenerateRandomString(10));
         private HubConnection _hubConnection;
         
-        public RemoteServerService(IDatabaseModel databaseModel)
+        public RemoteServerService(DatabaseModel databaseModel)
         {
             _databaseModel = databaseModel; 
         }

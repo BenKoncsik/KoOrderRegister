@@ -1,23 +1,24 @@
 ﻿using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Utility;
+using KORCore.Modules.Remote.Utility;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+using System.Diagnostics;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KORCore.Modules.Database.Services
 {
     public class RemoteDatabaseModel: IDatabaseModel 
     {
-        private static readonly string ApiBaseUrl = "http://localhost:5000/api";
+        private static string ApiBaseUrl = "http://localhost:5000/api";
         private readonly HttpClient _httpClient;
-        public RemoteDatabaseModel(HttpClient httpClient)
+        public RemoteDatabaseModel(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient("kor_connection_client");
+        }
+        
+        public static void SetUrl(string url)
+        {
+            ApiBaseUrl = url + "/api";
         }
 
         public static event Action<string, object> OnDatabaseChange;
@@ -30,35 +31,31 @@ namespace KORCore.Modules.Database.Services
         #region CustomerModel CRUD Implementation
         public async Task<int> CreateCustomer(CustomerModel customer)
         {
-            try
+            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/customer", customer);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/customer", customer);
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to create customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error creating customer: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
+            return 1;
         }
 
         public async Task<CustomerModel> GetCustomerById(Guid id)
         {
-            try
+           
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/{id}");
-                response.EnsureSuccessStatusCode();
-                var customer = await response.Content.ReadFromJsonAsync<CustomerModel>();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
-                return customer;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new CustomerModel();
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error retrieving customer with ID {id}: {e.Message}", e);
-            }
+            var customer = await response.Content.ReadFromJsonAsyncNewtonsoft<CustomerModel>();
+            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
+            return customer;
+            
         }
 
         public async Task<List<CustomerModel>> GetAllCustomers(int page = int.MinValue)
@@ -66,8 +63,13 @@ namespace KORCore.Modules.Database.Services
             try
             {
                 var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer");
-                response.EnsureSuccessStatusCode();
-                var customers = await response.Content.ReadFromJsonAsync<List<CustomerModel>>();
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Failed to get all customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                    return new List<CustomerModel>();
+                }
+                var customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
                 InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
@@ -104,44 +106,43 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> UpdateCustomer(CustomerModel customer)
         {
-            var response = await _httpClient.PutAsJsonAsync($"{ApiBaseUrl}/customer", customer);
-            response.EnsureSuccessStatusCode();
+            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/customer", customer);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to update customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
+            }
             InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
-            return await Task.FromResult(1);
+            return 1;
         }
 
         public async Task<int> DeleteCustomer(Guid id)
         {
-            try
+            var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/customer/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/customer/{id}");
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, id);
-                return await Task.FromResult(1);
-            } 
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error retrieving all customers: " + e.Message, e);
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-    
+            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, id);
+            return 1;
         }
 
         public async Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue)
         {
-            try
+
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/search?search={search}&page={page}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/search?search={search}&page={page}");
-                response.EnsureSuccessStatusCode();
-                List<CustomerModel> customers = await response.Content.ReadFromJsonAsync<List<CustomerModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
-                return await Task.FromResult(customers);
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new List<CustomerModel>();
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error retrieving all customers: " + e.Message, e);
-            }
+            List<CustomerModel> customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
+            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
+            return customers;
         }
 
         public async IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, CancellationToken cancellationToken)
@@ -169,19 +170,16 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> CountCustomers()
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/count");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/count");
-                response.EnsureSuccessStatusCode();
-                int count = await response.Content.ReadFromJsonAsync<int>();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
-                return await Task.FromResult(count);
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error retrieving all customers: " + e.Message, e);
-            }
+            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
+            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
+            return count;
 
         }
         #endregion
@@ -189,52 +187,44 @@ namespace KORCore.Modules.Database.Services
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
         {
-            try
+            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order", order);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/order", order);
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error creating order: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
+            return 1;
         }
 
         public async Task<OrderModel> GetOrderById(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/{id}");
-                response.EnsureSuccessStatusCode();
-                var order = await response.Content.ReadFromJsonAsync<OrderModel>();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
-                return order;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new OrderModel();
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error retrieving order with ID {id}: {e.Message}", e);
-            }
+            var order = await response.Content.ReadFromJsonAsyncNewtonsoft<OrderModel>();
+            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
+            return order;
+           
         }
 
         public async Task<List<OrderModel>> GetAllOrders(int page = int.MinValue)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order");
-                response.EnsureSuccessStatusCode();
-                var orders = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
-                return orders;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new List<OrderModel>();
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error retrieving all orders: " + e.Message, e);
-            }
+            var orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
+            InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
+            return orders;
         }
 
         public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream(CancellationToken cancellationToken)
@@ -262,26 +252,28 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> UpdateOrder(OrderModel order)
         {
-            try
+            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order", order);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PutAsJsonAsync($"{ApiBaseUrl}/order", order);
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to update order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error updating order: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
+            return 1;
         }
 
         public async Task<int> DeleteOrder(Guid id)
         {
             var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/order/{id}");
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to delete order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
+            }
             InVokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, id);
-            return await Task.FromResult(1);
+            return 1;
         }
 
         public async Task<List<OrderModel>> SearchOrders(string search, int page = int.MinValue)
@@ -289,8 +281,13 @@ namespace KORCore.Modules.Database.Services
             try
             {
                 var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/search?search={search}&page={page}");
-                response.EnsureSuccessStatusCode();
-                List<OrderModel> orders = await response.Content.ReadFromJsonAsync<List<OrderModel>>();
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Failed to get orders. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                    return new List<OrderModel>();
+                }
+                List<OrderModel> orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
                 InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
                 return await Task.FromResult(orders);
             }
@@ -327,68 +324,60 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> CountOrders()
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/count");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/count");
-                response.EnsureSuccessStatusCode();
-                int count = await response.Content.ReadFromJsonAsync<int>();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
-                return count;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to count order. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error counting orders: " + e.Message, e);
-            }
+            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
+            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
+            return count;  
         }
         #endregion
 
         #region FileModel CRUD Implementation
         public async Task<int> CreateFile(FileModel file)
         {
-            try
+            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/file", file);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/file", file);
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to cretae file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error creating file: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
+            return 1;
         }
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/{id}");
-                response.EnsureSuccessStatusCode();
-                var file = await response.Content.ReadFromJsonAsync<FileModel>();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
-                return file;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new FileModel();
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error retrieving file with ID {id}: {e.Message}", e);
-            }
+            var file = await response.Content.ReadFromJsonAsyncNewtonsoft<FileModel>();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
+            return file;
+     
         }
 
         public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}");
-                response.EnsureSuccessStatusCode();
-                var files = await response.Content.ReadFromJsonAsync<List<FileModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-                return files;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get all file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new List<FileModel>();
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error retrieving files for order ID {id}: {e.Message}", e);
-            }
+            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            return files;
         }
 
         public async IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid id, CancellationToken cancellationToken)
@@ -417,18 +406,16 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}/withoutcontent");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}/withoutcontent");
-                response.EnsureSuccessStatusCode();
-                var files = await response.Content.ReadFromJsonAsync<List<FileModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-                return files;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get files without content. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new List<FileModel>();
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error retrieving files without content for order ID {id}: {e.Message}", e);
-            }
+            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            return files;
         }
 
         public async IAsyncEnumerable<FileModel> GetFilesByOrderIdWithOutContentAsStream(Guid id, CancellationToken cancellationToken)
@@ -457,18 +444,16 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<List<FileModel>> GetAllFiles()
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file");
-                response.EnsureSuccessStatusCode();
-                var files = await response.Content.ReadFromJsonAsync<List<FileModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-                return files;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get all file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return new List<FileModel>();
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException("Error retrieving all files: " + e.Message, e);
-            }
+            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            return files;
         }
 
         public async IAsyncEnumerable<FileModel> GetAllFilesAsStream(CancellationToken cancellationToken)
@@ -496,64 +481,56 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> UpdateFile(FileModel file)
         {
-            try
+            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/file", file);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PutAsJsonAsync($"{ApiBaseUrl}/file", file);
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to update file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error updating file: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
+            return 1;
         }
 
         public async Task<int> DeleteFile(Guid id)
         {
-            try
+            var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/file/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/file/{id}");
-                response.EnsureSuccessStatusCode();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, id);
-                return 1;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to delete file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error deleting file with ID {id}: {e.Message}", e);
-            }
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, id);
+            return 1;
         }
 
         public async Task<string> GetFileContentSize(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/content/size/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/content/size/{id}");
-                response.EnsureSuccessStatusCode();
-                string size = await response.Content.ReadAsStringAsync();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, size);
-                return size;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to get count size file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return string.Empty;
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException($"Error getting content size of file with ID {id}: {e.Message}", e);
-            }
+            string size = await response.Content.ReadAsStringAsync();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, size);
+            return size;
         }
 
         public async Task<int> CountFiles()
         {
-            try
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/count");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/count");
-                response.EnsureSuccessStatusCode();
-                int count = await response.Content.ReadFromJsonAsync<int>();
-                InVokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT_CHANGED, count);
-                return count;
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Failed to count file. StatusCode: {response.StatusCode}, Content: {errorContent}");
+                return 0;
             }
-            catch (HttpRequestException e)
-            {
-                throw new ApplicationException("Error counting files: " + e.Message, e);
-            }
+            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
+            InVokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT_CHANGED, count);
+            return count;
         }
         #endregion
 

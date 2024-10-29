@@ -22,6 +22,16 @@ namespace KoOrderRegister.Services
         event Action<NotificationActionArgs> NotificationReceived;
         event Action<NotificationChangedArgs> NotificationChanged;
         event Action<NotificationClearedArgs> NotificationCleared;
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="categoryType"></param>
+        /// <param name="androidOptions"></param>
+        /// <param name="iosOption"></param>
+        /// <param name="windowsOptions"></param>
+        /// <returns>notification id</returns>
         int SendNotification(string title, string message, NotificationCategoryType categoryType = NotificationCategoryType.None, AndroidOptions androidOptions = null, iOSOptions iosOption = null, WindowsOptions windowsOptions = null);
         void UpdateNotification(int id, string title, string message, NotificationCategoryType categoryType = NotificationCategoryType.None, AndroidOptions androidOptions = null, iOSOptions iosOption = null, WindowsOptions windowsOptions = null);
         void DeleteNotification(int id);

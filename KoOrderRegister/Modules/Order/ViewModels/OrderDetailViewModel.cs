@@ -20,6 +20,7 @@ using KoOrderRegister.Modules.Order.Services;
 using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Services;
 using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {
@@ -148,9 +149,9 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public Command<FileModel> EditFileCommand => new Command<FileModel>(EditFile);
         public ICommand UpdateFilesCommand => new Command(UpdateFiles);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public OrderDetailViewModel(IDatabaseModelFactory database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _database = database.Get();
             _fileService = fileService;
             _filePropertiesPopup = filePropertiesPopup;
         }

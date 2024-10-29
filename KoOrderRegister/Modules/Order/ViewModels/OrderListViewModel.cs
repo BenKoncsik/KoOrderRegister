@@ -16,6 +16,7 @@ using System.Windows.Input;
 using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Services;
 using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {
@@ -40,9 +41,9 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand SearchCommand { get; }
         #endregion
 
-        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public OrderListViewModel(IDatabaseModelFactory database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _database = database.Get();
             _orderDetailsPage = orderDetailsPage;
 
             AddNewOrderCommand = new Command(NewOrder);

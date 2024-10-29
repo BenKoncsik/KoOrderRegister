@@ -214,6 +214,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client connection settings.
+        /// </summary>
+        internal static string ClientConnectionSettings {
+            get {
+                return ResourceManager.GetString("ClientConnectionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -228,6 +237,24 @@ namespace KoOrderRegister.Localization {
         internal static string CloseAdvancedDetails {
             get {
                 return ResourceManager.GetString("CloseAdvancedDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        internal static string Connection {
+            get {
+                return ResourceManager.GetString("Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection string.
+        /// </summary>
+        internal static string ConnectionString {
+            get {
+                return ResourceManager.GetString("ConnectionString", resourceCulture);
             }
         }
         
@@ -426,6 +453,15 @@ namespace KoOrderRegister.Localization {
         internal static string Exporter {
             get {
                 return ResourceManager.GetString("Exporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed.
+        /// </summary>
+        internal static string Failed {
+            get {
+                return ResourceManager.GetString("Failed", resourceCulture);
             }
         }
         
@@ -813,6 +849,15 @@ namespace KoOrderRegister.Localization {
         internal static string RemoteServerConnectionQrCodeLabel {
             get {
                 return ResourceManager.GetString("RemoteServerConnectionQrCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string RemoteServerSwitch {
+            get {
+                return ResourceManager.GetString("RemoteServerSwitch", resourceCulture);
             }
         }
         

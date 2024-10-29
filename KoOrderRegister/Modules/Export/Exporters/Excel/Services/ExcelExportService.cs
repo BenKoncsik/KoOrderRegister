@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KORCore.Modules.Database.Services;
+using KORCore.Modules.Database.Factory;
 
 
 
@@ -23,9 +24,9 @@ namespace KoOrderRegister.Modules.Export.Exporters.Excel.Services
         private bool _isExporting = false;
 
         private ProgressState progressState;
-        public ExcelExportService(IDatabaseModel databaseModel)
+        public ExcelExportService(IDatabaseModelFactory databaseModel)
         {
-            _databaseModel = databaseModel;
+            _databaseModel = databaseModel.Get();
 
         }
         public async Task Export(string outputPath, CancellationToken cancellationToken, Action<float> progressCallback = null)

@@ -4,6 +4,7 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
+using KORCore.Modules.Database.Factory;
 using KORCore.Modules.Database.Services;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
@@ -32,11 +33,11 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
         public ICommand NotificationCommand => new Command(NotificationTest);
         #endregion
 
-        public BetaFunctionsViewModel(IExcelExportService exportService, ILocalNotificationService notificationService, IDatabaseModel databaseModel)
+        public BetaFunctionsViewModel(IExcelExportService exportService, ILocalNotificationService notificationService, IDatabaseModelFactory databaseModel)
         {
             _exportService = exportService;
             _notifyService = notificationService;
-            _database = databaseModel;
+            _database = databaseModel.Get();
             _notifyService.NotificationReceived += OnNotificationReceived;
             IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
         }

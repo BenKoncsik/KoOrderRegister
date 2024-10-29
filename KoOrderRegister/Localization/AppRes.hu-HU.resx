@@ -489,10 +489,22 @@
   <data name="RomteServerSettings" xml:space="preserve">
     <value>Távoli hozzáférés beállítása</value>
   </data>
+  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
+    <value>Távoli hozzá férési kód:</value>
+  </data>
   <data name="RemoteServerSwitch" xml:space="preserve">
     <value>Szerver be/ki kapcsolása:</value>
   </data>
-  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
-    <value>Távoli hozzá férési kód:</value>
+  <data name="ClientConnectionSettings" xml:space="preserve">
+    <value>Kliens beállítások</value>
+  </data>
+  <data name="ConnectionString" xml:space="preserve">
+    <value>Cstalakozási kód</value>
+  </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Kapcsolódás</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Hiba</value>
   </data>
 </root>

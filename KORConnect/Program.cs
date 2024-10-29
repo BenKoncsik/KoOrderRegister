@@ -10,6 +10,7 @@ using System.Net.NetworkInformation;
 using KORConnect.SinalR;
 using KORCore.Modules.Database.Services;
 using KORConnect.Controllers;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 
 namespace KORConnect;
@@ -43,10 +44,16 @@ public class Program
         
         builder.Services.AddScoped<IDatabaseModel, DatabaseModel>();
         builder.Services.AddSignalR();
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson();
+        //builder.Services.AddRazorPages();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        
+
+        builder.Services.AddControllers().AddApplicationPart(typeof(CustomerController).Assembly);
+        builder.Services.AddControllers().AddApplicationPart(typeof(DatabaseContreller).Assembly);
+        builder.Services.AddControllers().AddApplicationPart(typeof(FileController).Assembly);
+        builder.Services.AddControllers().AddApplicationPart(typeof(OrderController).Assembly);
+
         builder.WebHost.UseUrls(url);
 
         var app = builder.Build();
@@ -61,7 +68,6 @@ public class Program
         app.MapControllers();
         app.MapGet("/helloworld", () => "Hello World!");
         app.MapGet("/", () => "King of Koncsik");
-
         if (app != null)
         {
             

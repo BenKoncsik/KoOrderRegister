@@ -307,6 +307,9 @@
 		<Compile Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml.cs">
 		  <DependentUpon>PdfExportersPage.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml.cs">
+		  <DependentUpon>ClientConnectionPage.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Platforms\Android\Services\UpdateService.cs">
 			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 		</Compile>
@@ -357,6 +360,9 @@
 		<MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -370,9 +376,6 @@
 
 	<ItemGroup>
 		<Folder Include="Modules\Export\Exporters\Pages\" />
-		<Folder Include="Modules\Remote\Client\Pages\" />
-		<Folder Include="Modules\Remote\Client\Service\" />
-		<Folder Include="Modules\Remote\Client\ViewModel\" />
 		<Folder Include="Modules\Settings\Services\" />
 		<Folder Include="Modules\Windows\Notification\Services\" />
 		<Folder Include="Platforms\Windows\Modules\" />
