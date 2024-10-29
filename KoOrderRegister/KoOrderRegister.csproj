@@ -64,7 +64,7 @@
 		<Configuration>Release</Configuration>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 		<PublishReadyToRun>false</PublishReadyToRun>
-		<SelfContained>True</SelfContained>
+		<SelfContained>false</SelfContained>
 		<PublishAppxPackage>true</PublishAppxPackage>
 		<PackageIcon>$placeholder$.scale-125.png</PackageIcon>
 		<Platforms>x64</Platforms>
@@ -94,7 +94,14 @@
 		<Optimize>true</Optimize>
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 	</PropertyGroup>
-
+	<!-- Projects -->
+	<ItemGroup>
+		<ProjectReference Include="..\KORCore\KORCore.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+		<ProjectReference Include="..\KORConnect\KORConnect.csproj" />
+	</ItemGroup>
+	<!-- Icons -->
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#B0E0E6" />
@@ -189,6 +196,10 @@
 		<None Remove="Resources\Images\play_light.svg" />
 		<None Remove="Resources\Images\qr_code_dark.svg" />
 		<None Remove="Resources\Images\qr_code_light.svg" />
+		<None Remove="Resources\Images\remote_client_dark.svg" />
+		<None Remove="Resources\Images\remote_client_light.svg" />
+		<None Remove="Resources\Images\remote_server_dark.svg" />
+		<None Remove="Resources\Images\remote_server_light.svg" />
 		<None Remove="Resources\Images\return_dark.svg" />
 		<None Remove="Resources\Images\return_light.svg" />
 		<None Remove="Resources\Images\save_dark.svg" />
@@ -244,8 +255,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CameraMaui" Version="1.4.9" />
 		<PackageReference Include="ClosedXML" Version="0.104.1" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.92" />
@@ -255,9 +268,10 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.LocalNotification" Version="11.1.4" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-		
 	</ItemGroup>
+	
 
+		
 	<!-- Plugin.LocalNotification -->
 	<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
 		<PackageReference Include="Xamarin.AndroidX.Fragment.Ktx" Version="1.8.4" />
@@ -292,6 +306,9 @@
 		</Compile>
 		<Compile Update="Modules\Export\Exporters\Pdf\View\Pages\PdfExportersPage.xaml.cs">
 		  <DependentUpon>PdfExportersPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml.cs">
+		  <DependentUpon>ClientConnectionPage.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Platforms\Android\Services\UpdateService.cs">
 			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
@@ -342,6 +359,12 @@
 		</MauiXaml>
 		<MauiXaml Update="Modules\Order\Pages\OrderListPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Modules\Settings\Pages\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>

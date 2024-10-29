@@ -1,11 +1,12 @@
 ﻿using KoOrderRegister.Utility;
+using KORCore.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Localization.SupportedLanguage
+namespace KoOrderRegister.Localization.SupportedLanguage.Language
 {
     public class English_US : ILanguageSettings
     {

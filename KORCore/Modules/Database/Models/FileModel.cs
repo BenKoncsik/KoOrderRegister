@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Modules.Database.Models
+namespace KORCore.Modules.Database.Models
 {
     [Table("Files")]
     public class FileModel
@@ -27,7 +27,10 @@ namespace KoOrderRegister.Modules.Database.Models
         }
         [Ignore]
         [JsonIgnore]
-        public FileResult FileResult { get; set; }
+        /// <summary>
+        /// Microsoft.Maui.Storage.FileResult
+        /// </summary>
+        public object FileResult { get; set; }
         [JsonProperty("contentType")]
         public string ContentType { get; set; }
         [JsonProperty("note")]

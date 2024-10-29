@@ -1,19 +1,22 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Customer.Pages;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {
     public class CustomerListViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
+
         private readonly PersonDetailsPage _personDetailsPage;
         #region Binding varrible
 
@@ -35,9 +38,9 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public CustomerListViewModel(IDatabaseModelFactory database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _database = database.Get();
             _personDetailsPage = personDetailsPage;
 
         UpdateCommand = new Command(Update);

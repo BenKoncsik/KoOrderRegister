@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoOrderRegister.Utility
+namespace KORCore.Utility
 {
     public static class Format
     {

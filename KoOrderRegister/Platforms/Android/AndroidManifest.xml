@@ -19,4 +19,9 @@
 	<!--Optional (only for Calendar and alarm clock apps)-->
 	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32" />
+
+	<!--Camera-->
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.RECORD_VIDEO" />
 </manifest>

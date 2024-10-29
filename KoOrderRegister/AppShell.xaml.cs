@@ -2,11 +2,14 @@ using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
+using KoOrderRegister.Modules.Remote.Client.Pages;
+using KoOrderRegister.Modules.Remote.Server.Pages;
 using KoOrderRegister.Modules.Settings.Pages;
 using KoOrderRegister.Modules.Windows.Notification.Pages;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
+using KORCore.Utility;
 using Microsoft.VisualBasic;
 using Plugin.LocalNotification;
 using System.ComponentModel;
@@ -62,10 +65,13 @@ namespace KoOrderRegister
             Routing.RegisterRoute(nameof(Modules.Export.Excel.Pages.ExcelExportersPage), typeof(Modules.Export.Excel.Pages.ExcelExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
+            Routing.RegisterRoute(nameof(ClientConnectionPage), typeof(ClientConnectionPage));
             #endregion
             #region Windows fuctions
-            Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));
+
 #if WINDOWS
+            Routing.RegisterRoute(nameof(NotificationPages), typeof(NotificationPages));
+            Routing.RegisterRoute(nameof(RemoteServerPage), typeof(RemoteServerPage));
             var notificationPage = serviceProvider.GetService<NotificationPages>();
             notificationPage.LoadData();
 #endif
@@ -81,23 +87,5 @@ namespace KoOrderRegister
 
             
         }
-
-        protected override void OnNavigated(ShellNavigatedEventArgs args)
-        {
-            using (new LowPriorityTaskManager())
-            {
-                _appShellViewModel.IsRefreshing = true;
-                Debug.WriteLine($"Navigated: {args.Source}");
-                base.OnNavigated(args);
-#if WINDOWS
-                var shellItem = Shell.Current?.CurrentItem;
-                string title = shellItem?.Title;
-
-                //titleLabel.Text = $"{title} {_appShellViewModel.NotificationString}";
-#endif
-            }
-        }
-
-     
     }
 }

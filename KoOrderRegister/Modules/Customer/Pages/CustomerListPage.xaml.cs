@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Customer.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Customer.Pages;
 
@@ -15,11 +16,6 @@ public partial class CustomerListPage : ContentPage
     private void ListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
     {
         var items = _viewModel.Customers;
-
-        if (items != null && e.Item == items[items.Count - 1])
-        {
-          //  _viewModel.LoadMoreItems();
-        }
     }
     protected override void OnAppearing()
     {

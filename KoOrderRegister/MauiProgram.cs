@@ -1,10 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Customer.ViewModels;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
-using KoOrderRegister.Modules.Order.List.Services;
-using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
 using Microsoft.Extensions.Logging;
@@ -16,12 +13,22 @@ using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
 using KoOrderRegister.Modules.DatabaseFile.ViewModel;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using KoOrderRegister.ViewModel;
+using KoOrderRegister.Modules.Order.Services;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
+using KoOrderRegister.Modules.Remote.Server.Service;
+using KoOrderRegister.Modules.Remote.Server.Pages;
+using KoOrderRegister.Modules.Remote.ViewModel;
+using Camera.MAUI;
+using KORCore.Modules.Database.Services;
+using KoOrderRegister.Modules.Remote.Client.ViewModel;
+using KoOrderRegister.Modules.Remote.Client.Pages;
+using KoOrderRegister.Modules.Remote.Client.Service;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister
 {
@@ -34,6 +41,7 @@ namespace KoOrderRegister
                 .UseMauiApp<App>()
                 .ConfigureMopups()
                 .UseMauiCommunityToolkit()
+                .UseMauiCameraView()
                 .UseLocalNotification(config =>
                 {
                     config.AddAndroid(android =>
@@ -57,8 +65,17 @@ namespace KoOrderRegister
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+           
+
             #region database
-            builder.Services.AddTransient<IDatabaseModel, DatabaseModel>();
+            builder.Services.AddTransient<DatabaseModel>();
+            builder.Services.AddHttpClient("kor_connection_client", client =>
+            {
+
+            });
+            builder.Services.AddTransient<RemoteDatabaseModel>();
+            builder.Services.AddSingleton<IDatabaseModelFactory, DatabaseModelFactory>();
             #endregion
 
             #region AppShell
@@ -75,7 +92,7 @@ namespace KoOrderRegister
             builder.Services.AddTransient<OrderDetailsPage>();
             builder.Services.AddTransient<OrderDetailViewModel>();
 
-            builder.Services.AddSingleton<IFileService, FileService>();
+            builder.Services.AddTransient<IFileService, FileService>();
 
             #endregion
 
@@ -92,23 +109,20 @@ namespace KoOrderRegister
 
             #region Settings Modul
             builder.Services.AddTransient<SettingsPage>();
-            builder.Services.AddSingleton<SettingsViewModel>();
+            builder.Services.AddTransient<SettingsViewModel>();
             #endregion
 
-            #region Update
+            #region Update Modul
             builder.Services.AddHttpClient("GitHubClient", client =>
             {
-                
+
             });
             builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
 #if WINDOWS
-                builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Windows.Services.VersionService>();
+                builder.Services.AddSingleton<IVersionService, Platforms.Windows.Serivces.VersionService>();
 #elif ANDROID
-            builder.Services.AddSingleton<IVersionService, KoOrderRegister.Platforms.Android.Services.VersionService>();
-            builder.Services.AddSingleton<KoOrderRegister.Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
-
-#else
-            builder.Services.AddSingleton<IAppUpdateService, AppUpdateService>();
+            builder.Services.AddSingleton<IVersionService, Platforms.Android.Services.VersionService>();
+            builder.Services.AddSingleton<Platforms.Android.Services.IPermissions, KoOrderRegister.Platforms.Android.Services.Permissions>();
 #endif
 
             #endregion
@@ -119,24 +133,24 @@ namespace KoOrderRegister
             #endregion
 
             #region Export Modul
-            builder.Services.AddTransient<IExcelExportService, ExcelExportService>();
+            builder.Services.AddSingleton<IExcelExportService, ExcelExportService>();
             //excel
             builder.Services.AddTransient<Modules.Export.Excel.Pages.ExcelExportersPage>();
-            builder.Services.AddSingleton<Modules.Export.Excel.ViewModel.ExportersViewModel>();
+            builder.Services.AddTransient<Modules.Export.Exporters.Excel.View.ViewModel.ExportersViewModel>();
             //pdf
             builder.Services.AddTransient<Modules.Export.Pdf.Pages.PdfExportersPage>();
-            builder.Services.AddSingleton<Modules.Export.Pdf.ViewModel.ExportersViewModel>();
+            builder.Services.AddTransient< Modules.Export.Exporters.Pdf.View.ViewModel.ExportersViewModel >();
             //html
             builder.Services.AddTransient<Modules.Export.Html.Pages.HtmlExportersPage>();
-            builder.Services.AddSingleton<Modules.Export.Html.ViewModel.ExportersViewModel>();
+            builder.Services.AddTransient< Modules.Export.Exporters.Html.View.ViewModel.ExportersViewModel >();
             #endregion
 
-            #region Beta function modul
+            #region Beta function Modul
             builder.Services.AddTransient<BetaFunctionsPages>();
-            builder.Services.AddSingleton<BetaFunctionsViewModel>();
+            builder.Services.AddTransient<BetaFunctionsViewModel>();
             #endregion
 
-            #region Language settings
+            #region Language settings Modul
             ILanguageSettings languageSettings = LanguageManager.GetCurrentLanguage();
             languageSettings.SetRegioSpecification();
             CultureInfo culture = new CultureInfo(languageSettings.GetCultureName());
@@ -144,18 +158,38 @@ namespace KoOrderRegister
             Thread.CurrentThread.CurrentUICulture = culture;
             #endregion
 
-            #region Notification
+            #region Notification Modul
             builder.Services.AddSingleton<ILocalNotificationService, LocalNotificationService>();
 #if WINDOWS
             builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.Pages.NotificationPages>();
             builder.Services.AddSingleton<KoOrderRegister.Modules.Windows.Notification.ViewModel.NotificationViewModel>();            
 #endif
+            #endregion 
+
+            #region Remote Modul
+            #region Server
+#if WINDOWS
+           builder.Services.AddSingleton<IRemoteServerService, RemoteServerService>();
+           builder.Services.AddTransient<RemoteServerViewModel>();
+           builder.Services.AddTransient<RemoteServerPage>();
+#endif
+            #endregion
+            #region Client
+            builder.Services.AddSingleton<IRemoteClientService, RemoteClientService>();
+            builder.Services.AddTransient<ClientConnectionViewModel>();
+            builder.Services.AddTransient<ClientConnectionPage>();
+            #endregion
             #endregion
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            return builder.Build();
+            var app = builder.Build();
+#if WINDOWS
+            var remoteService = app.Services.GetRequiredService<IRemoteServerService>();
+            remoteService.Init();
+#endif
+            return app;
         }
     }
 }

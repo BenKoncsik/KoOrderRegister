@@ -35,6 +35,18 @@
                     Grid.Column="2"
                     Command="{Binding NotificationCommand}"
                     Margin="10, 10, 10,10" />
+
+            <VerticalStackLayout MaximumHeightRequest="600"
+                         MinimumHeightRequest="200">
+                <Label Text="Database updates:"/>
+                <ListView ItemsSource="{Binding RealTimeDatabaseEvents}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding .}"></Label>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
         </VerticalStackLayout>
 
     </StackLayout>

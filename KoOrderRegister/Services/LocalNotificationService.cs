@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using KoOrderRegister.Modules.Windows.Notification.Utils;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using Plugin.LocalNotification.iOSOption;
@@ -39,7 +40,7 @@ namespace KoOrderRegister.Services
             obj,
             (key, existingVal) => obj);
             NotificationChanged?.Invoke(obj);
-            NotificationChangedStaic.Invoke();
+            NotificationChangedStaic?.Invoke();
         }
 
         private void Current_NotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs e)

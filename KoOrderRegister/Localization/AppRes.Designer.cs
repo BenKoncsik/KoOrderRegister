@@ -214,6 +214,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client connection settings.
+        /// </summary>
+        internal static string ClientConnectionSettings {
+            get {
+                return ResourceManager.GetString("ClientConnectionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -228,6 +237,24 @@ namespace KoOrderRegister.Localization {
         internal static string CloseAdvancedDetails {
             get {
                 return ResourceManager.GetString("CloseAdvancedDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        internal static string Connection {
+            get {
+                return ResourceManager.GetString("Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection string.
+        /// </summary>
+        internal static string ConnectionString {
+            get {
+                return ResourceManager.GetString("ConnectionString", resourceCulture);
             }
         }
         
@@ -426,6 +453,15 @@ namespace KoOrderRegister.Localization {
         internal static string Exporter {
             get {
                 return ResourceManager.GetString("Exporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed.
+        /// </summary>
+        internal static string Failed {
+            get {
+                return ResourceManager.GetString("Failed", resourceCulture);
             }
         }
         
@@ -808,6 +844,33 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remote server connection code:.
+        /// </summary>
+        internal static string RemoteServerConnectionQrCodeLabel {
+            get {
+                return ResourceManager.GetString("RemoteServerConnectionQrCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string RemoteServerSwitch {
+            get {
+                return ResourceManager.GetString("RemoteServerSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote Server ON/OFF:.
+        /// </summary>
+        internal static string RemoteServerSwitchLabel {
+            get {
+                return ResourceManager.GetString("RemoteServerSwitchLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore database.
         /// </summary>
         internal static string RestoreDatabase {
@@ -831,6 +894,15 @@ namespace KoOrderRegister.Localization {
         internal static string Return {
             get {
                 return ResourceManager.GetString("Return", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romte Server Settings.
+        /// </summary>
+        internal static string RomteServerSettings {
+            get {
+                return ResourceManager.GetString("RomteServerSettings", resourceCulture);
             }
         }
         

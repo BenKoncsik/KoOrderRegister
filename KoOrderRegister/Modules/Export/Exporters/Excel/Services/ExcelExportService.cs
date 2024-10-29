@@ -1,8 +1,7 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
+using KORCore.Modules.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,9 +10,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KORCore.Modules.Database.Services;
+using KORCore.Modules.Database.Factory;
 
 
-namespace KoOrderRegister.Modules.Export.Types.Excel.Services
+
+namespace KoOrderRegister.Modules.Export.Exporters.Excel.Services
 {
     public class ExcelExportService : IExcelExportService
     {
@@ -22,9 +24,9 @@ namespace KoOrderRegister.Modules.Export.Types.Excel.Services
         private bool _isExporting = false;
 
         private ProgressState progressState;
-        public ExcelExportService(IDatabaseModel databaseModel)
+        public ExcelExportService(IDatabaseModelFactory databaseModel)
         {
-            _databaseModel = databaseModel;
+            _databaseModel = databaseModel.Get();
 
         }
         public async Task Export(string outputPath, CancellationToken cancellationToken, Action<float> progressCallback = null)
