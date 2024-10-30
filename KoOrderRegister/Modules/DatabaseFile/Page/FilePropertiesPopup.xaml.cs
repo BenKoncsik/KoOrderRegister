@@ -31,6 +31,7 @@ public partial class FilePropertiesPopup : PopupPage
             else
             {
                 base.OnAppearing();
+                _viewModel.OnAppearing();
             }
         }
         

@@ -4,11 +4,11 @@ namespace KoOrderRegister.Modules.Windows.Notification.Pages;
 
 public partial class NotificationPages : ContentPage
 {
-	private readonly NotificationViewModel _notificationViewModel;
+	private readonly NotificationViewModel _viewModel;
     public NotificationPages(NotificationViewModel notificationViewModel)
 	{
-        _notificationViewModel = notificationViewModel;
-        BindingContext = _notificationViewModel;
+        _viewModel = notificationViewModel;
+        BindingContext = _viewModel;
         InitializeComponent();
     }
 
@@ -20,17 +20,17 @@ public partial class NotificationPages : ContentPage
 
     public void LoadData()
     {
-        _notificationViewModel.Appering();
+      _viewModel.OnAppearing();
     }
     protected override void OnAppearing()
     {
-        _notificationViewModel.Appering();
+        _viewModel.OnAppearing();
         base.OnAppearing();
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-       _notificationViewModel.Disappearing();
+        _viewModel.Disappearing();
     }
 }

@@ -17,9 +17,9 @@ namespace KORCore.Modules.Database.Models
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonIgnore]
-        public byte[] Content { get; set; }
-        [JsonProperty("content")]
+        public byte[] Content { get; set; } = null;
         [Ignore]
+        [JsonProperty("content", NullValueHandling = NullValueHandling.Ignore)]
         public string ContentBase64
         {
             get => Content == null ? null : Convert.ToBase64String(Content);
@@ -30,28 +30,28 @@ namespace KORCore.Modules.Database.Models
         /// <summary>
         /// Microsoft.Maui.Storage.FileResult
         /// </summary>
-        public object FileResult { get; set; }
-        [JsonProperty("contentType")]
+        public object FileResult { get; set; } = null;
+        [JsonProperty("content_type")]
         public string ContentType { get; set; }
         [JsonProperty("note")]
         public string Note { get; set; } = string.Empty;
 
-        [JsonProperty("orderId")]
+        [JsonProperty("order_id")]
         public string OrderId { get; set; } = string.Empty;
 
-        [JsonProperty("hashCode")]
+        [JsonProperty("hash_code")]
         public string HashCode { get; set; } = string.Empty;
         [Ignore]
         [JsonIgnore]
         public string FilePath { get; set; } = string.Empty;
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("order", NullValueHandling = NullValueHandling.Ignore)]
         public OrderModel Order { get; set; }
         [Ignore]
         [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("is_database_file")]
         public bool IsDatabaseContent { get; set; } = false;
         public FileModel()
         {

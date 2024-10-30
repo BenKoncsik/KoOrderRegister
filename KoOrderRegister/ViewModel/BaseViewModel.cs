@@ -95,6 +95,11 @@ namespace KoOrderRegister.ViewModel
         {
             settUserTheme();
         }
+
+        public virtual void OnAppearing()
+        {
+           
+        }
         #region AppUpdate method
         private async Task OnStart()
         {

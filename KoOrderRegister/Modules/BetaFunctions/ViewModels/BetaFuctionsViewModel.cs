@@ -38,8 +38,8 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
             _exportService = exportService;
             _notifyService = notificationService;
             _database = databaseModel.Get();
-            _notifyService.NotificationReceived += OnNotificationReceived;
-            IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
+            //_notifyService.NotificationReceived += OnNotificationReceived;
+            //IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
         }
         public void ProgressCallback(float precent)
         {

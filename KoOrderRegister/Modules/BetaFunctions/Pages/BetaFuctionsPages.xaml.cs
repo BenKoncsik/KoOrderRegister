@@ -20,6 +20,7 @@ public partial class BetaFunctionsPages : ContentPage
         using (new LowPriorityTaskManager())
         {
             Debug.WriteLine($"Navigate to: BetaFunctionsPages");
+            _viewModel.OnAppearing();
             base.OnAppearing();
         }
     }

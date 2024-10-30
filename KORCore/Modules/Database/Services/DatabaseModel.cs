@@ -565,6 +565,11 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> UpdateFile(FileModel file)
         {
+            if(string.IsNullOrEmpty(file.ContentBase64))
+            {
+                FileModel dbFile = await GetFileById(file.Guid);
+                file.Content = dbFile.Content;
+            }
             return await Database.UpdateAsync(file);
         }
 

@@ -25,6 +25,7 @@ public partial class PersonDetailsPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
     protected override void OnDisappearing()

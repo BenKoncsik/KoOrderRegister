@@ -19,6 +19,7 @@ public partial class ExcelExportersPage: ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

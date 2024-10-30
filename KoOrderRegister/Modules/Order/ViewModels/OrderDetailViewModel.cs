@@ -27,9 +27,10 @@ namespace KoOrderRegister.Modules.Order.ViewModels
     public class OrderDetailViewModel : BaseViewModel
     {
         #region DI
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
         private readonly IFileService _fileService;
         private readonly FilePropertiesPopup _filePropertiesPopup;
+        private readonly IDatabaseModelFactory _databaseModelFactory;
         #endregion
         #region Binding varrible
         private OrderModel _order = new OrderModel();
@@ -151,9 +152,14 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         #endregion
         public OrderDetailViewModel(IDatabaseModelFactory database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
+            _databaseModelFactory = database;
             _database = database.Get();
             _fileService = fileService;
             _filePropertiesPopup = filePropertiesPopup;
+        }
+        public override void OnAppearing()
+        {
+            _database = _databaseModelFactory.Get();
         }
 
         public void EditOrder(OrderModel order)

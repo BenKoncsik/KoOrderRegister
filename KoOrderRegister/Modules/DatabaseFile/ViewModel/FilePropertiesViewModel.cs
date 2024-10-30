@@ -19,7 +19,8 @@ namespace KoOrderRegister.Modules.DatabaseFile.ViewModel
     public class FilePropertiesViewModel : BaseViewModel
     {
         #region DI
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
+        private IDatabaseModelFactory _databaseModelFactory;
         #endregion
         #region Binding varrible
         private FileModel file;
@@ -88,6 +89,7 @@ namespace KoOrderRegister.Modules.DatabaseFile.ViewModel
 
         public FilePropertiesViewModel(IDatabaseModelFactory databaseModel)
         {
+            _databaseModelFactory = databaseModel;
             _database = databaseModel.Get();
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Return);
@@ -95,9 +97,14 @@ namespace KoOrderRegister.Modules.DatabaseFile.ViewModel
             OpenCloseAdvancedDetailsCommand = new Command(OpenCloseAdvancedDetails);
         }
 
+        public override void OnAppearing()
+        {
+            _database = _databaseModelFactory.Get();
+        }
+
         public async void Save()
         {
-            if(await _database.UpdateFile(File) > 0)
+            if(await _database.CreateFile(File) > 0)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + File.Name, AppRes.Ok);
             }
