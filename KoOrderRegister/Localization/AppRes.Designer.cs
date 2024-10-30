@@ -106,11 +106,29 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to connection.
+        /// </summary>
+        internal static string AreYouSureYouWantToConnection {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete: .
         /// </summary>
         internal static string AreYouSureYouWantToDelete {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to disconnection.
+        /// </summary>
+        internal static string AreYouSureYouWantToDisconnection {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDisconnection", resourceCulture);
             }
         }
         
@@ -241,6 +259,24 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected devices.
+        /// </summary>
+        internal static string ConnectedDevices {
+            get {
+                return ResourceManager.GetString("ConnectedDevices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected servers.
+        /// </summary>
+        internal static string ConnectedServers {
+            get {
+                return ResourceManager.GetString("ConnectedServers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection.
         /// </summary>
         internal static string Connection {
@@ -345,6 +381,15 @@ namespace KoOrderRegister.Localization {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disconecting.
+        /// </summary>
+        internal static string Disconecting {
+            get {
+                return ResourceManager.GetString("Disconecting", resourceCulture);
             }
         }
         
@@ -547,6 +592,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First connaction.
+        /// </summary>
+        internal static string FirstConnaction {
+            get {
+                return ResourceManager.GetString("FirstConnaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hash code:.
         /// </summary>
         internal static string HashCodeLabel {
@@ -561,6 +615,15 @@ namespace KoOrderRegister.Localization {
         internal static string HtmlExporter {
             get {
                 return ResourceManager.GetString("HtmlExporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last connection.
+        /// </summary>
+        internal static string LastConnection {
+            get {
+                return ResourceManager.GetString("LastConnection", resourceCulture);
             }
         }
         
@@ -853,7 +916,7 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Remote Server ON/OFF:.
         /// </summary>
         internal static string RemoteServerSwitch {
             get {
@@ -1029,6 +1092,15 @@ namespace KoOrderRegister.Localization {
         internal static string StartDateLabel {
             get {
                 return ResourceManager.GetString("StartDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success to connection.
+        /// </summary>
+        internal static string SuccessToConnection {
+            get {
+                return ResourceManager.GetString("SuccessToConnection", resourceCulture);
             }
         }
         

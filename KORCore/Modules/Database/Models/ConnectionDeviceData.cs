@@ -14,9 +14,22 @@ namespace KORCore.Modules.Database.Models
         [PrimaryKey]
         [JsonProperty("id")]
         public string Id { get; init; }
-        [JsonIgnore]
+        [JsonProperty("first_connection_date")]
         public DateTime FirstConnectionData { get; set; } = DateTime.UtcNow;
-        [JsonIgnore]
+        [JsonProperty("last_connection_date")]
+        public DateTime LastConnectionData { get; set; } = DateTime.UtcNow;
+        [JsonProperty("device_key")]
         public string DeviceKey { get; set; }
+        [JsonProperty("server_key")]
+        public string ServerKey { get; set; }
+        public string Url { get; set; }
+        [JsonIgnore]
+        [Ignore]
+        public Guid Guid => Guid.Parse(Id);
+
+        public ConnectionDeviceData()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
     }
 }

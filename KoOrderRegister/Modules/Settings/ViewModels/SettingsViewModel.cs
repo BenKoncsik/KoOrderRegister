@@ -83,7 +83,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         
         
-        public SettingsViewModel(DatabaseModel databaseModel, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public SettingsViewModel(LocalDatabaseModel databaseModel, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _databaseModel = databaseModel;
             _updateService = updateService;

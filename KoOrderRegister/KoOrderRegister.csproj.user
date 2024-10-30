@@ -70,6 +70,9 @@
     <MauiXaml Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Modules\Remote\Client\Pages\ConnectedServersPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

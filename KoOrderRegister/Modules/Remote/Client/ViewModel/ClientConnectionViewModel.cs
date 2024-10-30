@@ -34,6 +34,7 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
         #endregion
         #region Commands
         public ICommand ConnectionCommand => new Command(StartConnection);
+        public ICommand DisconectedCommand => new Command(Disconected);
         #endregion
         #region Binding varrible
         private CameraInfo camera = null;
@@ -169,20 +170,35 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
 
         private async void StartConnection()
         {
-            try
+            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.AreYouSureYouWantToConnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
+            if (result)
             {
-                if(await _remoteClientService.ConnectAsync(ConnectionData))
+                try
                 {
-                    _notificationService.SendNotification(AppRes.Connection, AppRes.Ok);
+                    if (await _remoteClientService.ConnectAsync(ConnectionData))
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.SuccessToConnection + " " + ConnectionData.Url, AppRes.Ok);
+                        _notificationService.SendNotification(AppRes.Connection, AppRes.Ok);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.Failed + " " + ConnectionData.Url, AppRes.Ok);
+                        _notificationService.SendNotification(AppRes.Connection, AppRes.Failed);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _notificationService.SendNotification(AppRes.Connection, AppRes.Failed);
+                    Debug.WriteLine($"Connection error: {ex}");
                 }
             }
-            catch (Exception ex)
+           
+        }
+        public async void Disconected()
+        {
+            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Disconecting, AppRes.AreYouSureYouWantToDisconnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
+            if (result)
             {
-                Debug.WriteLine($"Connection error: {ex}");
+               await _remoteClientService.DisconnectAsync();
             }
         }
 

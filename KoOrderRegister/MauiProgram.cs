@@ -29,6 +29,7 @@ using KoOrderRegister.Modules.Remote.Client.ViewModel;
 using KoOrderRegister.Modules.Remote.Client.Pages;
 using KoOrderRegister.Modules.Remote.Client.Service;
 using KORCore.Modules.Database.Factory;
+using KoOrderRegister.Modules.Remote.Client.Behavior;
 
 namespace KoOrderRegister
 {
@@ -69,12 +70,12 @@ namespace KoOrderRegister
            
 
             #region database
-            builder.Services.AddTransient<DatabaseModel>();
+            builder.Services.AddTransient<ILocalDatabase, LocalDatabaseModel>();
             builder.Services.AddHttpClient("kor_connection_client", client =>
             {
 
             });
-            builder.Services.AddTransient<RemoteDatabaseModel>();
+            builder.Services.AddTransient<IRemoteDatabase, RemoteDatabaseModel>();
             builder.Services.AddSingleton<IDatabaseModelFactory, DatabaseModelFactory>();
             #endregion
 
@@ -178,6 +179,12 @@ namespace KoOrderRegister
             builder.Services.AddSingleton<IRemoteClientService, RemoteClientService>();
             builder.Services.AddTransient<ClientConnectionViewModel>();
             builder.Services.AddTransient<ClientConnectionPage>();
+
+            builder.Services.AddTransient<ConnectedServersViewModel>();
+            builder.Services.AddTransient<ConnectedServersPage>();
+            builder.Services.AddTransient<ConnectionHighlightBehavior>();
+
+
             #endregion
             #endregion
 

@@ -42,7 +42,7 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
         
-        builder.Services.AddScoped<IDatabaseModel, DatabaseModel>();
+        builder.Services.AddScoped<IDatabaseModel, LocalDatabaseModel>();
         builder.Services.AddSignalR();
         builder.Services.AddControllers().AddNewtonsoftJson();
         //builder.Services.AddRazorPages();

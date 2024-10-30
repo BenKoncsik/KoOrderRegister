@@ -8,11 +8,12 @@ using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Utility;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.IO;
+using System.Threading;
 
 
 namespace KORCore.Modules.Database.Services
 {
-    public class DatabaseModel : IDatabaseModel
+    public class LocalDatabaseModel : ILocalDatabase
     {
         private SQLiteAsyncConnection Database;
         private SQLiteConnectionString options;
@@ -20,10 +21,11 @@ namespace KORCore.Modules.Database.Services
         private static string CUSTOMER_TABLE = "Customers";
         private static string ORDER_TABLE = "Orders";
         private static string FILES_TABLE = "Files";
+        private static string CONNECTION_DATA = "ConnectionDeviceDatas";
 
         private static int PAGE_SIZE = 5;
 
-        public DatabaseModel()
+        public LocalDatabaseModel()
         {
             ThreadManager.Run(async () => await Init(), ThreadManager.Priority.High).Wait();
         }
@@ -42,6 +44,7 @@ namespace KORCore.Modules.Database.Services
                 await Database.CreateTableAsync<CustomerModel>();
                 await Database.CreateTableAsync<OrderModel>();
                 await Database.CreateTableAsync<FileModel>();
+                await Database.CreateTableAsync<ConnectionDeviceData>();
                 options = new SQLiteConnectionString(Constants.basePath, false);
             }
             catch (Exception ex)
@@ -626,7 +629,6 @@ namespace KORCore.Modules.Database.Services
             return count;
         }
         #endregion
-
         #region export/import
         public async Task ExportDatabaseToJson(string filePath, CancellationToken cancellationToken, Action<float> progressCallback = null)
         {
@@ -641,7 +643,7 @@ namespace KORCore.Modules.Database.Services
 
                 jsonWriter.WriteStartObject();
                 // Serialize Customers
-                jsonWriter.WritePropertyName("Customers");
+                jsonWriter.WritePropertyName(CUSTOMER_TABLE);
                 jsonWriter.WriteStartArray();
                 await foreach (var customer in GetAllCustomersAsStream(cancellationToken))
                 {
@@ -652,7 +654,7 @@ namespace KORCore.Modules.Database.Services
                 jsonWriter.WriteEndArray();
 
                 // Serialize Orders
-                jsonWriter.WritePropertyName("Orders");
+                jsonWriter.WritePropertyName(ORDER_TABLE);
                 jsonWriter.WriteStartArray();
                 await foreach (var order in GetAllOrdersAsStream(cancellationToken))
                 {
@@ -663,11 +665,22 @@ namespace KORCore.Modules.Database.Services
                 jsonWriter.WriteEndArray();
 
                 // Serialize Files
-                jsonWriter.WritePropertyName("Files");
+                jsonWriter.WritePropertyName(FILES_TABLE);
                 jsonWriter.WriteStartArray();
                 await foreach (var file in GetAllFilesAsStream(cancellationToken))
                 {
                     serializer.Serialize(jsonWriter, file);
+                    processedItems++;
+                    progressCallback?.Invoke(100 * processedItems / totalItems);
+                }
+                jsonWriter.WriteEndArray();
+
+                // Serialize ConnectionDeviceDatas
+                jsonWriter.WritePropertyName(CONNECTION_DATA);
+                jsonWriter.WriteStartArray();
+                await foreach (var connectionData in GetConnectionDataAsStreamAsync(cancellationToken))
+                {
+                    serializer.Serialize(jsonWriter, connectionData);
                     processedItems++;
                     progressCallback?.Invoke(100 * processedItems / totalItems);
                 }
@@ -693,6 +706,7 @@ namespace KORCore.Modules.Database.Services
                 await Database.DropTableAsync<CustomerModel>();
                 await Database.DropTableAsync<OrderModel>();
                 await Database.DropTableAsync<FileModel>();
+                await Database.DropTableAsync<ConnectionDeviceData>();
                 await Init(force: true);
 
                 while (jsonReader.Read())
@@ -716,6 +730,12 @@ namespace KORCore.Modules.Database.Services
                         {
                             state.StreamPosition = 70;
                             await ProcessItems<FileModel>(jsonReader, serializer, CreateFile, state, progressCallback);
+                            state.StreamPosition = 59;
+                        }
+                        else if (propertyName == CONNECTION_DATA)
+                        {
+                            state.StreamPosition = 90;
+                            await ProcessItems<ConnectionDeviceData>(jsonReader, serializer, CreateOrUpdateDatabaseConnection, state, progressCallback);
                             state.StreamPosition = 100;
                         }
                     }
@@ -746,6 +766,70 @@ namespace KORCore.Modules.Database.Services
         }
 
         #endregion
+        #region Connection Data CRUD Implementation
+        public async Task<int> CreateOrUpdateDatabaseConnection(ConnectionDeviceData connection)
+        {
+            ConnectionDeviceData? result = await Database.Table<ConnectionDeviceData>().FirstOrDefaultAsync(c => c.Url.Equals(connection.Url) && c.ServerKey.Equals(connection.ServerKey));
+
+            if (result == null)
+            {
+                return await Database.InsertAsync(connection);
+            }
+            else
+            {
+                return await Database.UpdateAsync(connection);
+            }
+        }
+        public async Task<int> DeleteConnection(ConnectionDeviceData connection)
+        {
+            ConnectionDeviceData? result = await GetConnectionById(connection.Guid);
+            if (result == null)
+            {
+                return await Database.DeleteAsync(connection);
+            }
+            return 0;
+        }
+        public async IAsyncEnumerable<ConnectionDeviceData> GetConnectionDataAsStreamAsync(CancellationToken cancellationToken)
+        {
+            var connections = await Database.Table<ConnectionDeviceData>().ToListAsync();
+            foreach (var connection in connections.AsParallel())
+            {
+                yield return connection;
+            }
+        }
+
+        public async Task<ConnectionDeviceData> GetConnectionById(Guid id)
+        {
+            string stringId = id.ToString();
+            var connection = await Database.FindAsync<ConnectionDeviceData>(stringId);
+            return connection;
+        }
+        public async IAsyncEnumerable<ConnectionDeviceData> SearchConnectionDataAsStreamAsync(string searchValue, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                await foreach (var connectionData in GetConnectionDataAsStreamAsync(cancellationToken))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return connectionData;
+                }
+            }
+
+            string likeQuery = $"%{searchValue.Trim().ToLowerInvariant().Replace(" ", "%")}%";
+            string query = @"SELECT * FROM ConnectionDeviceData 
+                           WHERE LOWER(DeviceKey) LIKE ? OR 
+                                 LOWER(ServerKey) LIKE ? OR
+                                 LOWER(Url) LIKE ?";
+            List<ConnectionDeviceData> connectionDataList = await Database.QueryAsync<ConnectionDeviceData>(query, likeQuery, likeQuery, likeQuery);
+
+            foreach (var connectionData in connectionDataList.GroupBy(c => c.Id).Select(g => g.First()).ToList())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return connectionData;
+            }
+        }
+        #endregion
+
     }
 
 

@@ -66,6 +66,7 @@ namespace KoOrderRegister
             Routing.RegisterRoute(nameof(Modules.Export.Pdf.Pages.PdfExportersPage), typeof(Modules.Export.Pdf.Pages.PdfExportersPage));
             Routing.RegisterRoute(nameof(Modules.Export.Html.Pages.HtmlExportersPage), typeof(Modules.Export.Html.Pages.HtmlExportersPage));
             Routing.RegisterRoute(nameof(ClientConnectionPage), typeof(ClientConnectionPage));
+            Routing.RegisterRoute(nameof(ConnectedServersPage), typeof(ConnectedServersPage));
             #endregion
             #region Windows fuctions
 

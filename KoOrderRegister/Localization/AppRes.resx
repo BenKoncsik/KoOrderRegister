@@ -538,7 +538,7 @@
     <value>Remote server connection code:</value>
   </data>
   <data name="RemoteServerSwitch" xml:space="preserve">
-    <value />
+    <value>Remote Server ON/OFF:</value>
   </data>
   <data name="ClientConnectionSettings" xml:space="preserve">
     <value>Client connection settings</value>
@@ -551,5 +551,29 @@
   </data>
   <data name="Failed" xml:space="preserve">
     <value>Failed</value>
+  </data>
+  <data name="ConnectedDevices" xml:space="preserve">
+    <value>Connected devices</value>
+  </data>
+  <data name="SuccessToConnection" xml:space="preserve">
+    <value>Success to connection</value>
+  </data>
+  <data name="AreYouSureYouWantToConnection" xml:space="preserve">
+    <value>Are you sure you want to connection</value>
+  </data>
+  <data name="Disconecting" xml:space="preserve">
+    <value>Disconecting</value>
+  </data>
+  <data name="AreYouSureYouWantToDisconnection" xml:space="preserve">
+    <value>Are you sure you want to disconnection</value>
+  </data>
+  <data name="ConnectedServers" xml:space="preserve">
+    <value>Connected servers</value>
+  </data>
+  <data name="FirstConnaction" xml:space="preserve">
+    <value>First connaction</value>
+  </data>
+  <data name="LastConnection" xml:space="preserve">
+    <value>Last connection</value>
   </data>
 </root>
