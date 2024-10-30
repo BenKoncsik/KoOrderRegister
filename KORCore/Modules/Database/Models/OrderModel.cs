@@ -15,24 +15,24 @@ namespace KORCore.Modules.Database.Models
         [PrimaryKey]
         [JsonProperty("id")]
         public string Id { get; init; }
-        [JsonProperty("startDate")]
+        [JsonProperty("start_order_date")]
         public DateTime StartDate { get; set; } = DateTime.Now;
-        [JsonProperty("endOrder")]
+        [JsonProperty("end_order_date")]
         public DateTime EndDate { get; set; } = DateTime.Now;
 
-        [JsonProperty("customerId")]
+        [JsonProperty("customer_id")]
         public string CustomerId { get; set; }
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("customer")]
         public CustomerModel Customer { get; set; }
-        [JsonProperty("productId")]
+        [JsonProperty("product_id")]
         public string ProductId { get; set; }
 
-        [JsonProperty("orderNumber")]
+        [JsonProperty("order_number")]
         public string OrderNumber { get; set; }
 
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("files")]
         public List<FileModel> Files { get; set; } = new List<FileModel>();
 
         [JsonProperty("note")]
@@ -44,7 +44,7 @@ namespace KORCore.Modules.Database.Models
         [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("order_date")]
         public string OrderDate => $"{StartDate.ToString(DateFormat.DateTimeFormat)} - {EndDate.ToString(DateFormat.DateTimeFormat)}";
 
         public OrderModel()

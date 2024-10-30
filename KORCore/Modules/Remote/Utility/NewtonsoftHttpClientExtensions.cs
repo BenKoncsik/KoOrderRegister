@@ -33,8 +33,6 @@ namespace KORCore.Modules.Remote.Utility
 
             var response = await httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"), cancellationToken);
 
-            response.EnsureSuccessStatusCode();
-
             return response;
         }
 
@@ -51,8 +49,6 @@ namespace KORCore.Modules.Remote.Utility
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await httpClient.PutAsync(uri, content, cancellationToken);
-
-            response.EnsureSuccessStatusCode();
 
             return response;
         }

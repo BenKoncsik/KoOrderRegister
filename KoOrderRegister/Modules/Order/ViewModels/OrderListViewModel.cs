@@ -22,10 +22,11 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 {
     public class OrderListViewModel : BaseViewModel
     {
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
+        private readonly IDatabaseModelFactory _databaseModelFactory;
         #region Binding varrible
-       
+
         #endregion
         public string SearchTXT { get; set; } = string.Empty;
         private CancellationTokenSource _cancellationTokenSource;
@@ -43,6 +44,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public OrderListViewModel(IDatabaseModelFactory database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
+            _databaseModelFactory = database;
             _database = database.Get();
             _orderDetailsPage = orderDetailsPage;
 
@@ -52,17 +54,11 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             UpdateOrderCommand = new Command(UpdateOrders);
             SearchCommand = new Command<string>(Search);
 
-#if DEBUG
-            IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
-#endif
         }
-
-#if DEBUG
-        private void TestReliTimeDatabase(string name, object data)
+        public override void OnAppearing()
         {
-            Debug.WriteLine($"Name: {name} --> {data.GetType()}");
+            _database = _databaseModelFactory.Get();
         }
-#endif
         public async void NewOrder()
         {
             await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);

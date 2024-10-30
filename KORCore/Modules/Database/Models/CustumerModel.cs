@@ -37,7 +37,7 @@ namespace KORCore.Modules.Database.Models
         [DefaultValue("unknown")]
         public string NationalHealthInsurance { get; set; }
         [Ignore]
-        [JsonIgnore]
+        [JsonProperty("orders")]
         public List<OrderModel> Orders { get; set; } = new List<OrderModel>();
         [Ignore]
         [JsonIgnore]

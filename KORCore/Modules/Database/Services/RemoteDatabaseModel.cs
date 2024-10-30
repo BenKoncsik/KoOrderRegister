@@ -353,7 +353,7 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/{id}");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/{id.ToString()}");
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();

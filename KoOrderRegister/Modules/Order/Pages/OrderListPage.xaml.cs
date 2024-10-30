@@ -20,6 +20,7 @@ public partial class OrderListPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
             _viewModel.UpdateOrders();
         }
     }

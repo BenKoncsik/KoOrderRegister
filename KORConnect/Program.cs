@@ -49,10 +49,10 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
 
-        builder.Services.AddControllers().AddApplicationPart(typeof(CustomerController).Assembly);
-        builder.Services.AddControllers().AddApplicationPart(typeof(DatabaseContreller).Assembly);
-        builder.Services.AddControllers().AddApplicationPart(typeof(FileController).Assembly);
-        builder.Services.AddControllers().AddApplicationPart(typeof(OrderController).Assembly);
+        builder.Services.AddControllers().AddApplicationPart(typeof(CustomerController).Assembly).AddNewtonsoftJson();
+        builder.Services.AddControllers().AddApplicationPart(typeof(DatabaseContreller).Assembly).AddNewtonsoftJson();
+        builder.Services.AddControllers().AddApplicationPart(typeof(FileController).Assembly).AddNewtonsoftJson();
+        builder.Services.AddControllers().AddApplicationPart(typeof(OrderController).Assembly).AddNewtonsoftJson();
 
         builder.WebHost.UseUrls(url);
 

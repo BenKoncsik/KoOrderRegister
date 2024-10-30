@@ -19,6 +19,7 @@ public partial class SettingsPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

@@ -22,6 +22,7 @@ public partial class CustomerListPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
             _viewModel.Update();
         }
     }
