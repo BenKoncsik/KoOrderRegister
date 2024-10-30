@@ -37,6 +37,7 @@ namespace KoOrderRegister
             string logFileLocalPath = Path.Combine(localPath, "error.txt");
             string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string romingLocalPath = Path.Combine(roamingPath, "error.txt");
+            string loacaPath =  Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "log.txt");
 
             var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var logFilePath = Path.Combine(desktopPath, "error.txt");
@@ -46,11 +47,15 @@ namespace KoOrderRegister
             File.AppendAllText(logFilePath, message);
             File.AppendAllText(logFileLocalPath, message);
             File.AppendAllText(romingLocalPath, message);
-            MainPage.Dispatcher.Dispatch(() =>
-            {
-                MainPage.DisplayAlert("Hiba történt", $"Egy hiba történt: {ex.Message}\nAz esemény naplózva lett.", "OK");
-            });
+            
 #endif
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                MainPage.Dispatcher.Dispatch(() =>
+                {
+                    MainPage.DisplayAlert("Hiba történt", $"Egy hiba történt: {ex.Message}\nAz esemény naplózva lett.", "OK");
+                });
+            });
         }
 
     }
