@@ -20,15 +20,20 @@ namespace KORCore.Modules.Database.Factory
         {
             _isRemote = isRemote;
         }
+
+        public bool GetRemoteStatus()
+        {
+            return _isRemote;
+        }
         public IDatabaseModel Get()
         {
             if (_isRemote)
             {
-                return _serviceProvider.GetRequiredService<RemoteDatabaseModel>();
+                return _serviceProvider.GetRequiredService<IRemoteDatabase>();
             }
             else
             {
-                return _serviceProvider.GetRequiredService<DatabaseModel>();
+                return _serviceProvider.GetRequiredService<ILocalDatabase>();
             }
         }
     }

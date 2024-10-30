@@ -19,12 +19,12 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
 
         private readonly PersonDetailsPage _personDetailsPage;
         #region Binding varrible
-
-
+        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
+        public string SearchTXT { get; set; } = string.Empty;
         #endregion
 
 
-        public string SearchTXT { get; set; } = string.Empty;
+
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
 
@@ -36,7 +36,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         public Command<string> SearchCommand { get; }
         #endregion
 
-        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
+       
         
         public CustomerListViewModel(IDatabaseModelFactory database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
@@ -118,7 +118,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             if (result)
             {
                 int deleteResult = await _database.DeleteCustomer(customer.Guid);
-                if (deleteResult == 1)
+                if (deleteResult > 0)
                 {
                     Customers.Remove(customer);
                 }

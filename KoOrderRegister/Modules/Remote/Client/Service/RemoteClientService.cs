@@ -1,5 +1,6 @@
 ﻿using KORCore.Modules.Database.Factory;
 using KORCore.Modules.Database.Services;
+using KORCore.Modules.Database.Utility;
 using KORCore.Modules.Remote.Model;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,25 @@ namespace KoOrderRegister.Modules.Remote.Client.Service
     public class RemoteClientService : IRemoteClientService
     {
         #region DI
-        private readonly RemoteDatabaseModel _clientDatabaseModel;
+        private readonly IRemoteDatabase _remoteDatabaseModel;
+        private readonly ILocalDatabase _localDatabaseModel;
         private readonly IDatabaseModelFactory _databaseModelFactory;
         #endregion
-        public RemoteClientService(RemoteDatabaseModel databaseModel, IDatabaseModelFactory databaseModelFactory) 
+        private string _deviceKey = Preferences.Get("device_key", new Guid().ToString());
+        public RemoteClientService(IRemoteDatabase databaseModel, ILocalDatabase localDatabase, IDatabaseModelFactory databaseModelFactory) 
         {
-            _clientDatabaseModel = databaseModel;
+            _remoteDatabaseModel = databaseModel;
+            _localDatabaseModel = localDatabase;
             _databaseModelFactory = databaseModelFactory;
         }
+       
         public async Task<bool> ConnectAsync(ConnectionData connectionData)
         {
             try
             {
-                RemoteDatabaseModel.SetUrl(connectionData.Url);
+                _remoteDatabaseModel.SetUrl(connectionData.Url);
                 _databaseModelFactory.SetDatabase(true);
+                await _localDatabaseModel.CreateOrUpdateDatabaseConnection(connectionData.ToConnectionDeviceData(_deviceKey));
                 return true;
             }catch(System.Exception ex)
             {
@@ -37,7 +43,7 @@ namespace KoOrderRegister.Modules.Remote.Client.Service
         {
             try
             {
-                RemoteDatabaseModel.SetUrl(string.Empty);
+                _remoteDatabaseModel.SetUrl(string.Empty);
                 _databaseModelFactory.SetDatabase(false);
                 return true;
             }

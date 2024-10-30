@@ -7,16 +7,20 @@ using System.Net.Http.Json;
 
 namespace KORCore.Modules.Database.Services
 {
-    public class RemoteDatabaseModel: IDatabaseModel 
+    public class RemoteDatabaseModel: IRemoteDatabase
     {
-        private static string ApiBaseUrl = "http://localhost:5000/api";
+        private static string ApiBaseUrl = string.Empty;
         private readonly HttpClient _httpClient;
         public RemoteDatabaseModel(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("kor_connection_client");
         }
-        
-        public static void SetUrl(string url)
+
+        public string GetConectedUrl()
+        {
+            return ApiBaseUrl;
+        }
+        public void SetUrl(string url)
         {
             ApiBaseUrl = url + "/api";
         }

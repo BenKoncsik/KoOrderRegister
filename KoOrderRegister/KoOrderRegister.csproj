@@ -178,8 +178,12 @@
 		<None Remove="Resources\Images\csv_light.svg" />
 		<None Remove="Resources\Images\data_dark.svg" />
 		<None Remove="Resources\Images\data_light.svg" />
+		<None Remove="Resources\Images\devices_other_dark.svg" />
+		<None Remove="Resources\Images\devices_other_light.svg" />
 		<None Remove="Resources\Images\group_dark.svg" />
 		<None Remove="Resources\Images\group_light.svg" />
+		<None Remove="Resources\Images\host_dark.svg" />
+		<None Remove="Resources\Images\host_light.svg" />
 		<None Remove="Resources\Images\key_dark.svg" />
 		<None Remove="Resources\Images\key_light.svg" />
 		<None Remove="Resources\Images\labs_dark.svg" />
@@ -316,6 +320,9 @@
 		<Compile Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml.cs">
 		  <DependentUpon>ClientConnectionPage.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Modules\Remote\Client\Pages\ConnectedServersPage.xaml.cs">
+		  <DependentUpon>ConnectedServersPage.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Platforms\Android\Services\UpdateService.cs">
 			<ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 		</Compile>
@@ -367,6 +374,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Modules\Remote\Client\Pages\ClientConnectionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Modules\Remote\Client\Pages\ConnectedServersPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Modules\Remote\Server\Pages\RemoteServerPage.xaml">

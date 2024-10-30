@@ -93,6 +93,10 @@
                       Route="ClientConnectionPage"
                       ContentTemplate="{DataTemplate clientConnection:ClientConnectionPage}"
                        />
+        <ShellContent Title="{x:Static res:AppRes.ConnectedServers}"
+                      Icon="{AppThemeBinding Light='host_light.png', Dark='host_dark.png'}"
+                      Route="ConnectedServersPage"
+                      ContentTemplate="{DataTemplate clientConnection:ConnectedServersPage}" />
     </FlyoutItem>
     
     

@@ -489,6 +489,9 @@
   <data name="RomteServerSettings" xml:space="preserve">
     <value>Távoli hozzáférés beállítása</value>
   </data>
+  <data name="RemoteServerSwitchLabel" xml:space="preserve">
+    <value>Szerver be/ki kapcsolás:</value>
+  </data>
   <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
     <value>Távoli hozzá férési kód:</value>
   </data>
@@ -506,5 +509,29 @@
   </data>
   <data name="Failed" xml:space="preserve">
     <value>Hiba</value>
+  </data>
+  <data name="ConnectedDevices" xml:space="preserve">
+    <value>Régebbi csatlakozások</value>
+  </data>
+  <data name="SuccessToConnection" xml:space="preserve">
+    <value>Sikeres csatlakozás</value>
+  </data>
+  <data name="AreYouSureYouWantToConnection" xml:space="preserve">
+    <value>Biztos csatlakozni akarsz</value>
+  </data>
+  <data name="Disconecting" xml:space="preserve">
+    <value>Lekapcsolodás</value>
+  </data>
+  <data name="AreYouSureYouWantToDisconnection" xml:space="preserve">
+    <value>Biztosan le szeretnél kapcsolódni</value>
+  </data>
+  <data name="ConnectedServers" xml:space="preserve">
+    <value>Kapcsolódott szerverek</value>
+  </data>
+  <data name="FirstConnaction" xml:space="preserve">
+    <value>Első csatlakozás</value>
+  </data>
+  <data name="LastConnection" xml:space="preserve">
+    <value>Utolsó csatlakozás</value>
   </data>
 </root>

@@ -33,13 +33,13 @@
                                />
                 <Entry Text="{Binding BarcodeText}"
                        Placeholder="{x:Static res:AppRes.ConnectionString}"/>
-                <Button Command="{Binding ConnectionCommand}" Text="{x:Static res:AppRes.Connection}"/>
-
-                <!--<RefreshView>
-                    <ListView>
-                        
-                    </ListView>
-                </RefreshView>-->
+                <Button Command="{Binding ConnectionCommand}"
+                        Text="{x:Static res:AppRes.Connection}" 
+                        Margin="10" />
+                
+                <Button Command="{Binding DisconectedCommand}"
+                        Text="{x:Static res:AppRes.Disconecting}"
+                        Margin="10" />
             </VerticalStackLayout>
         </ScrollView>
     </StackLayout>

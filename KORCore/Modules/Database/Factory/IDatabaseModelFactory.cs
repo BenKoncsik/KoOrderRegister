@@ -10,6 +10,7 @@ namespace KORCore.Modules.Database.Factory
     public interface IDatabaseModelFactory
     {
         void SetDatabase(bool isRemote);
+        bool GetRemoteStatus();
         IDatabaseModel Get();
     }
 }

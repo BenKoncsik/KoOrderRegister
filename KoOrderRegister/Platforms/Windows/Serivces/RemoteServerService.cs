@@ -25,7 +25,7 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
         private string _private_key = Preferences.Get("private_key", GenerateRandomString(10));
         private HubConnection _hubConnection;
         
-        public RemoteServerService(DatabaseModel databaseModel)
+        public RemoteServerService(ILocalDatabase databaseModel)
         {
             _databaseModel = databaseModel; 
         }
@@ -42,10 +42,6 @@ namespace KoOrderRegister.Modules.Remote.Server.Service
                 KORConnect.Program.Main(new string[0]);
                 _port = KORConnect.Program.CreateAndRunWebHost(new string[0], (_port == -1)? null : _port);
                 Preferences.Set("remoteServerPort", _port);
-              /*  _hubConnection = new HubConnectionBuilder()
-                    .WithUrl(GetRemoteServerIP() + "/databaseHub")
-                    .Build();
-                IDatabaseModel.OnDatabaseChange += OnDatabaseChange;*/
                 return true;
             }
             catch(Exception ex)
