@@ -1,4 +1,5 @@
-﻿using KoOrderRegister.Localization.SupportedLanguage;
+﻿using KoOrderRegister.Localization;
+using KoOrderRegister.Localization.SupportedLanguage;
 using KoOrderRegister.Services;
 using System.Globalization;
 
@@ -10,9 +11,16 @@ namespace KoOrderRegister
         private static IServiceProvider _serviceProvider;
         public App(IServiceProvider serviceProvider)
         {
-            InitializeComponent();
-            _serviceProvider = serviceProvider;
-            MainPage = new AppShell(_serviceProvider);  
+            try
+            {
+                InitializeComponent();
+                _serviceProvider = serviceProvider;
+                MainPage = new AppShell(_serviceProvider);
+            }
+            catch(Exception ex)
+            {
+                ShowErrorMessage(ex);
+            }
         }
 
       
@@ -24,7 +32,15 @@ namespace KoOrderRegister
             }
             Application.Current.MainPage = new AppShell(_serviceProvider);
         }
+        private static void ShowErrorMessage(Exception ex)
+        {
+#if WINDOWS
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string logFilePath = Path.Combine(desktopPath, "log.txt");
+            File.AppendAllText(logFilePath, $"{DateTime.Now}: {ex.Message}{Environment.NewLine}");
+            Application.Current.MainPage.DisplayAlert(AppRes.Failed, ex.Message, "OK");
+#endif
+        }
 
-        
     }
 }
