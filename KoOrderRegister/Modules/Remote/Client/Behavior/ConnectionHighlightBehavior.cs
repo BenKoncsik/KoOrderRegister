@@ -11,10 +11,10 @@ namespace KoOrderRegister.Modules.Remote.Client.Behavior
 {
     public class ConnectionHighlightBehavior : Behavior<ListView>
     {
-        private IRemoteDatabase _remotedatabase;
+        private IRemoteDatabase _remoteDatabase;
         public ConnectionHighlightBehavior(IRemoteDatabase remotedatabase)
         {
-            _remotedatabase = remotedatabase;
+            _remoteDatabase = remotedatabase;
         }
         protected override void OnAttachedTo(ListView bindable)
         {
@@ -63,7 +63,7 @@ namespace KoOrderRegister.Modules.Remote.Client.Behavior
                     var cell = listView.TemplatedItems[index] as ViewCell;
                     if (cell != null)
                     {
-                        cell.View.BackgroundColor = Application.Current.PlatformAppTheme.Equals(AppTheme.Dark) ? Colors.White : Colors.Black;
+                        cell.View.BackgroundColor = Colors.Transparent;
                     }
                 }
             }
@@ -71,7 +71,7 @@ namespace KoOrderRegister.Modules.Remote.Client.Behavior
 
         private bool CheckIfConnected(ConnectionDeviceData connectionData)
         {
-            return _remotedatabase.GetConectedUrl().Equals(connectionData.Url + "/api");
+            return _remoteDatabase.GetConectedUrl().Equals(connectionData.Url + "/api");
         }
     }
 }

@@ -5,12 +5,13 @@
              x:Class="KoOrderRegister.Modules.Remote.Client.Pages.ClientConnectionPage"
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              Title="{x:Static res:AppRes.ClientConnectionSettings}">
-    <StackLayout>
+    <ScrollView>
+        <StackLayout>
         <Label Text="{x:Static res:AppRes.ClientConnectionSettings}"
                Margin="10, 0, 10,10"
                FontSize="Large"
                HorizontalOptions="Center" />
-        <ScrollView>
+       
             <VerticalStackLayout>
                 <Label Text="{x:Static res:AppRes.ConnectionString}"
                        Margin="10, 0, 10,10"
@@ -41,6 +42,7 @@
                         Text="{x:Static res:AppRes.Disconecting}"
                         Margin="10" />
             </VerticalStackLayout>
-        </ScrollView>
+       
     </StackLayout>
+    </ScrollView>
 </ContentPage>
