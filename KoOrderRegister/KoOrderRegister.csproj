@@ -124,11 +124,17 @@
 
 	<ItemGroup>
 	  <AndroidResource Remove="Modules\Export\Services\**" />
+	  <AndroidResource Remove="Technical\**" />
 	  <Compile Remove="Modules\Export\Services\**" />
+	  <Compile Remove="Technical\**" />
 	  <EmbeddedResource Remove="Modules\Export\Services\**" />
+	  <EmbeddedResource Remove="Technical\**" />
 	  <MauiCss Remove="Modules\Export\Services\**" />
+	  <MauiCss Remove="Technical\**" />
 	  <MauiXaml Remove="Modules\Export\Services\**" />
+	  <MauiXaml Remove="Technical\**" />
 	  <None Remove="Modules\Export\Services\**" />
+	  <None Remove="Technical\**" />
 	</ItemGroup>
 
 	<ItemGroup>
