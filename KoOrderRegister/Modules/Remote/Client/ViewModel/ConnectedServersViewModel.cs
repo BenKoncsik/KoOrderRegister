@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.VariantTypes;
 using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.Remote.Client.Service;
 using KoOrderRegister.ViewModel;
 using KORCore.Modules.Database.Factory;
 using KORCore.Modules.Database.Models;
@@ -22,6 +23,7 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
         private readonly ILocalDatabase _localDatabase;
         private readonly IRemoteDatabase _remoteDatabase;
         private readonly IDatabaseModelFactory _databaseModelFactory;
+        private readonly IRemoteClientService _remoteClientService;
         #endregion
         #region Binding varrible
         public ObservableCollection<ConnectionDeviceData> Connections { get; set; } = new ObservableCollection<ConnectionDeviceData>();
@@ -32,19 +34,24 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
         public Command<string> SearchCommand { get; }
         public Command<ConnectionDeviceData> DeleteConnectionCommand { get; }
         public Command<ConnectionDeviceData> ConnectServerCommand { get; }
+        public Command<ConnectionDeviceData> DisconetionServerCommand { get; }
+        public Command<ConnectionDeviceData> ConnectTapServerCommand { get; }
         #endregion
 
         private CancellationTokenSource _cancellationToken = new CancellationTokenSource();
 
-        public ConnectedServersViewModel(ILocalDatabase localDatabase, IRemoteDatabase remoteDatabase, IDatabaseModelFactory databaseModelFactory)
+        public ConnectedServersViewModel(ILocalDatabase localDatabase, IRemoteDatabase remoteDatabase, IRemoteClientService remoteClientService, IDatabaseModelFactory databaseModelFactory)
         {
             _localDatabase = localDatabase;
             _remoteDatabase = remoteDatabase;
             _databaseModelFactory = databaseModelFactory;
+            _remoteClientService = remoteClientService;
             UpdateCommand = new Command(Update);
             SearchCommand = new Command<string>(Search);
             DeleteConnectionCommand = new Command<ConnectionDeviceData>(Delete);
             ConnectServerCommand = new Command<ConnectionDeviceData>(Connection);
+            DisconetionServerCommand = new Command<ConnectionDeviceData>(Disconection);
+            ConnectTapServerCommand = new Command<ConnectionDeviceData>(ConectedTap);
         }
 
         private async void Update()
@@ -127,6 +134,29 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
                 _remoteDatabase.SetUrl(deviceData.Url);
                 _databaseModelFactory.SetDatabase(true);
                 await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.SuccessToConnection + " " + deviceData.Url, AppRes.Ok);
+            }
+        }
+        private async void Disconection(ConnectionDeviceData deviceData)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Disconecting, AppRes.AreYouSureYouWantToDisconnection + " " + deviceData.Url, AppRes.Yes, AppRes.No);
+                if (result)
+                {
+                    await _remoteClientService.DisconnectAsync();
+                }
+            });
+        }
+
+        private async void ConectedTap(ConnectionDeviceData deviceData)
+        {
+            if(_remoteDatabase.GetConectedUrl().Equals(deviceData.Url + "/api"))
+            {
+                Disconection(deviceData);
+            }
+            else
+            {
+                Connection(deviceData);
             }
         }
 

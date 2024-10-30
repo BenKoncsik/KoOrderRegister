@@ -182,7 +182,9 @@ namespace KoOrderRegister
 
             builder.Services.AddTransient<ConnectedServersViewModel>();
             builder.Services.AddTransient<ConnectedServersPage>();
+
             builder.Services.AddTransient<ConnectionHighlightBehavior>();
+            builder.Services.AddTransient<ConnectionMenuBehavior>();
 
 
             #endregion

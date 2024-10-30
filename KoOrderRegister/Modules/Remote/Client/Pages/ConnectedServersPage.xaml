@@ -48,26 +48,42 @@
                         <ViewCell>
 
                             <ViewCell.ContextActions>
-                                <MenuItem Text="{x:Static res:AppRes.Connection}"
+                                <MenuItem x:Name="connectionMenuItem"
+                                          Text="{x:Static res:AppRes.Connection}"
                                           IsDestructive="True"
                                           Command="{Binding Path=BindingContext.ConnectServerCommand, Source={x:Reference Name=connectionListView}}"
                                           CommandParameter="{Binding .}" />
-                                
+
+                                <MenuItem x:Name="disConnectionMenuItem"
+                                          Text="{x:Static res:AppRes.Disconecting}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DisconetionServerCommand, Source={x:Reference Name=connectionListView}}"
+                                          CommandParameter="{Binding .}" 
+                                          />
+
                                 <MenuItem Text="{x:Static res:AppRes.Delete}"
                                           IsDestructive="True"
                                           Command="{Binding Path=BindingContext.DeleteConnectionCommand, Source={x:Reference Name=connectionListView}}"
                                           CommandParameter="{Binding .}" />
+                                
                             </ViewCell.ContextActions>
+                            
                             <Grid  Padding="5,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-
+                                
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-
+                                
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.ConnectServerCommand, Source={x:Reference Name=connectionListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                                
                                 <Label Text="{Binding FirstConnectionData}"
                                        Grid.Column="0"
                                        HorizontalOptions="Center"
