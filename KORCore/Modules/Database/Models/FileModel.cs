@@ -17,10 +17,10 @@ namespace KORCore.Modules.Database.Models
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonIgnore]
-        public byte[] Content { get; set; } = null;
+        public byte[]? Content { get; set; } = null;
         [Ignore]
         [JsonProperty("content", NullValueHandling = NullValueHandling.Ignore)]
-        public string ContentBase64
+        public string? ContentBase64
         {
             get => Content == null ? null : Convert.ToBase64String(Content);
             set => Content = string.IsNullOrEmpty(value) ? null : Convert.FromBase64String(value);
@@ -30,7 +30,7 @@ namespace KORCore.Modules.Database.Models
         /// <summary>
         /// Microsoft.Maui.Storage.FileResult
         /// </summary>
-        public object FileResult { get; set; } = null;
+        public object? FileResult { get; set; } = null;
         [JsonProperty("content_type")]
         public string ContentType { get; set; }
         [JsonProperty("note")]
@@ -46,7 +46,7 @@ namespace KORCore.Modules.Database.Models
         public string FilePath { get; set; } = string.Empty;
         [Ignore]
         [JsonProperty("order", NullValueHandling = NullValueHandling.Ignore)]
-        public OrderModel Order { get; set; }
+        public OrderModel? Order { get; set; }
         [Ignore]
         [JsonIgnore]
         public Guid Guid => Guid.Parse(Id);

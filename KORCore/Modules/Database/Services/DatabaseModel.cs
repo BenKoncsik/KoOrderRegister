@@ -569,6 +569,7 @@ namespace KORCore.Modules.Database.Services
             {
                 FileModel dbFile = await GetFileById(file.Guid);
                 file.Content = dbFile.Content;
+                file.OrderId = dbFile.OrderId;
             }
             return await Database.UpdateAsync(file);
         }
