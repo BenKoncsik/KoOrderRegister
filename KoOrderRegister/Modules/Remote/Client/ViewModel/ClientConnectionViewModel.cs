@@ -170,36 +170,42 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
 
         private async void StartConnection()
         {
-            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.AreYouSureYouWantToConnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
-            if (result)
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                try
+                bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.AreYouSureYouWantToConnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
+                if (result)
                 {
-                    if (await _remoteClientService.ConnectAsync(ConnectionData))
+                    try
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.SuccessToConnection + " " + ConnectionData.Url, AppRes.Ok);
-                        _notificationService.SendNotification(AppRes.Connection, AppRes.Ok);
+                        if (await _remoteClientService.ConnectAsync(ConnectionData))
+                        {
+                            await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.SuccessToConnection + " " + ConnectionData.Url, AppRes.Ok);
+                            _notificationService.SendNotification(AppRes.Connection, AppRes.Ok);
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.Failed + " " + ConnectionData.Url, AppRes.Ok);
+                            _notificationService.SendNotification(AppRes.Connection, AppRes.Failed);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppRes.Connection, AppRes.Failed + " " + ConnectionData.Url, AppRes.Ok);
-                        _notificationService.SendNotification(AppRes.Connection, AppRes.Failed);
+                        Debug.WriteLine($"Connection error: {ex}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Connection error: {ex}");
-                }
-            }
-           
+            });
+
         }
         public async void Disconected()
         {
-            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Disconecting, AppRes.AreYouSureYouWantToDisconnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
-            if (result)
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-               await _remoteClientService.DisconnectAsync();
-            }
+                bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Disconecting, AppRes.AreYouSureYouWantToDisconnection + " " + ConnectionData.Url, AppRes.Yes, AppRes.No);
+                if (result)
+                {
+                    await _remoteClientService.DisconnectAsync();
+                }
+            });
         }
 
         public async void OnAppearing(CameraView cameraView)
