@@ -9,6 +9,6 @@ namespace KORCore.Modules.Database.Services
     public interface IRemoteDatabase: IDatabaseModel
     {
         void SetUrl(string url);
-        string GetConectedUrl();
+        string GetConnectedUrl();
     }
 }

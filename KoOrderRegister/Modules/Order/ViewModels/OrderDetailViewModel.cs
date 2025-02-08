@@ -131,7 +131,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                     _selectedItem = value;
                     OnPropertyChanged(nameof(SelectedItem));
                     Order.CustomerId = value?.Id ?? "";
-                    Order.Customer = value;
+                    Order.Customer = value ?? new CustomerModel();
                     OnPropertyChanged(nameof(Customer));
                 }
             }
@@ -140,7 +140,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ObservableCollection<FileModel> Files { get; set; } = new ObservableCollection<FileModel>();
         private CancellationToken cancellationToken = new CancellationToken();
         #region Commands
-        public ICommand ReturnCommand => new Command(Return);
+        public ICommand ReturnCommand => new Command(async () => await Return());
         public ICommand SaveCommand => new Command(SaveOrder);
         public ICommand DeleteCommand => new Command(DeleteOrder);
         public ICommand SelectedFilesCommand => new Command(SelectedFiles);
@@ -197,8 +197,8 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                             if (!file.IsDatabaseContent && file.FileResult != null)
                             {
                                 List<byte> contentList = new List<byte>();
-                                FileResult fileresult = (FileResult)file.FileResult;
-                                using (var stream = await fileresult.OpenReadAsync())
+                                FileResult fileResult = (FileResult)file.FileResult;
+                                using (var stream = await fileResult.OpenReadAsync())
                                 {
                                     byte[] buffer = new byte[1048576];
                                     int bytesRead;
@@ -239,7 +239,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 if (await _database.DeleteOrder(Order.Guid) > 0)
                 {
                     IsRefreshing = false;
-                    Return();
+                    await Return();
                 }
                 else
                 {
@@ -249,9 +249,9 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             }
         }
 
-        public async void Return()
+        public async Task Return()
         {
-            Application.Current.MainPage.Navigation.PopAsync();
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
 
         public async void Update()
@@ -412,9 +412,5 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             _filePropertiesPopup.EditFile(file);
             await MopupService.Instance.PushAsync(_filePropertiesPopup);
         }
-
-
-
-
     }
 }

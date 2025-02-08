@@ -109,6 +109,7 @@ namespace KoOrderRegister
             #endregion
 
             #region Settings Modul
+            builder.Services.AddSingleton<LocalDatabaseModel>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<SettingsViewModel>();
             #endregion
