@@ -71,7 +71,7 @@ namespace KoOrderRegister.Modules.Remote.Client.Behavior
 
         private bool CheckIfConnected(ConnectionDeviceData connectionData)
         {
-            return _remoteDatabase.GetConectedUrl().Equals(connectionData.Url + "/api");
+            return _remoteDatabase.GetConnectedUrl().Equals(connectionData.Url + "/api");
         }
     }
 }

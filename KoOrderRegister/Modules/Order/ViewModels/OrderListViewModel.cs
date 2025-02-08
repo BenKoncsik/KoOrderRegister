@@ -29,9 +29,8 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         #endregion
         public string SearchTXT { get; set; } = string.Empty;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
- 
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
 
         #region Commands
@@ -53,21 +52,28 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             DeleteOrderCommand = new Command<OrderModel>(DeleteOrder);
             UpdateOrderCommand = new Command(UpdateOrders);
             SearchCommand = new Command<string>(Search);
-
         }
+
         public override void OnAppearing()
         {
             _database = _databaseModelFactory.Get();
         }
+
         public async void NewOrder()
         {
-            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            if (App.Current?.MainPage != null)
+            {
+                await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            }
         }
 
         public async void EditOrder(OrderModel order)
         {
-            _orderDetailsPage.EditOrder(order);
-            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            if (App.Current?.MainPage != null)
+            {
+                _orderDetailsPage.EditOrder(order);
+                await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            }
         }
 
         public async void UpdateOrders()
@@ -93,6 +99,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 }
             }
         }
+
         private async Task _updateOrders()
         {
             IsRefreshing = true;
@@ -121,16 +128,19 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void DeleteOrder(OrderModel order)
         {
-            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.Yes, AppRes.No);
-            if (result)
+            if (Application.Current?.MainPage != null)
             {
-                if (await _database.DeleteOrder(order.Guid) > 0)
+                bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.Yes, AppRes.No);
+                if (result)
                 {
-                    Orders.Remove(order);
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + order.OrderNumber, AppRes.Ok);
+                    if (await _database.DeleteOrder(order.Guid) > 0)
+                    {
+                        Orders.Remove(order);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + order.OrderNumber, AppRes.Ok);
+                    }
                 }
             }
         }

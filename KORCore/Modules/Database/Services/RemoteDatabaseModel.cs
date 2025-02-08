@@ -16,7 +16,7 @@ namespace KORCore.Modules.Database.Services
             _httpClient = httpClientFactory.CreateClient("kor_connection_client");
         }
 
-        public string GetConectedUrl()
+        public string GetConnectedUrl()
         {
             return ApiBaseUrl;
         }
@@ -27,7 +27,7 @@ namespace KORCore.Modules.Database.Services
 
         public static event Action<string, object> OnDatabaseChange;
 
-        public static void InVokeOnDatabaseChange(string name, object data)
+        public static void InvokeOnDatabaseChange(string name, object data)
         {
             OnDatabaseChange?.Invoke(name, data);
         }
@@ -42,7 +42,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to create customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
             return 1;
         }
 
@@ -57,7 +57,7 @@ namespace KORCore.Modules.Database.Services
                 return new CustomerModel();
             }
             var customer = await response.Content.ReadFromJsonAsyncNewtonsoft<CustomerModel>();
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
             return customer;
             
         }
@@ -74,7 +74,7 @@ namespace KORCore.Modules.Database.Services
                     return new List<CustomerModel>();
                 }
                 var customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
+                InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
             catch (HttpRequestException e)
@@ -101,7 +101,7 @@ namespace KORCore.Modules.Database.Services
                         if (jsonTextReader.TokenType == JsonToken.StartObject)
                         {
                             var customer = serializer.Deserialize<CustomerModel>(jsonTextReader);
-                            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
+                            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                             yield return customer;
                         }
                     }
@@ -117,7 +117,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to update customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
             return 1;
         }
 
@@ -130,7 +130,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, id);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, id);
             return 1;
         }
 
@@ -145,7 +145,7 @@ namespace KORCore.Modules.Database.Services
                 return new List<CustomerModel>();
             }
             List<CustomerModel> customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
             return customers;
         }
 
@@ -165,7 +165,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var customer = serializer.Deserialize<CustomerModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
+                        InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                         yield return customer;
                     }
                 }
@@ -182,7 +182,7 @@ namespace KORCore.Modules.Database.Services
                 return 0;
             }
             int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
+            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
             return count;
 
         }
@@ -191,20 +191,20 @@ namespace KORCore.Modules.Database.Services
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
         {
-            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order", order);
+            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order/CreateOrder", order);
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
             return 1;
         }
 
         public async Task<OrderModel> GetOrderById(Guid id)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/{id}");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/GetOrderById/{id}");
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -212,14 +212,14 @@ namespace KORCore.Modules.Database.Services
                 return new OrderModel();
             }
             var order = await response.Content.ReadFromJsonAsyncNewtonsoft<OrderModel>();
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
             return order;
            
         }
 
         public async Task<List<OrderModel>> GetAllOrders(int page = int.MinValue)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/GetAllOrders");
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
@@ -227,7 +227,7 @@ namespace KORCore.Modules.Database.Services
                 return new List<OrderModel>();
             }
             var orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
             return orders;
         }
 
@@ -247,7 +247,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var order = serializer.Deserialize<OrderModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
+                        InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                         yield return order;
                     }
                 }
@@ -256,14 +256,14 @@ namespace KORCore.Modules.Database.Services
 
         public async Task<int> UpdateOrder(OrderModel order)
         {
-            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order", order);
+            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order/UpdateOrder", order);
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine($"Failed to update order. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
             return 1;
         }
 
@@ -276,7 +276,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to delete order. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, id);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, id);
             return 1;
         }
 
@@ -292,7 +292,7 @@ namespace KORCore.Modules.Database.Services
                     return new List<OrderModel>();
                 }
                 List<OrderModel> orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
-                InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
+                InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
                 return await Task.FromResult(orders);
             }
             catch(HttpRequestException e)
@@ -319,7 +319,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var order = serializer.Deserialize<OrderModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
+                        InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                         yield return order;
                     }
                 }
@@ -336,7 +336,7 @@ namespace KORCore.Modules.Database.Services
                 return 0;
             }
             int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InVokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
+            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
             return count;  
         }
         #endregion
@@ -351,7 +351,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to cretae file. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
             return 1;
         }
 
@@ -365,7 +365,7 @@ namespace KORCore.Modules.Database.Services
                 return new FileModel();
             }
             var file = await response.Content.ReadFromJsonAsyncNewtonsoft<FileModel>();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
             return file;
      
         }
@@ -380,7 +380,7 @@ namespace KORCore.Modules.Database.Services
                 return new List<FileModel>();
             }
             var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
             return files;
         }
 
@@ -400,7 +400,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
+                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                         yield return file;
                     }
                 }
@@ -418,7 +418,7 @@ namespace KORCore.Modules.Database.Services
                 return new List<FileModel>();
             }
             var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
             return files;
         }
 
@@ -438,7 +438,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
+                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                         yield return file;
                     }
                 }
@@ -456,7 +456,7 @@ namespace KORCore.Modules.Database.Services
                 return new List<FileModel>();
             }
             var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
             return files;
         }
 
@@ -476,7 +476,7 @@ namespace KORCore.Modules.Database.Services
                     if (jsonTextReader.TokenType == JsonToken.StartObject)
                     {
                         var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
+                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                         yield return file;
                     }
                 }
@@ -492,7 +492,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to update file. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
             return 1;
         }
 
@@ -505,7 +505,7 @@ namespace KORCore.Modules.Database.Services
                 Debug.WriteLine($"Failed to delete file. StatusCode: {response.StatusCode}, Content: {errorContent}");
                 return 0;
             }
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, id);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, id);
             return 1;
         }
 
@@ -519,7 +519,7 @@ namespace KORCore.Modules.Database.Services
                 return string.Empty;
             }
             string size = await response.Content.ReadAsStringAsync();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, size);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, size);
             return size;
         }
 
@@ -533,7 +533,7 @@ namespace KORCore.Modules.Database.Services
                 return 0;
             }
             int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InVokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT_CHANGED, count);
+            InvokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT_CHANGED, count);
             return count;
         }
         #endregion
@@ -543,7 +543,7 @@ namespace KORCore.Modules.Database.Services
         {
             // Logic to export the database to JSON
             progressCallback?.Invoke(100);
-            InVokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_CREATED, filePath);
+            InvokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_CREATED, filePath);
             await Task.CompletedTask;
         }
 
@@ -551,7 +551,7 @@ namespace KORCore.Modules.Database.Services
         {
             // Logic to import the database from JSON
             progressCallback?.Invoke(100);
-            InVokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_UPDATED, jsonStream);
+            InvokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_UPDATED, jsonStream);
             await Task.CompletedTask;
         }
         #endregion

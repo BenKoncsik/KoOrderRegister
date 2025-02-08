@@ -61,12 +61,12 @@ namespace KORCore.Modules.Database.Services
             CustomerModel? result = await GetCustomerById(customer.Guid);
             if (result == null)
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
                 return await Database.InsertAsync(customer);
             }
             else
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
                 return await UpdateCustomer(customer);
             }
         }
@@ -85,7 +85,7 @@ namespace KORCore.Modules.Database.Services
                 }
                 customer.Orders = orders;
             }
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
             return customer;
         }
 
@@ -106,7 +106,7 @@ namespace KORCore.Modules.Database.Services
                     }
                     customer.Orders = orders;
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
             else
@@ -127,7 +127,7 @@ namespace KORCore.Modules.Database.Services
                     }
                     customer.Orders = orders;
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
                 return customers;
             }
         }
@@ -153,7 +153,7 @@ namespace KORCore.Modules.Database.Services
                     }
                 }
                 customer.Orders = orders;
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                 yield return customer;
             }
         }
@@ -174,7 +174,7 @@ namespace KORCore.Modules.Database.Services
                 {
                     await DeleteOrder(Guid.Parse(order.Id));
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, customer);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, customer);
                 return await Database.DeleteAsync(customer);
             }
             return 0;
@@ -219,7 +219,7 @@ namespace KORCore.Modules.Database.Services
                 .GroupBy(c => c.Id)
                 .Select(g => g.First())
                 .ToList();
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customersOrders);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customersOrders);
             return customersOrders;
 
         }
@@ -247,7 +247,7 @@ namespace KORCore.Modules.Database.Services
             foreach (var customer in customers.GroupBy(c => c.Id).Select(g => g.First()).ToList())
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
                 yield return customer;
             }
         }
@@ -255,7 +255,7 @@ namespace KORCore.Modules.Database.Services
         public async Task<int> CountCustomers()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {CUSTOMER_TABLE}");
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
             return count;
         }
 
@@ -266,12 +266,12 @@ namespace KORCore.Modules.Database.Services
             OrderModel? result = await GetOrderById(order.Guid);
             if (result == null)
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
                 return await Database.InsertAsync(order);
             }
             else
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
                 return await UpdateOrder(order);
             }
         }
@@ -284,7 +284,7 @@ namespace KORCore.Modules.Database.Services
             {
                 order.Files = order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
             }
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
             return order;
         }
 
@@ -321,7 +321,7 @@ namespace KORCore.Modules.Database.Services
                     }, ThreadManager.Priority.High));
 
             await Task.WhenAll(tasks);
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
             return orders;
         }
 
@@ -346,7 +346,7 @@ namespace KORCore.Modules.Database.Services
                 {
                     order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                 yield return order;
             }
         }
@@ -366,7 +366,7 @@ namespace KORCore.Modules.Database.Services
                 {
                     await DeleteFile(Guid.Parse(file.Id));
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, order);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, order);
                 return await Database.DeleteAsync(order);
             }
             return 0;
@@ -438,7 +438,7 @@ namespace KORCore.Modules.Database.Services
 
             orders.AsParallel().ForAll(order => RunBackgroundTask(order));
             await Task.WhenAll(tasks);
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
             return orders;
         }
 
@@ -473,7 +473,7 @@ namespace KORCore.Modules.Database.Services
                     order.Customer = await GetCustomerById(Guid.Parse(order.CustomerId));
                     order.Files = await GetFilesByOrderIdWithOutContent(order.Guid);
                 }
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
                 yield return order;
             }
         }
@@ -481,7 +481,7 @@ namespace KORCore.Modules.Database.Services
         public async Task<int> CountOrders()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {ORDER_TABLE}");
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
             return count;
         }
         #endregion
@@ -491,12 +491,12 @@ namespace KORCore.Modules.Database.Services
             FileModel? result = await GetFileById(file.Guid);
             if (result == null)
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
                 return await Database.InsertAsync(file);
             }
             else
             {
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
                 return await UpdateFile(file);
             }
         }
@@ -505,7 +505,7 @@ namespace KORCore.Modules.Database.Services
         {
             string stringId = id.ToString();
             FileModel file = await Database.FindAsync<FileModel>(stringId);
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
             return file;
         }
 
@@ -520,10 +520,10 @@ namespace KORCore.Modules.Database.Services
                 List<FileModel> files = await Database.Table<FileModel>()
                     .Where(f => f.OrderId.Equals(stringId))
                     .ToListAsync();
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, files);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, files);
                 return files;
             }
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, new List<FileModel>());
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, new List<FileModel>());
             return new List<FileModel>();
         }
 
@@ -538,7 +538,7 @@ namespace KORCore.Modules.Database.Services
                 foreach (var file in await Database.Table<FileModel>().Where(f => f.OrderId.Equals(stringId)).ToListAsync())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
+                    IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                     yield return file;
                 }
             }
@@ -549,7 +549,7 @@ namespace KORCore.Modules.Database.Services
         {
             List<FileModel> files = await Database.Table<FileModel>().ToListAsync();
             files.AsParallel().Where(f => f.IsDatabaseContent = true);
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
             return files;
         }
 
@@ -561,7 +561,7 @@ namespace KORCore.Modules.Database.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 file.IsDatabaseContent = true;
                 file.Order = await GetOrderById(Guid.Parse(file.OrderId));
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, files);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, files);
                 yield return file;
             }
         }
@@ -585,7 +585,7 @@ namespace KORCore.Modules.Database.Services
             if (file != null)
             {
                 int reuslt = await Database.DeleteAsync(file);
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, reuslt);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, reuslt);
                 return reuslt;
             }
             return 0;
@@ -599,7 +599,7 @@ namespace KORCore.Modules.Database.Services
             {
                 file.IsDatabaseContent = true;
             }
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, fileModels);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, fileModels);
             return fileModels;
         }
 
@@ -610,7 +610,7 @@ namespace KORCore.Modules.Database.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 file.IsDatabaseContent = true;
-                IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
+                IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
                 yield return file;
             }
         }
@@ -619,13 +619,13 @@ namespace KORCore.Modules.Database.Services
         {
             var query = $"SELECT SUM(length(content)) FROM {FILES_TABLE} WHERE id = ?";
             long length = await Database.ExecuteScalarAsync<long>(query, id.ToString());
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, length.ToStringSize());
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, length.ToStringSize());
             return length.ToStringSize();
         }
         public async Task<int> CountFiles()
         {
             var count = await Database.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM {FILES_TABLE}");
-            IDatabaseModel.InVokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT, count);
+            IDatabaseModel.InvokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT, count);
             return count;
         }
         #endregion

@@ -11,7 +11,7 @@ namespace KORCore.Modules.Database.Services
     {
         #region RealTime changes
         static event Action<string, object> OnDatabaseChange;
-        static void InVokeOnDatabaseChange(string name, object data)
+        static void InvokeOnDatabaseChange(string name, object data)
         {
             OnDatabaseChange?.Invoke(name, data);
         }

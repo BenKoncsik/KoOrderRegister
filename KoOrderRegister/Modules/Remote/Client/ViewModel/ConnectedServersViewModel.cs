@@ -150,7 +150,7 @@ namespace KoOrderRegister.Modules.Remote.Client.ViewModel
 
         private async void ConectedTap(ConnectionDeviceData deviceData)
         {
-            if(_remoteDatabase.GetConectedUrl().Equals(deviceData.Url + "/api"))
+            if(_remoteDatabase.GetConnectedUrl().Equals(deviceData.Url + "/api"))
             {
                 Disconection(deviceData);
             }
