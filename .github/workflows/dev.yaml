@@ -20,7 +20,6 @@ permissions:
   contents: write
   pull-requests: write
 
-
 jobs:
   prepare-version:
     runs-on: ubuntu-latest
@@ -29,6 +28,11 @@ jobs:
       versionCode: ${{ steps.version.outputs.versionCode }}
       minorVersion: ${{ steps.version.outputs.minorVersion }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Get the current version using GitHub CLI
         id: get-version
         run: |
@@ -66,39 +70,40 @@ jobs:
           echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
           echo "minorVersion=$MINOR" >> $GITHUB_OUTPUT
-          echo newVersion: $NEW_VERSION
-          echo versionCode: $MAJOR
-          echo minorVersion: $MINOR
           gh api \
             --method PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
             -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
-            
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
-          NEW_PATCH: ${{ env.new-minor }}    
-        
-        
+          NEW_PATCH: ${{ env.new-minor }}
+
   build-apk:
     runs-on: [windows-latest]
-    #runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v4
         with:
-          dotnet-version: '8.0.x'
+          fetch-depth: 0
+
       - name: Debug Output Values
         run: |
           echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+
       - name: Install .NET SDK maui
         run: dotnet workload install maui
+
       - name: Run APK build script
         run: cmd /c ".\build_apk.bat"
         env:
@@ -106,6 +111,7 @@ jobs:
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -116,20 +122,26 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Debug Output Values
+        run: |
+          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
-      - name: Debug Output Values
-        run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
+
       - name: Install Certificate
         run: |
           Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
           -CertStoreLocation Cert:\CurrentUser\My `
           -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
         shell: powershell
+
       - name: Run MSIX build script
         run: cmd /c ".\build_msix.bat"
         env:
@@ -137,6 +149,7 @@ jobs:
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload MSIX
         uses: actions/upload-artifact@v4
         with:
@@ -147,25 +160,31 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk, build-msix]
     steps:
-      - name: Delete output
-        run: |
-          if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
-          if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
-          mkdir output
+      - name: Cleanup workspace
+        run: rm -rf ${{ github.workspace }}/*
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Download APK Artifact
         uses: actions/download-artifact@v3
         with:
           name: apk-artifact
+
       - name: Move APK Artifact
         run: |
           mv *.apk output/
+
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v3
         with:
           name: msix-artifact
+
       - name: Move MSIX Artifact
         run: |
           mv *.msix output/
+
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
@@ -178,9 +197,3 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
-
-
-
-
- 
