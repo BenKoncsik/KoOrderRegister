@@ -12,7 +12,7 @@ on:
     branches:
       - develop
   workflow_run:
-    workflows: ["Publish"] 
+    workflows: ["Publish"]
     types:
       - completed
 
@@ -41,7 +41,12 @@ jobs:
           git remote add origin https://github.com/${{ github.repository }}.git
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
-        shell: cmd /c
+        # Ha szeretnéd explicit módon beállítani, akkor:
+        # shell: bash
+
+      # Itt (vagy egy másik lépésben) kellene szerepelnie annak, ami beállítja a
+      # steps.version.outputs.* változókat (pl. verziószám számítás). 
+      # Ez a példa szerint kimaradt, de a kimeneti értékek definíciója megvan.
 
   build-apk:
     runs-on: [windows-latest]
