@@ -28,6 +28,11 @@ jobs:
       versionCode: ${{ steps.version.outputs.versionCode }}
       minorVersion: ${{ steps.version.outputs.minorVersion }}
     steps:
+      # 1) Beállítjuk a safe directory-t a futó user globális configjában (Linux/Bash).
+      - name: Configure Git safe directory (Ubuntu)
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -42,21 +47,22 @@ jobs:
           git remote add origin https://github.com/${{ github.repository }}.git
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
-        # Fut Ubuntu-n, így alapértelmezetten bash shellt használ.
 
-      # Ha van egy lépés, amely előállítja a version, versionCode, minorVersion
-      # értékeket (például scripts vagy valamilyen action), ide illeszd be:
-      #
+      # Példa lépés, ha kalkulálod a version, versionCode, minorVersion értékeket:
       # - name: Calculate version
       #   id: version
       #   run: ...
       #
-      # A kimeneti értékek felül meg vannak hivatkozva, hogy a build-apk job is megkapja őket.
+      # A fenti kimeneteket a job outputja továbbadja:
+      # newVersion: ${{ steps.version.outputs.newVersion }}
+      # versionCode: ${{ steps.version.outputs.versionCode }}
+      # minorVersion: ${{ steps.version.outputs.minorVersion }}
 
   build-apk:
     runs-on: windows-latest
     needs: prepare-version
     steps:
+      # 1) (Opcionális) Töröljük a workspace-et, ha létezik
       - name: Cleanup runner workspace
         run: |
           if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
@@ -64,6 +70,12 @@ jobs:
           ) else (
             echo "Directory not found"
           )
+        shell: cmd
+
+      # 2) Állítsuk be a Git safe directory-t, mielőtt a checkout dolgozik
+      - name: Configure Git safe directory (Windows)
+        run: |
+          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
         shell: cmd
 
       - uses: actions/checkout@v4
@@ -110,6 +122,7 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk]
     steps:
+      # 1) Opcionális törlés, ha még maradt korábbi workspace
       - name: Cleanup runner workspace
         run: |
           if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
@@ -117,6 +130,12 @@ jobs:
           ) else (
             echo "Directory not found"
           )
+        shell: cmd
+
+      # 2) Biztonságos könyvtár beállítása
+      - name: Configure Git safe directory (Self-hosted Windows)
+        run: |
+          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
         shell: cmd
 
       - uses: actions/checkout@v4
