@@ -28,18 +28,21 @@ jobs:
       versionCode: ${{ steps.version.outputs.versionCode }}
       minorVersion: ${{ steps.version.outputs.minorVersion }}
     steps:
-      # 1) Beállítjuk a safe directory-t a futó user globális configjában (Linux/Bash).
+      # 1) Globális safe.directory beállítás a Git számára, hogy ne panaszkodjon tulajdonjogra.
       - name: Configure Git safe directory (Ubuntu)
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+      # 2) Checkout a repóba (nem törlünk semmit kézzel, a manual init miatt amúgy is felülírjuk).
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          clean: true
+          # Fontos: clean: false => ne töröljön automatikusan, mielőtt klónoz!
+          clean: false
 
+      # 3) Manually initialize Git repository (ha mindenképp kell a fetch + reset).
       - name: Manually initialize Git repository
         run: |
           git init
@@ -48,21 +51,21 @@ jobs:
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
 
-      # Példa lépés, ha kalkulálod a version, versionCode, minorVersion értékeket:
+      # Itt helyezheted el a verziószám kiszámítását / beállítását is:
       # - name: Calculate version
       #   id: version
       #   run: ...
       #
-      # A fenti kimeneteket a job outputja továbbadja:
-      # newVersion: ${{ steps.version.outputs.newVersion }}
-      # versionCode: ${{ steps.version.outputs.versionCode }}
-      # minorVersion: ${{ steps.version.outputs.minorVersion }}
+      # outputs:
+      #   newVersion: ${{ steps.version.outputs.newVersion }}
+      #   versionCode: ${{ steps.version.outputs.versionCode }}
+      #   minorVersion: ${{ steps.version.outputs.minorVersion }}
 
   build-apk:
     runs-on: windows-latest
     needs: prepare-version
     steps:
-      # 1) (Opcionális) Töröljük a workspace-et, ha létezik
+      # 1) Opcionális: saját kézi törlés, ha maradt valami a workspace-ben
       - name: Cleanup runner workspace
         run: |
           if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
@@ -72,17 +75,18 @@ jobs:
           )
         shell: cmd
 
-      # 2) Állítsuk be a Git safe directory-t, mielőtt a checkout dolgozik
+      # 2) Globális safe.directory beállítás, mielőtt a Checkout Action futna.
       - name: Configure Git safe directory (Windows)
         run: |
           git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
         shell: cmd
 
+      # 3) Checkout (fetch-depth=0, clean: false – ne törölje a repót újra).
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          clean: true
+          clean: false
 
       - name: Debug Output Values
         run: |
@@ -122,7 +126,7 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk]
     steps:
-      # 1) Opcionális törlés, ha még maradt korábbi workspace
+      # 1) Opcionális: töröljük a workspace-et
       - name: Cleanup runner workspace
         run: |
           if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
@@ -132,18 +136,20 @@ jobs:
           )
         shell: cmd
 
-      # 2) Biztonságos könyvtár beállítása
+      # 2) Biztonságos könyvtár hozzáadása a git globális confighoz
       - name: Configure Git safe directory (Self-hosted Windows)
         run: |
           git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
         shell: cmd
 
+      # 3) Checkout
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          clean: true
+          clean: false
 
+      # 4) Letöltjük az előző job-ban feltöltött APK-t
       - name: Download APK Artifact
         uses: actions/download-artifact@v4
         with:
