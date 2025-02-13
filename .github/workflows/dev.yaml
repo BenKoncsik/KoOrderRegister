@@ -39,9 +39,9 @@ jobs:
         run: |
           git init
           git remote add origin https://github.com/${{ github.repository }}.git
-          git fetch --depth=1 origin ${{ github.ref }}
+          git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
-        shell: cmd
+        shell: cmd /c
 
   build-apk:
     runs-on: [windows-latest]
@@ -58,8 +58,9 @@ jobs:
 
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-          echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+          echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
+          echo Version Code: ${{ needs.prepare-version.outputs.versionCode }}
+        shell: cmd /c
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -68,9 +69,11 @@ jobs:
 
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+        shell: cmd /c
 
       - name: Install .NET SDK maui
         run: dotnet workload install maui
+        shell: cmd /c
 
       - name: Run APK build script
         run: cmd /c ".\build_apk.bat"
