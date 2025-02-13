@@ -32,15 +32,28 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          clean: true  # Ez biztosítja a workspace tisztaságát
+          persist-credentials: false
+          clean: true
+
+      - name: Manually initialize Git repository
+        run: |
+          git init
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git fetch --depth=1 origin ${{ github.ref }}
+          git reset --hard FETCH_HEAD
+        shell: cmd
 
   build-apk:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
+      - name: Cleanup runner workspace
+        run: cmd /c "rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister"
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
           clean: true
 
       - name: Debug Output Values
@@ -77,9 +90,13 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: [prepare-version, build-apk]
     steps:
+      - name: Cleanup runner workspace
+        run: cmd /c "rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister"
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
           clean: true
 
       - name: Download APK Artifact
