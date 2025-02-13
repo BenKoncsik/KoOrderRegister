@@ -42,20 +42,29 @@ jobs:
           git remote add origin https://github.com/${{ github.repository }}.git
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
+        # Fut Ubuntu-n, így alapértelmezetten bash shellt használ.
 
-      # Itt (vagy egy másik lépésben) szükség lehet arra, hogy a version, versionCode, minorVersion
-      # értékek kiszámítása és beállítása megtörténjen, pl.:
+      # Ha van egy lépés, amely előállítja a version, versionCode, minorVersion
+      # értékeket (például scripts vagy valamilyen action), ide illeszd be:
+      #
       # - name: Calculate version
       #   id: version
       #   run: ...
-      # Ebben a példában ez most kimaradt, de a kimeneti értékek láthatóak a job kimeneteinél.
+      #
+      # A kimeneti értékek felül meg vannak hivatkozva, hogy a build-apk job is megkapja őket.
 
   build-apk:
-    runs-on: [windows-latest]
+    runs-on: windows-latest
     needs: prepare-version
     steps:
       - name: Cleanup runner workspace
-        run: cmd /c "if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister) else (echo 'Directory not found')"
+        run: |
+          if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
+            rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister
+          ) else (
+            echo "Directory not found"
+          )
+        shell: cmd
 
       - uses: actions/checkout@v4
         with:
@@ -67,7 +76,7 @@ jobs:
         run: |
           echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
           echo Version Code: ${{ needs.prepare-version.outputs.versionCode }}
-        shell: cmd /c
+        shell: cmd
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -76,14 +85,15 @@ jobs:
 
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
-        shell: cmd /c
+        shell: cmd
 
       - name: Install .NET SDK maui
         run: dotnet workload install maui
-        shell: cmd /c
+        shell: cmd
 
       - name: Run APK build script
-        run: cmd /c ".\build_apk.bat"
+        run: .\build_apk.bat
+        shell: cmd
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
@@ -101,7 +111,13 @@ jobs:
     needs: [prepare-version, build-apk]
     steps:
       - name: Cleanup runner workspace
-        run: cmd /c "if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister) else (echo 'Directory not found')"
+        run: |
+          if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
+            rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister
+          ) else (
+            echo "Directory not found"
+          )
+        shell: cmd
 
       - uses: actions/checkout@v4
         with:
@@ -115,7 +131,8 @@ jobs:
           name: apk-artifact
 
       - name: Move APK Artifact
-        run: cmd /c "move *.apk output\"
+        run: move *.apk output\
+        shell: cmd
 
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
