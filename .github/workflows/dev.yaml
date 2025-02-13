@@ -38,15 +38,14 @@ jobs:
       - name: Manually initialize Git repository
         run: |
           git init
+          git remote remove origin || true
           git remote add origin https://github.com/${{ github.repository }}.git
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
-        # Ha szeretnéd explicit módon beállítani, akkor:
-        # shell: bash
+        # Linux alatt a parancs alapértelmezésben bash-t használ, nem cmd-t.
 
-      # Itt (vagy egy másik lépésben) kellene szerepelnie annak, ami beállítja a
-      # steps.version.outputs.* változókat (pl. verziószám számítás). 
-      # Ez a példa szerint kimaradt, de a kimeneti értékek definíciója megvan.
+      # Ha van egy lépés, ami előállítja a version, versionCode, minorVersion értékeket,
+      # azt is itt (vagy előtte) kell futtatni. A kimeneti értékek már ki vannak vezetve a jobb oldalon.
 
   build-apk:
     runs-on: [windows-latest]
