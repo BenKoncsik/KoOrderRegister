@@ -42,17 +42,20 @@ jobs:
           git remote add origin https://github.com/${{ github.repository }}.git
           git fetch --depth=1 origin refs/heads/develop
           git reset --hard FETCH_HEAD
-        # Linux alatt a parancs alapértelmezésben bash-t használ, nem cmd-t.
 
-      # Ha van egy lépés, ami előállítja a version, versionCode, minorVersion értékeket,
-      # azt is itt (vagy előtte) kell futtatni. A kimeneti értékek már ki vannak vezetve a jobb oldalon.
+      # Itt (vagy egy másik lépésben) szükség lehet arra, hogy a version, versionCode, minorVersion
+      # értékek kiszámítása és beállítása megtörténjen, pl.:
+      # - name: Calculate version
+      #   id: version
+      #   run: ...
+      # Ebben a példában ez most kimaradt, de a kimeneti értékek láthatóak a job kimeneteinél.
 
   build-apk:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
       - name: Cleanup runner workspace
-        run: cmd /c "rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister"
+        run: cmd /c "if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister) else (echo 'Directory not found')"
 
       - uses: actions/checkout@v4
         with:
@@ -98,7 +101,7 @@ jobs:
     needs: [prepare-version, build-apk]
     steps:
       - name: Cleanup runner workspace
-        run: cmd /c "rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister"
+        run: cmd /c "if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister) else (echo 'Directory not found')"
 
       - uses: actions/checkout@v4
         with:
