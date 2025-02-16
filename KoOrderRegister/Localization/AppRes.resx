@@ -576,4 +576,23 @@
   <data name="LastConnection" xml:space="preserve">
     <value>Last connection</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+    <comment>About</comment>
+  </data>
+  <data name="ProjectGithubLabel" xml:space="preserve">
+    <value>Project Github:</value>
+  </data>
+  <data name="GithubProfileLabel" xml:space="preserve">
+    <value>Github profile:</value>
+    <comment>Github profile</comment>
+  </data>
+  <data name="XProfileLabel" xml:space="preserve">
+    <value>X profile:</value>
+    <comment>XProfileLabel</comment>
+  </data>
+  <data name="ReleaseNotesLabel" xml:space="preserve">
+    <value>Release notes:</value>
+    <comment>Release note</comment>
+  </data>
 </root>

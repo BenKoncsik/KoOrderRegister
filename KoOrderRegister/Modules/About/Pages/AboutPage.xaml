@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.About.Pages.AboutPage"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.About}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="15">
+            <Label Text="{x:Static res:AppRes.About}"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.ReleaseNotesLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.Open}"
+                        Command="{Binding OpenUrlCommand}"
+                        CommandParameter="https://github.com/BenKoncsik/KoOrderRegister/releases" />
+            </StackLayout>
+            
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.ProjectGithubLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.Open}"
+                        Command="{Binding OpenUrlCommand}"
+                        CommandParameter="https://github.com/BenKoncsik/KoOrderRegister" />
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.GithubProfileLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.Open}"
+                        Command="{Binding OpenUrlCommand}"
+                        CommandParameter="https://github.com/BenKoncsik" />
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.XProfileLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.Open}"
+                        Command="{Binding OpenUrlCommand}"
+                        CommandParameter="https://x.com/BenedekKoncsik" />
+            </StackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

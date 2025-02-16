@@ -534,4 +534,19 @@
   <data name="LastConnection" xml:space="preserve">
     <value>Utolsó csatlakozás</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>Elérhetőség</value>
+  </data>
+  <data name="ProjectGithubLabel" xml:space="preserve">
+    <value>Github project:</value>
+  </data>
+  <data name="GithubProfileLabel" xml:space="preserve">
+    <value>Github profil:</value>
+  </data>
+  <data name="XProfileLabel" xml:space="preserve">
+    <value>X profil:</value>
+  </data>
+  <data name="ReleaseNotesLabel" xml:space="preserve">
+    <value>Változás naplók:</value>
+  </data>
 </root>

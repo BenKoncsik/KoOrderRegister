@@ -30,6 +30,8 @@ using KoOrderRegister.Modules.Remote.Client.Pages;
 using KoOrderRegister.Modules.Remote.Client.Service;
 using KORCore.Modules.Database.Factory;
 using KoOrderRegister.Modules.Remote.Client.Behavior;
+using KoOrderRegister.Modules.About.Pages;
+using KoOrderRegister.Modules.About.ViewModel;
 
 namespace KoOrderRegister
 {
@@ -189,6 +191,11 @@ namespace KoOrderRegister
 
 
             #endregion
+            #endregion
+
+            #region About Modul
+            builder.Services.AddTransient<AboutViewModel>();
+            builder.Services.AddTransient<AboutPage>();
             #endregion
 
 #if DEBUG
