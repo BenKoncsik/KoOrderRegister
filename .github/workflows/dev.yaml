@@ -68,8 +68,8 @@ jobs:
       # 1) Opcionális: saját kézi törlés, ha maradt valami a workspace-ben
       - name: Cleanup runner workspace
         run: |
-          if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
-            rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister
+          if exist D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister (
+            rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister
           ) else (
             echo "Directory not found"
           )
@@ -78,7 +78,7 @@ jobs:
       # 2) Globális safe.directory beállítás, mielőtt a Checkout Action futna.
       - name: Configure Git safe directory (Windows)
         run: |
-          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
+          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/KoOrderRegister/KoOrderRegister"
         shell: cmd
 
       # 3) Checkout (fetch-depth=0, clean: false – ne törölje a repót újra).
@@ -129,8 +129,8 @@ jobs:
       # 1) Opcionális: töröljük a workspace-et
       - name: Cleanup runner workspace
         run: |
-          if exist D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister (
-            rd /s /q D:\git_runner\actions-runner\_work\Ko0rderRegister\Ko0rderRegister
+          if exist D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister (
+            rd /s /q D:\git_runner\actions-runner\_work\KoOrderRegister\KoOrderRegister
           ) else (
             echo "Directory not found"
           )
@@ -139,7 +139,7 @@ jobs:
       # 2) Biztonságos könyvtár hozzáadása a git globális confighoz
       - name: Configure Git safe directory (Self-hosted Windows)
         run: |
-          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/Ko0rderRegister/Ko0rderRegister"
+          git config --global --add safe.directory "D:/git_runner/actions-runner/_work/KoOrderRegister/KoOrderRegister"
         shell: cmd
 
       # 3) Checkout
