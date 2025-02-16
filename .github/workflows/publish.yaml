@@ -81,11 +81,11 @@ jobs:
         
         
   build-apk:
-    #runs-on: [windows-latest]
-    runs-on: [self-hosted, Windows]
+    runs-on: [windows-latest]
+    #runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -106,7 +106,7 @@ jobs:
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk-artifact
           path: output\*.apk
@@ -115,7 +115,7 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -137,7 +137,7 @@ jobs:
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
       - name: Upload MSIX
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: msix-artifact
           path: output\*.msix
