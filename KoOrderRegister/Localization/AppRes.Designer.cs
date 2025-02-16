@@ -61,6 +61,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new customer.
         /// </summary>
         internal static string AddNewCustomer {
@@ -601,6 +610,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Github profile:.
+        /// </summary>
+        internal static string GithubProfileLabel {
+            get {
+                return ResourceManager.GetString("GithubProfileLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hash code:.
         /// </summary>
         internal static string HashCodeLabel {
@@ -898,11 +916,29 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Github:.
+        /// </summary>
+        internal static string ProjectGithubLabel {
+            get {
+                return ResourceManager.GetString("ProjectGithubLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Porperties.
         /// </summary>
         internal static string Properties {
             get {
                 return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release notes:.
+        /// </summary>
+        internal static string ReleaseNotesLabel {
+            get {
+                return ResourceManager.GetString("ReleaseNotesLabel", resourceCulture);
             }
         }
         
@@ -1155,6 +1191,15 @@ namespace KoOrderRegister.Localization {
         internal static string UpdateDownloaded {
             get {
                 return ResourceManager.GetString("UpdateDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X profile:.
+        /// </summary>
+        internal static string XProfileLabel {
+            get {
+                return ResourceManager.GetString("XProfileLabel", resourceCulture);
             }
         }
         

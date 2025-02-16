@@ -346,6 +346,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Modules\About\Pages\AboutPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Modules\BetaFunctions\Pages\BetaFuctionsPages.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

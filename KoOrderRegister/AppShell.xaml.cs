@@ -1,4 +1,5 @@
 using KoOrderRegister.Localization;
+using KoOrderRegister.Modules.About.Pages;
 using KoOrderRegister.Modules.BetaFunctions.Pages;
 using KoOrderRegister.Modules.Customer.Pages;
 using KoOrderRegister.Modules.Order.Pages;
@@ -58,6 +59,7 @@ namespace KoOrderRegister
             Routing.RegisterRoute(nameof(CustomerListPage), typeof(CustomerListPage));
             Routing.RegisterRoute(nameof(PersonDetailsPage), typeof(PersonDetailsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+            Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 
             #endregion
             #region Beta fuctions
