@@ -1,199 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
- <root>
-  <data name="OrderList" xml:space="preserve">
-    <value>Commandes</value>
-    <comment>Liste des commandes</comment>
-  </data>
-  <data name="Orders" xml:space="preserve">
-    <value>Commandes</value>
-    <comment>Commandes</comment>
-  </data>
-  <data name="OrderNumber" xml:space="preserve">
-    <value>Numéro de commande</value>
-    <comment>Numéro de commande</comment>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Nom</value>
-    <comment>Nom</comment>
-  </data>
-  <data name="Date" xml:space="preserve">
-    <value>Date</value>
-    <comment>Date</comment>
-  </data>
-  <data name="CustomerList" xml:space="preserve">
-    <value>Clients</value>
-    <comment>Liste des clients</comment>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Mettre à jour</value>
-    <comment>Mettre à jour</comment>
-  </data>
-  <data name="AddNewCustomer" xml:space="preserve">
-    <value>Ajouter un nouveau client</value>
-    <comment>Ajouter un nouveau client</comment>
-  </data>
-  <data name="Person" xml:space="preserve">
-    <value>Personne</value>
-    <comment>Personne</comment>
-  </data>
-  <data name="Return" xml:space="preserve">
-    <value>Retour</value>
-    <comment>Retour</comment>
-  </data>
-  <data name="NHI" xml:space="preserve">
-    <value>Assurance maladie nationale</value>
-    <comment>Assurance maladie nationale</comment>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Téléphone</value>
-    <comment>Téléphone</comment>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Modifier</value>
-    <comment>Modifier</comment>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Supprimer</value>
-    <comment>Supprimer</comment>
-  </data>
-  <data name="AreYouSureYouWantToDelete" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer : </value>
-    <comment>Êtes-vous sûr de vouloir supprimer : </comment>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Oui</value>
-    <comment>Oui</comment>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Non</value>
-    <comment>Non</comment>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
-    <comment>Ok</comment>
-  </data>
-  <data name="FailedToDelete" xml:space="preserve">
-    <value>Échec de la suppression.</value>
-    <comment>Échec de la suppression.</comment>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Enregistrer</value>
-    <comment>Enregistrer</comment>
-  </data>
-  <data name="FailedToSave" xml:space="preserve">
-    <value>Échec de l'enregistrement !</value>
-    <comment>Échec de l'enregistrement !</comment>
-  </data>
-  <data name="SuccessToSave" xml:space="preserve">
-    <value>Enregistrement réussi</value>
-    <comment>Enregistrement réussi</comment>
-  </data>
-  <data name="NHILabel" xml:space="preserve">
-    <value>Assurance maladie nationale :</value>
-    <comment>Assurance maladie nationale :</comment>
-  </data>
-  <data name="PhoneLabel" xml:space="preserve">
-    <value>Téléphone :</value>
-    <comment>Téléphone :</comment>
-  </data>
-  <data name="AddressLabel" xml:space="preserve">
-    <value>Adresse :</value>
-    <comment>Adresse :</comment>
-  </data>
-  <data name="CustomerDetails" xml:space="preserve">
-    <value>Détails du client</value>
-    <comment>Détails du client</comment>
-  </data>
-  <data name="Order" xml:space="preserve">
-    <value>Commande</value>
-    <comment>Commande</comment>
-  </data>
-  <data name="OrderNumberLabel" xml:space="preserve">
-    <value>Numéro de commande :</value>
-    <comment>Numéro de commande :</comment>
-  </data>
-  <data name="DateLabel" xml:space="preserve">
-    <value>Date :</value>
-    <comment>Date :</comment>
-  </data>
-  <data name="SelectCustomer" xml:space="preserve">
-    <value>Sélectionner un client :</value>
-    <comment>Sélectionner un client :</comment>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Recherche</value>
-    <comment>Recherche</comment>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Paramètres</value>
-    <comment>Paramètres</comment>
-  </data>
-  <data name="BackupDatabase" xml:space="preserve">
-    <value>Sauvegarder la base de données</value>
-    <comment>Sauvegarder la base de données</comment>
-  </data>
-  <data name="RestoreDatabase" xml:space="preserve">
-    <value>Restaurer la base de données</value>
-    <comment>Restaurer la base de données</comment>
-  </data>
-</root>
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	
+	<xs:schema id="root">
+		<xs:element name="root" ns1:IsDataSet="true">
+			<xs:complexType>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element name="data">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+								<xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+							</xs:sequence>
+							<xs:attribute name="name" type="xsd:string" ns1:Ordinal="1" />
+							<xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+							<xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="resheader">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+							</xs:sequence>
+							<xs:attribute name="name" type="xsd:string" use="required" />
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+			</xs:complexType>
+		</xs:element>
+	</xs:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+<data name="OrderList" xml:space="preserve"><value>Ordres</value></data><data name="Orders" xml:space="preserve"><value>Ordres</value></data><data name="OrderNumber" xml:space="preserve"><value>Numéro de commande</value></data><data name="Name" xml:space="preserve"><value>Nom</value></data><data name="Date" xml:space="preserve"><value>Date</value></data><data name="CustomerList" xml:space="preserve"><value>Clients</value></data><data name="Update" xml:space="preserve"><value>Mise à jour</value></data><data name="AddNewCustomer" xml:space="preserve"><value>Ajouter un nouveau client</value></data><data name="Person" xml:space="preserve"><value>Personne</value></data><data name="Return" xml:space="preserve"><value>Retour</value></data><data name="NHI" xml:space="preserve"><value>Assurance maladie nationale</value></data><data name="Phone" xml:space="preserve"><value>Téléphone</value></data><data name="Edit" xml:space="preserve"><value>Modifier</value></data><data name="Delete" xml:space="preserve"><value>Supprimer</value></data><data name="AreYouSureYouWantToDelete" xml:space="preserve"><value>Êtes-vous sûr de vouloir supprimer:</value></data><data name="Yes" xml:space="preserve"><value>Oui</value></data><data name="No" xml:space="preserve"><value>Non</value></data><data name="Ok" xml:space="preserve"><value>D'accord</value></data><data name="FailedToDelete" xml:space="preserve"><value>Échec de la suppression.</value></data><data name="Save" xml:space="preserve"><value>Sauvegarder</value></data><data name="FailedToSave" xml:space="preserve"><value>Échec de la sauvegarde!</value></data><data name="SuccessToSave" xml:space="preserve"><value>Succès pour sauver</value></data><data name="NHILabel" xml:space="preserve"><value>Assurance maladie nationale:</value></data><data name="NoteLabel" xml:space="preserve"><value>Note:</value></data><data name="PhoneLabel" xml:space="preserve"><value>Téléphone:</value></data><data name="AddressLabel" xml:space="preserve"><value>Adresse:</value></data><data name="NameLabel" xml:space="preserve"><value>Nom:</value></data><data name="EmailLabel" xml:space="preserve"><value>E-mail:</value></data><data name="CustomerDetails" xml:space="preserve"><value>Détails du client</value></data><data name="Copy" xml:space="preserve"><value>Copie</value></data><data name="Copyd" xml:space="preserve"><value>Culminer</value></data><data name="Order" xml:space="preserve"><value>Commande</value></data><data name="OrderNumberLabel" xml:space="preserve"><value>Numéro de commande:</value></data><data name="DateLabel" xml:space="preserve"><value>Date:</value></data><data name="AddNewOrder" xml:space="preserve"><value>Ajouter une nouvelle commande</value></data><data name="OutDateLabel" xml:space="preserve"><value>Date du problème de commande:</value></data><data name="StartDateLabel" xml:space="preserve"><value>Date de ramassage de la commande:</value></data><data name="SelectCustomer" xml:space="preserve"><value>Sélectionnez Client:</value></data><data name="ChooseAnCustomer" xml:space="preserve"><value>Choisissez un client</value></data><data name="ProductIdLabel" xml:space="preserve"><value>ID de produit:</value></data><data name="StartDate" xml:space="preserve"><value>Date de ramassage de la commande</value></data><data name="SelectFiles" xml:space="preserve"><value>Sélectionner des fichiers</value></data><data name="FailedToOpen" xml:space="preserve"><value>Échec de l'ouverture:</value></data><data name="Open" xml:space="preserve"><value>Ouvrir</value></data><data name="Search" xml:space="preserve"><value>Recherche</value></data><data name="Settings" xml:space="preserve"><value>Paramètres</value></data><data name="SelectLanguage" xml:space="preserve"><value>Sélectionner la langue</value></data><data name="SelectLanguageLabel" xml:space="preserve"><value>Sélectionner la langue:</value></data><data name="BackupDatabase" xml:space="preserve"><value>Base de données de sauvegarde</value></data><data name="RestoreDatabase" xml:space="preserve"><value>Restaurer la base de données</value></data><data name="RestoreDatabaseLabel" xml:space="preserve"><value>Restaurer la base de données:</value></data><data name="BackupDatabaseLabel" xml:space="preserve"><value>Base de données de sauvegarde:</value></data><data name="PriceLabel" xml:space="preserve"><value>Prix:</value></data><data name="PlsChoosLocatoinToBackup" xml:space="preserve"><value>Veuillez choisir un emplacement pour enregistrer votre sauvegarde</value></data><data name="Loading" xml:space="preserve"><value>Chargement...</value></data><data name="AreYouSureYouRestore" xml:space="preserve"><value>Êtes-vous sûr de vouloir le restaurer à partir de la sauvegarde? Menden Data sera supprimé de ce qui est actuellement dans l'application!</value></data><data name="PlsSelectBackupFile" xml:space="preserve"><value>Veuillez sélectionner un fichier de sauvegarde pour restaurer</value></data><data name="FaliedToRestore" xml:space="preserve"><value>Échec de la base de la base de données</value></data><data name="DatabaseRestoredSuccessfully" xml:space="preserve"><value>La base de données restaurée avec succès</value></data><data name="Test" xml:space="preserve"><value>Test</value></data><data name="NewVersionAvailable" xml:space="preserve"><value>Nouvelle version disponible</value></data><data name="UpdateApp" xml:space="preserve"><value>Mise à jour de l'application</value></data><data name="Douwnload" xml:space="preserve"><value>Tootage</value></data><data name="CheckAppUpdate" xml:space="preserve"><value>Vérifier la mise à jour de l'application</value></data><data name="CheckAppUpdateLabel" xml:space="preserve"><value>Vérifiez la mise à jour de l'application:</value></data><data name="UpdateDownloaded" xml:space="preserve"><value>Mise à jour téléchargée</value></data><data name="UpdateDownlaodStartInBackground" xml:space="preserve"><value>Mettre à jour downlaod démarrer en arrière-plan</value></data><data name="Downloading" xml:space="preserve"><value>Téléchargement</value></data><data name="NoNewVersion" xml:space="preserve"><value>Pas de nouvelle version</value></data><data name="SaveToDevice" xml:space="preserve"><value>Enregistrer sur l'appareil</value></data><data name="Properties" xml:space="preserve"><value>Forperties</value></data><data name="SorrySomethingWrong" xml:space="preserve"><value>Désolé quelque chose qui ne va pas</value></data><data name="Porperties" xml:space="preserve"><value>Forperties</value></data><data name="HashCodeLabel" xml:space="preserve"><value>Code de hachage:</value></data><data name="OpenAdvancedDetails" xml:space="preserve"><value>Ouvrir les détails avancés</value></data><data name="CloseAdvancedDetails" xml:space="preserve"><value>Fermer les détails avancés</value></data><data name="Close" xml:space="preserve"><value>Fermer</value></data><data name="SizeLabel" xml:space="preserve"><value>Taille:</value></data><data name="ChangeAppThemeLabel" xml:space="preserve"><value>THÈME DE l'application Switch:</value></data><data name="ChangeAppTheme" xml:space="preserve"><value>THÈME DE l'application Switch</value></data><data name="ChangeAppThemeAutomaticLabel" xml:space="preserve"><value>Changer le thème de l'application automatique:</value></data><data name="Address" xml:space="preserve"><value>Adresse</value></data><data name="Email" xml:space="preserve"><value>E-mail</value></data><data name="Note" xml:space="preserve"><value>Note</value></data><data name="EndDate" xml:space="preserve"><value>Date de fin</value></data><data name="Price" xml:space="preserve"><value>Prix</value></data><data name="FilesName" xml:space="preserve"><value>Nom des fichiers</value></data><data name="Customers" xml:space="preserve"><value>Clients</value></data><data name="Files" xml:space="preserve"><value>Fichiers</value></data><data name="FilePath" xml:space="preserve"><value>Chemin de fichier</value></data><data name="FileName" xml:space="preserve"><value>Nom de fichier</value></data><data name="ExportDatabaseToExcel" xml:space="preserve"><value>Base de données d'exportation vers Excel</value></data><data name="FileError" xml:space="preserve"><value>Erreur de fichier</value></data><data name="Row" xml:space="preserve"><value>Rangée</value></data><data name="ExcelError" xml:space="preserve"><value>Erreur Excel</value></data><data name="ExcelNotInstalled" xml:space="preserve"><value>Excel n'est pas correctement installé!</value></data><data name="Exporter" xml:space="preserve"><value>Exportateur</value></data><data name="SelectExportType" xml:space="preserve"><value>Sélectionnez le type d'exportation</value></data><data name="CreateZipLabel" xml:space="preserve"><value>Créer Zip:</value></data><data name="BetaFuctions" xml:space="preserve"><value>Fictions bêta</value></data><data name="ExcelExporter" xml:space="preserve"><value>Excel Exporter</value></data><data name="HtmlExporter" xml:space="preserve"><value>Exportateur HTML</value></data><data name="PdfExporter" xml:space="preserve"><value>Exportateur PDF</value></data><data name="Notification" xml:space="preserve"><value>Notification</value></data><data name="Cancel" xml:space="preserve"><value>Annuler</value></data><data name="Done" xml:space="preserve"><value>Fait</value></data><data name="ClearAll" xml:space="preserve"><value>Effacer tout</value></data><data name="RomteServerSettings" xml:space="preserve"><value>Paramètres du serveur spatial</value></data><data name="RemoteServerSwitchLabel" xml:space="preserve"><value>Serveur distant activé / désactivé:</value></data><data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve"><value>Code de connexion du serveur distant:</value></data><data name="RemoteServerSwitch" xml:space="preserve"><value>Serveur distant activé / désactivé:</value></data><data name="ClientConnectionSettings" xml:space="preserve"><value>Paramètres de connexion client</value></data><data name="ConnectionString" xml:space="preserve"><value>Chaîne de connexion</value></data><data name="Connection" xml:space="preserve"><value>Connexion</value></data><data name="Failed" xml:space="preserve"><value>Échoué</value></data><data name="ConnectedDevices" xml:space="preserve"><value>Appareils connectés</value></data><data name="SuccessToConnection" xml:space="preserve"><value>Succès à la connexion</value></data><data name="AreYouSureYouWantToConnection" xml:space="preserve"><value>Êtes-vous sûr de vouloir connecter</value></data><data name="Disconecting" xml:space="preserve"><value>Disconect</value></data><data name="AreYouSureYouWantToDisconnection" xml:space="preserve"><value>Êtes-vous sûr de vouloir déconnecter</value></data><data name="ConnectedServers" xml:space="preserve"><value>Serveurs connectés</value></data><data name="FirstConnaction" xml:space="preserve"><value>Première conaction</value></data><data name="LastConnection" xml:space="preserve"><value>Dernière connexion</value></data><data name="About" xml:space="preserve"><value>À propos</value></data><data name="ProjectGithubLabel" xml:space="preserve"><value>Project Github:</value></data><data name="GithubProfileLabel" xml:space="preserve"><value>Profil GitHub:</value></data><data name="XProfileLabel" xml:space="preserve"><value>Profil x:</value></data><data name="ReleaseNotesLabel" xml:space="preserve"><value>Notes de libération:</value></data><data name="OrderList" xml:space="preserve"><value>Ordres</value></data><data name="Orders" xml:space="preserve"><value>Ordres</value></data><data name="OrderNumber" xml:space="preserve"><value>Numéro de commande</value></data><data name="Name" xml:space="preserve"><value>Nom</value></data><data name="Date" xml:space="preserve"><value>Date</value></data><data name="CustomerList" xml:space="preserve"><value>Clients</value></data><data name="Update" xml:space="preserve"><value>Mise à jour</value></data><data name="AddNewCustomer" xml:space="preserve"><value>Ajouter un nouveau client</value></data><data name="Person" xml:space="preserve"><value>Personne</value></data><data name="Return" xml:space="preserve"><value>Retour</value></data><data name="NHI" xml:space="preserve"><value>Assurance maladie nationale</value></data><data name="Phone" xml:space="preserve"><value>Téléphone</value></data><data name="Edit" xml:space="preserve"><value>Modifier</value></data><data name="Delete" xml:space="preserve"><value>Supprimer</value></data><data name="AreYouSureYouWantToDelete" xml:space="preserve"><value>Êtes-vous sûr de vouloir supprimer:</value></data><data name="Yes" xml:space="preserve"><value>Oui</value></data><data name="No" xml:space="preserve"><value>Non</value></data><data name="Ok" xml:space="preserve"><value>D'accord</value></data><data name="FailedToDelete" xml:space="preserve"><value>Échec de la suppression.</value></data><data name="Save" xml:space="preserve"><value>Sauvegarder</value></data><data name="FailedToSave" xml:space="preserve"><value>Échec de la sauvegarde!</value></data><data name="SuccessToSave" xml:space="preserve"><value>Succès pour sauver</value></data><data name="NHILabel" xml:space="preserve"><value>Assurance maladie nationale:</value></data><data name="NoteLabel" xml:space="preserve"><value>Note:</value></data><data name="PhoneLabel" xml:space="preserve"><value>Téléphone:</value></data><data name="AddressLabel" xml:space="preserve"><value>Adresse:</value></data><data name="NameLabel" xml:space="preserve"><value>Nom:</value></data><data name="EmailLabel" xml:space="preserve"><value>E-mail:</value></data><data name="CustomerDetails" xml:space="preserve"><value>Détails du client</value></data><data name="Copy" xml:space="preserve"><value>Copie</value></data><data name="Copyd" xml:space="preserve"><value>Culminer</value></data><data name="Order" xml:space="preserve"><value>Commande</value></data><data name="OrderNumberLabel" xml:space="preserve"><value>Numéro de commande:</value></data><data name="DateLabel" xml:space="preserve"><value>Date:</value></data><data name="AddNewOrder" xml:space="preserve"><value>Ajouter une nouvelle commande</value></data><data name="OutDateLabel" xml:space="preserve"><value>Date du problème de commande:</value></data><data name="StartDateLabel" xml:space="preserve"><value>Date de ramassage de la commande:</value></data><data name="SelectCustomer" xml:space="preserve"><value>Sélectionnez Client:</value></data><data name="ChooseAnCustomer" xml:space="preserve"><value>Choisissez un client</value></data><data name="ProductIdLabel" xml:space="preserve"><value>ID de produit:</value></data><data name="StartDate" xml:space="preserve"><value>Date de ramassage de la commande</value></data><data name="SelectFiles" xml:space="preserve"><value>Sélectionner des fichiers</value></data><data name="FailedToOpen" xml:space="preserve"><value>Échec de l'ouverture:</value></data><data name="Open" xml:space="preserve"><value>Ouvrir</value></data><data name="Search" xml:space="preserve"><value>Recherche</value></data><data name="Settings" xml:space="preserve"><value>Paramètres</value></data><data name="SelectLanguage" xml:space="preserve"><value>Sélectionner la langue</value></data><data name="SelectLanguageLabel" xml:space="preserve"><value>Sélectionner la langue:</value></data><data name="BackupDatabase" xml:space="preserve"><value>Base de données de sauvegarde</value></data><data name="RestoreDatabase" xml:space="preserve"><value>Restaurer la base de données</value></data><data name="RestoreDatabaseLabel" xml:space="preserve"><value>Restaurer la base de données:</value></data><data name="BackupDatabaseLabel" xml:space="preserve"><value>Base de données de sauvegarde:</value></data><data name="PriceLabel" xml:space="preserve"><value>Prix:</value></data><data name="PlsChoosLocatoinToBackup" xml:space="preserve"><value>Veuillez choisir un emplacement pour enregistrer votre sauvegarde</value></data><data name="Loading" xml:space="preserve"><value>Chargement...</value></data><data name="AreYouSureYouRestore" xml:space="preserve"><value>Êtes-vous sûr de vouloir le restaurer à partir de la sauvegarde? Menden Data sera supprimé de ce qui est actuellement dans l'application!</value></data><data name="PlsSelectBackupFile" xml:space="preserve"><value>Veuillez sélectionner un fichier de sauvegarde pour restaurer</value></data><data name="FaliedToRestore" xml:space="preserve"><value>Échec de la base de la base de données</value></data><data name="DatabaseRestoredSuccessfully" xml:space="preserve"><value>La base de données restaurée avec succès</value></data><data name="Test" xml:space="preserve"><value>Test</value></data><data name="NewVersionAvailable" xml:space="preserve"><value>Nouvelle version disponible</value></data><data name="UpdateApp" xml:space="preserve"><value>Mise à jour de l'application</value></data><data name="Douwnload" xml:space="preserve"><value>Tootage</value></data><data name="CheckAppUpdate" xml:space="preserve"><value>Vérifier la mise à jour de l'application</value></data><data name="CheckAppUpdateLabel" xml:space="preserve"><value>Vérifiez la mise à jour de l'application:</value></data><data name="UpdateDownloaded" xml:space="preserve"><value>Mise à jour téléchargée</value></data><data name="UpdateDownlaodStartInBackground" xml:space="preserve"><value>Mettre à jour downlaod démarrer en arrière-plan</value></data><data name="Downloading" xml:space="preserve"><value>Téléchargement</value></data><data name="NoNewVersion" xml:space="preserve"><value>Pas de nouvelle version</value></data><data name="SaveToDevice" xml:space="preserve"><value>Enregistrer sur l'appareil</value></data><data name="Properties" xml:space="preserve"><value>Forperties</value></data><data name="SorrySomethingWrong" xml:space="preserve"><value>Désolé quelque chose qui ne va pas</value></data><data name="Porperties" xml:space="preserve"><value>Forperties</value></data><data name="HashCodeLabel" xml:space="preserve"><value>Code de hachage:</value></data><data name="OpenAdvancedDetails" xml:space="preserve"><value>Ouvrir les détails avancés</value></data><data name="CloseAdvancedDetails" xml:space="preserve"><value>Fermer les détails avancés</value></data><data name="Close" xml:space="preserve"><value>Fermer</value></data><data name="SizeLabel" xml:space="preserve"><value>Taille:</value></data><data name="ChangeAppThemeLabel" xml:space="preserve"><value>THÈME DE l'application Switch:</value></data><data name="ChangeAppTheme" xml:space="preserve"><value>THÈME DE l'application Switch</value></data><data name="ChangeAppThemeAutomaticLabel" xml:space="preserve"><value>Changer le thème de l'application automatique:</value></data><data name="Address" xml:space="preserve"><value>Adresse</value></data><data name="Email" xml:space="preserve"><value>E-mail</value></data><data name="Note" xml:space="preserve"><value>Note</value></data><data name="EndDate" xml:space="preserve"><value>Date de fin</value></data><data name="Price" xml:space="preserve"><value>Prix</value></data><data name="FilesName" xml:space="preserve"><value>Nom des fichiers</value></data><data name="Customers" xml:space="preserve"><value>Clients</value></data><data name="Files" xml:space="preserve"><value>Fichiers</value></data><data name="FilePath" xml:space="preserve"><value>Chemin de fichier</value></data><data name="FileName" xml:space="preserve"><value>Nom de fichier</value></data><data name="ExportDatabaseToExcel" xml:space="preserve"><value>Base de données d'exportation vers Excel</value></data><data name="FileError" xml:space="preserve"><value>Erreur de fichier</value></data><data name="Row" xml:space="preserve"><value>Rangée</value></data><data name="ExcelError" xml:space="preserve"><value>Erreur Excel</value></data><data name="ExcelNotInstalled" xml:space="preserve"><value>Excel n'est pas correctement installé!</value></data><data name="Exporter" xml:space="preserve"><value>Exportateur</value></data><data name="SelectExportType" xml:space="preserve"><value>Sélectionnez le type d'exportation</value></data><data name="CreateZipLabel" xml:space="preserve"><value>Créer Zip:</value></data><data name="BetaFuctions" xml:space="preserve"><value>Fictions bêta</value></data><data name="ExcelExporter" xml:space="preserve"><value>Excel Exporter</value></data><data name="HtmlExporter" xml:space="preserve"><value>Exportateur HTML</value></data><data name="PdfExporter" xml:space="preserve"><value>Exportateur PDF</value></data><data name="Notification" xml:space="preserve"><value>Notification</value></data><data name="Cancel" xml:space="preserve"><value>Annuler</value></data><data name="Done" xml:space="preserve"><value>Fait</value></data><data name="ClearAll" xml:space="preserve"><value>Effacer tout</value></data><data name="RomteServerSettings" xml:space="preserve"><value>Paramètres du serveur spatial</value></data><data name="RemoteServerSwitchLabel" xml:space="preserve"><value>Serveur distant activé / désactivé:</value></data><data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve"><value>Code de connexion du serveur distant:</value></data><data name="RemoteServerSwitch" xml:space="preserve"><value>Serveur distant activé / désactivé:</value></data><data name="ClientConnectionSettings" xml:space="preserve"><value>Paramètres de connexion client</value></data><data name="ConnectionString" xml:space="preserve"><value>Chaîne de connexion</value></data><data name="Connection" xml:space="preserve"><value>Connexion</value></data><data name="Failed" xml:space="preserve"><value>Échoué</value></data><data name="ConnectedDevices" xml:space="preserve"><value>Appareils connectés</value></data><data name="SuccessToConnection" xml:space="preserve"><value>Succès à la connexion</value></data><data name="AreYouSureYouWantToConnection" xml:space="preserve"><value>Êtes-vous sûr de vouloir connecter</value></data><data name="Disconecting" xml:space="preserve"><value>Disconect</value></data><data name="AreYouSureYouWantToDisconnection" xml:space="preserve"><value>Êtes-vous sûr de vouloir déconnecter</value></data><data name="ConnectedServers" xml:space="preserve"><value>Serveurs connectés</value></data><data name="FirstConnaction" xml:space="preserve"><value>Première conaction</value></data><data name="LastConnection" xml:space="preserve"><value>Dernière connexion</value></data><data name="About" xml:space="preserve"><value>À propos</value></data><data name="ProjectGithubLabel" xml:space="preserve"><value>Project Github:</value></data><data name="GithubProfileLabel" xml:space="preserve"><value>Profil GitHub:</value></data><data name="XProfileLabel" xml:space="preserve"><value>Profil x:</value></data><data name="ReleaseNotesLabel" xml:space="preserve"><value>Notes de libération:</value></data></root>
