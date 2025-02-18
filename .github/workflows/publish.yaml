@@ -80,7 +80,7 @@ jobs:
           NEW_MINOR: ${{ env.new-minor }}    
         
         
- build-apk:
+  build-apk:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
