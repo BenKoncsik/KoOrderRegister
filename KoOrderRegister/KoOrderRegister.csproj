@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Maui"> 
 	<!-- Definie devBuild constans-->
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
