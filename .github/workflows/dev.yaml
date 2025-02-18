@@ -116,7 +116,6 @@ jobs:
     steps:
       - name: Fix Git Safe Directory (Windows)
         run: git config --global --add safe.directory "${{ github.workspace }}"
-        shell: pwsh
       - uses: actions/checkout@v2
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
