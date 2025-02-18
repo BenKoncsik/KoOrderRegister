@@ -1,177 +1,180 @@
 name: Publish_DEV
 
 env:
-branch-name: 'develop'
-varrible: 'DEV_VERSION'
+  branch-name: 'develop'
+  varrible: 'DEV_VERSION'
 
 on:
-pull_request:
-branches:
-- develop
-push:
-branches:
-- develop
-workflow_run:
-workflows: ["Publish"]
-types:
-- completed
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+  workflow_run:
+    workflows: ["Publish"] 
+    types:
+      - completed
 
 permissions:
-contents: write
-pull-requests: write
+  contents: write
+  pull-requests: write
+
 
 jobs:
-prepare-version:
-runs-on: ubuntu-latest
-outputs:
-newVersion: ${{ steps.version.outputs.newVersion }}
-versionCode: ${{ steps.version.outputs.versionCode }}
-minorVersion: ${{ steps.version.outputs.minorVersion }}
-steps:
-- name: Get the current version using GitHub CLI
-id: get-version
-run: |
-VERSION=$(gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
-/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
---jq '.value')
-echo "Current version: $VERSION"
-if [[ -z "$VERSION" ]]; then
-echo "Error: VERSION is empty"
-exit 1
-fi
-IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-echo "MAJOR=$MAJOR" >> $GITHUB_ENV
-echo "MINOR=$MINOR" >> $GITHUB_ENV
-echo "PATCH=$PATCH" >> $GITHUB_ENV
-env:
-GH_TOKEN: ${{ secrets.TOKEN }}
+  prepare-version:
+    runs-on: ubuntu-latest
+    outputs:
+      newVersion: ${{ steps.version.outputs.newVersion }}
+      versionCode: ${{ steps.version.outputs.versionCode }}
+      minorVersion: ${{ steps.version.outputs.minorVersion }}
+    steps:
+      - name: Get the current version using GitHub CLI
+        id: get-version
+        run: |
+          VERSION=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
+            --jq '.value')
+          echo "Current version: $VERSION"
+          if [[ -z "$VERSION" ]]; then
+            echo "Error: VERSION is empty"
+            exit 1
+          fi
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          echo "MAJOR=$MAJOR" >> $GITHUB_ENV
+          echo "MINOR=$MINOR" >> $GITHUB_ENV
+          echo "PATCH=$PATCH" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
 
-- name: Increment the MINOR version  
-    id: increment-minor  
-    run: |  
-      NEW_PATCH=$((PATCH + 1))  
-      echo "New MINOR version: $NEW_PATCH"  
-      echo "new-minor=$NEW_PATCH" >> $GITHUB_ENV  
-    env:  
-      GH_TOKEN: ${{ secrets.TOKEN }}  
+      - name: Increment the MINOR version
+        id: increment-minor
+        run: |
+          NEW_PATCH=$((PATCH + 1))
+          echo "New MINOR version: $NEW_PATCH"
+          echo "new-minor=$NEW_PATCH" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
 
-  - name: Update the version using GitHub CLI  
-    id: version  
-    run: |  
-      NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"  
-      echo "Updating version to: $NEW_VERSION"  
-      echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT  
-      echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT  
-      echo "minorVersion=$MINOR" >> $GITHUB_OUTPUT  
-      echo newVersion: $NEW_VERSION  
-      echo versionCode: $MAJOR  
-      echo minorVersion: $MINOR  
-      gh api \  
-        --method PATCH \  
-        -H "Accept: application/vnd.github+json" \  
-        -H "X-GitHub-Api-Version: 2022-11-28" \  
-        /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \  
-        -f "name=DEV_VERSION" -f "value=$NEW_VERSION"  
-          
-    env:  
-      GH_TOKEN: ${{ secrets.TOKEN }}  
-      NEW_PATCH: ${{ env.new-minor }}
+      - name: Update the version using GitHub CLI
+        id: version
+        run: |
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          echo "Updating version to: $NEW_VERSION"
+          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minorVersion=$MINOR" >> $GITHUB_OUTPUT
+          echo newVersion: $NEW_VERSION
+          echo versionCode: $MAJOR
+          echo minorVersion: $MINOR
+          gh api \
+            --method PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
+            -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
+            
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+          NEW_PATCH: ${{ env.new-minor }}    
+        
+        
+  build-apk:
+    runs-on: [windows-latest]
+    #runs-on: [self-hosted, Windows]
+    needs: prepare-version
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Debug Output Values
+        run: |
+          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
+          echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+      - name: Install .NET MAUI Android workloads
+        run: dotnet workload install maui-android
+      - name: Install .NET SDK maui
+        run: dotnet workload install maui
+      - name: Run APK build script
+        run: cmd /c ".\build_apk.bat"
+        env:
+          KEYPASS: ${{ secrets.KEYPASS }}
+          NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
+          NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
+          BUILD_VERSION: ${{ env.varrible }}
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-artifact
+          path: output\*.apk
 
-build-apk:
-runs-on: [windows-latest]
-#runs-on: [self-hosted, Windows]
-needs: prepare-version
-steps:
-- uses: actions/checkout@v2
-- name: Set up .NET Core
-uses: actions/setup-dotnet@v1
-with:
-dotnet-version: '8.0.x'
-- name: Debug Output Values
-run: |
-echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
-- name: Install .NET MAUI Android workloads
-run: dotnet workload install maui-android
-- name: Install .NET SDK maui
-run: dotnet workload install maui
-- name: Run APK build script
-run: cmd /c ".\build_apk.bat"
-env:
-KEYPASS: ${{ secrets.KEYPASS }}
-NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
-NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
-BUILD_VERSION: ${{ env.varrible }}
-- name: Upload APK
-uses: actions/upload-artifact@v4
-with:
-name: apk-artifact
-path: output*.apk
+  build-msix:
+    runs-on: [self-hosted, Windows]
+    needs: prepare-version
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Debug Output Values
+        run: |
+          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
+      - name: Install Certificate
+        run: |
+          Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
+          -CertStoreLocation Cert:\CurrentUser\My `
+          -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
+        shell: powershell
+      - name: Run MSIX build script
+        run: cmd /c ".\build_msix.bat"
+        env:
+          KEYPASS: ${{ secrets.KEYPASS }}
+          NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
+          NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
+          BUILD_VERSION: ${{ env.varrible }}
+      - name: Upload MSIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: msix-artifact
+          path: output\*.msix
 
-build-msix:
-runs-on: [self-hosted, Windows]
-needs: prepare-version
-steps:
-- uses: actions/checkout@v2
-- name: Set up .NET Core
-uses: actions/setup-dotnet@v1
-with:
-dotnet-version: '8.0.x'
-- name: Debug Output Values
-run: |
-echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-- name: Install Certificate
-run: |
-Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx"   -CertStoreLocation Cert:\CurrentUser\My
--Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
-shell: powershell
-- name: Run MSIX build script
-run: cmd /c ".\build_msix.bat"
-env:
-KEYPASS: ${{ secrets.KEYPASS }}
-NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
-NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
-BUILD_VERSION: ${{ env.varrible }}
-- name: Upload MSIX
-uses: actions/upload-artifact@v4
-with:
-name: msix-artifact
-path: output*.msix
-
-release:
-runs-on: [windows-latest]
-needs: [prepare-version, build-apk, build-msix]
-steps:
-- name: Delete output
-run: |
-if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
-if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
-mkdir output
-- name: Download APK Artifact
-uses: actions/download-artifact@v4
-with:
-name: apk-artifact
-- name: Move APK Artifact
-run: |
-mv .apk output/
-- name: Download MSIX Artifact
-uses: actions/download-artifact@v4
-with:
-name: msix-artifact
-- name: Move MSIX Artifact
-run: |
-mv .msix output/
-- name: Create or Update Release
-uses: softprops/action-gh-release@v1
-with:
-files: output/.apk,output/.msix,KoOrderRegister/Technical/kor.pfx
-tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
-release_name: ${{ needs.prepare-version.outputs.newVersion }}
-body_path: Technical/release_base.md
-draft: false
-prerelease: false
-generate_release_notes: true
-env:
-GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  release:
+    runs-on: [self-hosted, Windows]
+    needs: [prepare-version, build-apk, build-msix]
+    steps:
+      - name: Delete output
+        run: |
+          if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
+          if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
+          mkdir output
+      - name: Download APK Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-artifact
+      - name: Move APK Artifact
+        run: |
+          mv *.apk output/
+      - name: Download MSIX Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: msix-artifact
+      - name: Move MSIX Artifact
+        run: |
+          mv *.msix output/
+      - name: Create or Update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
+          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+          release_name: ${{ needs.prepare-version.outputs.newVersion }}
+          body_path: Technical/release_base.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
