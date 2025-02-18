@@ -20,7 +20,6 @@ permissions:
   contents: write
   pull-requests: write
 
-
 jobs:
   prepare-version:
     runs-on: ubuntu-latest
@@ -75,37 +74,48 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
             -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
-            
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_PATCH: ${{ env.new-minor }}    
-        
-        
+
   build-apk:
     runs-on: [windows-latest]
-    #runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
+        shell: cmd
+
       - uses: actions/checkout@v2
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
+
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-          echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+          echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
+          echo Version Code: ${{ needs.prepare-version.outputs.versionCode }}
+        shell: cmd
+
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+        shell: cmd
+
       - name: Install .NET SDK maui
         run: dotnet workload install maui
+        shell: cmd
+
       - name: Run APK build script
-        run: cmd /c ".\build_apk.bat"
+        run: .\build_apk.bat
+        shell: cmd
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -116,27 +126,37 @@ jobs:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
+        shell: cmd
+
       - uses: actions/checkout@v2
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
+      
+      # FONTOS: itt is fel kell rakni az android (vagy a teljes MAUI) workloadot,
+      # különben a multi-target csproj leellenőrzi és hibára fut.
+      - name: Install MAUI workloads (windows & android)
+        run: dotnet workload install maui-windows maui-android
+        shell: cmd
+
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-      - name: Install Certificate
-        run: |
-          Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
-          -CertStoreLocation Cert:\CurrentUser\My `
-          -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
-        shell: powershell
+          echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
+        shell: cmd
+
       - name: Run MSIX build script
-        run: cmd /c ".\build_msix.bat"
+        run: .\build_msix.bat
+        shell: cmd
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload MSIX
         uses: actions/upload-artifact@v4
         with:
@@ -152,20 +172,26 @@ jobs:
           if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
           if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
           mkdir output
+        shell: powershell
+
       - name: Download APK Artifact
         uses: actions/download-artifact@v4
         with:
           name: apk-artifact
+
       - name: Move APK Artifact
-        run: |
-          mv *.apk output/
+        run: mv *.apk output/
+        shell: cmd
+
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v4
         with:
           name: msix-artifact
+
       - name: Move MSIX Artifact
-        run: |
-          mv *.msix output/
+        run: mv *.msix output/
+        shell: cmd
+
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
