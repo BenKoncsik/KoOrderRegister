@@ -20,7 +20,6 @@ permissions:
   contents: write
   pull-requests: write
 
-
 jobs:
   prepare-version:
     runs-on: ubuntu-latest
@@ -75,17 +74,16 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
             -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
-            
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_PATCH: ${{ env.new-minor }}    
-        
-        
+
   build-apk:
     runs-on: [windows-latest]
-    #runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
       - uses: actions/checkout@v2
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -116,6 +114,9 @@ jobs:
     runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
+        shell: pwsh
       - uses: actions/checkout@v2
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -152,20 +153,26 @@ jobs:
           if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
           if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
           mkdir output
+        shell: powershell
+
       - name: Download APK Artifact
         uses: actions/download-artifact@v4
         with:
           name: apk-artifact
+
       - name: Move APK Artifact
         run: |
           mv *.apk output/
+
       - name: Download MSIX Artifact
         uses: actions/download-artifact@v4
         with:
           name: msix-artifact
+
       - name: Move MSIX Artifact
         run: |
           mv *.msix output/
+
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
