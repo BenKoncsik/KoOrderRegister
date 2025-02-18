@@ -162,16 +162,9 @@ jobs:
           path: output\*.msix
 
   release:
-    runs-on: [self-hosted, Windows]
+    runs-on: [windows-latest]
     needs: [prepare-version, build-apk, build-msix]
     steps:
-      - name: Delete output
-        run: |
-          if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
-          if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
-          mkdir output
-        shell: powershell
-
       - name: Download APK Artifact
         uses: actions/download-artifact@v4
         with:
