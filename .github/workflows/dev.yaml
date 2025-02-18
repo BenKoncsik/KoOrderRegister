@@ -165,33 +165,39 @@ jobs:
     runs-on: [windows-latest]
     needs: [prepare-version, build-apk, build-msix]
     steps:
-      - name: Download APK Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-artifact
+    - name: Create (or clean) output folder
+      run: |
+        if exist output rmdir /S /Q output
+        mkdir output
+      shell: cmd
 
-      - name: Move APK Artifact
-        run: mv *.apk output/
-        shell: cmd
+    - name: Download APK Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: apk-artifact
 
-      - name: Download MSIX Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: msix-artifact
+    - name: Move APK Artifact
+      run: mv *.apk output/
+      shell: cmd
 
-      - name: Move MSIX Artifact
-        run: mv *.msix output/
-        shell: cmd
+    - name: Download MSIX Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: msix-artifact
 
-      - name: Create or Update Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
-          release_name: ${{ needs.prepare-version.outputs.newVersion }}
-          body_path: Technical/release_base.md
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    - name: Move MSIX Artifact
+      run: mv *.msix output/
+      shell: cmd
+
+    - name: Create or Update Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
+        tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+        release_name: ${{ needs.prepare-version.outputs.newVersion }}
+        body_path: Technical/release_base.md
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
