@@ -28,7 +28,7 @@ jobs:
           VERSION=$(gh api \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
+            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/DEV_VERSION \
             --jq '.value')
           echo "Current version: $VERSION"
           if [[ -z "$VERSION" ]]; then
@@ -45,31 +45,24 @@ jobs:
       - name: Increment the MINOR version
         id: increment-minor
         run: |
-          NEW_MINOR=$((MINOR + 1))
-          echo "New MINOR version: $NEW_MINOR"
-          echo "new-minor=$NEW_MINOR" >> $GITHUB_ENV
+          NEW_PATCH=$((PATCH + 1))
+          echo "New MINOR version: $NEW_PATCH"
+          echo "new-minor=$NEW_PATCH" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Update the version using GitHub CLI
         id: version
         run: |
-          NEW_VERSION="$MAJOR.$NEW_MINOR.$PATCH"
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
           echo "Updating version to: $NEW_VERSION"
           echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "versionCode=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minorVersion=$NEW_MINOR" >> $GITHUB_OUTPUT
+          echo "minorVersion=$MINOR" >> $GITHUB_OUTPUT
           echo newVersion: $NEW_VERSION
           echo versionCode: $MAJOR
-          echo minorVersion: $NEW_MINOR
+          echo minorVersion: $MINOR
           gh api \
-            --method PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/variables/STABIL_VERSION \
-            -f "name=STABIL_VERSION" -f "value=$NEW_VERSION"
-            
-            gh api \
             --method PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -77,35 +70,46 @@ jobs:
             -f "name=DEV_VERSION" -f "value=$NEW_VERSION"
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
-          NEW_MINOR: ${{ env.new-minor }}    
-        
- 
+          NEW_PATCH: ${{ env.new-minor }}    
+
   build-apk:
     runs-on: [windows-latest]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
+        shell: cmd
+
       - uses: actions/checkout@v2
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
+
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-          echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
-      - name: Run Translator
-        run: cmd /c "Technical\translator\main.exe --new-only"
+          echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
+          echo Version Code: ${{ needs.prepare-version.outputs.versionCode }}
+        shell: cmd
+
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
+        shell: cmd
+
       - name: Install .NET SDK maui
         run: dotnet workload install maui
+        shell: cmd
+
       - name: Run APK build script
-        run: cmd /c ".\build_apk.bat"
+        run: .\build_apk.bat
+        shell: cmd
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -113,32 +117,38 @@ jobs:
           path: output\*.apk
 
   build-msix:
-    runs-on: [self-hosted, Windows]
+    runs-on: [windows-latest]
     needs: prepare-version
     steps:
+      - name: Fix Git Safe Directory (Windows)
+        run: git config --global --add safe.directory "${{ github.workspace }}"
+        shell: cmd
+
       - uses: actions/checkout@v2
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
+
+      - name: Install all MAUI workloads (windows, android, ios, maccatalyst)
+        run: dotnet workload install maui-windows maui-android maui-ios maui-maccatalyst
+        shell: cmd
+
       - name: Debug Output Values
         run: |
-          echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
-      - name: Run Translator
-        run: cmd /c "Technical\translator\main.exe --new-only"
-      - name: Install Certificate
-        run: |
-          Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
-          -CertStoreLocation Cert:\CurrentUser\My `
-          -Password (ConvertTo-SecureString -String kor -Force -AsPlainText)
-        shell: powershell
+          echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
+        shell: cmd
+
       - name: Run MSIX build script
-        run: cmd /c ".\build_msix.bat"
+        run: .\build_msix.bat
+        shell: cmd
         env:
           KEYPASS: ${{ secrets.KEYPASS }}
           NEW_VERSION: ${{ needs.prepare-version.outputs.newVersion }}
           NEW_VERSION_CODE: ${{ needs.prepare-version.outputs.versionCode }}
           BUILD_VERSION: ${{ env.varrible }}
+
       - name: Upload MSIX
         uses: actions/upload-artifact@v4
         with:
@@ -146,43 +156,45 @@ jobs:
           path: output\*.msix
 
   release:
-    runs-on: [self-hosted, Windows]
+    runs-on: [windows-latest]
     needs: [prepare-version, build-apk, build-msix]
     steps:
-      - name: Delete output
-        run: |
-          if (Test-Path -Path output) { Remove-Item -Recurse -Force output }
-          if (Test-Path -Path output) { Get-ChildItem -Path output -Recurse | Remove-Item -Force }
-          mkdir output
-      - name: Download APK Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-artifact
-      - name: Move APK Artifact
-        run: |
-          mv *.apk output/
-      - name: Download MSIX Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: msix-artifact
-      - name: Move MSIX Artifact
-        run: |
-          mv *.msix output/
-      - name: Create or Update Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
-          tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
-          release_name: ${{ needs.prepare-version.outputs.newVersion }}
-          body_path: Technical/release_base.md
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    
+    - uses: actions/checkout@v2
+    
+    - name: Create (or clean) output folder
+      run: |
+        if exist output rmdir /S /Q output
+        mkdir output
+      shell: cmd
 
+    - name: Download APK Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: apk-artifact
 
+    - name: Move APK Artifact
+      run: mv *.apk output/
+      shell: cmd
 
+    - name: Download MSIX Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: msix-artifact
 
+    - name: Move MSIX Artifact
+      run: mv *.msix output/
+      shell: cmd
 
- 
+    - name: Create or Update Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/*.apk,output/*.msix,KoOrderRegister/Technical/kor.pfx
+        tag_name: ${{ needs.prepare-version.outputs.versionCode }}.${{ needs.prepare-version.outputs.minorVersion }}
+        release_name: ${{ needs.prepare-version.outputs.newVersion }}
+        body_path: Technical/release_base.md
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
