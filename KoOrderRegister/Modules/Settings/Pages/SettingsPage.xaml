@@ -4,7 +4,6 @@
              x:Class="KoOrderRegister.Modules.Settings.Pages.SettingsPage"
              xmlns:res="clr-namespace:KoOrderRegister.Localization"
              xmlns:vm="clr-namespace:KoOrderRegister.Modules.Settings.ViewModels"
-             xmlns:converter="clr-namespace:KoOrderRegister.Modules.Order.List.Converters"
              Title="{x:Static res:AppRes.Settings}">
 
     <ScrollView>
