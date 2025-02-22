@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 import xml.etree.ElementTree as ET
 from deep_translator import GoogleTranslator
 
@@ -7,7 +8,7 @@ def translate_text(text, target_lang):
     translator = GoogleTranslator(source='auto', target=target_lang)
     return translator.translate(text)
 
-def process_resx_files(directory, force_translate):
+def process_resx_files(directory, force_translate, exclude_languages):
     original_file = os.path.join(directory, "AppRes.resx")
     if not os.path.exists(original_file):
         print("Original resx file not found!")
@@ -20,7 +21,7 @@ def process_resx_files(directory, force_translate):
     for file_name in os.listdir(directory):
         if file_name.startswith("AppRes.") and file_name.endswith(".resx") and file_name != "AppRes.resx":
             lang_code = file_name[7:-5]  # Extracting language code from filename
-            if lang_code == "hu-HU":
+            if lang_code in exclude_languages:
                 continue
 
             file_path = os.path.join(directory, file_name)
@@ -63,14 +64,22 @@ def process_resx_files(directory, force_translate):
     print("\nTranslation process completed!")
 
 def main():
-    directory = "../../KoOrderRegister/Localization"
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--force":
-            process_resx_files(directory, True)
-            return
-        elif sys.argv[1] == "--new-only":
-            process_resx_files(directory, False)
-            return
+    parser = argparse.ArgumentParser(description="Translate .resx files")
+    parser.add_argument("--resx-directory", type=str, help="Path to the .resx directory", required=False)
+    parser.add_argument("--exclude-languages", type=str, help="Comma-separated list of languages to exclude", required=False, default="")
+    parser.add_argument("--force", action="store_true", help="Force re-translate all entries")
+    parser.add_argument("--new-only", action="store_true", help="Only translate new entries")
+    
+    args = parser.parse_args()
+
+    if args.resx_directory:
+        exclude_languages = args.exclude_languages.split(',') if args.exclude_languages else []
+        if args.force:
+            process_resx_files(args.resx_directory, True, exclude_languages)
+            sys.exit(0)
+        elif args.new_only:
+            process_resx_files(args.resx_directory, False, exclude_languages)
+            sys.exit(0)
     
     while True:
         print("Menu:")
@@ -79,13 +88,17 @@ def main():
         print("3. Exit")
         choice = input("Choose an option: ")
         
+        if choice in ["1", "2"]:
+            directory = input("Enter the directory of resx files: ")
+            exclude_languages = input("Enter languages to exclude (comma separated, optional): ").split(',') if input("Exclude any languages? (y/n): ").lower() == "y" else []
+        
         if choice == "1":
-            process_resx_files(directory, False)
+            process_resx_files(directory, False, exclude_languages)
         elif choice == "2":
-            process_resx_files(directory, True)
+            process_resx_files(directory, True, exclude_languages)
         elif choice == "3":
             print("Exiting...")
-            break
+            sys.exit(0)
         else:
             print("Invalid option, please choose again.")
 

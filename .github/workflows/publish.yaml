@@ -13,7 +13,6 @@ permissions:
   contents: write
   pull-requests: write
 
-
 jobs:
   prepare-version:
     runs-on: ubuntu-latest
@@ -107,7 +106,10 @@ jobs:
       - name: Install .NET SDK maui
         run: dotnet workload install maui
         shell: cmd
-
+      
+      - name: Run Translator
+        run: cmd /c "cd Technical\translator && main.exe --new-only --resx-directory ../../KoOrderRegister/Localization --exclude-languages hu-HU"
+        
       - name: Run APK build script
         run: .\build_apk.bat
         shell: cmd
@@ -141,12 +143,14 @@ jobs:
       - name: Install all MAUI workloads (windows, android, ios, maccatalyst)
         run: dotnet workload install maui-windows maui-android maui-ios maui-maccatalyst
         shell: cmd
-
       - name: Debug Output Values
         run: |
           echo New Version: ${{ needs.prepare-version.outputs.newVersion }}
         shell: cmd
-
+      
+      - name: Run Translator
+        run: cmd /c "cd Technical\translator && main.exe --new-only --resx-directory ../../KoOrderRegister/Localization --exclude-languages hu-HU"
+      
       - name: Run MSIX build script
         run: .\build_msix.bat
         shell: cmd
