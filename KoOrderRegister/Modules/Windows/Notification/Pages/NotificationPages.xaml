@@ -13,9 +13,9 @@
     </ContentPage.ToolbarItems>
 
     <RefreshView Command="{Binding UpdateNotificationCommand}"
-                     IsRefreshing="{Binding IsRefreshing}"
-                     Grid.Row="2">
-            <ListView x:Name="notificationListView"
+                 IsRefreshing="{Binding IsRefreshing}"
+                 Grid.Row="2">
+        <ListView x:Name="notificationListView"
                   ItemsSource="{Binding Notifications}"
                       SeparatorVisibility="Default"
                       SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"

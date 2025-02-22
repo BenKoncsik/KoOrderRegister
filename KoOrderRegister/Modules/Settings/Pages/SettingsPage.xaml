@@ -8,92 +8,71 @@
              Title="{x:Static res:AppRes.Settings}">
 
     <ScrollView>
-        <Grid>
-                <Grid Padding="10"
-                      ColumnDefinitions="Auto, *"
-                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
-                    <Label Text="{x:Static res:AppRes.SelectLanguage}"
-                           Grid.Row="0"
-                           Grid.Column="0"
-                           Margin="10, 0, 10,10" />
-                    <Picker ItemsSource="{Binding LanguageSettings}"
-                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                            ItemDisplayBinding="{Binding DisplayName}"
-                            Margin="10, 0, 10,10"
-                            Grid.Row="0"
-                            Grid.Column="1" />
+        <VerticalStackLayout Padding="20"
+                             Spacing="15">
+            <Label Text="{x:Static res:AppRes.Settings}"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.SelectLanguage}"
+                       FontSize="18" />
+                <Picker ItemsSource="{Binding LanguageSettings}"
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                        ItemDisplayBinding="{Binding DisplayName}" />
+            </StackLayout>
 
-                    <Label Text="{x:Static res:AppRes.BackupDatabaseLabel}"
-                           Grid.Row="1"
-                           Grid.Column="0"
-                           Margin="10, 20, 10,10" />
-                    <Button Text="{x:Static res:AppRes.BackupDatabase}"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Command="{Binding BackUpDatabaseCommand}"
-                            Margin="10, 10, 10,10" />
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.BackupDatabaseLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.BackupDatabase}"
+                        Command="{Binding BackUpDatabaseCommand}" />
+            </StackLayout>
 
-                    <Label Text="{x:Static res:AppRes.RestoreDatabaseLabel}"
-                           Grid.Row="2"
-                           Grid.Column="0"
-                           Margin="10, 20, 10,10" />
-                    <Button Text="{x:Static res:AppRes.RestoreDatabase}"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            Command="{Binding RestoreDatabaseCommand}"
-                            Margin="10, 10, 10,10" />
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.RestoreDatabaseLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.RestoreDatabase}"
+                        Command="{Binding RestoreDatabaseCommand}" />
+            </StackLayout>
 
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.CheckAppUpdateLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.CheckAppUpdate}"
+                        Command="{Binding AppUpdateCommand}" />
+            </StackLayout>
 
-                    <Label Text="{x:Static res:AppRes.CheckAppUpdateLabel}"
-                           Grid.Row="3"
-                           Grid.Column="0"
-                           Margin="10, 20, 10,10" />
-                    <Button Text="{x:Static res:AppRes.CheckAppUpdate}"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            Command="{Binding AppUpdateCommand}"
-                            Margin="10, 10, 10,10" />
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.ChangeAppThemeLabel}"
+                       FontSize="18" />
+                <Button Text="{x:Static res:AppRes.ChangeAppTheme}"
+                        Command="{Binding AppThemeSwitchCommand}" />
+            </StackLayout>
 
+            <StackLayout>
+                <Label Text="{x:Static res:AppRes.ChangeAppThemeAutomaticLabel}"
+                       FontSize="18" />
+                <Switch IsToggled="{Binding IsAutoUserTheme}" />
+            </StackLayout>
 
-                    <Label Text="{x:Static res:AppRes.ChangeAppThemeLabel}"
-                           Grid.Row="4"
-                           Grid.Column="0"
-                           Margin="10, 20, 10,10" />
-                    <Button Text="{x:Static res:AppRes.ChangeAppTheme}"
-                            Grid.Row="4"
-                            Grid.Column="2"
-                            Command="{Binding AppThemeSwitchCommand}"
-                            Margin="10, 10, 10,10" />
-                    
-                    <Label Text="{x:Static res:AppRes.ChangeAppThemeAutomaticLabel}"
-                           Grid.Row="5"
-                           Grid.Column="0"
-                           Margin="10, 20, 10,10" />
-                    <Switch Grid.Row="5"
-                            Grid.Column="2"
-                            IsToggled="{Binding IsAutoUserTheme}"
-                            Margin="10, 10, 10,10" />
-
-                
-
-
-            </Grid>
             <Grid IsVisible="{Binding IsRefreshing}"
-                      BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
-                      Opacity="0.4">
+                  BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
+                  Opacity="0.4">
                 <VerticalStackLayout>
                     <ActivityIndicator IsRunning="{Binding IsRefreshing}"
                                        HorizontalOptions="Center"
                                        HeightRequest="250"
                                        WidthRequest="250"
-                                       VerticalOptions="Center" 
-                                       Margin="25"/>
-                    <Label Text="{Binding LoadingTXT}" 
-                           VerticalOptions="Center" 
+                                       VerticalOptions="Center"
+                                       Margin="25" />
+                    <Label Text="{Binding LoadingTXT}"
+                           VerticalOptions="Center"
                            HorizontalOptions="Center"
-                           Margin="20"/>
+                           Margin="20" />
                 </VerticalStackLayout>
             </Grid>
-            </Grid>
+
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
