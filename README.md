@@ -26,11 +26,11 @@ This Python script automates the translation of `.resx` resource files for a pro
    ```
 3. Run the script:
    ```sh
-   python3 script.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
+   python3 main.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
    ```
 4. Create an executable:
    ```sh
-   pyinstaller --onefile --console --hidden-import=deep_translator.main script.py
+   pyinstaller --onefile --console --hidden-import=deep_translator.main main.py
    ```
 
 #### Windows
@@ -41,11 +41,11 @@ This Python script automates the translation of `.resx` resource files for a pro
    ```
 3. Run the script:
    ```cmd
-   python script.py --new-only --resx-directory C:\path\to\resx --exclude-languages "fr,de"
+   python main.py --new-only --resx-directory C:\path\to\resx --exclude-languages "fr,de"
    ```
 4. Create an executable:
    ```cmd
-   pyinstaller --onefile --console --hidden-import=deep_translator.main script.py
+   pyinstaller --onefile --console --hidden-import=deep_translator.main main.py
    ```
 
 ### Dependencies
@@ -57,12 +57,12 @@ This Python script automates the translation of `.resx` resource files for a pro
 - `--force`: Translates all entries regardless of existing values.
   - **Example:**
     ```sh
-    python script.py --force --resx-directory /path/to/resx --exclude-languages "es,it"
+    python main.py --force --resx-directory /path/to/resx --exclude-languages "es,it"
     ```
 - `--new-only`: Translates only missing or new entries.
   - **Example:**
     ```sh
-    python script.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
+    python main.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
     ```
 
 ---
@@ -93,11 +93,11 @@ Ez a Python szkript automatikusan lefordítja a `.resx` erőforrásfájlokat egy
    ```
 3. Futtasd a szkriptet:
    ```sh
-   python3 script.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
+   python3 main.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
    ```
 4. Hozz létre egy futtatható fájlt:
    ```sh
-   pyinstaller --onefile --console --hidden-import=deep_translator.main script.py
+   pyinstaller --onefile --console --hidden-import=deep_translator.main main.py
    ```
 
 #### Windows
@@ -108,11 +108,11 @@ Ez a Python szkript automatikusan lefordítja a `.resx` erőforrásfájlokat egy
    ```
 3. Futtasd a szkriptet:
    ```cmd
-   python script.py --new-only --resx-directory C:\path\to\resx --exclude-languages "fr,de"
+   python main.py --new-only --resx-directory C:\path\to\resx --exclude-languages "fr,de"
    ```
 4. Hozz létre egy futtatható fájlt:
    ```cmd
-   pyinstaller --onefile --console --hidden-import=deep_translator.main script.py
+   pyinstaller --onefile --console --hidden-import=deep_translator.main main.py
    ```
 
 ### Függőségek
@@ -124,11 +124,11 @@ Ez a Python szkript automatikusan lefordítja a `.resx` erőforrásfájlokat egy
 - `--force`: Az összes bejegyzést lefordítja, még ha már léteznek is.
   - **Példa:**
     ```sh
-    python script.py --force --resx-directory /path/to/resx --exclude-languages "es,it"
+    python main.py --force --resx-directory /path/to/resx --exclude-languages "es,it"
     ```
 - `--new-only`: Csak az új vagy hiányzó bejegyzéseket fordítja le.
   - **Példa:**
     ```sh
-    python script.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
+    python main.py --new-only --resx-directory /path/to/resx --exclude-languages "fr,de"
     ```
 
