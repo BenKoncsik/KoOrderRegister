@@ -108,7 +108,7 @@ jobs:
         shell: cmd
       
       - name: Run Translator
-        run: cmd /c "cd Technical\translator && main.exe --new-only"
+        run: cmd /c "cd Technical\translator && main.exe --new-only --resx-directory ../../KoOrderRegister/Localization --exclude-languages hu-HU"
         
       - name: Run APK build script
         run: .\build_apk.bat
@@ -149,7 +149,7 @@ jobs:
         shell: cmd
       
       - name: Run Translator
-        run: cmd /c "cd Technical\translator && main.exe --new-only"
+        run: cmd /c "cd Technical\translator && main.exe --new-only --resx-directory ../../KoOrderRegister/Localization --exclude-languages hu-HU"
       
       - name: Run MSIX build script
         run: .\build_msix.bat
