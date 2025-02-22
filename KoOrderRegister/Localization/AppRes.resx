@@ -147,7 +147,6 @@
   </data>
   <data name="AddNewCustomer" xml:space="preserve">
     <value>Add new customer</value>
-    <comment>AddNewCustomer</comment>
   </data>
   <data name="Person" xml:space="preserve">
     <value>Person</value>

@@ -12,7 +12,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage.Language
     {
         private string _languageName = "German_DE";
         private string _cultureName = "de-DE";
-        private string _languageDisplayName = "Deutsch (German) [AI Translated]";
+        private string _languageDisplayName = "Deutsch (German)";
         private string _languageId = "+49";
 
         public string DisplayName { get => GetLanguageDisplayName(); }
