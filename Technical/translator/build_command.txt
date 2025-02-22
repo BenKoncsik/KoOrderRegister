@@ -1,1 +1,0 @@
-pyinstaller --onefile --console --hidden-import=deep_translator.main main.py
