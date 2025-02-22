@@ -147,7 +147,6 @@
   </data>
   <data name="AddNewCustomer" xml:space="preserve">
     <value>Add new customer</value>
-    <comment>AddNewCustomer</comment>
   </data>
   <data name="Person" xml:space="preserve">
     <value>Person</value>
@@ -527,5 +526,72 @@
   </data>
   <data name="ClearAll" xml:space="preserve">
     <value>Clear all</value>
+  </data>
+  <data name="RomteServerSettings" xml:space="preserve">
+    <value>Romte Server Settings</value>
+  </data>
+  <data name="RemoteServerSwitchLabel" xml:space="preserve">
+    <value>Remote Server ON/OFF:</value>
+  </data>
+  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
+    <value>Remote server connection code:</value>
+  </data>
+  <data name="RemoteServerSwitch" xml:space="preserve">
+    <value>Remote Server ON/OFF:</value>
+  </data>
+  <data name="ClientConnectionSettings" xml:space="preserve">
+    <value>Client connection settings</value>
+  </data>
+  <data name="ConnectionString" xml:space="preserve">
+    <value>Connection string</value>
+  </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="ConnectedDevices" xml:space="preserve">
+    <value>Connected devices</value>
+  </data>
+  <data name="SuccessToConnection" xml:space="preserve">
+    <value>Success to connection</value>
+  </data>
+  <data name="AreYouSureYouWantToConnection" xml:space="preserve">
+    <value>Are you sure you want to connection</value>
+  </data>
+  <data name="Disconecting" xml:space="preserve">
+    <value>Disconecting</value>
+  </data>
+  <data name="AreYouSureYouWantToDisconnection" xml:space="preserve">
+    <value>Are you sure you want to disconnection</value>
+  </data>
+  <data name="ConnectedServers" xml:space="preserve">
+    <value>Connected servers</value>
+  </data>
+  <data name="FirstConnaction" xml:space="preserve">
+    <value>First connaction</value>
+  </data>
+  <data name="LastConnection" xml:space="preserve">
+    <value>Last connection</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+    <comment>About</comment>
+  </data>
+  <data name="ProjectGithubLabel" xml:space="preserve">
+    <value>Project Github:</value>
+  </data>
+  <data name="GithubProfileLabel" xml:space="preserve">
+    <value>Github profile:</value>
+    <comment>Github profile</comment>
+  </data>
+  <data name="XProfileLabel" xml:space="preserve">
+    <value>X profile:</value>
+    <comment>XProfileLabel</comment>
+  </data>
+  <data name="ReleaseNotesLabel" xml:space="preserve">
+    <value>Release notes:</value>
+    <comment>Release note</comment>
   </data>
 </root>

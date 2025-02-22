@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KORCore.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,5 @@ namespace KoOrderRegister.Localization.SupportedLanguage
         string GetLanguageId();
         string GetCultureName();
         Task SetRegioSpecification();
-
-
     }
 }

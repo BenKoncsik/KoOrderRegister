@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.DatabaseFile.Page;
-using KoOrderRegister.Modules.Order.List.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
@@ -19,15 +16,21 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KoOrderRegister.Modules.Order.Services;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
-namespace KoOrderRegister.Modules.Order.List.ViewModels
+namespace KoOrderRegister.Modules.Order.ViewModels
 {
     public class OrderDetailViewModel : BaseViewModel
     {
         #region DI
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
         private readonly IFileService _fileService;
         private readonly FilePropertiesPopup _filePropertiesPopup;
+        private readonly IDatabaseModelFactory _databaseModelFactory;
         #endregion
         #region Binding varrible
         private OrderModel _order = new OrderModel();
@@ -64,7 +67,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         }
 
         private DateTime _SelectedStartDate = DateTime.Now;
-        public DateTime SelectedStartDate 
+        public DateTime SelectedStartDate
         {
             get => _SelectedStartDate;
             set
@@ -77,7 +80,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
         private TimeSpan _SelectedStartTime = DateTime.Now.TimeOfDay;
-        public TimeSpan SelectedStartTime 
+        public TimeSpan SelectedStartTime
         {
             get => _SelectedStartTime;
             set
@@ -90,7 +93,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
         private DateTime _SelectedEndDate = DateTime.Now;
-        public DateTime SelectedEndDate 
+        public DateTime SelectedEndDate
         {
             get => _SelectedEndDate;
             set
@@ -116,7 +119,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
 
-        public ObservableCollection<CustomerModel> Customers {get; set;} = new ObservableCollection<CustomerModel>();
+        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
         private CustomerModel _selectedItem;
         public CustomerModel SelectedItem
         {
@@ -128,7 +131,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                     _selectedItem = value;
                     OnPropertyChanged(nameof(SelectedItem));
                     Order.CustomerId = value?.Id ?? "";
-                    Order.Customer = value;
+                    Order.Customer = value ?? new CustomerModel();
                     OnPropertyChanged(nameof(Customer));
                 }
             }
@@ -137,7 +140,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public ObservableCollection<FileModel> Files { get; set; } = new ObservableCollection<FileModel>();
         private CancellationToken cancellationToken = new CancellationToken();
         #region Commands
-        public ICommand ReturnCommand => new Command(Return);
+        public ICommand ReturnCommand => new Command(async () => await Return());
         public ICommand SaveCommand => new Command(SaveOrder);
         public ICommand DeleteCommand => new Command(DeleteOrder);
         public ICommand SelectedFilesCommand => new Command(SelectedFiles);
@@ -147,11 +150,16 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         public Command<FileModel> EditFileCommand => new Command<FileModel>(EditFile);
         public ICommand UpdateFilesCommand => new Command(UpdateFiles);
         #endregion
-        public OrderDetailViewModel(IDatabaseModel database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public OrderDetailViewModel(IDatabaseModelFactory database, IFileService fileService, FilePropertiesPopup filePropertiesPopup, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _databaseModelFactory = database;
+            _database = database.Get();
             _fileService = fileService;
             _filePropertiesPopup = filePropertiesPopup;
+        }
+        public override void OnAppearing()
+        {
+            _database = _databaseModelFactory.Get();
         }
 
         public void EditOrder(OrderModel order)
@@ -161,7 +169,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             SelectedEndDate = Order.EndDate;
             SelectedEndTime = Order.EndDate.TimeOfDay;
             SelectedStartDate = Order.StartDate;
-            SelectedStartTime = Order.StartDate.TimeOfDay;            
+            SelectedStartTime = Order.StartDate.TimeOfDay;
 #if DEBUG
             Debug.WriteLine("Start date: " + SelectedStartDate.ToString("yyyy-MM-dd"));
             Debug.WriteLine("Start time: " + SelectedStartTime.ToString(@"hh\:mm"));
@@ -189,7 +197,8 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                             if (!file.IsDatabaseContent && file.FileResult != null)
                             {
                                 List<byte> contentList = new List<byte>();
-                                using (var stream = await file.FileResult.OpenReadAsync())
+                                FileResult fileResult = (FileResult)file.FileResult;
+                                using (var stream = await fileResult.OpenReadAsync())
                                 {
                                     byte[] buffer = new byte[1048576];
                                     int bytesRead;
@@ -230,7 +239,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                 if (await _database.DeleteOrder(Order.Guid) > 0)
                 {
                     IsRefreshing = false;
-                    Return();
+                    await Return();
                 }
                 else
                 {
@@ -240,9 +249,9 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             }
         }
 
-        public async void Return()
+        public async Task Return()
         {
-            App.Current.MainPage.Navigation.PopAsync();
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
 
         public async void Update()
@@ -254,7 +263,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
                     Customers.Clear();
                 }
 
-                await foreach(var customer in  _database.GetAllCustomersAsStream(cancellationToken))
+                await foreach (var customer in _database.GetAllCustomersAsStream(cancellationToken))
                 {
                     Customers.Add(customer);
                 }
@@ -322,7 +331,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             IsRefreshing = true;
             if (file.FileResult == null)
             {
-              await _database.DeleteFile(file.Guid);
+                await _database.DeleteFile(file.Guid);
             }
             Files.Remove(file);
             IsRefreshing = false;
@@ -332,7 +341,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             IsRefreshing = true;
             file = await _database.GetFileById(file.Guid);
-            
+
             if (file.Content == null)
             {
                 IsRefreshing = false;
@@ -379,7 +388,7 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
         {
             IsLoadingFiles = true;
             List<FileModel> files = await _database.GetFilesByOrderIdWithOutContent(Order.Guid);
-            if(files == null)
+            if (files == null)
             {
                 IsLoadingFiles = false;
                 return;
@@ -403,9 +412,5 @@ namespace KoOrderRegister.Modules.Order.List.ViewModels
             _filePropertiesPopup.EditFile(file);
             await MopupService.Instance.PushAsync(_filePropertiesPopup);
         }
-
-
-
-
     }
 }

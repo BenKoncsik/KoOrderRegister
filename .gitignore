@@ -7,3 +7,10 @@ KoOrderRegister/Technical/icon_creator/input
 KoOrderRegister/Technical/icon_creator/output
 
 KoOrderRegister/Technical/KoOrderRegister.csproj.bak
+KORCore/bin
+KORCore/obj
+KORConnect/bin
+KORConnect/obj
+*.kncsk
+Technical/translator/build
+Technical/translator/dist

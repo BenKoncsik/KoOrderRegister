@@ -8,11 +8,14 @@
     xmlns:orderListViews="clr-namespace:KoOrderRegister.Modules.Order.Pages"
     xmlns:customerListViews="clr-namespace:KoOrderRegister.Modules.Customer.Pages"
     xmlns:settings="clr-namespace:KoOrderRegister.Modules.Settings.Pages"
+    xmlns:about="clr-namespace:KoOrderRegister.Modules.About.Pages"
     xmlns:excelExporter="clr-namespace:KoOrderRegister.Modules.Export.Excel.Pages"
     xmlns:pdfExporter="clr-namespace:KoOrderRegister.Modules.Export.Pdf.Pages"
     xmlns:htmlExporter="clr-namespace:KoOrderRegister.Modules.Export.Html.Pages"
     xmlns:betaFuctions="clr-namespace:KoOrderRegister.Modules.BetaFunctions.Pages"
     xmlns:notification="clr-namespace:KoOrderRegister.Modules.Windows.Notification.Pages"
+    xmlns:remoteServer="clr-namespace:KoOrderRegister.Modules.Remote.Server.Pages"
+    xmlns:clientConnection="clr-namespace:KoOrderRegister.Modules.Remote.Client.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Ko Order-Register">
 
@@ -72,13 +75,29 @@
 
         <ShellContent Title="{x:Static res:AppRes.PdfExporter}"
                       Icon="{AppThemeBinding Light='pdf_light.png', Dark='pdf_dark.png'}"
-                      Route="ExportersPage"
+                      Route="PdfExportersPage"
                       ContentTemplate="{DataTemplate pdfExporter:PdfExportersPage}" />
 
         <ShellContent Title="{x:Static res:AppRes.HtmlExporter}"
                       Icon="{AppThemeBinding Light='web_light.png', Dark='web_dark.png'}"
-                      Route="ExportersPage"
+                      Route="HtmlExportersPage"
                       ContentTemplate="{DataTemplate htmlExporter:HtmlExportersPage}" />
+
+        <ShellContent Title="{x:Static res:AppRes.RomteServerSettings}"
+                      Icon="{AppThemeBinding Light='remote_server_light.png', Dark='remote_server_dark.png'}"
+                      Route="RemoteServerPage"
+                      ContentTemplate="{DataTemplate remoteServer:RemoteServerPage}"
+                      IsVisible="{x:Static local:AppShell.IsWindows}" />
+
+        <ShellContent Title="{x:Static res:AppRes.ClientConnectionSettings}"
+                      Icon="{AppThemeBinding Light='remote_client_light.png', Dark='remote_client_dark.png'}"
+                      Route="ClientConnectionPage"
+                      ContentTemplate="{DataTemplate clientConnection:ClientConnectionPage}"
+                       />
+        <ShellContent Title="{x:Static res:AppRes.ConnectedServers}"
+                      Icon="{AppThemeBinding Light='host_light.png', Dark='host_dark.png'}"
+                      Route="ConnectedServersPage"
+                      ContentTemplate="{DataTemplate clientConnection:ConnectedServersPage}" />
     </FlyoutItem>
     
     
@@ -91,7 +110,15 @@
                       ContentTemplate="{DataTemplate settings:SettingsPage}" />
     </FlyoutItem>
     
-    
+    <FlyoutItem Title="{x:Static res:AppRes.About}"
+                Icon="{AppThemeBinding Light='about_light.png', Dark='about_dark.png'}">
+        <ShellContent Title="{x:Static res:AppRes.About}"
+                      Icon="{AppThemeBinding Light='about_light.png', Dark='about_dark.png'}"
+                      Route="AboutPage"
+                      ContentTemplate="{DataTemplate about:AboutPage}" />
+    </FlyoutItem>
+
+
 
 
 

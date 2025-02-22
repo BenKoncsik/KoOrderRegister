@@ -2,11 +2,12 @@
 using DocumentFormat.OpenXml.Presentation;
 using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
-using KoOrderRegister.Modules.Database.Services;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
+using KORCore.Modules.Database.Factory;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 using System;
@@ -82,7 +83,7 @@ namespace KoOrderRegister.Modules.Settings.ViewModels
 
         
         
-        public SettingsViewModel(IDatabaseModel databaseModel, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public SettingsViewModel(LocalDatabaseModel databaseModel, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
             _databaseModel = databaseModel;
             _updateService = updateService;

@@ -78,12 +78,11 @@ namespace KoOrderRegister.Modules.Windows.Notification.ViewModel
             }
         }
 
-        internal void Appering()
+        public override void OnAppearing()
         {
             _localNotificationService.NotificationChanged += LocalNotificationService_NotificationChanged;
             _localNotificationService.NotificationCleared += LocalNotificationService_NotificationCleared;
         }
-
         internal void Disappearing()
         { 
             _localNotificationService.NotificationChanged -= LocalNotificationService_NotificationChanged;

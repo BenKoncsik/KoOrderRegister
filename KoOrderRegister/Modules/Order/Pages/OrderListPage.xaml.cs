@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Order.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 using System.Collections.Generic;
 
 namespace KoOrderRegister.Modules.Order.Pages;
@@ -19,6 +20,7 @@ public partial class OrderListPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
             _viewModel.UpdateOrders();
         }
     }

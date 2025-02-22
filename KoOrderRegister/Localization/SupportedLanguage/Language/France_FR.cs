@@ -1,4 +1,5 @@
 ﻿using KoOrderRegister.Utility;
+using KORCore.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace KoOrderRegister.Localization.SupportedLanguage.Language
     {
         private string _languageName = "France_FR";
         private string _cultureName = "fr-FR";
-        private string _languageDisplayName = "France (France) [AI Translated]";
+        private string _languageDisplayName = "France (France)";
         private string _languageId = "+33";
 
         public string DisplayName { get => GetLanguageDisplayName(); }

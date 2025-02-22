@@ -61,6 +61,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new customer.
         /// </summary>
         internal static string AddNewCustomer {
@@ -106,11 +115,29 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to connection.
+        /// </summary>
+        internal static string AreYouSureYouWantToConnection {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete: .
         /// </summary>
         internal static string AreYouSureYouWantToDelete {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to disconnection.
+        /// </summary>
+        internal static string AreYouSureYouWantToDisconnection {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDisconnection", resourceCulture);
             }
         }
         
@@ -214,6 +241,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client connection settings.
+        /// </summary>
+        internal static string ClientConnectionSettings {
+            get {
+                return ResourceManager.GetString("ClientConnectionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -228,6 +264,42 @@ namespace KoOrderRegister.Localization {
         internal static string CloseAdvancedDetails {
             get {
                 return ResourceManager.GetString("CloseAdvancedDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected devices.
+        /// </summary>
+        internal static string ConnectedDevices {
+            get {
+                return ResourceManager.GetString("ConnectedDevices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected servers.
+        /// </summary>
+        internal static string ConnectedServers {
+            get {
+                return ResourceManager.GetString("ConnectedServers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        internal static string Connection {
+            get {
+                return ResourceManager.GetString("Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection string.
+        /// </summary>
+        internal static string ConnectionString {
+            get {
+                return ResourceManager.GetString("ConnectionString", resourceCulture);
             }
         }
         
@@ -318,6 +390,15 @@ namespace KoOrderRegister.Localization {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disconecting.
+        /// </summary>
+        internal static string Disconecting {
+            get {
+                return ResourceManager.GetString("Disconecting", resourceCulture);
             }
         }
         
@@ -430,6 +511,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed.
+        /// </summary>
+        internal static string Failed {
+            get {
+                return ResourceManager.GetString("Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to delete..
         /// </summary>
         internal static string FailedToDelete {
@@ -511,6 +601,24 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First connaction.
+        /// </summary>
+        internal static string FirstConnaction {
+            get {
+                return ResourceManager.GetString("FirstConnaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Github profile:.
+        /// </summary>
+        internal static string GithubProfileLabel {
+            get {
+                return ResourceManager.GetString("GithubProfileLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hash code:.
         /// </summary>
         internal static string HashCodeLabel {
@@ -525,6 +633,15 @@ namespace KoOrderRegister.Localization {
         internal static string HtmlExporter {
             get {
                 return ResourceManager.GetString("HtmlExporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last connection.
+        /// </summary>
+        internal static string LastConnection {
+            get {
+                return ResourceManager.GetString("LastConnection", resourceCulture);
             }
         }
         
@@ -799,11 +916,56 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Github:.
+        /// </summary>
+        internal static string ProjectGithubLabel {
+            get {
+                return ResourceManager.GetString("ProjectGithubLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Porperties.
         /// </summary>
         internal static string Properties {
             get {
                 return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release notes:.
+        /// </summary>
+        internal static string ReleaseNotesLabel {
+            get {
+                return ResourceManager.GetString("ReleaseNotesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote server connection code:.
+        /// </summary>
+        internal static string RemoteServerConnectionQrCodeLabel {
+            get {
+                return ResourceManager.GetString("RemoteServerConnectionQrCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote Server ON/OFF:.
+        /// </summary>
+        internal static string RemoteServerSwitch {
+            get {
+                return ResourceManager.GetString("RemoteServerSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote Server ON/OFF:.
+        /// </summary>
+        internal static string RemoteServerSwitchLabel {
+            get {
+                return ResourceManager.GetString("RemoteServerSwitchLabel", resourceCulture);
             }
         }
         
@@ -831,6 +993,15 @@ namespace KoOrderRegister.Localization {
         internal static string Return {
             get {
                 return ResourceManager.GetString("Return", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romte Server Settings.
+        /// </summary>
+        internal static string RomteServerSettings {
+            get {
+                return ResourceManager.GetString("RomteServerSettings", resourceCulture);
             }
         }
         
@@ -961,6 +1132,15 @@ namespace KoOrderRegister.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Success to connection.
+        /// </summary>
+        internal static string SuccessToConnection {
+            get {
+                return ResourceManager.GetString("SuccessToConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success to save.
         /// </summary>
         internal static string SuccessToSave {
@@ -1011,6 +1191,15 @@ namespace KoOrderRegister.Localization {
         internal static string UpdateDownloaded {
             get {
                 return ResourceManager.GetString("UpdateDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X profile:.
+        /// </summary>
+        internal static string XProfileLabel {
+            get {
+                return ResourceManager.GetString("XProfileLabel", resourceCulture);
             }
         }
         

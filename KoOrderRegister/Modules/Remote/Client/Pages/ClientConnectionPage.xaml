@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             x:Class="KoOrderRegister.Modules.Remote.Client.Pages.ClientConnectionPage"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             Title="{x:Static res:AppRes.ClientConnectionSettings}">
+    <ScrollView>
+        <StackLayout>
+        <Label Text="{x:Static res:AppRes.ClientConnectionSettings}"
+               Margin="10, 0, 10,10"
+               FontSize="Large"
+               HorizontalOptions="Center" />
+       
+            <VerticalStackLayout>
+                <Label Text="{x:Static res:AppRes.ConnectionString}"
+                       Margin="10, 0, 10,10"
+                       FontSize="Large"
+                       HorizontalOptions="Center" />
+                <cv:CameraView x:Name="cameraView"
+                               MaximumHeightRequest="350"
+                               BarCodeOptions="{Binding BarCodeOptions}"
+                               BarCodeResults="{Binding BarCodeResults, Mode=OneWayToSource}"
+                               BarCodeDetectionEnabled="True"
+                               Cameras="{Binding Cameras, Mode=OneWayToSource}"
+                               Camera="{Binding Camera}"
+                               AutoStartPreview="{Binding AutoStartPreview}"
+                               NumCamerasDetected="{Binding NumCameras, Mode=OneWayToSource}"
+                               AutoSnapShotAsImageSource="True"
+                               AutoSnapShotFormat="PNG"
+                               TakeAutoSnapShot="{Binding TakeSnapshot}"
+                               AutoSnapShotSeconds="{Binding SnapshotSeconds}"
+                               
+                               />
+                <Entry Text="{Binding BarcodeText}"
+                       Placeholder="{x:Static res:AppRes.ConnectionString}"/>
+                <Button Command="{Binding ConnectionCommand}"
+                        Text="{x:Static res:AppRes.Connection}" 
+                        Margin="10" />
+                
+                <Button Command="{Binding DisconectedCommand}"
+                        Text="{x:Static res:AppRes.Disconecting}"
+                        Margin="10" />
+            </VerticalStackLayout>
+       
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

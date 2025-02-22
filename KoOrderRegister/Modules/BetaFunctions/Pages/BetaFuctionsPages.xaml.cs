@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.BetaFunctions.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 using System.Diagnostics;
 
 namespace KoOrderRegister.Modules.BetaFunctions.Pages;
@@ -19,6 +20,7 @@ public partial class BetaFunctionsPages : ContentPage
         using (new LowPriorityTaskManager())
         {
             Debug.WriteLine($"Navigate to: BetaFunctionsPages");
+            _viewModel.OnAppearing();
             base.OnAppearing();
         }
     }

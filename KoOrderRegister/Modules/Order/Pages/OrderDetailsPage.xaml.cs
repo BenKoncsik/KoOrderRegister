@@ -1,7 +1,8 @@
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Order.List.ViewModels;
 using KoOrderRegister.Utility;
 using System.Collections.ObjectModel;
+using KoOrderRegister.Modules.Order.ViewModels;
+using KORCore.Modules.Database.Models;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Order.Pages;
 
@@ -38,6 +39,7 @@ public partial class OrderDetailsPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
             _viewModel.Update();
         }
     }

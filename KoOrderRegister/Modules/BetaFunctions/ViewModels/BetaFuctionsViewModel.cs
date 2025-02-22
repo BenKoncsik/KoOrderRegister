@@ -1,13 +1,17 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Export.Types.Excel.Services;
+using KoOrderRegister.Modules.Export.Exporters.Excel.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
+using KORCore.Modules.Database.Factory;
+using KORCore.Modules.Database.Services;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,26 +24,33 @@ namespace KoOrderRegister.Modules.BetaFunctions.ViewModels
     {
         private readonly IExcelExportService _exportService;
         private readonly ILocalNotificationService _notifyService;
+        private readonly IDatabaseModel _database;
         #region Binding varribles
-
+        public ObservableCollection<string> RealTimeDatabaseEvents = new ObservableCollection<string>();
         #endregion
         #region Commands
         public ICommand ExportDataCommand => new Command(ExportDataToExcel);
         public ICommand NotificationCommand => new Command(NotificationTest);
         #endregion
 
-        public BetaFunctionsViewModel(IExcelExportService exportService, ILocalNotificationService notificationService)
+        public BetaFunctionsViewModel(IExcelExportService exportService, ILocalNotificationService notificationService, IDatabaseModelFactory databaseModel)
         {
             _exportService = exportService;
             _notifyService = notificationService;
-            _notifyService.NotificationReceived += OnNotificationReceived;
+            _database = databaseModel.Get();
+            //_notifyService.NotificationReceived += OnNotificationReceived;
+            //IDatabaseModel.OnDatabaseChange += TestReliTimeDatabase;
         }
         public void ProgressCallback(float precent)
         {
             LoadingTXT = $"{AppRes.Loading}: {precent}%";
         }
 
-
+        private void TestReliTimeDatabase(string name, object data)
+        {
+            Debug.WriteLine($"Name: {name} --> {data.GetType()}");
+            RealTimeDatabaseEvents.Add($"{name} --> {data.GetType()}");
+        }
         public async void ExportDataToExcel()
         {
             CancellationTokenSource cancellationToken = new CancellationTokenSource();

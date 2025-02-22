@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace KoOrderRegister
+namespace KoOrderRegister.Platforms.Android
 {
     [Application]
     public class MainApplication : MauiApplication
@@ -27,7 +27,7 @@ namespace KoOrderRegister
 
         // user can grant the permission via the app
         [assembly: UsesPermission("android.permission.SCHEDULE_EXACT_ALARM")]
-        public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+        public MainApplication(nint handle, JniHandleOwnership ownership)
             : base(handle, ownership)
         {
         }

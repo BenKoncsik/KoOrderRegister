@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KoOrderRegister.Modules.Remote.Client.Pages.ConnectedServersPage"
+             xmlns:res="clr-namespace:KoOrderRegister.Localization"
+             Title="{x:Static res:AppRes.ConnectedServers}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{x:Static res:AppRes.Update}"
+                     IconImageSource="{AppThemeBinding Light='update_light.png', Dark='update_dark.png'}"
+                     Command="{Binding UpdateCommand}"
+                     ToolTipProperties.Text="{x:Static res:AppRes.Update}" />
+    </ContentPage.ToolbarItems>
+    <Grid RowDefinitions="Auto, Auto, *"
+          Padding="3,10,3,20">
+        <StackLayout Padding="3, 10, 3, 20"
+                     Grid.Row="0">
+            <SearchBar x:Name="searchBar"
+                       Placeholder="{x:Static res:AppRes.Search}"
+                       SearchCommand="{Binding SearchCommand}"
+                       TextChanged="OnTextChanged"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+        </StackLayout>
+
+        <Grid Padding="3, 0, 0, 3"
+              RowDefinitions="Auto"
+              ColumnDefinitions="*,*"
+              Grid.Row="1">
+            <Label Text="{x:Static res:AppRes.FirstConnaction}"
+                   Grid.Column="0"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Label Text="{x:Static res:AppRes.LastConnection}"
+                   Grid.Column="1"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+        </Grid>
+
+        <RefreshView Command="{Binding UpdateCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Grid.Row="2">
+            <ListView x:Name="connectionListView"
+                      ItemsSource="{Binding Connections}"
+                      SeparatorVisibility="Default"
+                      SeparatorColor="{AppThemeBinding Light='LightGray', Dark='White'}"
+                      RowHeight="150">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+
+                            <ViewCell.ContextActions>
+                                <MenuItem x:Name="connectionMenuItem"
+                                          Text="{x:Static res:AppRes.Connection}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.ConnectServerCommand, Source={x:Reference Name=connectionListView}}"
+                                          CommandParameter="{Binding .}" />
+
+                                <MenuItem x:Name="disConnectionMenuItem"
+                                          Text="{x:Static res:AppRes.Disconecting}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DisconetionServerCommand, Source={x:Reference Name=connectionListView}}"
+                                          CommandParameter="{Binding .}" 
+                                          />
+
+                                <MenuItem Text="{x:Static res:AppRes.Delete}"
+                                          IsDestructive="True"
+                                          Command="{Binding Path=BindingContext.DeleteConnectionCommand, Source={x:Reference Name=connectionListView}}"
+                                          CommandParameter="{Binding .}" />
+                                
+                            </ViewCell.ContextActions>
+                            
+                            <Grid  Padding="5,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                          Command="{Binding Path=BindingContext.ConnectServerCommand, Source={x:Reference Name=connectionListView}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                                
+                                <Label Text="{Binding FirstConnectionData}"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Margin="2, 25, 0, 25" />
+                                <Label Text="{Binding LastConnectionData}"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Margin="2, 25, 0, 25" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+
+
+    </Grid>
+
+</ContentPage>

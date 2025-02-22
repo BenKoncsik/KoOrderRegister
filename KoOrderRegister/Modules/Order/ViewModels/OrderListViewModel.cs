@@ -1,7 +1,5 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Localization.SupportedLanguage;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Modules.Order.Pages;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
@@ -15,20 +13,24 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Order.ViewModels
 {
     public class OrderListViewModel : BaseViewModel
     {
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
         private readonly OrderDetailsPage _orderDetailsPage;
+        private readonly IDatabaseModelFactory _databaseModelFactory;
         #region Binding varrible
-       
+
         #endregion
         public string SearchTXT { get; set; } = string.Empty;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
- 
         public ObservableCollection<OrderModel> Orders { get; set; } = new ObservableCollection<OrderModel>();
 
         #region Commands
@@ -39,9 +41,10 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         public ICommand SearchCommand { get; }
         #endregion
 
-        public OrderListViewModel(IDatabaseModel database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public OrderListViewModel(IDatabaseModelFactory database, OrderDetailsPage orderDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _databaseModelFactory = database;
+            _database = database.Get();
             _orderDetailsPage = orderDetailsPage;
 
             AddNewOrderCommand = new Command(NewOrder);
@@ -51,29 +54,26 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             SearchCommand = new Command<string>(Search);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        public override void OnAppearing()
         {
-            try
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            catch (TargetInvocationException ex)
-            {
-                Debug.WriteLine($"Inner Exception: {ex.InnerException}");
-            }
+            _database = _databaseModelFactory.Get();
         }
 
         public async void NewOrder()
         {
-            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            if (App.Current?.MainPage != null)
+            {
+                await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            }
         }
 
         public async void EditOrder(OrderModel order)
         {
-            _orderDetailsPage.EditOrder(order);
-            await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            if (App.Current?.MainPage != null)
+            {
+                _orderDetailsPage.EditOrder(order);
+                await App.Current.MainPage.Navigation.PushAsync(_orderDetailsPage);
+            }
         }
 
         public async void UpdateOrders()
@@ -99,6 +99,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
                 }
             }
         }
+
         private async Task _updateOrders()
         {
             IsRefreshing = true;
@@ -127,16 +128,19 @@ namespace KoOrderRegister.Modules.Order.ViewModels
 
         public async void DeleteOrder(OrderModel order)
         {
-            bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.Yes, AppRes.No);
-            if (result)
+            if (Application.Current?.MainPage != null)
             {
-                if (await _database.DeleteOrder(order.Guid) > 0)
+                bool result = await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.AreYouSureYouWantToDelete + " " + order.OrderNumber, AppRes.Yes, AppRes.No);
+                if (result)
                 {
-                    Orders.Remove(order);
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + order.OrderNumber, AppRes.Ok);
+                    if (await _database.DeleteOrder(order.Guid) > 0)
+                    {
+                        Orders.Remove(order);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppRes.Delete, AppRes.FailedToDelete + " " + order.OrderNumber, AppRes.Ok);
+                    }
                 }
             }
         }

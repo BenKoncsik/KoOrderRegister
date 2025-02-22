@@ -1,27 +1,30 @@
 ﻿using KoOrderRegister.Localization;
 using KoOrderRegister.Modules.Customer.Pages;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.Utility;
 using KoOrderRegister.ViewModel;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Utility;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {
     public class CustomerListViewModel : BaseViewModel
     {
         private readonly IDatabaseModel _database;
+
         private readonly PersonDetailsPage _personDetailsPage;
         #region Binding varrible
-
-
+        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
+        public string SearchTXT { get; set; } = string.Empty;
         #endregion
 
 
-        public string SearchTXT { get; set; } = string.Empty;
+
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
 
@@ -33,11 +36,11 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
         public Command<string> SearchCommand { get; }
         #endregion
 
-        public ObservableCollection<CustomerModel> Customers { get; set; } = new ObservableCollection<CustomerModel>();
+       
         
-        public CustomerListViewModel(IDatabaseModel database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public CustomerListViewModel(IDatabaseModelFactory database, PersonDetailsPage personDetailsPage, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _database = database.Get();
             _personDetailsPage = personDetailsPage;
 
         UpdateCommand = new Command(Update);
@@ -115,7 +118,7 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
             if (result)
             {
                 int deleteResult = await _database.DeleteCustomer(customer.Guid);
-                if (deleteResult == 1)
+                if (deleteResult > 0)
                 {
                     Customers.Remove(customer);
                 }

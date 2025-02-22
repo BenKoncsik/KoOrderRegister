@@ -1,9 +1,10 @@
 ﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.Services;
 using KoOrderRegister.ViewModel;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Modules.Database.Factory;
 
 namespace KoOrderRegister.Modules.Customer.ViewModels
 {
@@ -40,9 +41,9 @@ namespace KoOrderRegister.Modules.Customer.ViewModels
       
         #endregion
      
-        public PersonDetailsViewModel(IDatabaseModel database, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
+        public PersonDetailsViewModel(IDatabaseModelFactory database, IAppUpdateService updateService, ILocalNotificationService notificationService) : base(updateService, notificationService)
         {
-            _database = database;
+            _database = database.Get();
         }
 
         public async void SavePerson()

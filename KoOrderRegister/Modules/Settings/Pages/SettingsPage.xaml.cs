@@ -1,5 +1,6 @@
 using KoOrderRegister.Modules.Settings.ViewModels;
 using KoOrderRegister.Utility;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Settings.Pages;
 
@@ -18,6 +19,7 @@ public partial class SettingsPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

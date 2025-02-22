@@ -1,6 +1,4 @@
 ﻿using KoOrderRegister.Localization;
-using KoOrderRegister.Modules.Database.Models;
-using KoOrderRegister.Modules.Database.Services;
 using KoOrderRegister.ViewModel;
 using Microsoft.Maui.Controls;
 using Mopups.Services;
@@ -10,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KORCore.Modules.Database.Models;
+using KORCore.Modules.Database.Services;
+using KORCore.Modules.Database.Factory;
 
 
 
@@ -18,7 +19,8 @@ namespace KoOrderRegister.Modules.DatabaseFile.ViewModel
     public class FilePropertiesViewModel : BaseViewModel
     {
         #region DI
-        private readonly IDatabaseModel _database;
+        private IDatabaseModel _database;
+        private IDatabaseModelFactory _databaseModelFactory;
         #endregion
         #region Binding varrible
         private FileModel file;
@@ -85,18 +87,24 @@ namespace KoOrderRegister.Modules.DatabaseFile.ViewModel
         public ICommand OpenCloseAdvancedDetailsCommand { get; set; }
         #endregion
 
-        public FilePropertiesViewModel(IDatabaseModel databaseModel)
+        public FilePropertiesViewModel(IDatabaseModelFactory databaseModel)
         {
-            _database = databaseModel;
+            _databaseModelFactory = databaseModel;
+            _database = databaseModel.Get();
             SaveCommand = new Command(Save);
             CancelCommand = new Command(Return);
             DeleteCommand = new Command(Delete);
             OpenCloseAdvancedDetailsCommand = new Command(OpenCloseAdvancedDetails);
         }
 
+        public override void OnAppearing()
+        {
+            _database = _databaseModelFactory.Get();
+        }
+
         public async void Save()
         {
-            if(await _database.UpdateFile(File) > 0)
+            if(await _database.CreateFile(File) > 0)
             {
                 await Application.Current.MainPage.DisplayAlert(AppRes.Save, AppRes.SuccessToSave + " " + File.Name, AppRes.Ok);
             }

@@ -486,4 +486,67 @@
   <data name="ClearAll" xml:space="preserve">
     <value>Összes törlése</value>
   </data>
+  <data name="RomteServerSettings" xml:space="preserve">
+    <value>Távoli hozzáférés beállítása</value>
+  </data>
+  <data name="RemoteServerSwitchLabel" xml:space="preserve">
+    <value>Szerver be/ki kapcsolás:</value>
+  </data>
+  <data name="RemoteServerConnectionQrCodeLabel" xml:space="preserve">
+    <value>Távoli hozzá férési kód:</value>
+  </data>
+  <data name="RemoteServerSwitch" xml:space="preserve">
+    <value>Szerver be/ki kapcsolása:</value>
+  </data>
+  <data name="ClientConnectionSettings" xml:space="preserve">
+    <value>Kliens beállítások</value>
+  </data>
+  <data name="ConnectionString" xml:space="preserve">
+    <value>Cstalakozási kód</value>
+  </data>
+  <data name="Connection" xml:space="preserve">
+    <value>Kapcsolódás</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
+  <data name="ConnectedDevices" xml:space="preserve">
+    <value>Régebbi csatlakozások</value>
+  </data>
+  <data name="SuccessToConnection" xml:space="preserve">
+    <value>Sikeres csatlakozás</value>
+  </data>
+  <data name="AreYouSureYouWantToConnection" xml:space="preserve">
+    <value>Biztos csatlakozni akarsz</value>
+  </data>
+  <data name="Disconecting" xml:space="preserve">
+    <value>Lekapcsolodás</value>
+  </data>
+  <data name="AreYouSureYouWantToDisconnection" xml:space="preserve">
+    <value>Biztosan le szeretnél kapcsolódni</value>
+  </data>
+  <data name="ConnectedServers" xml:space="preserve">
+    <value>Kapcsolódott szerverek</value>
+  </data>
+  <data name="FirstConnaction" xml:space="preserve">
+    <value>Első csatlakozás</value>
+  </data>
+  <data name="LastConnection" xml:space="preserve">
+    <value>Utolsó csatlakozás</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Elérhetőség</value>
+  </data>
+  <data name="ProjectGithubLabel" xml:space="preserve">
+    <value>Github project:</value>
+  </data>
+  <data name="GithubProfileLabel" xml:space="preserve">
+    <value>Github profil:</value>
+  </data>
+  <data name="XProfileLabel" xml:space="preserve">
+    <value>X profil:</value>
+  </data>
+  <data name="ReleaseNotesLabel" xml:space="preserve">
+    <value>Változás naplók:</value>
+  </data>
 </root>

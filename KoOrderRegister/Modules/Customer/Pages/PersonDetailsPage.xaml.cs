@@ -1,6 +1,7 @@
 using KoOrderRegister.Modules.Customer.ViewModels;
-using KoOrderRegister.Modules.Database.Models;
 using KoOrderRegister.Utility;
+using KORCore.Modules.Database.Models;
+using KORCore.Utility;
 
 namespace KoOrderRegister.Modules.Customer.Pages;
 
@@ -24,6 +25,7 @@ public partial class PersonDetailsPage : ContentPage
         using (new LowPriorityTaskManager())
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
     protected override void OnDisappearing()
