@@ -1,4 +1,5 @@
 import os
+import sys
 import xml.etree.ElementTree as ET
 from deep_translator import GoogleTranslator
 
@@ -14,7 +15,7 @@ def process_resx_files(directory, force_translate):
 
     tree = ET.parse(original_file)
     root = tree.getroot()
-    original_entries = {entry.attrib['name']: entry.find('value').text for entry in root.findall('data')}
+    original_entries = {entry.attrib['name']: entry for entry in root.findall('data')}
 
     for file_name in os.listdir(directory):
         if file_name.startswith("AppRes.") and file_name.endswith(".resx") and file_name != "AppRes.resx":
@@ -30,18 +31,30 @@ def process_resx_files(directory, force_translate):
                 resx_root = ET.Element("root")
                 for element in root.findall("resheader"):
                     resx_root.append(element)
+                for schema in root.findall("{http://www.w3.org/2001/XMLSchema}schema"):
+                    resx_root.append(schema)
 
-            existing_entries = {entry.attrib['name']: entry.find('value').text for entry in resx_root.findall('data')}
+            existing_entries = {entry.attrib['name']: entry for entry in resx_root.findall('data')}
 
-            for name, value in original_entries.items():
+            for name, orig_entry in original_entries.items():
+                orig_value_elem = orig_entry.find('value')
+                orig_value = orig_value_elem.text if orig_value_elem is not None else ""
+                
                 if force_translate or name not in existing_entries:
-                    translated_value = translate_text(value, lang_code[:2])
-                    print(f"Translate ({lang_code}): {value} --> {translated_value}")
-                    data_elem = ET.Element("data", name=name)
-                    data_elem.set("xml:space", "preserve")
-                    value_elem = ET.SubElement(data_elem, "value")
+                    translated_value = translate_text(orig_value, lang_code[:2])
+                    print(f"Translate ({lang_code}): {orig_value} --> {translated_value}")
+                    new_entry = ET.Element("data", name=name)
+                    if 'xml:space' in orig_entry.attrib:
+                        new_entry.set("xml:space", orig_entry.attrib['xml:space'])
+                    value_elem = ET.SubElement(new_entry, "value")
                     value_elem.text = translated_value
-                    resx_root.append(data_elem)
+                    
+                    comment_elem = orig_entry.find("comment")
+                    if comment_elem is not None:
+                        new_comment = ET.SubElement(new_entry, "comment")
+                        new_comment.text = comment_elem.text
+                    
+                    resx_root.append(new_entry)
 
             resx_tree = ET.ElementTree(resx_root)
             resx_tree.write(file_path, encoding="utf-8", xml_declaration=True)
@@ -51,6 +64,14 @@ def process_resx_files(directory, force_translate):
 
 def main():
     directory = "../../KoOrderRegister/Localization"
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--force":
+            process_resx_files(directory, True)
+            return
+        elif sys.argv[1] == "--new-only":
+            process_resx_files(directory, False)
+            return
+    
     while True:
         print("Menu:")
         print("1. Start translation (only new entries)")

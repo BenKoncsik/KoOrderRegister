@@ -79,11 +79,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
           NEW_PATCH: ${{ env.new-minor }}    
-        
-        
+          
+          
   build-apk:
     runs-on: [windows-latest]
-    #runs-on: [self-hosted, Windows]
     needs: prepare-version
     steps:
       - uses: actions/checkout@v2
@@ -95,6 +94,8 @@ jobs:
         run: |
           echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
           echo "Version Code: ${{ needs.prepare-version.outputs.versionCode }}"
+      - name: Run Translator
+        run: cmd /c "Technical\translator\main.exe --new-only"
       - name: Install .NET MAUI Android workloads
         run: dotnet workload install maui-android
       - name: Install .NET SDK maui
@@ -124,6 +125,8 @@ jobs:
       - name: Debug Output Values
         run: |
           echo "New Version: ${{ needs.prepare-version.outputs.newVersion }}"
+      - name: Run Translator
+        run: cmd /c "Technical\translator\main.exe --new-only"
       - name: Install Certificate
         run: |
           Import-PfxCertificate -FilePath "KoOrderRegister\Technical\kor.pfx" `
@@ -142,6 +145,7 @@ jobs:
         with:
           name: msix-artifact
           path: output\*.msix
+
 
   release:
     runs-on: [self-hosted, Windows]

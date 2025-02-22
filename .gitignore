@@ -13,3 +13,4 @@ KORConnect/bin
 KORConnect/obj
 *.kncsk
 Technical/translator/build
+Technical/translator/dist
