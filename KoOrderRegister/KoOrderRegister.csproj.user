@@ -2,8 +2,8 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugFramework>net8.0-windows10.0.19041.0</ActiveDebugFramework>
-    <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
+    <ActiveDebugFramework>net8.0-android</ActiveDebugFramework>
+    <ActiveDebugProfile>Xiaomi Mi 10 (Android 15.0 - API 35)</ActiveDebugProfile>
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
     <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
     <AppxShowAllApps>False</AppxShowAllApps>
@@ -26,12 +26,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Localization\AppRes.de-DE.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Localization\AppRes.fr-FR.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Update="Localization\AppRes.hu-HU.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -40,6 +34,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <MauiXaml Update="Modules\About\Pages\AboutPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Modules\BetaFunctions\Pages\BetaFuctionsPages.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

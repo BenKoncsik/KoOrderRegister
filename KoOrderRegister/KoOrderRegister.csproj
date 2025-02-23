@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk"> 
 	<!-- Definie devBuild constans-->
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('maccatalyst'))">net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('ios'))">net8.0-ios</TargetFrameworks>
+		<!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('maccatalyst'))">net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('ios'))">net8.0-ios</TargetFrameworks>-->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -335,10 +335,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Update="Localization\AppRes.de-DE.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>AppRes.deu-DEU.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
 		<EmbeddedResource Update="Localization\AppRes.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>AppRes.Designer.cs</LastGenOutput>
@@ -346,6 +342,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Modules\About\Pages\AboutPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Modules\BetaFunctions\Pages\BetaFuctionsPages.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
