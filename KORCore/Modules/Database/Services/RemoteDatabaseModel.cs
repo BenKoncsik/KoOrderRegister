@@ -4,13 +4,16 @@ using KORCore.Modules.Remote.Utility;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace KORCore.Modules.Database.Services
 {
-    public class RemoteDatabaseModel: IRemoteDatabase
+    public class RemoteDatabaseModel : IRemoteDatabase
     {
         private static string ApiBaseUrl = string.Empty;
         private readonly HttpClient _httpClient;
+
         public RemoteDatabaseModel(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("kor_connection_client");
@@ -20,539 +23,246 @@ namespace KORCore.Modules.Database.Services
         {
             return ApiBaseUrl;
         }
+
         public void SetUrl(string url)
         {
             ApiBaseUrl = url + "/api";
+            _httpClient.BaseAddress = new Uri(GetConnectedUrl());
         }
-
-        public static event Action<string, object> OnDatabaseChange;
-
-        public static void InvokeOnDatabaseChange(string name, object data)
+        private async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
         {
-            OnDatabaseChange?.Invoke(name, data);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         #region CustomerModel CRUD Implementation
         public async Task<int> CreateCustomer(CustomerModel customer)
         {
-            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/customer", customer);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to create customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_CREATED, customer);
-            return 1;
+            var response = await _httpClient.PostAsync("api/customers", new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<CustomerModel> GetCustomerById(Guid id)
         {
-           
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new CustomerModel();
-            }
-            var customer = await response.Content.ReadFromJsonAsyncNewtonsoft<CustomerModel>();
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_RETRIEVED, customer);
-            return customer;
-            
+            var response = await _httpClient.GetAsync($"api/customers/{id}");
+            return await DeserializeResponse<CustomerModel>(response);
         }
 
-        public async Task<List<CustomerModel>> GetAllCustomers(int page = int.MinValue)
+        public async Task<List<CustomerModel>> GetAllCustomers(int page = 0)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer");
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Failed to get all customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                    return new List<CustomerModel>();
-                }
-                var customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
-                InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
-                return customers;
-            }
-            catch (HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException("Error retrieving all customers: " + e.Message, e);
-            }
+            var response = await _httpClient.GetAsync($"api/customers?page={page}");
+            return await DeserializeResponse<List<CustomerModel>>(response);
         }
 
-        public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/customer/stream");
-            HttpResponseMessage response = null;
-                response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
-                var stream = await response.Content.ReadAsStreamAsync();
-                var serializer = new JsonSerializer();
-
-                using (var sr = new StreamReader(stream))
-                using (var jsonTextReader = new JsonTextReader(sr))
-                {
-                    while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                    {
-                        if (jsonTextReader.TokenType == JsonToken.StartObject)
-                        {
-                            var customer = serializer.Deserialize<CustomerModel>(jsonTextReader);
-                            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
-                            yield return customer;
-                        }
-                    }
-                }
+            using var response = await _httpClient.GetAsync("api/customers/stream", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var customer in JsonConvert.DeserializeObject<List<CustomerModel>>(json))
+            {
+                yield return customer;
+            }
         }
 
         public async Task<int> UpdateCustomer(CustomerModel customer)
         {
-            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/customer", customer);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to update customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_UPDATED, customer);
-            return 1;
+            var response = await _httpClient.PutAsync("api/customers", new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<int> DeleteCustomer(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/customer/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_DELETED, id);
-            return 1;
-        }
-
-        public async Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue)
-        {
-
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/search?search={search}&page={page}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new List<CustomerModel>();
-            }
-            List<CustomerModel> customers = await response.Content.ReadFromJsonAsyncNewtonsoft<List<CustomerModel>>();
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMERS_RETRIEVED, customers);
-            return customers;
-        }
-
-        public async IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/customer/search/stream?search={search}");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
-            {
-                while (jsonTextReader.Read())
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var customer = serializer.Deserialize<CustomerModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_STREAM_RETRIEVED, customer);
-                        yield return customer;
-                    }
-                }
-            }
-        }
-
-        public async Task<int> CountCustomers()
-        {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/customer/count");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get customer. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InvokeOnDatabaseChange(DatabaseChangedType.CUSTOMER_COUNT_CHANGED, count);
-            return count;
-
+            var response = await _httpClient.DeleteAsync($"api/customers/{id}");
+            return await DeserializeResponse<int>(response);
         }
         #endregion
 
         #region OrderModel CRUD Implementation
         public async Task<int> CreateOrder(OrderModel order)
         {
-            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order/CreateOrder", order);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_CREATED, order);
-            return 1;
+            var response = await _httpClient.PostAsync("api/orders", new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<OrderModel> GetOrderById(Guid id)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/GetOrderById/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new OrderModel();
-            }
-            var order = await response.Content.ReadFromJsonAsyncNewtonsoft<OrderModel>();
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_RETRIEVED, order);
-            return order;
-           
+            var response = await _httpClient.GetAsync($"api/orders/{id}");
+            return await DeserializeResponse<OrderModel>(response);
         }
 
-        public async Task<List<OrderModel>> GetAllOrders(int page = int.MinValue)
+        public async Task<List<OrderModel>> GetAllOrders(int page = 0)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/GetAllOrders");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new List<OrderModel>();
-            }
-            var orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
-            return orders;
+            var response = await _httpClient.GetAsync($"api/orders?page={page}");
+            return await DeserializeResponse<List<OrderModel>>(response);
         }
 
-        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/order/stream");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
+            using var response = await _httpClient.GetAsync("api/orders/stream", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var order in JsonConvert.DeserializeObject<List<OrderModel>>(json))
             {
-                while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var order = serializer.Deserialize<OrderModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
-                        yield return order;
-                    }
-                }
+                yield return order;
             }
         }
 
         public async Task<int> UpdateOrder(OrderModel order)
         {
-            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/order/UpdateOrder", order);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to update order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_UPDATED, order);
-            return 1;
+            var response = await _httpClient.PutAsync("api/orders", new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<int> DeleteOrder(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/order/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to delete order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_DELETED, id);
-            return 1;
-        }
-
-        public async Task<List<OrderModel>> SearchOrders(string search, int page = int.MinValue)
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/search?search={search}&page={page}");
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Failed to get orders. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                    return new List<OrderModel>();
-                }
-                List<OrderModel> orders = await response.Content.ReadFromJsonAsyncNewtonsoft<List<OrderModel>>();
-                InvokeOnDatabaseChange(DatabaseChangedType.ORDERS_RETRIEVED, orders);
-                return await Task.FromResult(orders);
-            }
-            catch(HttpRequestException e)
-            {
-                // Log the error or handle it appropriately
-                throw new ApplicationException($"Error updating order: {e.Message}", e);
-            }
-            
-        }
-
-        public async IAsyncEnumerable<OrderModel> SearchOrdersAsStream(string search, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/order/search/stream?search={search}");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
-            {
-                while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var order = serializer.Deserialize<OrderModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.ORDER_STREAM_RETRIEVED, order);
-                        yield return order;
-                    }
-                }
-            }
-        }
-
-        public async Task<int> CountOrders()
-        {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/order/count");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to count order. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InvokeOnDatabaseChange(DatabaseChangedType.ORDER_COUNT_CHANGED, count);
-            return count;  
+            var response = await _httpClient.DeleteAsync($"api/orders/{id}");
+            return await DeserializeResponse<int>(response);
         }
         #endregion
 
         #region FileModel CRUD Implementation
         public async Task<int> CreateFile(FileModel file)
         {
-            var response = await _httpClient.PostAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/file", file);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to cretae file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_CREATED, file);
-            return 1;
+            var response = await _httpClient.PostAsync("api/files", new StringContent(JsonConvert.SerializeObject(file), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<FileModel> GetFileById(Guid id)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/{id.ToString()}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new FileModel();
-            }
-            var file = await response.Content.ReadFromJsonAsyncNewtonsoft<FileModel>();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_RETRIEVED, file);
-            return file;
-     
+            var response = await _httpClient.GetAsync($"api/files/{id}");
+            return await DeserializeResponse<FileModel>(response);
         }
-
-        public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
-        {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get all file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new List<FileModel>();
-            }
-            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-            return files;
-        }
-
-        public async IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid id, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/file/order/{id}/stream");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
-            {
-                while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
-                        yield return file;
-                    }
-                }
-            }
-        }
-
-
-        public async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(Guid id)
-        {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/order/{id}/withoutcontent");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get files without content. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new List<FileModel>();
-            }
-            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-            return files;
-        }
-
-        public async IAsyncEnumerable<FileModel> GetFilesByOrderIdWithOutContentAsStream(Guid id, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/file/order/{id}/withoutcontent/stream");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
-            {
-                while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
-                        yield return file;
-                    }
-                }
-            }
-        }
-
 
         public async Task<List<FileModel>> GetAllFiles()
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get all file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return new List<FileModel>();
-            }
-            var files = await response.Content.ReadFromJsonAsyncNewtonsoft<List<FileModel>>();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILES_RETRIEVED, files);
-            return files;
+            var response = await _httpClient.GetAsync("api/files");
+            return await DeserializeResponse<List<FileModel>>(response);
         }
 
-        public async IAsyncEnumerable<FileModel> GetAllFilesAsStream(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<FileModel> GetAllFilesAsStream([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/file/stream");
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-            var stream = await response.Content.ReadAsStreamAsync();
-            var serializer = new JsonSerializer();
-
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
+            using var response = await _httpClient.GetAsync("api/files/stream", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var file in JsonConvert.DeserializeObject<List<FileModel>>(json))
             {
-                while (await jsonTextReader.ReadAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-                {
-                    if (jsonTextReader.TokenType == JsonToken.StartObject)
-                    {
-                        var file = serializer.Deserialize<FileModel>(jsonTextReader);
-                        InvokeOnDatabaseChange(DatabaseChangedType.FILE_STREAM_RETRIEVED, file);
-                        yield return file;
-                    }
-                }
+                yield return file;
             }
         }
 
         public async Task<int> UpdateFile(FileModel file)
         {
-            var response = await _httpClient.PutAsJsonAsyncNewtonsoft($"{ApiBaseUrl}/file", file);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to update file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_UPDATED, file);
-            return 1;
+            var response = await _httpClient.PutAsync("api/files", new StringContent(JsonConvert.SerializeObject(file), Encoding.UTF8, "application/json"));
+            return await DeserializeResponse<int>(response);
         }
 
         public async Task<int> DeleteFile(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/file/{id}");
-            if (!response.IsSuccessStatusCode)
+            var response = await _httpClient.DeleteAsync($"api/files/{id}");
+            return await DeserializeResponse<int>(response);
+        }
+        #endregion
+
+
+
+        #region CustomerModel CRUD Implementation
+        public async IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            using var response = await _httpClient.GetAsync($"api/customers/search?query={search}", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var customer in JsonConvert.DeserializeObject<List<CustomerModel>>(json))
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to delete file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
+                yield return customer;
             }
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_DELETED, id);
-            return 1;
+        }
+
+        public async Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue)
+        {
+            var response = await _httpClient.GetAsync($"api/customers/search?query={search}&page={page}");
+            return await DeserializeResponse<List<CustomerModel>>(response);
+        }
+
+        public async Task<int> CountCustomers()
+        {
+            var response = await _httpClient.GetAsync("api/customers/count");
+            return await DeserializeResponse<int>(response);
+        }
+        #endregion
+
+        #region OrderModel CRUD Implementation
+        public async Task<List<OrderModel>> SearchOrders(string search, int page = int.MinValue)
+        {
+            var response = await _httpClient.GetAsync($"api/orders/search?query={search}&page={page}");
+            return await DeserializeResponse<List<OrderModel>>(response);
+        }
+        public async IAsyncEnumerable<OrderModel> SearchOrdersAsStream(string search, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            using var response = await _httpClient.GetAsync($"api/orders/search/stream?query={search}", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var order in JsonConvert.DeserializeObject<List<OrderModel>>(json))
+            {
+                yield return order;
+            }
+        }
+        public async Task<int> CountOrders()
+        {
+            var response = await _httpClient.GetAsync("api/orders/count");
+            return await DeserializeResponse<int>(response);
+        }
+        #endregion
+
+        #region FileModel CRUD Implementation
+        public async Task<List<FileModel>> GetAllFilesByOrderId(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/files/order/{id}");
+            return await DeserializeResponse<List<FileModel>>(response);
+        }
+
+        public async Task<List<FileModel>> GetFilesByOrderIdWithOutContent(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/files/order/{id}/without-content");
+            return await DeserializeResponse<List<FileModel>>(response);
         }
 
         public async Task<string> GetFileContentSize(Guid id)
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/content/size/{id}");
-            if (!response.IsSuccessStatusCode)
+            var response = await _httpClient.GetAsync($"api/files/file/{id}/size");
+            return await DeserializeResponse<string>(response);
+        }
+
+        public async IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid id, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            using var response = await _httpClient.GetAsync($"api/files/order/{id}/stream", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var file in JsonConvert.DeserializeObject<List<FileModel>>(json))
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to get count size file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return string.Empty;
+                yield return file;
             }
-            string size = await response.Content.ReadAsStringAsync();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_SIZE, size);
-            return size;
+        }
+        public async IAsyncEnumerable<FileModel> GetFilesByOrderIdWithOutContentAsStream(Guid id, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            using var response = await _httpClient.GetAsync($"api/files/order/{id}/without-content/stream", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync();
+            foreach (var file in JsonConvert.DeserializeObject<List<FileModel>>(json))
+            {
+                yield return file;
+            }
         }
 
         public async Task<int> CountFiles()
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/file/count");
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine($"Failed to count file. StatusCode: {response.StatusCode}, Content: {errorContent}");
-                return 0;
-            }
-            int count = await response.Content.ReadFromJsonAsyncNewtonsoft<int>();
-            InvokeOnDatabaseChange(DatabaseChangedType.FILE_COUNT_CHANGED, count);
-            return count;
+            var response = await _httpClient.GetAsync("api/files/count");
+            return await DeserializeResponse<int>(response);
         }
         #endregion
 
-        #region Database Export/Import Implementation
-        public async Task ExportDatabaseToJson(string filePath, CancellationToken cancellationToken, Action<float> progressCallback = null)
+        #region Database Export/Import Operations
+        public Task ExportDatabaseToJson(string filePath, CancellationToken cancellationToken, Action<float> progressCallback = null)
         {
-            // Logic to export the database to JSON
-            progressCallback?.Invoke(100);
-            InvokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_CREATED, filePath);
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        public async Task ImportDatabaseFromJson(Stream jsonStream, Action<float> progressCallback = null)
+        public Task ImportDatabaseFromJson(Stream jsonStream, Action<float> progressCallback = null)
         {
-            // Logic to import the database from JSON
-            progressCallback?.Invoke(100);
-            InvokeOnDatabaseChange(DatabaseChangedType.NOTIFY_CUSTOMER_UPDATED, jsonStream);
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
         #endregion
     }

@@ -2,11 +2,12 @@
 using KORCore.Modules.Database.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace KORConnect.Controllers
 {
     [ApiController]
-    [Route("api/file/")]
+    [Route("api/files")]
     public class FileController : ControllerBase
     {
         private readonly IDatabaseModel _database;
@@ -19,75 +20,55 @@ namespace KORConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFile([FromBody] FileModel file)
         {
-            int result = await _database.CreateFile(file);
+            var result = await _database.CreateFile(file);
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFileById(Guid id)
         {
-            FileModel file = await _database.GetFileById(id);
-            return Ok(file);
+            var file = await _database.GetFileById(id);
+            return file != null ? Ok(file) : NotFound();
         }
 
         [HttpGet("order/{orderId}")]
-        public async Task<IActionResult> GetAllFilesByOrderId(Guid orderId)
+        public async Task<IActionResult> GetFilesByOrderId(Guid orderId)
         {
-            List<FileModel> files = await _database.GetAllFilesByOrderId(orderId);
+            var files = await _database.GetAllFilesByOrderId(orderId);
             return Ok(files);
-        }
-
-        [HttpGet("order/{orderId}/stream")]
-        public async IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid orderId, CancellationToken cancellationToken)
-        {
-            await foreach (var file in _database.GetAllFilesByOrderIdAsStream(orderId, cancellationToken))
-            {
-                yield return file;
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllFiles()
-        {
-            List<FileModel> files = await _database.GetAllFiles();
-            return Ok(files);
-        }
-
-        [HttpGet("stream")]
-        public async IAsyncEnumerable<FileModel> GetAllFilesAsStream(CancellationToken cancellationToken)
-        {
-            await foreach (var file in _database.GetAllFilesAsStream(cancellationToken))
-            {
-                yield return file;
-            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateFile([FromBody] FileModel file)
         {
-            int result = await _database.UpdateFile(file);
+            var result = await _database.UpdateFile(file);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFile(Guid id)
         {
-            int result = await _database.DeleteFile(id);
+            var result = await _database.DeleteFile(id);
             return Ok(result);
         }
 
-        [HttpGet("order/{orderId}/withoutcontent")]
-        public async Task<IActionResult> GetFilesByOrderIdWithOutContent(Guid orderId)
+        [HttpGet("stream")]
+        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            List<FileModel> files = await _database.GetFilesByOrderIdWithOutContent(orderId);
-            return Ok(files);
+            await foreach (var order in _database.GetAllOrdersAsStream(cancellationToken))
+            {
+                yield return order;
+            }
         }
 
+        [HttpGet("order/{id}")]
+        public Task<List<FileModel>> GetAllFilesByOrderId(Guid id) => _database.GetAllFilesByOrderId(id);
+
+        [HttpGet("order/{id}/stream")]
+        public IAsyncEnumerable<FileModel> GetAllFilesByOrderIdAsStream(Guid id, CancellationToken cancellationToken)
+            => _database.GetAllFilesByOrderIdAsStream(id, cancellationToken);
+
         [HttpGet("count")]
-        public async Task<IActionResult> CountFiles()
-        {
-            int count = await _database.CountFiles();
-            return Ok(count);
-        }
+        public Task<int> CountFiles() => _database.CountFiles();
     }
 }

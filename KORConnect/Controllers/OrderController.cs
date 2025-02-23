@@ -2,11 +2,12 @@
 using KORCore.Modules.Database.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace KORConnect.Controllers
 {
     [ApiController]
-    [Route("api/order/")]
+    [Route("api/orders")]
     public class OrderController : ControllerBase
     {
         private readonly IDatabaseModel _database;
@@ -19,69 +20,53 @@ namespace KORConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderModel order)
         {
-            int result = await _database.CreateOrder(order);
+            var result = await _database.CreateOrder(order);
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(Guid id)
         {
-            OrderModel order = await _database.GetOrderById(id);
-            return Ok(order);
+            var order = await _database.GetOrderById(id);
+            return order != null ? Ok(order) : NotFound();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders([FromQuery] int page = int.MinValue)
+        public async Task<IActionResult> GetAllOrders(int page = 0)
         {
-            List<OrderModel> orders = await _database.GetAllOrders(page);
+            var orders = await _database.GetAllOrders(page);
             return Ok(orders);
-        }
-
-        [HttpGet("stream")]
-        public async IAsyncEnumerable<OrderModel> GetAllOrdersAsStream(CancellationToken cancellationToken)
-        {
-            await foreach (var order in _database.GetAllOrdersAsStream(cancellationToken))
-            {
-                yield return order;
-            }
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateOrder([FromBody] OrderModel order)
         {
-            int result = await _database.UpdateOrder(order);
+            var result = await _database.UpdateOrder(order);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            int result = await _database.DeleteOrder(id);
+            var result = await _database.DeleteOrder(id);
             return Ok(result);
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchOrders([FromQuery] string search, [FromQuery] int page = int.MinValue)
+        [HttpGet("order/{orderId}/stream")]
+        public async IAsyncEnumerable<FileModel> GetFilesByOrderIdAsStream(Guid orderId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            List<OrderModel> orders = await _database.SearchOrders(search, page);
-            return Ok(orders);
-        }
-
-        [HttpGet("search/stream")]
-        public async IAsyncEnumerable<OrderModel> SearchOrdersAsStream([FromQuery] string search, CancellationToken cancellationToken)
-        {
-            await foreach (var order in _database.SearchOrdersAsStream(search, cancellationToken))
+            await foreach (var file in _database.GetAllFilesByOrderIdAsStream(orderId, cancellationToken))
             {
-                yield return order;
+                yield return file;
             }
         }
 
+        [HttpGet("search")]
+        public IAsyncEnumerable<OrderModel> SearchOrdersAsStream(string search, CancellationToken cancellationToken)
+       => _database.SearchOrdersAsStream(search, cancellationToken);
+
         [HttpGet("count")]
-        public async Task<IActionResult> CountOrders()
-        {
-            int count = await _database.CountOrders();
-            return Ok(count);
-        }
+        public Task<int> CountOrders() => _database.CountOrders();
     }
 
 }

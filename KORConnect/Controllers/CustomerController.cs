@@ -1,87 +1,76 @@
 ﻿using KORCore.Modules.Database.Models;
 using KORCore.Modules.Database.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace KORConnect.Controllers
+[ApiController]
+[Route("api/customers")]
+public class CustomerController : ControllerBase
 {
-    [ApiController]
-    [Route("api/customer/")]
-    public class CustomerController : ControllerBase
+    private readonly IDatabaseModel _database;
+
+    public CustomerController(IDatabaseModel database)
     {
-        private readonly IDatabaseModel _database;
+        _database = database;
+    }
 
-        public CustomerController(IDatabaseModel database)
-        {
-            _database = database;
-        }
+    [HttpPost]
+    public async Task<IActionResult> CreateCustomer([FromBody] CustomerModel customer)
+    {
+        var result = await _database.CreateCustomer(customer);
+        return Ok(result);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromBody] CustomerModel customer)
-        {
-            int result = await _database.CreateCustomer(customer);
-            return Ok(result);
-        }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCustomerById(Guid id)
+    {
+        var customer = await _database.GetCustomerById(id);
+        return customer != null ? Ok(customer) : NotFound();
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomerById(Guid id)
-        {
-            CustomerModel customer = await _database.GetCustomerById(id);
-            return Ok(customer);
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAllCustomers(int page = 0)
+    {
+        var customers = await _database.GetAllCustomers(page);
+        return Ok(customers);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCustomers([FromQuery] int page = int.MinValue)
-        {
-            List<CustomerModel> customers = await _database.GetAllCustomers(page);
-            return Ok(customers);
-        }
+    [HttpPut]
+    public async Task<IActionResult> UpdateCustomer([FromBody] CustomerModel customer)
+    {
+        var result = await _database.UpdateCustomer(customer);
+        return Ok(result);
+    }
 
-        [HttpGet("stream")]
-        public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream(CancellationToken cancellationToken)
-        {
-            await foreach (var customer in _database.GetAllCustomersAsStream(cancellationToken))
-            {
-                yield return customer;
-            }
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCustomer(Guid id)
+    {
+        var result = await _database.DeleteCustomer(id);
+        return Ok(result);
+    }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateCustomer([FromBody] CustomerModel customer)
+    [HttpGet("stream")]
+    public async IAsyncEnumerable<CustomerModel> GetAllCustomersAsStream([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        await foreach (var customer in _database.GetAllCustomersAsStream(cancellationToken))
         {
-            int result = await _database.UpdateCustomer(customer);
-            return Ok(result);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(Guid id)
-        {
-            int result = await _database.DeleteCustomer(id);
-            return Ok(result);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchCustomer([FromQuery] string search, [FromQuery] int page = int.MinValue)
-        {
-            List<CustomerModel> customers = await _database.SearchCustomer(search, page);
-            return Ok(customers);
-        }
-
-        [HttpGet("search/stream")]
-        public async IAsyncEnumerable<CustomerModel> SearchCustomerAsStream([FromQuery] string search, CancellationToken cancellationToken)
-        {
-            await foreach (var customer in _database.SearchCustomerAsStream(search, cancellationToken))
-            {
-                yield return customer;
-            }
-        }
-
-        [HttpGet("count")]
-        public async Task<IActionResult> CountCustomers()
-        {
-            int count = await _database.CountCustomers();
-            return Ok(count);
+            yield return customer;
         }
     }
+
+    [HttpGet("search")]
+    public IAsyncEnumerable<CustomerModel> SearchCustomerAsStream(string search, CancellationToken cancellationToken)
+      => _database.SearchCustomerAsStream(search, cancellationToken);
+
+    [HttpGet("count")]
+    public Task<int> CountCustomers() => _database.CountCustomers();
+
+    [HttpGet("search")]
+    public Task<List<CustomerModel>> SearchCustomer(string search, int page = int.MinValue)
+    => _database.SearchCustomer(search, page);
 
 }
