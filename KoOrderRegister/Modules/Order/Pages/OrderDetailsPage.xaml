@@ -31,8 +31,7 @@
                     <Label Text="{x:Static res:AppRes.OrderNumberLabel}"
                            VerticalOptions="Center"
                            FontSize="18"/>
-                    <Entry Text="{Binding Order.OrderNumber}"
-                      />
+                    <Entry Text="{Binding Order.OrderNumber}"/>
                 </StackLayout>
                 
                 <!-- Customers -->
@@ -52,11 +51,10 @@
                            VerticalOptions="Center"
                            FontSize="18" />
                     <HorizontalStackLayout Grid.Row="2"
-                                           Grid.Column="1"
-                                           Margin="10, 0, 10,10">
+                                           Grid.Column="1">
                         <DatePicker Date="{Binding SelectedStartDate}" />
                         <TimePicker Time="{Binding SelectedStartTime}"
-                                    Margin="10, 10, 0, 0" />
+                                    Margin="10, 10, 10,10" />
                     </HorizontalStackLayout>
                 </StackLayout>
 
@@ -65,11 +63,10 @@
                            VerticalOptions="Center"
                            FontSize="18"/>
                     <HorizontalStackLayout Grid.Row="3"
-                                           Grid.Column="1"
-                                           Margin="10, 0, 10,10">
+                                           Grid.Column="1">
                         <DatePicker Date="{Binding SelectedEndDate}" />
                         <TimePicker Time="{Binding SelectedEndTime}"
-                                    Margin="10, 10, 0, 0" />
+                                    Margin="10, 10, 10,10" />
                     </HorizontalStackLayout>
                 </StackLayout>
                 
