@@ -47,7 +47,7 @@ public partial class OrderDetailsPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        if(_viewModel.Files != null)
+        if (_viewModel.Files != null)
         {
             _viewModel.Files.Clear();
         }

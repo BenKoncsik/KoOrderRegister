@@ -141,7 +141,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
         private CancellationToken cancellationToken = new CancellationToken();
         #region Commands
         public ICommand ReturnCommand => new Command(async () => await Return());
-        public ICommand SaveCommand => new Command(SaveOrder);
+        public ICommand SaveCommand => new Command(async () => await SaveOrder());
         public ICommand DeleteCommand => new Command(DeleteOrder);
         public ICommand SelectedFilesCommand => new Command(SelectedFiles);
         public Command<FileModel> RemoveFileCommand => new Command<FileModel>(RemoveFile);
@@ -178,7 +178,7 @@ namespace KoOrderRegister.Modules.Order.ViewModels
             Debug.WriteLine("Files: " + Order.Files.Count());
 #endif
         }
-        public async void SaveOrder()
+        public async Task SaveOrder()
         {
             using (new LowPriorityTaskManager())
             {

@@ -24,49 +24,46 @@
     <Grid>
         <ScrollView>
             <VerticalStackLayout Padding="20"
-                                 Spacing="20">
-                <Grid ColumnDefinitions="Auto,*"
-                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto, Auto, Auto"
-                      Margin="10, 10, 10, 10">
-                    <!-- OrderNumber -->
+                                 Spacing="15">
+                
+                <!-- OrderNumber -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.OrderNumberLabel}"
-                           Grid.Row="0"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"
+                           FontSize="18"/>
                     <Entry Text="{Binding Order.OrderNumber}"
-                           Grid.Row="0"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-
-                    <!-- Customers -->
+                      />
+                </StackLayout>
+                
+                <!-- Customers -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.SelectCustomer}"
-                           Grid.Row="1"
-                           Grid.Column="0"
+                           FontSize="18"
                            VerticalOptions="Center" />
                     <Picker ItemsSource="{Binding Customers}"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding Name}"
-                            Margin="10, 0, 10,10"
-                            Grid.Row="1"
-                            Grid.Column="1" />
-
-                    <!-- OrderDate -->
+                            />
+                </StackLayout>
+                
+                <!-- OrderDate -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.StartDateLabel}"
-                           Grid.Row="2"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"
+                           FontSize="18" />
                     <HorizontalStackLayout Grid.Row="2"
                                            Grid.Column="1"
                                            Margin="10, 0, 10,10">
-                        <DatePicker Date="{Binding SelectedStartDate}"/>
+                        <DatePicker Date="{Binding SelectedStartDate}" />
                         <TimePicker Time="{Binding SelectedStartTime}"
-                                    Margin="10, 10, 0, 0"/>
+                                    Margin="10, 10, 0, 0" />
                     </HorizontalStackLayout>
+                </StackLayout>
 
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.OutDateLabel}"
-                           Grid.Row="3"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"
+                           FontSize="18"/>
                     <HorizontalStackLayout Grid.Row="3"
                                            Grid.Column="1"
                                            Margin="10, 0, 10,10">
@@ -74,34 +71,32 @@
                         <TimePicker Time="{Binding SelectedEndTime}"
                                     Margin="10, 10, 0, 0" />
                     </HorizontalStackLayout>
-                    <!-- Product id-->
+                </StackLayout>
+                
+                <!-- Product id-->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.ProductIdLabel}"
-                           Grid.Row="4"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Order.ProductId}"
-                           Grid.Row="4"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-                    <!-- Order Price -->
+                           VerticalOptions="Center"
+                           FontSize="18"/>
+                    <Entry Text="{Binding Order.ProductId}"/>
+                </StackLayout>
+                
+                <!-- Order Price -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.PriceLabel}"
-                           Grid.Row="5"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Order.Price}"
-                           Grid.Row="5"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-                    <!-- Note -->
+                           VerticalOptions="Center"
+                           FontSize="18"/>
+                    <Entry Text="{Binding Order.Price}"/>
+                </StackLayout>
+                
+                <!-- Note -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.NoteLabel}"
-                           Grid.Row="6"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Order.Note}"
-                           Grid.Row="6"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-                </Grid>
+                           VerticalOptions="Center"
+                           FontSize="18"/>
+                    <Entry Text="{Binding Order.Note}"/>
+                </StackLayout>
+
                 <VerticalStackLayout Grid.Row="7"
                                      Spacing="10"
                                      Padding="20">
@@ -109,8 +104,6 @@
                           RowDefinitions="Auto, Auto">
                         <Button Text="{x:Static res:AppRes.SelectFiles}"
                                 Command="{Binding SelectedFilesCommand}"
-                                Grid.Row="0"
-                                Grid.Column="0"
                                 Margin="10, 0, 10,10" />
                         <!-- Files -->
                         <RefreshView Command="{Binding UpdateFilesCommand}"
@@ -149,14 +142,12 @@
                                             <Grid RowDefinitions="*"
                                                   ColumnDefinitions="*">
                                                 <Grid.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                                          Command="{Binding Path=BindingContext.EditFileCommand, Source={x:Reference Name=ordersListView}}"
-                                                                          CommandParameter="{Binding .}" />
                                                 </Grid.GestureRecognizers>
 
                                                 <Label Text="{Binding Name}"
                                                        Grid.Column="0"
                                                        Grid.Row="0"
+                                                       FontSize="18"
                                                        HorizontalOptions="Center"
                                                        VerticalOptions="Center" />
 
@@ -169,9 +160,6 @@
                     </Grid>
 
                 </VerticalStackLayout>
-
-
-
 
                 <Grid ColumnDefinitions="*,*"
                       RowDefinitions="Auto">
