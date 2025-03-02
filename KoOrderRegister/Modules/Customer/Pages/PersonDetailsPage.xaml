@@ -25,83 +25,71 @@
     <Grid>
         <ScrollView>
             <VerticalStackLayout Padding="20"
-                                 Spacing="20">
+                                 Spacing="15">
 
-                <!-- Az űrlap címkéi és beviteli mezői -->
-                <Grid ColumnDefinitions="Auto,*"
-                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                    <!-- Name -->
-                    <Label Text="{x:Static res:AppRes.NameLabel}"
-                           Grid.Row="0"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.Name}"
-                           Grid.Row="0"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-
+                <Label Text="{x:Static res:AppRes.Person}"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <!-- Name -->
+                    <StackLayout>
+                        <Label Text="{x:Static res:AppRes.NameLabel}"
+                               VerticalOptions="Center"
+                               FontSize="18"/>
+                        <Entry Text="{Binding Customer.Name}" />
+                    </StackLayout>
+                    
                     <!-- Address -->
-                    <Label Text="{x:Static res:AppRes.AddressLabel}"
-                           Grid.Row="1"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.Address}"
-                           Grid.Row="1"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-
+                    <StackLayout>
+                        <Label Text="{x:Static res:AppRes.AddressLabel}"
+                               VerticalOptions="Center"
+                               FontSize="18" />
+                        <Entry Text="{Binding Customer.Address}"/>
+                    </StackLayout>
+                    
                     <!-- Phone -->
-                    <Label Text="{x:Static res:AppRes.PhoneLabel}"
-                           Grid.Row="2"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.Phone}"
-                           Grid.Row="2"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10">
-                        <Entry.Behaviors>
-                            <PhoneEntrycheker:PhoneNumberValidationBehavior />
-                        </Entry.Behaviors>
-                    </Entry>
-
+                    <StackLayout>
+                        <Label Text="{x:Static res:AppRes.PhoneLabel}"
+                               VerticalOptions="Center"
+                               FontSize="18"/>
+                        <Entry Text="{Binding Customer.Phone}">
+                            <Entry.Behaviors>
+                                <PhoneEntrycheker:PhoneNumberValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </StackLayout>
+                    
                     <!-- Email -->
-                    <Label Text="{x:Static res:AppRes.EmailLabel}"
-                           Grid.Row="3"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.Email}"
-                           Grid.Row="3"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10">
-                        <Entry.Behaviors>
-                            <EmailEntrycheker:EmailValidationBehavior />
-                        </Entry.Behaviors>
-                    </Entry>
-
+                    <StackLayout>
+                        <Label Text="{x:Static res:AppRes.EmailLabel}"
+                               VerticalOptions="Center"
+                               FontSize="18"/>
+                        <Entry Text="{Binding Customer.Email}">
+                            <Entry.Behaviors>
+                                <EmailEntrycheker:EmailValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </StackLayout>
+                    
                     <!-- Note -->
-                    <Label Text="{x:Static res:AppRes.NoteLabel}"
-                           Grid.Row="4"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.Note}"
-                           Grid.Row="4"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10" />
-
+                    <StackLayout>
+                        <Label Text="{x:Static res:AppRes.NoteLabel}"
+                               VerticalOptions="Center"
+                               FontSize="18"/>
+                        <Entry Text="{Binding Customer.Note}"/>
+                    </StackLayout>
+                    
                     <!-- National Health Insurance -->
+                <StackLayout>
                     <Label Text="{x:Static res:AppRes.NHILabel}"
-                           Grid.Row="5"
-                           Grid.Column="0"
-                           VerticalOptions="Center" />
-                    <Entry Text="{Binding Customer.NationalHealthInsurance}"
-                           Grid.Row="5"
-                           Grid.Column="1"
-                           Margin="10, 0, 10,10">
+                           VerticalOptions="Center"
+                           FontSize="18" />
+                    <Entry Text="{Binding Customer.NationalHealthInsurance}">
                         <Entry.Behaviors>
                             <INSentrycheker:BaseINSBehavior />
                         </Entry.Behaviors>
                     </Entry>
-                </Grid>
+                </StackLayout>
 
                 <Grid ColumnDefinitions="*,*"
                       RowDefinitions="Auto">
